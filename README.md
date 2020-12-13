@@ -25,7 +25,9 @@ EnRecipes is an easy to use, privacy-friendly digital cookbook that lets you cre
 -   No internet access is required and never asks for any unwanted permissions
 -   100% free and open-source
 
-Lots of interesting features on the way...
+**Languages supported**: English, German, Portuguese, Tamil
+
+Check the [Roadmap](https://github.com/vishnuraghavb/EnRecipes/projects/1) for upcoming features.
 
 ## Downloads
 
@@ -45,19 +47,20 @@ You can add an issue [here](https://github.com/vishnuraghavb/EnRecipes/issues) o
 ## Future
 
 -   [Roadmap](https://github.com/vishnuraghavb/EnRecipes/projects/1)
--   [Translations](https://github.com/vishnuraghavb/EnRecipes/projects/1) - Contributors are welcome! No technical knowledge is required.
+-   [Translations](https://github.com/vishnuraghavb/EnRecipes/projects/1) - Contributors are welcome!
 
 ## Contributors
 
 -   [mondstern](https://codeberg.org/mondstern) (Translator)
+-   [epicalxyz](https://github.com/epicalxyz) (Translator)
 
 ### Instruction for translators
 
 You can contribute by translating EnRecipes in your native language.
 
-1.  Fork this repository and head to this `app/i18n` folder.
+1.  Fork this repository and head to the `app/i18n` folder.
 2.  Create a new JSON file or duplicate any existing file and start translating its values.
-3.  The filename should be as follows, `fr.json` for french
+3.  The filenames should be based on this [gist](https://gist.github.com/vishnuraghavb/bf27b068acc35e331adfba66d18e2094)
 4.  Once done, create a merge request.
 
 #### Don't know what fork means? No issues.
