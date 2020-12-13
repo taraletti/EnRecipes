@@ -47,16 +47,6 @@ You can add an issue [here](https://github.com/vishnuraghavb/EnRecipes/issues) o
 -   [Roadmap](https://github.com/vishnuraghavb/EnRecipes/projects/1)
 -   [Translations](https://github.com/vishnuraghavb/EnRecipes/projects/1) - Contributors are welcome! No technical knowledge is required.
 
-## Credits
-
-This app was written in my free time using NativeScript. I would like to thank all those people who helped me understand the concepts during the process and my special thanks to the NativeScript team and the community.
-
-### Recipes used in the Screenshots
-
--   **Meen Pollichathu** by [Bency Veronica](https://www.instagram.com/bencys_lil_kitchen)
--   **Curd Vada** by P. Shanmugalakshmi
--   **Roasted Chicken Biriyani** by [Ranga](https://www.youtube.com/channel/UC6ONI92scjwMmk3IITKIx-g)
-
 ## Contributors
 
 -   [mondstern](https://codeberg.org/mondstern) (Translator)
@@ -76,6 +66,16 @@ You can contribute by translating EnRecipes in your native language.
 2.  Once done, share the file to the [EnRecipes Telegram group](http://t.me/enrecipes) for verification.
 
 If everything looks good, your translations will be included in the next update and you'll be added to the contributors list for your work.
+
+## Credits
+
+This app was written in my free time using NativeScript. I would like to thank all those people who helped me understand the concepts during the process and my special thanks to the NativeScript team and the community.
+
+### Recipes used in the Screenshots
+
+-   **Meen Pollichathu** by [Bency Veronica](https://www.instagram.com/bencys_lil_kitchen)
+-   **Curd Vada** by P. Shanmugalakshmi
+-   **Roasted Chicken Biriyani** by [Ranga](https://www.youtube.com/channel/UC6ONI92scjwMmk3IITKIx-g)
 
 ## Technologies
 
