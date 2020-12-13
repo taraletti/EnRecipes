@@ -49,17 +49,33 @@ You can add an issue [here](https://github.com/vishnuraghavb/EnRecipes/issues) o
 
 ## Credits
 
+This app was written in my free time using NativeScript. I would like to thank all those people who helped me understand the concepts during the process and my special thanks to the NativeScript team and the community.
+
 ### Recipes used in the Screenshots
 
 -   **Meen Pollichathu** by [Bency Veronica](https://www.instagram.com/bencys_lil_kitchen)
 -   **Curd Vada** by P. Shanmugalakshmi
 -   **Roasted Chicken Biriyani** by [Ranga](https://www.youtube.com/channel/UC6ONI92scjwMmk3IITKIx-g)
 
-This app was written in my free time using NativeScript. I would like to thank all those people who helped me understand the concepts during the process and my special thanks to the NativeScript team and the community.
-
 ## Contributors
 
 -   [mondstern](https://codeberg.org/mondstern) (Translator)
+
+### Instruction for translators
+
+You can contribute by translating EnRecipes in your native language.
+
+1.  Fork this repository and head to this `app/i18n` folder.
+2.  Create a new JSON file or duplicate any existing file and start translating its values.
+3.  The filename should be as follows, `fr.json` for french
+4.  Once done, create a merge request.
+
+#### Don't know what fork means? No issues.
+
+1.  Just [download the JSON file](https://raw.githubusercontent.com/vishnuraghavb/EnRecipes/main/app/i18n/en.default.json) and start translating its value(right side part after the colon":").
+2.  Once done, share the file to the [EnRecipes Telegram group](http://t.me/enrecipes) for verification.
+
+If everything looks good, your translations will be included in the next update and you'll be added to the contributors list for your work.
 
 ## Technologies
 
