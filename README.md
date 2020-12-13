@@ -47,7 +47,7 @@ You can add an issue [here](https://github.com/vishnuraghavb/EnRecipes/issues) o
 ## Future
 
 -   [Roadmap](https://github.com/vishnuraghavb/EnRecipes/projects/1)
--   [Translations](https://github.com/vishnuraghavb/EnRecipes/projects/1) - Contributors are welcome!
+-   [Translations](https://github.com/vishnuraghavb/EnRecipes/projects/2) - Contributors are welcome!
 
 ## Contributors
 
@@ -60,8 +60,8 @@ You can contribute by translating EnRecipes in your native language.
 
 1.  Fork this repository and head to the `app/i18n` folder.
 2.  Create a new JSON file or duplicate any existing file and start translating its values.
-3.  The filenames should be based on this [gist](https://gist.github.com/vishnuraghavb/bf27b068acc35e331adfba66d18e2094)
-4.  Once done, create a merge request.
+3.  The filenames should be based on this [gist](https://gist.github.com/vishnuraghavb/bf27b068acc35e331adfba66d18e2094).
+4.  Once done, create a new pull request.
 
 #### Don't know what fork means? No issues.
 
