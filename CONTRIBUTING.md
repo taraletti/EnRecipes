@@ -4,7 +4,7 @@
 
 Here are some important resources:
 
--   Our [roadmap](https://github.com/vishnuraghavb/EnRecipes/projects/1) will tell you the future of EnRecipes
+-   The [roadmap](https://github.com/vishnuraghavb/EnRecipes/projects/1) will tell you whats the future of EnRecipes
 -   You can help [translate](https://github.com/vishnuraghavb/EnRecipes/projects/2) EnRecipes in your native language(not limited to those existing in the `To do`)
 -   Bugs, suggestions or feedback? You can [create an issue here](https://github.com/vishnuraghavb/EnRecipes/issues) or [join the Telegram group](http://t.me/enrecipes)(quicker replies) to make the app better.
 
