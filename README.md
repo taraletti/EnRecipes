@@ -15,7 +15,7 @@
 -   Create recipes quickly
 -   Add photo, notes and combinations to your recipes
 -   Organise your recipes by category
--   Quickly search for your recipes
+-   Quickly search for your recipes either by name or ingredient
 -   Mark recipes as favourites and add them to your Try Later list
 -   Scale your recipe ingredients to serve more or less people
 -   Get notified of the last time you tried a recipe
@@ -27,7 +27,7 @@
 -   No internet access is required and never asks for any unwanted permissions
 -   100% free and open-source
 
-**Languages supported**: English, German, Portuguese, Tamil
+**Languages supported**: English, German, Tamil
 
 Check the [Roadmap](https://github.com/vishnuraghavb/EnRecipes/projects/1) for upcoming features.
 
