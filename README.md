@@ -1,4 +1,4 @@
-<p align="center" style="background:#ff5200;padding:32px;"><a href="https://enrecipes.vercel.app"><img src="fastlane/metadata/android/en-US/images/featureGraphic.png" height="180"></a></p>
+<p align="center"><a href="https://enrecipes.vercel.app"><img src="fastlane/metadata/android/en-US/images/featureGraphic.png" width="100%"></a></p>
 
 <h3 align="center">A simple, offline recipe manager</h3>
 <h4 align="center">EnRecipes is an easy to use, privacy-friendly digital cookbook that lets you create, manage and share your own recipes.</h4>
