@@ -1,12 +1,14 @@
-# EnRecipes
+<p align="center" style="background:#ff5200;padding:32px;"><a href="https://enrecipes.vercel.app"><img src="fastlane/metadata/android/en-US/images/featureGraphic.png" height="180"></a></p>
 
-> A simple, offline recipe manager.
+<h3 align="center">A simple, offline recipe manager</h3>
+<h4 align="center">EnRecipes is an easy to use, privacy-friendly digital cookbook that lets you create, manage and share your own recipes.</h4>
+<br>
+<p align="center">
+<a href="https://github.com/vishnuraghavb/EnRecipes/releases" alt="Release version"><img src="https://img.shields.io/github/v/release/vishnuraghavb/EnRecipes?label=Release"></a> <a href="https://github.com/vishnuraghavb/EnRecipes/releases" alt="Release date"><img src="https://img.shields.io/github/release-date/vishnuraghavb/EnRecipes?color=blue&label=Release%20date"></a> <a href="https://www.gnu.org/licenses/gpl-3.0" alt="License: GPLv3"><img src="https://img.shields.io/badge/License-GPL%20v3-blue"></a> <a href="https://github.com/vishnuraghavb/EnRecipes/issues" alt="GitHub issues"><img src="https://img.shields.io/github/issues/vishnuraghavb/EnRecipes?label=Issues"></a> <a href="https://liberapay.com/vishnuraghavb/donate" alt="Translation Status"><img src="https://img.shields.io/liberapay/patrons/vishnuraghavb?label=Patrons"></a>
 
-EnRecipes is an easy to use, privacy-friendly digital cookbook that lets you create, manage and share your own recipes.
-
-## Principles
-
--   Privacy by Design
+<hr>
+<p align="center"><a href="#features">Features</a> - <a href="#downloads">Downloads</a> - <a href="#screenshots">Screenshots</a> - <a href="#future">Future</a> - <a href="#contributors">Contribution</a> - <a href="#credits">Credits</a> - <a href="#license">License</a> - <a href="https://enrecipes.vercel.app/">Website</a> - <a href="https://enrecipes.vercel.app/">Telegram group</a></p>
+<hr>
 
 ## Features
 
@@ -31,14 +33,14 @@ Check the [Roadmap](https://github.com/vishnuraghavb/EnRecipes/projects/1) for u
 
 ## Downloads
 
-You can get the latest release [here](https://github.com/vishnuraghavb/EnRecipes/releases)
+You can get the latest release [here](https://github.com/vishnuraghavb/EnRecipes/releases/latest)
 
 [![PlayStore](assets/Images/google-play-badge.png)](https://play.google.com/store/apps/details?id=com.vishnuraghav.enrecipes)
 [![IzzyOnDroid](assets/Images/IzzyOnDroid.png)](https://apt.izzysoft.de/fdroid/index/apk/com.vishnuraghav.enrecipes)
 
 ## Screenshots
 
-![EnRecipe](assets/Screenshots/2.png)![View Recipe](assets/Screenshots/3.png)![Ingredients](assets/Screenshots/4.png)![Edit Recipe](assets/Screenshots/5.png)![Share](assets/Screenshots/6.png)![Side Drawer](assets/Screenshots/7.png)![Mealplanner](assets/Screenshots/8.png)![Dark Mode](assets/Screenshots/10.png)
+[<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width=240>](fastlane/metadata/android/en-US/images/phoneScreenshots/2.png)[<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width=240>](fastlane/metadata/android/en-US/images/phoneScreenshots/3.png)[<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" width=240>](fastlane/metadata/android/en-US/images/phoneScreenshots/4.png)[<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" width=240>](fastlane/metadata/android/en-US/images/phoneScreenshots/5.png)[<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" width=240>](fastlane/metadata/android/en-US/images/phoneScreenshots/6.png)[<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" width=240>](fastlane/metadata/android/en-US/images/phoneScreenshots/7.png)[<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/8.png" width=240>](fastlane/metadata/android/en-US/images/phoneScreenshots/8.png)[<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/10.png" width=240>](fastlane/metadata/android/en-US/images/phoneScreenshots/10.png)
 
 ## Having issues, suggestions and feedback?
 
@@ -67,6 +69,10 @@ This app was written in my free time using NativeScript. I would like to thank a
 -   **Meen Pollichathu** by [Bency Veronica](https://www.instagram.com/bencys_lil_kitchen)
 -   **Curd Vada** by P. Shanmugalakshmi
 -   **Roasted Chicken Biriyani** by [Ranga](https://www.youtube.com/channel/UC6ONI92scjwMmk3IITKIx-g)
+
+## Principles
+
+-   Privacy by Design
 
 ## Technologies
 
