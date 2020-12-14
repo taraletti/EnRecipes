@@ -42,7 +42,7 @@ You can get the latest release [here](https://github.com/vishnuraghavb/EnRecipes
 
 ## Having issues, suggestions and feedback?
 
-You can add an issue [here](https://github.com/vishnuraghavb/EnRecipes/issues) or [join the Telegram group](http://t.me/enrecipes)(quicker replies)
+You can [create an issue here](https://github.com/vishnuraghavb/EnRecipes/issues) or [join the Telegram group](http://t.me/enrecipes)(quicker replies)
 
 ## Future
 
@@ -54,21 +54,9 @@ You can add an issue [here](https://github.com/vishnuraghavb/EnRecipes/issues) o
 -   [mondstern](https://codeberg.org/mondstern) (Translator)
 -   [epicalxyz](https://github.com/epicalxyz) (Translator)
 
-### Instruction for translators
+### Want to contribute?
 
-You can contribute by translating EnRecipes in your native language.
-
-1.  Fork this repository and head to the `app/i18n` folder.
-2.  Create a new JSON file or duplicate any existing file and start translating its values.
-3.  The filenames should be based on this [gist](https://gist.github.com/vishnuraghavb/bf27b068acc35e331adfba66d18e2094).
-4.  Once done, create a new pull request.
-
-#### Don't know what fork means? No issues.
-
-1.  Just [download the JSON file](https://raw.githubusercontent.com/vishnuraghavb/EnRecipes/main/app/i18n/en.default.json) and start translating its value(right side part after the colon":").
-2.  Once done, share the file to the [EnRecipes Telegram group](http://t.me/enrecipes) for verification.
-
-If everything looks good, your translations will be included in the next update and you'll be added to the contributors list for your work.
+Please read the [CONTRIBUTING.md](https://github.com/vishnuraghavb/EnRecipes/blob/main/CONTRIBUTING.md)
 
 ## Credits
 
