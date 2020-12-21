@@ -1,22 +1,21 @@
 <template>
 <Page @loaded="onPageLoad" actionBarHidden="true" :androidStatusBarBackground="appTheme == 'Light' ? '#f1f3f5' : '#212529'">
-
   <RadSideDrawer allowEdgeSwipe="true" showOverNavigation="true" ref="drawer" id="sideDrawer" drawerContentSize="270" gesturesEnabled="true" drawerTransition="SlideInOnTopTransition">
     <GridLayout rows="*, auto" columns="*" ~drawerContent class="sd">
       <StackLayout row="0">
-        <GridLayout rows="48" columns="auto, 24, *" v-for="(item, index) in topmenu" :key="index" class="sd-item orkm" :class="{
+        <GridLayout rows="48" columns="auto, *, auto" v-for="(item, index) in topmenu" :key="index" class="sd-item orkm" :class="{
               'selected-sd-item': currentComponent === item.component,
             }">
           <MDRipple row="0" colSpan="3" @tap="navigateTo(item.component, item.component, false, false)" />
           <Label col="0" row="0" class="bx" :text="icon[item.icon]" />
-          <Label col="2" row="0" :text="`${item.title}` | L" />
+          <Label col="1" row="0" :text="`${item.title}` | L" />
+          <Label class="recipeCount" v-if="getRecipeCount(item.title)" :text="getRecipeCount(item.title)" col="2" />
         </GridLayout>
         <StackLayout class="hr" margin="8"></StackLayout>
-        <GridLayout rows="48" columns="auto, 24, *" class="sd-item orkm" :class="{
+        <GridLayout rows="48" columns="auto, *" class="sd-item orkm" :class="{
               'selected-sd-item': currentComponent === 'MealPlanner',
             }">
           <MDRipple row="0" colSpan="3" @tap="navigateTo(MealPlanner, 'MealPlanner', true, false)" />
-
           <Label col="0" row="0" class="bx" :text="icon.calendar" />
           <Label col="2" row="0" :text="'Meal Planner' | L" />
         </GridLayout>
@@ -31,9 +30,10 @@
                   'selected-sd-item': currentComponent == item,
                 }" columns="auto, *, auto">
               <MDRipple row="0" colSpan="3" @tap="navigateTo(item, item, false, true)" />
-              <Label col="0" class="bx" :text="icon.label" margin="0 24 0 0" />
+              <Label col="0" class="bx" :text="icon.label" />
               <Label col="1" :text="`${item}` | L" />
               <MDButton variant="text" v-if="editCategory" @tap="renameCategory(item)" col="2" class="bx" :text="icon.edit" />
+              <Label class="recipeCount" v-else :text="getRecipeCount(item)" col="2" />
             </GridLayout>
           </StackLayout>
         </ScrollView>
@@ -42,7 +42,7 @@
         <StackLayout class="hr" margin="0 8 8"></StackLayout>
         <GridLayout class="sd-item orkm" :class="{
               'selected-sd-item': currentComponent == item.title,
-            }" v-for="(item, index) in bottommenu" :key="index" rows="48" columns="auto, 24, *">
+            }" v-for="(item, index) in bottommenu" :key="index" rows="48" columns="auto, *">
           <MDRipple colSpan="3" @tap="navigateTo(item.component, 'item.title', true, false)" />
           <Label class="bx" col="0" :text="icon[item.icon]" />
           <Label col="2" :text="`${item.title}` | L" />
@@ -73,14 +73,11 @@ import {
   mapState
 }
 from "vuex"
-
 import EnRecipes from "./EnRecipes"
 import MealPlanner from "./MealPlanner"
 import Settings from "./Settings"
 import About from "./About"
-
 import PromptDialog from "./modal/PromptDialog"
-
 export default {
   data() {
     return {
@@ -89,32 +86,27 @@ export default {
       filterTrylater: false,
       MealPlanner: MealPlanner,
       topmenu: [ {
-          title: "EnRecipes",
-          component: "EnRecipes",
-          icon: "home",
-        },
-        {
-          title: "Try Later",
-          component: "Try Later",
-          icon: "trylater",
-        },
-        {
-          title: "Favourites",
-          component: "Favourites",
-          icon: "heart",
-        },
-      ],
+        title: "EnRecipes",
+        component: "EnRecipes",
+        icon: "home",
+      }, {
+        title: "Try Later",
+        component: "Try Later",
+        icon: "trylater",
+      }, {
+        title: "Favourites",
+        component: "Favourites",
+        icon: "heart",
+      }, ],
       bottommenu: [ {
-          title: "Settings",
-          component: Settings,
-          icon: "cog",
-        },
-        {
-          title: "About",
-          component: About,
-          icon: "info",
-        },
-      ],
+        title: "Settings",
+        component: Settings,
+        icon: "cog",
+      }, {
+        title: "About",
+        component: About,
+        icon: "info",
+      }, ],
       editCategory: false,
       appTheme: "Light",
     }
@@ -124,14 +116,7 @@ export default {
     MealPlanner,
   },
   computed: {
-    ...mapState( [
-      "icon",
-      "recipes",
-      "categories",
-      "yieldUnits",
-      "mealPlans",
-      "currentComponent",
-    ] ),
+    ...mapState( [ "icon", "recipes", "categories", "yieldUnits", "mealPlans", "currentComponent", ] ),
     categoriesWithRecipes() {
       let arr = this.recipes.map( ( e ) => {
         return e.category
@@ -140,14 +125,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions( [
-      "setCurrentComponentAction",
-      "initializeRecipes",
-      "initializeCategories",
-      "initializeYieldUnits",
-      "initializeMealPlans",
-      "renameCategoryAction",
-    ] ),
+    ...mapActions( [ "setCurrentComponentAction", "initializeRecipes", "initializeCategories", "initializeYieldUnits", "initializeMealPlans", "renameCategoryAction", ] ),
     onPageLoad() {
       if ( this.appTheme === "Light" ) {
         const View = android.view.View
@@ -156,7 +134,6 @@ export default {
         decorView.setSystemUiVisibility( View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR )
       }
     },
-
     // HELPERS
     toggleCatEdit() {
       this.editCategory = !this.editCategory
@@ -189,23 +166,32 @@ export default {
       this.selectedCategory = e.item
       this.closeDrawer()
     },
-
     closeDrawer() {
       this.$refs.drawer.nativeView.closeDrawer()
     },
-
+    getRecipeCount( category ) {
+      let count = ''
+      switch ( category ) {
+        case 'EnRecipes':
+          count = this.recipes.length
+          break;
+        case 'Try Later':
+          count = this.recipes.filter( e => !e.tried ).length
+          break;
+        case 'Favourites':
+          count = this.recipes.filter( e => e.isFavorite ).length
+          break;
+        default:
+          count = this.recipes.filter( e => e.category === category ).length
+      }
+      return count
+    },
     // NAVIGATION HANDLERS
     hijackGlobalBackEvent() {
-      AndroidApplication.on(
-        AndroidApplication.activityBackPressedEvent,
-        this.globalBackEvent
-      )
+      AndroidApplication.on( AndroidApplication.activityBackPressedEvent, this.globalBackEvent )
     },
     releaseGlobalBackEvent() {
-      AndroidApplication.off(
-        AndroidApplication.activityBackPressedEvent,
-        this.globalBackEvent
-      )
+      AndroidApplication.off( AndroidApplication.activityBackPressedEvent, this.globalBackEvent )
     },
     globalBackEvent( args ) {
       function preventDefault() {
@@ -215,12 +201,8 @@ export default {
         preventDefault()
         this.closeDrawer()
         this.editCategory = false
-      }
-      else if (
-        [ "Favourites", "Try Later", this.selectedCategory ].includes(
-          this.currentComponent
-        )
-      ) {
+      } else if (
+        [ "Favourites", "Try Later", this.selectedCategory ].includes( this.currentComponent ) ) {
         preventDefault()
         this.setCurrentComponentAction( "EnRecipes" )
         this.filterFavourites = this.filterTrylater = false
@@ -237,8 +219,7 @@ export default {
             backstackVisible: false
           } )
           this.closeDrawer()
-        }
-        else if ( !this.editCategory || !isCategory ) {
+        } else if ( !this.editCategory || !isCategory ) {
           this.releaseGlobalBackEvent()
           this.hijackGlobalBackEvent()
           this.setCurrentComponentAction( to )
@@ -253,8 +234,7 @@ export default {
           this.closeDrawer()
         }
         this.editCategory = false
-      }
-      else {
+      } else {
         this.closeDrawer()
       }
     },

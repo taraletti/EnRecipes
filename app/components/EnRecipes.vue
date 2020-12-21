@@ -3,7 +3,7 @@
   <ActionBar :androidElevation="viewIsScrolled ? 4 : 0">
     <GridLayout v-if="showSearch" columns="auto, *" verticalAlignment="center">
       <MDButton class="bx" :text="icon.back" variant="text" automationText="Back" col="0" @tap="closeSearch" />
-      <SearchBar col="1" :hint="'Search' | L" v-model="searchQuery" @textChange="updateFilter" @clear="clearSearch" />
+      <SearchBar col="1" :hint="'Search by name or ingredient' | L" v-model="searchQuery" @textChange="updateFilter" @clear="clearSearch" />
     </GridLayout>
     <GridLayout v-else columns="auto, *, auto, auto">
       <MDButton class="bx" col="0" variant="text" @tap="showDrawer" :text="icon.menu" automationText="Back" />
@@ -133,17 +133,15 @@ export default {
   computed: {
     ...mapState( [ "icon", "recipes", "currentComponent" ] ),
     filteredRecipes() {
+      let ingredients = this.recipes.map( e => e.ingredients.map( f => f.item.toLowerCase() ).join() ).join()
       if ( this.filterFavourites ) {
-        return this.recipes.filter( e => e.isFavorite && e.title.toLowerCase().includes( this.searchQuery ) );
-      }
-      else if ( this.filterTrylater ) {
-        return this.recipes.filter( e => !e.tried && e.title.toLowerCase().includes( this.searchQuery ) );
-      }
-      else if ( this.selectedCategory ) {
-        return this.recipes.filter( e => e.category === this.selectedCategory && e.title.toLowerCase().includes( this.searchQuery ) );
-      }
-      else {
-        return this.recipes.filter( e => e.title.toLowerCase().includes( this.searchQuery ) );
+        return this.recipes.filter( e => e.isFavorite && e.title.toLowerCase().includes( this.searchQuery ) || ingredients.includes( this.searchQuery ) );
+      } else if ( this.filterTrylater ) {
+        return this.recipes.filter( e => !e.tried && e.title.toLowerCase().includes( this.searchQuery ) || ingredients.includes( this.searchQuery ) );
+      } else if ( this.selectedCategory ) {
+        return this.recipes.filter( e => e.category === this.selectedCategory && e.title.toLowerCase().includes( this.searchQuery ) || ingredients.includes( this.searchQuery ) );
+      } else {
+        return this.recipes.filter( e => e.title.toLowerCase().includes( this.searchQuery ) || ingredients.includes( this.searchQuery ) );
       }
     },
     noResultFor() {
@@ -292,17 +290,15 @@ export default {
       }, 1 );
     },
     filterFunction( item ) {
+      let ingredients = item.ingredients.map( e => e.item.toLowerCase() ).join()
       if ( this.filterFavourites ) {
-        return item.isFavorite ? item.title.toLowerCase().includes( this.searchQuery ) : false;
-      }
-      else if ( this.filterTrylater ) {
-        return item.tried ? false : item.title.toLowerCase().includes( this.searchQuery );
-      }
-      else if ( this.selectedCategory ) {
-        return item.category === this.selectedCategory ? item.title.toLowerCase().includes( this.searchQuery ) : false;
-      }
-      else {
-        return item.title.toLowerCase().includes( this.searchQuery );
+        return item.isFavorite ? item.title.toLowerCase().includes( this.searchQuery ) || ingredients.includes( this.searchQuery ) : false;
+      } else if ( this.filterTrylater ) {
+        return item.tried ? false : item.title.toLowerCase().includes( this.searchQuery ) || ingredients.includes( this.searchQuery );
+      } else if ( this.selectedCategory ) {
+        return item.category === this.selectedCategory ? item.title.toLowerCase().includes( this.searchQuery ) || ingredients.includes( this.searchQuery ) : false;
+      } else {
+        return item.title.toLowerCase().includes( this.searchQuery ) || ingredients.includes( this.searchQuery );
       }
     },
     onSwiping( {
