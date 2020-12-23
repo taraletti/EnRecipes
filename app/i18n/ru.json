@@ -276,5 +276,9 @@
   "Filtered result": "Отфильтрованный результат",
   "Created": "Создано",
   "Star rating": "Оценка",
-  "Untitled Recipe": "Рецепт без названия"
+  "Untitled Recipe": "Рецепт без названия",
+  "Remove recipe from breakfast?": "Remove recipe from breakfast?",
+  "Remove recipe from lunch?": "Remove recipe from lunch?",
+  "Remove recipe from dinner?": "Remove recipe from dinner?",
+  "Remove recipe from snacks?": "Remove recipe from snacks?"
 }
