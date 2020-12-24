@@ -276,5 +276,9 @@
   "Filtered result": "Resultados filtrados",
   "Created": "Creado",
   "Star rating": "Valoración por estrellas",
-  "Untitled Recipe": "Receta sin título"
+  "Untitled Recipe": "Receta sin título",
+  "Remove recipe from breakfast?": "Remove recipe from breakfast?",
+  "Remove recipe from lunch?": "Remove recipe from lunch?",
+  "Remove recipe from dinner?": "Remove recipe from dinner?",
+  "Remove recipe from snacks?": "Remove recipe from snacks?"
 }
