@@ -207,7 +207,7 @@
   "Reset cuisines list": "உணவு வகைகள் பட்டியலை மீட்டமை",
   "Reset categories list": "பகுப்புகள் பட்டியலை மீட்டமை",
   "Reset yield units list": "மகசூல் அலகுகள் பட்டியலை மீட்டமை",
-  "Reset units list": "அலகுகளின் பட்டியலை மீட்டமை",
+  "Reset units list": "அலகுகள் பட்டியலை மீட்டமை",
   "Reset successful": "வெற்றிகரமாக மீட்டமைக்கப்பட்டது",
   "Recipe not found": "சமையல் குறிப்பு காணப்படவில்லை",
   "Your search did not match any recipes in the filtered result": "உங்கள் தேடல் வடிகட்டப்பட்ட முடிவில் எந்த சமையல் குறிப்புகளுடனும் பொருந்தவில்லை",
@@ -276,5 +276,9 @@
   "Filtered result": "வடிகட்டப்பட்ட முடிவு",
   "Created": "உருவாக்கப்பட்டது",
   "Star rating": "நட்சத்திர மதிப்பீடு",
-  "Untitled Recipe": "பெயரிடப்படாத சமையல் குறிப்பு"
+  "Untitled Recipe": "பெயரிடப்படாத சமையல் குறிப்பு",
+  "Remove recipe from breakfast?": "காலை உணவில் இருந்து சமையல் குறிப்பை அகற்றவா?",
+  "Remove recipe from lunch?": "மதிய உணவில் இருந்து சமையல் குறிப்பை அகற்றவா?",
+  "Remove recipe from dinner?": "இரவு உணவில் இருந்து சமையல் குறிப்பை அகற்றவா?",
+  "Remove recipe from snacks?": "தின்பண்டங்களிலிருந்து சமையல் குறிப்பை அகற்றவா?"
 }
