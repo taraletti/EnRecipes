@@ -209,7 +209,7 @@
   "Reset yield units list": "மகசூல் அலகுகள் பட்டியலை மீட்டமை",
   "Reset units list": "அலகுகள் பட்டியலை மீட்டமை",
   "Reset successful": "வெற்றிகரமாக மீட்டமைக்கப்பட்டது",
-  "Recipe not found": "சமையல் குறிப்பு காணப்படவில்லை",
+  "Recipe not found": "சமையல் குறிப்பு கிடைக்கவில்லை",
   "Your search did not match any recipes in the filtered result": "உங்கள் தேடல் வடிகட்டப்பட்ட முடிவில் எந்த சமையல் குறிப்புகளுடனும் பொருந்தவில்லை",
   "Quickest first": "விரைவானவை முதலில்",
   "Slowest first": "மெதுவானவை முதலில்",
@@ -280,5 +280,10 @@
   "Remove recipe from breakfast?": "காலை உணவில் இருந்து சமையல் குறிப்பை அகற்றவா?",
   "Remove recipe from lunch?": "மதிய உணவில் இருந்து சமையல் குறிப்பை அகற்றவா?",
   "Remove recipe from dinner?": "இரவு உணவில் இருந்து சமையல் குறிப்பை அகற்றவா?",
-  "Remove recipe from snacks?": "தின்பண்டங்களிலிருந்து சமையல் குறிப்பை அகற்றவா?"
+  "Remove recipe from snacks?": "தின்பண்டங்களிலிருந்து சமையல் குறிப்பை அகற்றவா?",
+  "Import failed": "இறக்குமதி தோல்வியுற்றது",
+  "Backup file is incorrect or corrupt.": "காப்பு கோப்பு தவறானது அல்லது சிதைந்துள்ளது.",
+  "Backup file seems empty.": "காப்பு கோப்பு காலியாக உள்ளது.",
+  "Backup file has been modified externally.": "காப்பு கோப்பு வெளிப்புறமாக மாற்றப்பட்டுள்ளது.",
+  "Invalid file:": "தவறான கோப்பு:"
 }
