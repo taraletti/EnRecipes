@@ -280,5 +280,10 @@
   "Remove recipe from breakfast?": "Entferne Rezept von Frühstück?",
   "Remove recipe from lunch?": "Entferne Rezept von Mittagessen?",
   "Remove recipe from dinner?": "Entferne Rezept von Abendessen?",
-  "Remove recipe from snacks?": "Entferne Rezept von Imbiss?"
+  "Remove recipe from snacks?": "Entferne Rezept von Imbiss?",
+  "Import failed": "Import failed",
+  "Backup file is incorrect or corrupt.": "Backup file is incorrect or corrupt.",
+  "Backup file seems empty.": "Backup file seems empty.",
+  "Backup file has been modified externally.": "Backup file has been modified externally.",
+  "Invalid file:": "Invalid file:"
 }
