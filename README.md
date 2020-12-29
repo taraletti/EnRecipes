@@ -7,19 +7,20 @@
 <a href="https://github.com/vishnuraghavb/EnRecipes/releases" alt="Release version"><img src="https://img.shields.io/github/v/release/vishnuraghavb/EnRecipes?label=Release"></a> <a href="https://github.com/vishnuraghavb/EnRecipes/releases" alt="Release date"><img src="https://img.shields.io/github/release-date/vishnuraghavb/EnRecipes?color=blue&label=Release%20date"></a> <a href="https://www.gnu.org/licenses/gpl-3.0" alt="License: GPLv3"><img src="https://img.shields.io/badge/License-GPL%20v3-blue"></a> <a href="https://github.com/vishnuraghavb/EnRecipes/issues" alt="GitHub issues"><img src="https://img.shields.io/github/issues/vishnuraghavb/EnRecipes?label=Issues"></a> <a href="https://liberapay.com/vishnuraghavb/donate" alt="Translation Status"><img src="https://img.shields.io/liberapay/patrons/vishnuraghavb?label=Patrons"></a>
 
 <hr>
-<p align="center"><a href="#features">Features</a> - <a href="#downloads">Downloads</a> - <a href="#screenshots">Screenshots</a> - <a href="#future">Future</a> - <a href="#contributors">Contribution</a> - <a href="#credits">Credits</a> - <a href="#license">License</a> - <a href="https://enrecipes.vercel.app/">Website</a> - <a href="https://enrecipes.vercel.app/">Telegram group</a></p>
+<p align="center"><a href="#features">Features</a> - <a href="#downloads">Downloads</a> - <a href="#screenshots">Screenshots</a> - <a href="https://github.com/vishnuraghavb/EnRecipes/wiki/User-Guide">User guide</a> - <a href="#future">Future</a> - <a href="#contributors">Contribution</a> - <a href="#credits">Credits</a> - <a href="#license">License</a> - <a href="https://enrecipes.vercel.app/">Website</a> - <a href="https://enrecipes.vercel.app/">Telegram group</a></p>
 <hr>
 
 ## Features
 
 -   Create recipes quickly
 -   Add photo, notes and combinations to your recipes
--   Organise your recipes by category
--   Quickly search for your recipes either by name or ingredient
--   Mark recipes as favourites and add them to your Try Later list
+-   Organise your recipes by cuisine, category and tags
+-   Quickly search for your recipes by name, ingredient or tag
+-   Mark recipes as Favourites and add them to your Try Later list
 -   Scale your recipe ingredients to serve more or less people
 -   Get notified of the last time you tried a recipe
--   Share your recipe to anyone by any means as a nicely formatted message. You can share the recipe photo too.
+-   Share your recipe to anyone by any means as a nicely formatted message. You can share the recipe photo too
+-   Shake to view random recipe
 -   Create meal plans
 -   Import/Export recipes
 -   Light & Dark theme
@@ -27,7 +28,7 @@
 -   No internet access is required and never asks for any unwanted permissions
 -   100% free and open-source
 
-**Languages supported**: English, German, Tamil
+**Languages supported**: Danish, Dutch, English, German, Portuguese, Russian, Spanish and Tamil
 
 Check the [Roadmap](https://github.com/vishnuraghavb/EnRecipes/projects/1) for upcoming features.
 
@@ -49,16 +50,14 @@ You can [create an issue here](https://github.com/vishnuraghavb/EnRecipes/issues
 ## Future
 
 -   [Roadmap](https://github.com/vishnuraghavb/EnRecipes/projects/1)
--   [Translations](https://github.com/vishnuraghavb/EnRecipes/projects/2) - Contributors are welcome!
+-   [Translations](https://github.com/vishnuraghavb/EnRecipes/projects/2) - Want to contribute? Please read the [CONTRIBUTING.md](https://github.com/vishnuraghavb/EnRecipes/blob/main/CONTRIBUTING.md)
 
 ## Contributors
 
--   [mondstern](https://codeberg.org/mondstern) (Translator)
--   [epicalxyz](https://github.com/epicalxyz) (Translator)
-
-### Want to contribute?
-
-Please read the [CONTRIBUTING.md](https://github.com/vishnuraghavb/EnRecipes/blob/main/CONTRIBUTING.md)
+-   [mondstern](https://codeberg.org/mondstern) (Translations: Danish, Dutch and German)
+-   [EpicalXYZ](https://github.com/epicalxyz) (Translations: Portuguese)
+-   [dm9pZCAq](https://github.com/dm9pZCAq) (Translations: Russian)
+-   [AHaro88](https://github.com/taraletti) (Translations: Spanish)
 
 ## Credits
 

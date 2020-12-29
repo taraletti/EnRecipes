@@ -21,8 +21,23 @@
       </GridLayout>
       <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="openURL('https://github.com/vishnuraghavb/enrecipes')" />
-        <Label col="0" class="bx" :text="icon.link" />
-        <Label verticalAlignment="center" col="1" :text="'View project on GitHub' | L" textWrap="true" />
+        <Label col="0" class="bx" :text="icon.github" />
+        <Label verticalAlignment="center" col="1" :text="'View on GitHub' | L" textWrap="true" />
+      </GridLayout>
+      <GridLayout columns="auto, *" class="option">
+        <MDRipple colSpan="2" @tap="openURL('https://github.com/vishnuraghavb/EnRecipes/blob/main/PRIVACY.md')" />
+        <Label col="0" class="bx" :text="icon.lock" />
+        <Label verticalAlignment="center" col="1" :text="'Privacy policy' | L" textWrap="true" />
+      </GridLayout>
+      <GridLayout columns="auto, *" class="option">
+        <MDRipple colSpan="2" @tap="openURL('https://github.com/vishnuraghavb/EnRecipes/wiki/User-Guide')" />
+        <Label col="0" class="bx" :text="icon.compass" />
+        <Label verticalAlignment="center" col="1" :text="'User guide' | L" textWrap="true" />
+      </GridLayout>
+      <GridLayout columns="auto, *" class="option">
+        <MDRipple colSpan="2" @tap="openURL('https://www.vishnuraghav.com/donate')" />
+        <Label col="0" class="bx" :text="icon.donate" />
+        <Label verticalAlignment="center" col="1" :text="'Donate' | L" textWrap="true" />
       </GridLayout>
       <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="openURL('https://t.me/enrecipes')" />
@@ -39,24 +54,46 @@
         <Label col="0" class="bx" :text="icon.user" />
         <Label verticalAlignment="center" col="1" :text="'Vishnu Raghav B' | L" textWrap="true" />
       </GridLayout>
-      <GridLayout columns="auto, *" class="option">
-        <MDRipple colSpan="2" @tap="openURL('https://github.com/vishnuraghavb')" />
-        <Label col="0" class="bx" :text="icon.link" />
-        <Label verticalAlignment="center" col="1" :text="'Follow on GitHub' | L" textWrap="true" />
-      </GridLayout>
-      <GridLayout columns="auto, *" class="option">
-        <MDRipple colSpan="2" @tap="openURL('https://mastodon.social/@vishnuraghavb')" />
-        <Label col="0" class="bx" :text="icon.link" />
-        <Label verticalAlignment="center" col="1" :text="'Follow on Mastodon' | L" textWrap="true" />
-      </GridLayout>
       <StackLayout class="hr m-10"></StackLayout>
       <Label :text="'Contributors' | L" class="group-header orkm" />
       <GridLayout columns="auto, *" class="option">
-        <MDRipple colSpan="2" @tap="openURL('https://github.com/mondlicht-und-sterne')" />
-        <Label col="0" class="bx" :text="icon.user" />
+        <MDRipple colSpan="2" @tap="openURL('https://codeberg.org/mondstern')" />
+        <Label col="0" class="bx" :text="icon.link" />
         <StackLayout col="1">
           <Label text="mondstern" textWrap="true" />
-          <Label :text="`${$options.filters.L('Translations:')} Deutsch`" class="info" textWrap="true" />
+          <Label :text="'Translator' | L" class="info" textWrap="true" />
+        </StackLayout>
+      </GridLayout>
+      <GridLayout columns="auto, *" class="option">
+        <MDRipple colSpan="2" @tap="openURL('https://github.com/epicalxyz')" />
+        <Label col="0" class="bx" :text="icon.github" />
+        <StackLayout col="1">
+          <Label text="EpicalXYZ" textWrap="true" />
+          <Label :text="'Translator' | L" class="info" textWrap="true" />
+        </StackLayout>
+      </GridLayout>
+      <GridLayout columns="auto, *" class="option">
+        <MDRipple colSpan="2" @tap="openURL('https://github.com/dm9pZCAq')" />
+        <Label col="0" class="bx" :text="icon.github" />
+        <StackLayout col="1">
+          <Label text="dm9pZCAq" textWrap="true" />
+          <Label :text="'Translator' | L" class="info" textWrap="true" />
+        </StackLayout>
+      </GridLayout>
+      <GridLayout columns="auto, *" class="option">
+        <MDRipple colSpan="2" @tap="openURL('https://github.com/taraletti')" />
+        <Label col="0" class="bx" :text="icon.github" />
+        <StackLayout col="1">
+          <Label text="AHaro88" textWrap="true" />
+          <Label :text="'Translator' | L" class="info" textWrap="true" />
+        </StackLayout>
+      </GridLayout>
+      <GridLayout columns="auto, *" class="option">
+        <MDRipple colSpan="2" @tap="openURL('https://github.com/RAPXT')" />
+        <Label col="0" class="bx" :text="icon.github" />
+        <StackLayout col="1">
+          <Label text="RAPXT" textWrap="true" />
+          <Label :text="'Translator' | L" class="info" textWrap="true" />
         </StackLayout>
       </GridLayout>
     </StackLayout>

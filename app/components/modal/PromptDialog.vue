@@ -3,7 +3,7 @@
   <StackLayout class="dialogContainer" :class="appTheme">
     <Label class="dialogTitle orkm" :text="`${title}` | L" textWrap='true' />
     <StackLayout class="dialogInput">
-      <TextField @loaded="focusField" :hint="hint ? hint : ''" v-model="category" autocapitalizationType="words" />
+      <TextField @loaded="focusField" :hint="hint ? hint : ''" v-model="category" autocapitalizationType="words" @returnPress="$modal.close(category)" />
     </StackLayout>
     <GridLayout rows="auto" columns="*, auto, auto" class="actionsContainer">
       <MDButton :rippleColor="rippleColor" variant="text" col="1" class="action orkm" :text="'CANCEL' | L" @tap="$modal.close(false)" />

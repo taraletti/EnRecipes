@@ -11,12 +11,12 @@ $gray7: #495057;
 $gray8: #343a40;
 $gray9: #212529;
 $orange: #ff5200;
-$fabRipple: #ff864d;
+$fabRipple: #ff922b;
 $red: #c92a2a;
-$breakfast: #ffb180;
-$lunch: #ceff80;
-$dinner: #80ceff;
-$snacks: #b180ff; // Global SCSS styling
+$breakfast: #ff922b;
+$lunch: #94d82d;
+$dinner: #339af0;
+$snacks: #845ef7; // Global SCSS styling
 // @see https://docs.nativescript.org/ui/styling
 .ns-modal,
 Page {
@@ -55,10 +55,11 @@ Page {
   .sd {
     background: $gray1;
   }
+  .combination,
+  .group-info,
   .overviewItem,
   .recipeItem,
-  .textCard,
-  .urlCard {
+  .textCard {
     background: white;
   }
   TextField.combinationToken {
@@ -66,6 +67,7 @@ Page {
   }
   .sd-group-header,
   .sd-item,
+  .tag,
   .time .bx {
     color: $gray8;
   }
@@ -78,7 +80,8 @@ Page {
     background: $gray3;
   }
   .count,
-  .marker {
+  .marker,
+  .noteCount {
     color: $gray1;
     background: $gray9;
   }
@@ -121,15 +124,19 @@ Page {
   .sd {
     background: $gray9;
   }
+  .combination,
   .overviewItem,
   .recipeItem,
   .textCard,
-  .urlCard,
   TextField.combinationToken {
     background: $gray8;
   }
+  .group-info {
+    background: #111;
+  }
   .sd-group-header,
   .sd-item,
+  .tag,
   .time .bx {
     color: $gray3;
   }
@@ -142,7 +149,8 @@ Page {
     background: #111;
   }
   .count,
-  .marker {
+  .marker,
+  .noteCount {
     color: $gray9;
     background: $gray1;
   }
@@ -168,7 +176,7 @@ TimePickerField {
   width: 100%;
   border-width: 1;
   font-size: 14;
-  padding: 14 14 13;
+  padding: 13 12;
   margin: 8 0 0;
   border-radius: 4;
   border-color: $gray6;
@@ -182,25 +190,25 @@ ListPicker {
 }
 SearchBar {
   font-family: 'Orkney-Regular';
-  font-size: 16;
+  font-size: 14;
   text-field-hint-color: $gray6;
 }
 TabView {
   tab-text-color: $gray6;
 }
 .inputField {
-  margin-bottom: 4;
+  margin-bottom: 8;
 }
 .fieldLabel {
   font-size: 12;
-  margin-left: 12;
+  margin-left: 8;
   padding: 0 4;
 }
 .progressContainer {
   width: 100%;
 }
-.category,
-.group-header,
+// .category,
+// .group-header,
 .text-btn,
 MDActivityIndicator {
   color: $orange;
@@ -208,12 +216,16 @@ MDActivityIndicator {
 MDProgress {
   progress-color: $orange;
 }
+Switch {
+  background-color: $orange;
+  off-background-color: $gray6;
+}
 // -----------------------------
 // ActionBar
 ActionBar {
+  height: 64;
   margin: 0;
-  padding: 6 8;
-  // height: 64;
+  padding: 0 8;
   GridLayout {
     padding: 0;
     margin: 0;
@@ -242,6 +254,7 @@ ActionBar {
   vertical-alignment: center;
   .bx {
     font-size: 24;
+    margin: 0 24 0 0;
   }
   &.selected-sd-item {
     color: $orange;
@@ -253,7 +266,7 @@ ActionBar {
   // prettier-ignore
   Label {
     padding: 2 16 0 0;
-    font-size: 16;
+    font-size: 14;
     vertical-alignment: center;
     &.bx {
       padding: 0 0 0 16;
@@ -265,10 +278,27 @@ ActionBar {
   MDButton.bx {
     margin: 0;
   }
+  .recipeCount {
+    padding: 4;
+    font-size: 14;
+    margin: 0 8 0 0;
+    vertical-alignment: center;
+  }
 }
 .sd-group-header {
   width: 100%;
   padding: 0 0 8 8;
+  MDButton.bx {
+    margin: 0;
+  }
+  .filterPath {
+    line-height: 6;
+  }
+}
+.noTags {
+  font-size: 14;
+  text-align: center;
+  margin: 8;
 }
 MDRipple {
   border-radius: 4;
@@ -295,7 +325,7 @@ MDButton {
   line-height: 8;
   padding: 0 32;
   text-align: center;
-  font-size: 16;
+  font-size: 14;
   horizontal-alignment: center;
   .icon {
     font-size: 64;
@@ -308,10 +338,9 @@ MDButton {
     margin-bottom: 16;
   }
   .title {
-    font-size: 20;
+    font-size: 18;
     text-align: center;
     padding: 0;
-    margin: 0 0 8;
     horizontal-alignment: center;
     .bx {
       font-size: 24;
@@ -323,29 +352,46 @@ MDButton {
 // Recipe Items
 RadListView {
   margin: 0 0 128;
-  font-size: 16;
+  font-size: 14;
 }
 .recipeItem {
-  margin: 8 16;
+  margin: 4 8;
   border-radius: 4;
   .recipeInfo {
-    margin: 4;
-    .category,
-    .time {
-      font-size: 12;
+    margin: 0;
+    padding: 8;
+    .attr,
+    .category {
+      font-size: 10;
       padding: 0;
       margin: 0;
     }
     .title {
       margin: 0;
-      padding: 4 0;
+      padding: 2 0;
     }
-    .timeContainer {
+    .attrContainer {
       padding: 0;
-      .time {
-        padding: 0 0 0 4;
+      .attr {
+        padding: 1 8 0 2;
       }
     }
+  }
+}
+.tagsContainer {
+  padding: 2 0 0;
+  .collapsedTagsCount {
+    font-size: 10;
+    padding: 1 0 0 2;
+  }
+  .tag {
+    font-size: 10;
+    padding: 0 4;
+    margin: 0 4 0 0;
+    line-height: 0;
+    border-radius: 4;
+    border-width: 1;
+    border-color: $gray6;
   }
 }
 .imageHolder {
@@ -362,25 +408,33 @@ RadListView {
   margin: 0 8;
   background: $red;
   color: #fff;
-  height: 128;
+  height: 104;
   border-radius: 4;
 }
 // -----------------------------
 // SETTINGS
 .group-header {
-  text-transform: uppercase;
+  // text-transform: uppercase;
   padding: 8;
+}
+.group-info {
+  text-align: center;
+  padding: 16;
+  line-height: 6;
+  margin-top: 8;
+  border-radius: 4;
 }
 .main-container {
   padding: 8 8 88;
   .option {
-    font-size: 16;
+    font-size: 14;
+    line-height: 6;
     .bx {
       margin: 11 24 11 16;
     }
     .info {
       font-size: 12;
-      line-height: 4;
+      padding-top: 0;
     }
     StackLayout {
       margin: 9 24 9 0;
@@ -395,51 +449,69 @@ RadListView {
   width: 100%;
   border-radius: 4;
   .appIcon {
-    height: 128;
+    height: 96;
   }
 }
 // -----------------------------
 // VIEW RECIPE
 .viewRecipe {
+  .attr,
   .category,
   .ingredient,
-  .time {
-    font-size: 16;
+  .tag,
+  .tagsTitle {
+    font-size: 14;
   }
+  .attr,
   .category {
-    margin: 0 8;
+    margin: 0 12;
   }
-  .time {
-    margin: 0 8;
+  .small {
+    font-size: 10;
   }
   .title {
-    font-size: 22;
+    font-size: 18;
     line-height: 6;
+    padding: 0 12;
+  }
+  .ratingContainer {
+    margin: 14 8 6;
+    .rating {
+      margin-right: 8;
+      color: $orange;
+    }
   }
   .subTitle {
-    font-size: 18;
-    line-height: 4;
+    font-size: 14;
+    line-height: 6;
+  }
+  .tagsContainer {
+    padding: 18 12 0;
+    .tag {
+      padding: 1 6;
+      margin: 0 8 8 0;
+    }
   }
   .overviewContainer {
-    margin-top: 12;
+    margin: 12 0 24;
     .overviewItem {
       border-radius: 4;
-      margin: 8;
+      margin: 4;
       android-elevation: 1;
       .bx {
-        padding: 12 0 0 12;
+        padding: 16 0 0 16;
         color: $gray6;
         horizontal-alignment: left;
       }
       .itemCount {
-        font-size: 16;
-        padding: 8 12 12;
+        font-size: 14;
+        padding: 8 16 16;
       }
     }
   }
   .ingredient {
-    line-height: 6;
-    padding-bottom: 0;
+    font-family: 'Orkney-Regular';
+    margin: 0 0 0 4;
   }
   .count {
     width: 24;
@@ -447,40 +519,49 @@ RadListView {
     padding-top: 4%;
     margin: 0 0 0 8;
     text-align: center;
+    vertical-alignment: top;
+    horizontal-alignment: center;
     border-radius: 99;
   }
   .instruction {
-    font-size: 16;
+    font-size: 14;
     line-height: 6;
-    padding: 1 0 24 36;
+    padding: 2 0 24 35;
     margin: 0 0 0 19;
     border-width: 0 0 0 2;
   }
   .instruction.noBorder {
     border-color: transparent;
   }
-  .urlCard {
-    margin: 8 16;
+  .combination {
+    margin: 8 8 0;
     border-radius: 4;
-    font-size: 16;
+    font-size: 14;
     .bx {
       font-size: 24;
+      padding: 0 0 0 16;
     }
-    .link {
-      padding: 13 16 13 11;
+    .combinationTitle {
+      padding: 14 24;
       margin: 0;
       line-height: 6;
     }
-    .linkIcon {
-      padding: 0 0 0 12;
-    }
   }
-  .textCard {
-    font-size: 16;
+  .noteCount {
+    width: 24;
+    height: 24;
+    padding-top: 4%;
+    margin: 0 0 0 8;
+    text-align: center;
+    vertical-alignment: top;
+    horizontal-alignment: center;
+    clip-path: polygon(4% 12%, 12% 4%, 75% 4%, 96% 25%, 96% 88%, 88% 96%, 12% 96%, 4% 88%,);
+  }
+  .note {
+    font-size: 14;
     line-height: 6;
-    padding: 13 16;
-    margin: 8 16;
-    border-radius: 4;
+    padding: 2 0 24 37;
+    margin: 0 0 0 19;
   }
 }
 // -----------------------------
@@ -500,7 +581,7 @@ MDFloatingActionButton {
 // -----------------------------
 // EDIT RECIPE
 .sectionTitle {
-  font-size: 20;
+  font-size: 18;
 }
 .text-btn {
   font-size: 14;
@@ -522,38 +603,42 @@ MDButton.closeBtn {
   padding: 0 0 88;
   width: 100%;
   .plansContainer {
-    padding: 8 4;
-    color: $gray9;
+    margin: 16 8 0 16;
+    padding: 0;
+    border-left-width: 8;
     &.breakfast {
-      background: $breakfast;
+      border-left-color: $breakfast;
     }
     &.lunch {
-      background: $lunch;
+      border-left-color: $lunch;
     }
     &.dinner {
-      background: $dinner;
+      border-left-color: $dinner;
     }
     &.snacks {
-      background: $snacks;
+      border-left-color: $snacks;
     }
     .periodLabel {
-      text-transform: uppercase;
+      text-transform: capitalize;
       vertical-alignment: center;
       font-size: 14;
       padding: 0 0 0 16;
     }
+    MDRipple {
+      background: white;
+    }
     .recipes {
-      margin: 4 8;
+      margin: 0 8 8 16;
       .recipeTitle {
         font-size: 14;
-        padding: 6 8;
-        line-height: 4;
-      }
-      .closeBtn {
-        margin: 0 8;
-        vertical-alignment: top;
+        padding: 14 16;
+        line-height: 6;
       }
     }
+    // .closeBtn {
+    //   margin: 0 16 0 4;
+    //   vertical-alignment: top;
+    // }
     MDButton,
     MDRipple {
       ripple-color: rgba($gray6, 0.2);
@@ -567,7 +652,7 @@ MDButton.closeBtn {
   width: 100%;
   color: $gray9;
   background: $gray1;
-  font-size: 16;
+  font-size: 14;
   &.dark {
     color: $gray1;
     background: $gray9;
@@ -575,7 +660,7 @@ MDButton.closeBtn {
   .dialogTitle {
     line-height: 6;
     padding: 24 24 16;
-    font-size: 20;
+    font-size: 18;
   }
   .dialogInput {
     padding: 0 24 16;
@@ -590,6 +675,11 @@ MDButton.closeBtn {
     line-height: 6;
     padding: 13 24;
     margin: 0;
+    border-radius: 1;
+    background: transparent;
+  }
+  .actionToggle {
+    background: $orange;
   }
   .actionsContainer {
     padding: 8;
@@ -598,9 +688,10 @@ MDButton.closeBtn {
     font-size: 12;
     padding: 12;
     min-width: 0;
-    color: #ff7043;
+    color: $orange;
   }
   MDButton.actionIcon {
+    font-size: 14;
     width: auto;
     height: auto;
     min-width: 0;

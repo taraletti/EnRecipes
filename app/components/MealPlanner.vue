@@ -15,12 +15,11 @@
         <StackLayout v-for="(mealType, index) in mealTimes" :key="'mealType' + index" class="plansContainer" :class="mealType">
           <GridLayout columns="*, auto" class="header">
             <Label col="0" class="periodLabel orkm" :text="mealType | L" />
-            <MDButton col="1" variant="text" class="bx addMeal" :text="icon.plus" @tap="addRecipe(mealType)" />
+            <MDButton col="1" variant="text" class="bx" :text="icon.plus" @tap="addRecipe(mealType)" />
           </GridLayout>
-          <GridLayout class="recipes" columns="*, auto" v-for="(recipeID, index) in getRecipes[mealType]" :key="mealType + index">
-            <MDRipple @tap="viewRecipe(recipeID)" />
+          <GridLayout class="recipes" :paddingTop="index == 0?8:0" columns="*" v-for="(recipeID, index) in getRecipes[mealType]" :key="mealType + index">
+            <MDRipple @tap="viewRecipe(recipeID)" @longPress="removeRecipe(mealType, recipeID)" />
             <Label verticalAlignment="center" class="recipeTitle" col="0" :text="getRecipeTitle(recipeID)" textWrap="true" />
-            <MDButton variant="text" col="1" class="bx closeBtn" :text="icon.close" @tap="removeRecipe(mealType, recipeID)" />
           </GridLayout>
         </StackLayout>
       </StackLayout>
@@ -57,14 +56,10 @@ import {
   mapActions
 }
 from "vuex"
-
 import ViewRecipe from "./ViewRecipe.vue"
-
 import ActionDialogWithSearch from "./modal/ActionDialogWithSearch.vue"
 import ConfirmDialog from "./modal/ConfirmDialog.vue"
-
 import * as utils from "~/shared/utils"
-
 export default {
   data() {
     return {
@@ -90,10 +85,10 @@ export default {
         gray9: new Color( "#212529" ),
         black: new Color( "#111111" ),
         orange: new Color( "#ff5200" ),
-        breakfast: "#ffb180",
-        lunch: "#ceff80",
-        dinner: "#80ceff",
-        snacks: "#b180ff",
+        breakfast: "#ff922b",
+        lunch: "#94d82d",
+        dinner: "#339af0",
+        snacks: "#845ef7",
       },
       appFontRegular: "Orkney-Regular",
       appFontMedium: "Orkney-Medium",
@@ -107,44 +102,27 @@ export default {
     },
     monthViewStyle() {
       const monthViewStyle = new CalendarMonthViewStyle()
-      monthViewStyle.backgroundColor = this.isLightMode ?
-        this.color.gray1 :
-        this.color.gray9
+      monthViewStyle.backgroundColor = this.isLightMode ? this.color.gray1 : this.color.gray9
       monthViewStyle.showTitle = true
       monthViewStyle.showWeekNumbers = false
       monthViewStyle.showDayNames = true
-
       const titleCellStyle = new DayCellStyle()
-      titleCellStyle.cellBackgroundColor = this.isLightMode ?
-        this.color.gray2 :
-        this.color.black
+      titleCellStyle.cellBackgroundColor = this.isLightMode ? this.color.gray2 : this.color.black
       titleCellStyle.cellBorderWidth = 1
-      titleCellStyle.cellBorderColor = this.isLightMode ?
-        this.color.gray2 :
-        this.color.black
+      titleCellStyle.cellBorderColor = this.isLightMode ? this.color.gray2 : this.color.black
       titleCellStyle.cellTextSize = 16
-      titleCellStyle.cellTextColor = this.isLightMode ?
-        this.color.gray9 :
-        this.color.gray1
+      titleCellStyle.cellTextColor = this.isLightMode ? this.color.gray9 : this.color.gray1
       titleCellStyle.cellTextFontName = this.appFontMedium
       monthViewStyle.titleCellStyle = titleCellStyle
-
       const dayNameCellStyle = new CellStyle()
-      dayNameCellStyle.cellBackgroundColor = this.isLightMode ?
-        this.color.gray2 :
-        this.color.black
-      dayNameCellStyle.cellTextColor = this.isLightMode ?
-        this.color.gray9 :
-        this.color.gray1
+      dayNameCellStyle.cellBackgroundColor = this.isLightMode ? this.color.gray2 : this.color.black
+      dayNameCellStyle.cellTextColor = this.isLightMode ? this.color.gray9 : this.color.gray1
       dayNameCellStyle.cellBorderWidth = 1
-      dayNameCellStyle.cellBorderColor = this.isLightMode ?
-        this.color.gray2 :
-        this.color.black
+      dayNameCellStyle.cellBorderColor = this.isLightMode ? this.color.gray2 : this.color.black
       dayNameCellStyle.cellTextSize = 10
       dayNameCellStyle.cellAlignment = CalendarCellAlignment.Center
       dayNameCellStyle.cellTextFontName = this.appFontMedium
       monthViewStyle.dayNameCellStyle = dayNameCellStyle
-
       const dayCellStyle = new DayCellStyle()
       dayCellStyle.showEventsText = false
       dayCellStyle.eventTextColor = this.color.orange
@@ -152,51 +130,34 @@ export default {
       dayCellStyle.eventFontStyle = CalendarFontStyle.Bold
       dayCellStyle.eventTextSize = 8
       dayCellStyle.cellTextSize = 16
-      dayCellStyle.cellTextColor = this.isLightMode ?
-        this.color.gray9 :
-        this.color.gray1
+      dayCellStyle.cellTextColor = this.isLightMode ? this.color.gray9 : this.color.gray1
       dayCellStyle.cellAlignment = CalendarCellAlignment.Bottom
-      dayCellStyle.cellBackgroundColor = this.isLightMode ?
-        this.color.gray1 :
-        this.color.gray9
+      dayCellStyle.cellBackgroundColor = this.isLightMode ? this.color.gray1 : this.color.gray9
       dayCellStyle.cellTextFontName = this.appFontRegular
       dayCellStyle.cellBorderWidth = 1
-      dayCellStyle.cellBorderColor = this.isLightMode ?
-        this.color.gray2 :
-        this.color.black
+      dayCellStyle.cellBorderColor = this.isLightMode ? this.color.gray2 : this.color.black
       monthViewStyle.dayCellStyle = dayCellStyle
-
       const todayCellStyle = new DayCellStyle()
-      todayCellStyle.cellBackgroundColor = this.isLightMode ?
-        this.color.gray1 :
-        this.color.gray9
+      todayCellStyle.cellBackgroundColor = this.isLightMode ? this.color.gray1 : this.color.gray9
       todayCellStyle.cellTextColor = this.color.orange
       todayCellStyle.cellBorderWidth = 1
       todayCellStyle.cellTextFontName = this.appFontMedium
       todayCellStyle.cellTextFontStyle = CalendarFontStyle.Bold
       todayCellStyle.cellTextSize = 16
       todayCellStyle.cellAlignment = CalendarCellAlignment.Bottom
-      todayCellStyle.cellBorderColor = this.isLightMode ?
-        this.color.gray2 :
-        this.color.black
+      todayCellStyle.cellBorderColor = this.isLightMode ? this.color.gray2 : this.color.black
       monthViewStyle.todayCellStyle = todayCellStyle
-
       const selectedCellStyle = new DayCellStyle()
       selectedCellStyle.eventTextSize = 1
       selectedCellStyle.cellAlignment = CalendarCellAlignment.Bottom
-      selectedCellStyle.cellBackgroundColor = this.isLightMode ?
-        this.color.white :
-        this.color.gray8
+      selectedCellStyle.cellBackgroundColor = this.isLightMode ? this.color.white : this.color.gray8
       selectedCellStyle.cellBorderWidth = 1
       selectedCellStyle.cellBorderColor = this.color.orange
-      selectedCellStyle.cellTextColor = this.isLightMode ?
-        this.color.gray9 :
-        this.color.gray1
+      selectedCellStyle.cellTextColor = this.isLightMode ? this.color.gray9 : this.color.gray1
       selectedCellStyle.cellTextFontName = this.appFontMedium
       selectedCellStyle.cellTextFontStyle = CalendarFontStyle.Bold
       selectedCellStyle.cellTextSize = 16
       monthViewStyle.selectedDayCellStyle = selectedCellStyle
-
       return monthViewStyle
     },
     getRecipes() {
@@ -220,41 +181,24 @@ export default {
           }
           return acc
         }, {} )
-      }
-      else return 0
+      } else return 0
     },
     getMealPlans() {
       const getDate = ( date ) => {
         let d = new Date( date )
-        let result = new Date(
-          d.getFullYear(),
-          d.getMonth(),
-          d.getDate(),
-          d.getHours()
-        )
+        let result = new Date( d.getFullYear(), d.getMonth(), d.getDate(), d.getHours() )
         return result
       }
       let events = []
       this.mealPlans.forEach( ( plan ) => {
-        let e = new CalendarEvent(
-          plan.title,
-          getDate( plan.startDate ),
-          getDate( plan.endDate ),
-          false,
-          new Color( plan.eventColor )
-        )
+        let e = new CalendarEvent( plan.title, getDate( plan.startDate ), getDate( plan.endDate ), false, new Color( plan.eventColor ) )
         events = [ ...events, e ]
       } )
       return events
     },
   },
   methods: {
-    ...mapActions( [
-      "setCurrentComponentAction",
-      "initializeMealPlans",
-      "addMealPlanAction",
-      "deleteMealPlanAction",
-    ] ),
+    ...mapActions( [ "setCurrentComponentAction", "initializeMealPlans", "addMealPlanAction", "deleteMealPlanAction", ] ),
     onPageLoad( args ) {
       const page = args.object;
       page.bindingContext = new Observable();
@@ -263,24 +207,13 @@ export default {
     onCalendarLoad( args ) {
       args.object.locale = `${Device.language}-${Device.language.toUpperCase()}`
       args.object.monthViewStyle = this.monthViewStyle
-      args.object.android
-        .getGestureManager()
-        .setDoubleTapToChangeDisplayMode( false )
-      args.object.android
-        .getGestureManager()
-        .setPinchCloseToChangeDisplayMode( false )
-      if ( args.object.selectedDate == null )
-        args.object.selectedDate = new Date()
+      args.object.android.getGestureManager().setDoubleTapToChangeDisplayMode( false )
+      args.object.android.getGestureManager().setPinchCloseToChangeDisplayMode( false )
+      if ( args.object.selectedDate == null ) args.object.selectedDate = new Date()
       if ( args.object.nativeView.getEventAdapter() ) {
-        args.object.nativeView
-          .getEventAdapter()
-          .getRenderer()
-          .setEventRenderMode(
-            com.telerik.widget.calendar.events.EventRenderMode.Shape
-          )
+        args.object.nativeView.getEventAdapter().getRenderer().setEventRenderMode( com.telerik.widget.calendar.events.EventRenderMode.Shape )
       }
     },
-
     // HELPERS
     showDrawer() {
       utils.showDrawer()
@@ -300,9 +233,8 @@ export default {
     },
     getRecipeTitle( id ) {
       let recipe = this.recipes.filter( ( e ) => e.id === id )[ 0 ]
-      return recipe ? recipe.title : "[Deleted Recipe]"
+      return recipe ? recipe.title : `[ ${this.$options.filters.L('Recipe not found')} ]`
     },
-
     // NAVIGATION HANDLERS
     viewRecipe( recipeID ) {
       let recipe = this.recipes.filter( ( e ) => e.id === recipeID )[ 0 ]
@@ -316,14 +248,9 @@ export default {
         } )
       }
     },
-
     // DATA HANDLERS
     addRecipe( mealType ) {
-      let filteredRecipes = this.recipes.filter( ( e ) =>
-        this.getRecipes[ mealType ] ?
-        !this.getRecipes[ mealType ].includes( e.id ) :
-        true
-      )
+      let filteredRecipes = this.recipes.filter( ( e ) => this.getRecipes[ mealType ] ? !this.getRecipes[ mealType ].includes( e.id ) : true )
       this.$showModal( ActionDialogWithSearch, {
         props: {
           title: "Select a recipe",
@@ -336,7 +263,7 @@ export default {
     removeRecipeConfirm( mealType ) {
       return this.$showModal( ConfirmDialog, {
         props: {
-          title: `Remove recipe from ${mealType}`,
+          title: `Remove recipe from ${mealType}?`,
           cancelButtonText: "CANCEL",
           okButtonText: "REMOVE",
         },
@@ -352,10 +279,7 @@ export default {
       this.removeRecipeConfirm( mealType ).then( ( res ) => {
         if ( res ) {
           let actualMealPlan = this.selectedDayMealPlans.filter(
-            ( e ) =>
-            e.startDate.getHours() === startHour[ mealType ] &&
-            e.title === recipeID
-          )[ 0 ]
+            ( e ) => e.startDate.getHours() === startHour[ mealType ] && e.title === recipeID )[ 0 ]
           let mealPlan = {
             title: actualMealPlan.title,
             startDate: actualMealPlan.startDate,
@@ -365,14 +289,11 @@ export default {
         }
       } )
     },
-
     // CALENDAR
     updateSelectedDatePlans() {
       let date = new Date( this.selectedDate )
       setTimeout( () => {
-        this.selectedDayMealPlans = this.$refs.calendar.nativeView.getEventsForDate(
-          date
-        )
+        this.selectedDayMealPlans = this.$refs.calendar.nativeView.getEventsForDate( date )
       }, 100 )
     },
     onDateSelected( args ) {
@@ -411,13 +332,7 @@ export default {
           end: new Date( y, m, d, 19 ),
         },
       }
-      let event = new CalendarEvent(
-        recipeID,
-        mealTime[ mealType ].start,
-        mealTime[ mealType ].end,
-        false,
-        new Color( this.color[ mealType ] )
-      )
+      let event = new CalendarEvent( recipeID, mealTime[ mealType ].start, mealTime[ mealType ].end, false, new Color( this.color[ mealType ] ) )
       this.addMealPlanAction( {
         event,
         eventColor: this.color[ mealType ]

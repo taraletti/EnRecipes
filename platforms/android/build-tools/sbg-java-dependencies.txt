@@ -11,6 +11,7 @@
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/fc408377c8cf777247ca857a44bd30dd/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/fe916b20331dc4debf82d6ea7e6b63d9/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/82d65df7e94312d16a76a183e5e8143d/classes.jar
+/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/29233c2e8b152c1184a34a994f48ad57/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/9f4c071b013b1c436d42a2854f455509/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/dcf7576246617a08ade1939cf5e52a78/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/c4e66d836e9f477cfe18c572069c2a0d/okio-1.14.0.jar
@@ -21,7 +22,6 @@
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/2babf7185945e4823613fc5d0b60fadc/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/ae816c1984e19eee53fa180a05fdacb5/zip4j-2.2.6.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/c0875f85874ce1b5ae63b784d9d1465c/classes.jar
-/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/3ce283be83dd3375414821e2fcf5d983/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/744f4daf5e147b772446a00ef1ab3dae/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/773fc60d595a22ac21f34dd257c7c5a9/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/055e0d6dfda88cd583e3274a1745faaa/classes.jar
@@ -29,12 +29,12 @@
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/385bb50cf4a3dca16ea143fa5bbc5e84/lifecycle-common-2.2.0.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/94d238f3a0920c60904b4f54dd1454d8/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/57ab8ee695cae8b50c16bf92b153fadb/classes.jar
+/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/ca10f25f516ff120bccc5416eda49630/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/8106c5bc54316d3c94b684c27fc4ef81/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/bd64044582789eef53f6ad3fe10aa479/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/3326f9687fd71cfc2858bc068e711ed3/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/3a5f006ccf4f13245d835ed82a76546b/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/fc69baaad1de7584a4ad710f67a1467f/classes.jar
-/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/34868f25e752e5db739e11d82fbbdf7f/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/712d04ab3fc5cbd370d4cad204d382b5/core-common-2.1.0.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/071b36a990f399a4dca6d14790c20656/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/35e5bf7af0b20d95831f6510e5a33667/classes.jar
@@ -47,15 +47,16 @@
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/5633d9877214a82bd12e8e01bc1a74ed/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/f03022c7fcb0f747962a3d58a37937a8/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/4d70183c4773bae36bada347ac3a2563/classes.jar
+/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/ac1ebdea1ae85f93ce394b61515731dc/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/e7357be1c2ebe720e61c67c5dbe92c20/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/0401a5118c37a252f100ed49139c5b9b/annotations-13.0.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/cdb6f136c57c8c359d104ebdb2488c78/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/faefd1221c45c5bd50607c3a600ee286/classes.jar
+/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/53c9af5f601120ebd4ef2b74814b9324/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/d909e0a152268faeecba26c3be02354e/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/4e11bec5ca29670c3d8f0728d4db1842/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/96f3216e349c69e88f0229f7912f9904/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/8b416943667eae8eb0023e0e8e011a5e/classes.jar
-/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/20e65b479a83472e81519ec2e1896d52/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/7a9020b4039fb1f58e687fafb7fae450/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/3a13f1c54a78dfede6f3a8dff04febc7/classes.jar
 /mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/build/exploded-dependencies/a603478709b2edf8488cb17d0c87641e/classes.jar

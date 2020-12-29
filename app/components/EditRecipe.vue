@@ -24,13 +24,23 @@
           <TextField :hint="'My Healthy Recipe' | L" v-model="recipeContent.title" @loaded="setInputTypeText($event, 'words')" />
           <Label top="0" class="fieldLabel" :text="'Title' | L" />
         </AbsoluteLayout>
+        <GridLayout columns="*, 8, *">
+          <AbsoluteLayout class="inputField" col="0">
+            <TextField :text="`${recipeContent.cuisine}` | L" editable="false" @focus="modalOpen === false && showCuisine(true)" @tap="showCuisine(false)" />
+            <Label top="0" class="fieldLabel" :text="'Cuisine' | L" />
+          </AbsoluteLayout>
+          <AbsoluteLayout class="inputField" col="2">
+            <TextField ref='category' :text="`${recipeContent.category}` | L" editable="false" @focus="modalOpen === false && showCategories(true)" @tap="showCategories(false)" />
+            <Label top="0" class="fieldLabel" :text="'Category' | L" />
+          </AbsoluteLayout>
+        </GridLayout>
         <AbsoluteLayout class="inputField">
-          <TextField :text="`${recipeContent.category}` | L" editable="false" @focus="modalOpen === false && showCategories(true)" @tap="showCategories(false)" />
-          <Label top="0" class="fieldLabel" :text="'Category' | L" />
+          <TextField autocapitalizationType="words" ref='tags' :hint="`${$options.filters.L('separate with spaces')}`" v-model="tags" @textChange="splitTags" returnKeyType="next" />
+          <Label top="0" class="fieldLabel" :text="`${$options.filters.L('Tags')} (${$options.filters.L('separate with spaces')})`" />
         </AbsoluteLayout>
         <GridLayout columns="*, 8, *">
           <AbsoluteLayout class="inputField" col="0">
-            <TextField ref="prepTime" :text="timeRequired('prepTime')" editable="false" @focus="
+            <TextField :text="timeRequired('prepTime')" editable="false" @focus="
                   modalOpen === false && setTimeRequired(true, 'prepTime')
                 " @tap="setTimeRequired(false, 'prepTime')" />
             <Label top="0" class="fieldLabel" :text="'Preparation time' | L" />
@@ -52,14 +62,25 @@
             <Label top="0" class="fieldLabel" :text="'Yield measured in' | L" />
           </AbsoluteLayout>
         </GridLayout>
+        <GridLayout columns="*, 8, *">
+          <AbsoluteLayout class="inputField" col="0">
+            <TextField ref="difficultyLevel" :text="`${recipeContent.difficulty}` | L" editable="false" @focus="modalOpen === false && showDifficultyLevel(true)" @tap="showDifficultyLevel(false)" />
+            <Label top="0" class="fieldLabel" :text="'Difficulty level' | L" />
+          </AbsoluteLayout>
+        </GridLayout>
         <StackLayout class="hr" margin="24 16"></StackLayout>
       </StackLayout>
       <StackLayout margin="0 16">
         <Label :text="'Ingredients' | L" class="sectionTitle" />
-        <GridLayout columns="*,8,auto,8,auto,8,auto" v-for="(ingredient, index) in recipeContent.ingredients" :key="index">
-          <TextField ref="ingredient" @loaded="focusField($event, 'sentence')" col="0" v-model="recipeContent.ingredients[index].item" :hint="`${$options.filters.L('Item')} ${index + 1}`" returnKeyType="next" />
-          <TextField width="60" col="2" v-model="recipeContent.ingredients[index].quantity" hint="1.00" keyboardType="number" returnKeyType="next" />
-          <TextField width="76" col="4" :text="`${recipeContent.ingredients[index].unit}` | L" editable="false" @focus="modalOpen === false && showUnits($event, true, index)" @tap="showUnits($event, false, index)" />
+        <GridLayout columns="auto,8,auto,8,*,8,auto" v-for="(ingredient, index) in recipeContent.ingredients" :key="index">
+
+          <TextField width="60" col="0" @loaded="!recipeContent.ingredients[index].item && focusField($event)" v-model="recipeContent.ingredients[index].quantity" hint="1.00" keyboardType="number" returnKeyType="next" />
+
+          <TextField width="76" col="2" :text="`${recipeContent.ingredients[index].unit}` | L" editable="false" @focus="modalOpen === false && showUnits($event, true, index)" @tap="showUnits($event, false, index)" />
+
+          <TextField ref="ingredient" @loaded="setInputTypeText($event, 'sentence')" col="4" v-model="recipeContent.ingredients[index].item" :hint="`${$options.filters.L('Item')} ${index + 1}`"
+            @returnPress="index+1 == recipeContent.ingredients.length && addIngredient()" />
+
           <MDButton variant="text" col="6" class="bx closeBtn" :text="icon.close" @tap="removeIngredient(index)" />
         </GridLayout>
         <MDButton variant="text" class="text-btn orkm" :text="`+ ${$options.filters.L('ADD INGREDIENT')}`" @tap="addIngredient()" />
@@ -75,21 +96,21 @@
         <StackLayout class="hr" margin="24 16"></StackLayout>
       </StackLayout>
       <StackLayout margin="0 16">
-        <Label :text="'Combinations' | L" class="sectionTitle" />
-        <GridLayout columns="*,8,auto" v-for="(combination, index) in recipeContent.combinations" :key="index">
-          <TextField class="combinationToken" col="0" :text="getCombinationTitle(combination)" editable="false" />
-          <MDButton variant="text" col="2" class="bx closeBtn" :text="icon.close" @tap="removeCombination(combination)" />
-        </GridLayout>
-        <MDButton variant="text" class="text-btn orkm" :text="`+ ${$options.filters.L('ADD COMBINATION')}`" @tap="showCombinations" />
-        <StackLayout class="hr" margin="24 16"></StackLayout>
-      </StackLayout>
-      <StackLayout margin="0 16">
         <Label :text="'Notes' | L" class="sectionTitle" />
         <GridLayout columns="*,8,auto" v-for="(note, index) in recipeContent.notes" :key="index">
           <TextView @loaded="focusField($event, 'multiLine')" col="0" :hint="`${$options.filters.L('Note')} ${index + 1}`" v-model="recipeContent.notes[index]" />
           <MDButton variant="text" col="2" class="bx closeBtn" :text="icon.close" @tap="removeNote(index)" />
         </GridLayout>
         <MDButton variant="text" class="text-btn orkm" :text="`+ ${$options.filters.L('ADD NOTE')}`" @tap="addNote" />
+        <StackLayout class="hr" margin="24 16"></StackLayout>
+      </StackLayout>
+      <StackLayout margin="0 16">
+        <Label :text="'Combinations' | L" class="sectionTitle" />
+        <GridLayout columns="*,8,auto" v-for="(combination, index) in recipeContent.combinations" :key="index">
+          <TextField class="combinationToken" col="0" :text="getCombinationTitle(combination)" editable="false" />
+          <MDButton variant="text" col="2" class="bx closeBtn" :text="icon.close" @tap="removeCombination(combination)" />
+        </GridLayout>
+        <MDButton variant="text" class="text-btn orkm" :text="`+ ${$options.filters.L('ADD COMBINATION')}`" @tap="showCombinations" />
       </StackLayout>
     </StackLayout>
   </ScrollView>
@@ -135,7 +156,7 @@ import PromptDialog from "./modal/PromptDialog.vue"
 import ListPicker from "./modal/ListPicker.vue"
 import * as utils from "~/shared/utils"
 export default {
-  props: [ "recipeID", "selectedCategory", "filterFavourites", "filterTrylater", "navigationFromView", ],
+  props: [ "recipeID", "selectedCuisine", "selectedCategory", "selectedTag", "filterFavourites", "filterTrylater", "navigationFromView", ],
   data() {
     return {
       title: "New recipe",
@@ -143,13 +164,17 @@ export default {
       recipeContent: {
         imageSrc: null,
         title: undefined,
+        cuisine: "Undefined",
         category: "Undefined",
+        tags: [],
         prepTime: "00:00",
         cookTime: "00:00",
         yield: {
           quantity: undefined,
           unit: "Serving",
         },
+        difficulty: "Easy",
+        rating: 0,
         ingredients: [],
         instructions: [],
         combinations: [],
@@ -158,8 +183,10 @@ export default {
         tried: true,
         lastTried: null,
         lastModified: null,
+        created: null,
       },
       tempRecipeContent: {},
+      tags: undefined,
       blockModal: false,
       modalOpen: false,
       newRecipeID: null,
@@ -167,10 +194,15 @@ export default {
       saving: false,
       cacheImagePath: null,
       unSyncCombinations: [],
+      difficultyLevels: [
+        "Easy",
+        "Moderate",
+        "Challenging",
+      ],
     }
   },
   computed: {
-    ...mapState( [ "icon", "units", "yieldUnits", "recipes", "categories", "currentComponent", ] ),
+    ...mapState( [ "icon", "units", "yieldUnits", "recipes", "cuisines", "categories", "currentComponent", ] ),
     screenWidth() {
       return Screen.mainScreen.widthDIPs
     },
@@ -182,7 +214,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions( [ "setCurrentComponentAction", "addRecipeAction", "overwriteRecipeAction", "addCategoryAction", "addYieldUnitAction", "unSyncCombinationsAction", ] ),
+    ...mapActions( [ "setCurrentComponentAction", "addRecipeAction", "overwriteRecipeAction", "addListItemAction", "unSyncCombinationsAction", ] ),
     onPageLoad( args ) {
       const page = args.object;
       page.bindingContext = new Observable();
@@ -201,20 +233,21 @@ export default {
       if ( type ) this.setInputTypeText( args, type )
       if ( !args.object.text ) {
         args.object.focus()
-        setTimeout( ( e ) => Utils.ad.showSoftInput( args.object.android ), 10 )
+        setTimeout( ( e ) => Utils.ad.showSoftInput( args.object.android ), 100 )
       }
     },
     setInputTypeText( args, type ) {
       let field = args.object
+      let common = android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
       switch ( type ) {
         case "words":
-          field.android.setInputType( android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_FLAG_CAP_WORDS | android.text.InputType.TYPE_TEXT_FLAG_AUTO_CORRECT )
+          field.android.setInputType( android.text.InputType.TYPE_TEXT_FLAG_CAP_WORDS | common )
           break
         case "sentence":
-          field.android.setInputType( android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | android.text.InputType.TYPE_TEXT_FLAG_AUTO_CORRECT )
+          field.android.setInputType( android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | common )
           break
         case "multiLine":
-          field.android.setInputType( android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE | android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | android.text.InputType.TYPE_TEXT_FLAG_AUTO_CORRECT )
+          field.android.setInputType( android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE | android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | common )
           break
         default:
           break
@@ -223,7 +256,7 @@ export default {
     getRandomID() {
       let res = ""
       let chars = "abcdefghijklmnopqrstuvwxyz0123456789"
-      for ( let i = 0; i < 10; i++ ) {
+      for ( let i = 0; i < 20; i++ ) {
         res += chars.charAt( Math.floor( Math.random() * chars.length ) )
       }
       return res
@@ -263,13 +296,56 @@ export default {
       this.viewIsScrolled = args.scrollY ? true : false
     },
     // DATA LIST
+    showCuisine( focus ) {
+      this.modalOpen = true
+      this.releaseBackEvent()
+      this.$showModal( ActionDialog, {
+        props: {
+          title: "Cuisine",
+          list: this.cuisines,
+          stretch: true,
+          action: "ADD NEW",
+        },
+      } ).then( ( action ) => {
+        if ( action == "ADD NEW" ) {
+          this.$showModal( PromptDialog, {
+            props: {
+              title: "New cuisine",
+              action: "ADD",
+            },
+          } ).then( ( item ) => {
+            this.hijackBackEvent()
+            if ( item.length ) {
+              this.recipeContent.cuisine = item
+              ApplicationSettings.setString( "previousCuisine", item )
+              this.addListItemAction( {
+                item,
+                listName: 'cuisines'
+              } )
+              this.modalOpen = false
+              if ( focus ) this.autoFocusField( "category", false )
+            }
+          } )
+        } else if ( action ) {
+          this.recipeContent.cuisine = action
+          ApplicationSettings.setString( "previousCuisine", action )
+          this.hijackBackEvent()
+          this.modalOpen = false
+          if ( focus ) this.autoFocusField( "category", false )
+        } else {
+          this.cuisines.includes( this.recipeContent.cuisine ) ? mull : this.recipeContent.cuisine = 'Undefined'
+          this.hijackBackEvent()
+        }
+      } )
+    },
     showCategories( focus ) {
       this.modalOpen = true
       this.releaseBackEvent()
       this.$showModal( ActionDialog, {
         props: {
           title: "Category",
-          list: [ ...this.categories ],
+          list: this.categories,
+          stretch: true,
           action: "ADD NEW",
         },
       } ).then( ( action ) => {
@@ -279,32 +355,30 @@ export default {
               title: "New category",
               action: "ADD",
             },
-          } ).then( ( category ) => {
+          } ).then( ( item ) => {
             this.hijackBackEvent()
-            if ( category.length ) {
-              this.recipeContent.category = category
-              this.addCategoryAction( category )
+            if ( item.length ) {
+              this.recipeContent.category = item
+              ApplicationSettings.setString( "previousCategory", item )
+              this.addListItemAction( {
+                item,
+                listName: 'categories'
+              } )
               this.modalOpen = false
-              if ( focus ) this.autoFocusField( "prepTime", false )
+              if ( focus ) this.autoFocusField( "tags", true )
             }
           } )
         } else if ( action ) {
           this.recipeContent.category = action
+          ApplicationSettings.setString( "previousCategory", action )
           this.hijackBackEvent()
           this.modalOpen = false
-          if ( focus ) this.autoFocusField( "prepTime", false )
+          if ( focus ) this.autoFocusField( "tags", true )
         } else {
+          this.categories.includes( this.recipeContent.category ) ? mull : this.recipeContent.category = 'Undefined'
           this.hijackBackEvent()
         }
       } )
-    },
-    autoFocusField( ref, showSoftInput ) {
-      this.$refs[ ref ].nativeView.focus()
-      if ( showSoftInput ) {
-        setTimeout( () => {
-          Utils.ad.showSoftInput( this.$refs[ ref ].nativeView.android )
-        }, 1 )
-      }
     },
     showYieldUnits( focus ) {
       this.modalOpen = true
@@ -312,8 +386,8 @@ export default {
       this.$showModal( ActionDialog, {
         props: {
           title: "Yield measured in",
-          list: [ ...this.yieldUnits ],
-          // height: "420",
+          list: this.yieldUnits,
+          stretch: true,
           action: "ADD NEW",
         },
       } ).then( ( action ) => {
@@ -323,21 +397,48 @@ export default {
               title: "New yield unit",
               action: "ADD",
             },
-          } ).then( ( yieldUnit ) => {
+          } ).then( ( item ) => {
             this.hijackBackEvent()
-            if ( yieldUnit.length ) {
-              this.recipeContent.yield.unit = yieldUnit
-              this.addYieldUnitAction( yieldUnit )
+            if ( item.length ) {
+              this.recipeContent.yield.unit = item
+              ApplicationSettings.setString( "previousYieldUnit", item )
+              this.addListItemAction( {
+                item,
+                listName: 'yieldUnits'
+              } )
               this.modalOpen = false
-              if ( focus ) this.addIngredient()
+              if ( focus ) this.autoFocusField( "difficultyLevel", false )
             }
           } )
         } else if ( action ) {
           this.recipeContent.yield.unit = action
+          ApplicationSettings.setString( "previousYieldUnit", action )
+          this.hijackBackEvent()
+          this.modalOpen = false
+          if ( focus ) this.autoFocusField( "difficultyLevel", false )
+        } else {
+          this.yieldUnits.includes( this.recipeContent.yield.unit ) ? mull : this.recipeContent.yield.unit = 'Serving'
+          this.hijackBackEvent()
+        }
+      } )
+    },
+    showDifficultyLevel( focus ) {
+      this.modalOpen = true
+      this.releaseBackEvent()
+      this.$showModal( ActionDialog, {
+        props: {
+          title: "Difficulty level",
+          list: this.difficultyLevels,
+          stretch: false,
+        },
+      } ).then( ( action ) => {
+        if ( action ) {
+          this.recipeContent.difficulty = action
           this.hijackBackEvent()
           this.modalOpen = false
           if ( focus ) this.addIngredient()
         } else {
+          this.difficultyLevels.includes( this.recipeContent.difficulty ) ? mull : this.recipeContent.difficulty = 'Easy'
           this.hijackBackEvent()
         }
       } )
@@ -347,25 +448,54 @@ export default {
       this.releaseBackEvent()
       this.$showModal( ActionDialog, {
         props: {
-          title: localize( "Unit" ),
-          list: [ ...this.units ],
+          title: "Units",
+          list: this.units,
+          stretch: true,
+          action: "ADD NEW",
         },
       } ).then( ( action ) => {
         this.hijackBackEvent()
-        if ( action ) {
-          this.recipeContent.ingredients[ index ].unit = e.object.text = action
-          this.modalOpen = false
-          if ( focus ) {
-            if ( this.recipeContent.ingredients.length - 1 === index ) {
-              this.addIngredient()
-            } else {
-              this.$refs.ingredient[ index + 1 ].nativeView.focus()
-              setTimeout(
-                ( e ) => Utils.ad.showSoftInput( this.$refs.ingredient[ index + 1 ].nativeView.android ), 10 )
+        if ( action == "ADD NEW" ) {
+          this.$showModal( PromptDialog, {
+            props: {
+              title: "New unit",
+              action: "ADD",
+            },
+          } ).then( ( item ) => {
+            this.hijackBackEvent()
+            if ( item.length ) {
+              this.recipeContent.ingredients[ index ].unit = item
+              this.addListItemAction( {
+                item,
+                listName: 'units'
+              } )
+              this.modalOpen = false
+              if ( focus && this.recipeContent.ingredients.length - 1 === index )
+                this.autoFocusRefField( 'ingredient', index )
+
+
             }
-          }
+          } )
+        } else if ( action ) {
+          this.recipeContent.ingredients[ index ].unit = action
+          this.modalOpen = false
+          if ( focus && this.recipeContent.ingredients.length - 1 === index ) this.autoFocusRefField( 'ingredient', index )
         }
       } )
+    },
+    autoFocusField( ref, showSoftInput ) {
+      this.$refs[ ref ].nativeView.focus()
+      if ( showSoftInput ) {
+        setTimeout( () => {
+          Utils.ad.showSoftInput( this.$refs[ ref ].nativeView.android )
+        }, 100 )
+      }
+    },
+    autoFocusRefField( ref, index ) {
+      this.$refs[ ref ][ index ].nativeView.focus()
+      setTimeout( () => {
+        Utils.ad.showSoftInput( this.$refs[ ref ][ index ].nativeView.android )
+      }, 100 )
     },
     // NAVIGATION HANDLERS
     navigateBackController() {
@@ -415,6 +545,7 @@ export default {
     },
     // DATA HANDLERS
     imageHandler() {
+      this.clearEmptyFields()
       if ( this.recipeContent.imageSrc ) {
         this.blockModal = true
         this.$showModal( ConfirmDialog, {
@@ -500,6 +631,21 @@ export default {
       } )
     },
     // INPUT FIELD HANDLERS
+    splitTags() {
+      let string
+      if ( this.tags ) {
+        let tags = this.tags.split( " " ).map( e => {
+          string = e.replace( /^[^\w\s]+/, '' )
+          if ( /^[A-Za-z]+/.test( string ) ) {
+            return string.charAt( 0 ).toUpperCase() + string.slice( 1 )
+          }
+        } ).filter( e => e )
+        this.recipeContent.tags = tags
+      }
+    },
+    joinTags() {
+      this.tags = this.recipeContent.tags.join( " " )
+    },
     fieldDeletionConfirm( title ) {
       return this.$showModal( ConfirmDialog, {
         props: {
@@ -510,20 +656,26 @@ export default {
       } )
     },
     addIngredient() {
+      let ingredients = this.recipeContent.ingredients
+      let unit = ingredients.length ? ingredients[ ingredients.length - 1 ].unit : "unit"
       this.recipeContent.ingredients.push( {
         item: "",
         quantity: null,
-        unit: "unit",
+        unit,
       } )
     },
     removeIngredient( index ) {
+      this.modalOpen = true
       if ( this.recipeContent.ingredients[ index ].item.length ) {
         this.fieldDeletionConfirm( "Remove ingredient?" ).then( ( res ) => {
           if ( res ) {
             this.recipeContent.ingredients.splice( index, 1 )
           }
         } )
-      } else this.recipeContent.ingredients.splice( index, 1 )
+      } else {
+        this.recipeContent.ingredients.splice( index, 1 )
+      }
+      setTimeout( e => this.modalOpen = false, 200 )
     },
     addInstruction() {
       this.recipeContent.instructions.push( "" )
@@ -576,7 +728,7 @@ export default {
     },
     // SAVE OPERATION
     clearEmptyFields() {
-      if ( !this.recipeContent.title ) this.recipeContent.title = "Untitled Recipe"
+      if ( !this.recipeContent.title ) this.recipeContent.title = localize( "Untitled Recipe" )
       if ( !this.recipeContent.yield.quantity ) this.recipeContent.yield.quantity = 1
       this.recipeContent.ingredients = this.recipeContent.ingredients.filter(
         ( e ) => e.item )
@@ -613,7 +765,6 @@ export default {
       this.saveRecipe()
     },
     saveRecipe() {
-      console.log( this.recipeContent.ingredients );
       if ( this.recipeID ) {
         this.overwriteRecipeAction( {
           id: this.recipeID,
@@ -641,9 +792,18 @@ export default {
       let recipe = this.recipes.filter( ( e ) => e.id === this.recipeID )[ 0 ]
       Object.assign( this.recipeContent, JSON.parse( JSON.stringify( recipe ) ) )
       Object.assign( this.tempRecipeContent, JSON.parse( JSON.stringify( this.recipeContent ) ) )
+      if ( this.recipeContent.tags.length ) this.joinTags()
     } else {
-      if ( this.selectedCategory ) this.recipeContent.category = this.selectedCategory
+      this.recipeContent.cuisine = this.selectedCuisine ? /All/.test( this.selectedCuisine ) ? "Undefined" : this.selectedCuisine : ApplicationSettings.getString( "previousCuisine", "Undefined" )
+      this.recipeContent.category = this.selectedCategory ? /All/.test( this.selectedCategory ) ? "Undefined" : this.selectedCategory : ApplicationSettings.getString( "previousCategory", "Undefined" )
+      if ( this.selectedTag && !/All/.test( this.selectedTag ) ) {
+        this.tags = this.selectedTag
+        this.splitTags()
+      }
+      this.recipeContent.yield.unit = ApplicationSettings.getString( "previousYieldUnit", "Serving" )
       if ( this.filterFavourites ) this.recipeContent.isFavorite = true
+      if ( this.filterTrylater ) this.recipeContent.tried = false
+      this.recipeContent.created = new Date()
       Object.assign( this.tempRecipeContent, JSON.parse( JSON.stringify( this.recipeContent ) ) )
       this.newRecipeID = this.getRandomID()
     }

@@ -12,7 +12,7 @@ Here are some important resources:
 
 1.  Fork this repository and head to the `app/i18n` folder.
 2.  Create a new JSON file or duplicate any existing file and start translating its values.
-3.  The filenames should be based on this [gist](https://gist.github.com/vishnuraghavb/bf27b068acc35e331adfba66d18e2094).
+3.  The filename should be based on this [gist](https://gist.github.com/vishnuraghavb/bf27b068acc35e331adfba66d18e2094).
 4.  Once done, create a new pull request.
 
 #### Don't know what fork means? No issues.

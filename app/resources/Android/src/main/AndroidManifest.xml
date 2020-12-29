@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" package="__PACKAGE__" android:versionCode="10000" android:versionName="1.0">
 	<supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true" android:xlargeScreens="true" />
 	<uses-permission android:name="android.permission.CAMERA" tools:node="remove" />
-	<!-- <uses-feature android:name="android.hardware.camera" /> -->
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove" />
 	<uses-permission android:name="android.permission.INTERNET" tools:node="remove" />
 	<uses-permission android:name="android.permission.RECORD_AUDIO" tools:node="remove" />

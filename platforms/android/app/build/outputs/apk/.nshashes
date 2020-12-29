@@ -1,5 +1,6 @@
 {
 	"/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/src/main/assets/app/tns-java-classes.js": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+	"/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/src/main/assets/app/fonts/Orkney-Medium.otf": "c11f050eaecbb1cc95c90bcc25f47bc0dcd35ec4",
 	"/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/src/main/assets/app/fonts/Orkney-Regular.otf": "eca386e11c6c51a2800a24a456bebcbc2a699b98",
 	"/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/src/main/assets/app/package.json": "66e3387f8d71589213a52a9179935c1f0c93181b",
 	"/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/src/main/assets/app/resources/Android/src/main/res/drawable-hdpi/camera.png": "73911d2bab8115193301e1638d74e6a9efdb7305",
@@ -49,10 +50,8 @@
 	"/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/src/main/assets/app/resources/Android/src/main/res/drawable-xxxhdpi/photo.png": "6500603c21d7cc1738db44ba26157ab47b621747",
 	"/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/src/main/assets/app/resources/Android/src/main/res/drawable-xxxhdpi/plus.png": "02eab956eabbe68bb27973582c569b822f130d2a",
 	"/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/src/main/assets/app/resources/Android/src/main/res/drawable-xxxhdpi/share.png": "ebe8381c0e77d40abd5f41daf94532248caaa9dc",
-	"/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/src/main/assets/app/runtime.js": "46d6b98a238721f34ab9bc68b90c0cdea00153cf",
-	"/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/src/main/assets/app/vendor.js.LICENSE.txt": "fe0ae576f8684fbe78596ad84eddafc528dba50c",
-	"/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/src/main/assets/app/fonts/Orkney-Medium.otf": "c11f050eaecbb1cc95c90bcc25f47bc0dcd35ec4",
-	"/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/src/main/assets/app/bundle.js": "cd989fafb7c72c12dbb7733dc325cd3a887c06c9",
+	"/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/src/main/assets/app/runtime.js": "af307a469f93a9d332e8d059f5929677c4505e47",
 	"/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/src/main/assets/app/fonts/boxicons.ttf": "6c9944326ed3c901afcb78a9ed07906f04f9cbb2",
-	"/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/src/main/assets/app/vendor.js": "db1e2f5f5daea8a9e3bc164548af7b1024c79827"
+	"/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/src/main/assets/app/bundle.js": "d75efaec53f7fc6e02d8ac82ac0c6532f07e86a3",
+	"/mnt/82e5ff15-70b8-44a5-bb66-55688fc2381f/Freelance/Projects/WIP/EnRecipes/Developement/EnRecipes-App/platforms/android/app/src/main/assets/app/vendor.js": "cfe29102f0c4d6f7ff8d95a4194ca064f5444a3a"
 }
