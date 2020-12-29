@@ -1,6 +1,6 @@
 # How to contribute
 
-:+1::tada: First off, thanks for taking the time to contribute! :+1::tada:
+:tada: First off, thanks for taking the time to contribute!
 
 Here are some important resources:
 
