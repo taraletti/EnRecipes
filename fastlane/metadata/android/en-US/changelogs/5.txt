@@ -5,8 +5,9 @@
 - Improvement: Add or delete cuisines, categories, yield units, units
 - Improvement: More sorting options
 - Improvement: Now you can see the created and last updated time of a recipe
-- Added app languages: Danish, Dutch, Portuguese, Russian and Spanish
 - Removed: Categories rename feature
+- Refreshed Meal Planner UI
+- Added new languages: Danish, Dutch, Portuguese, Russian and Spanish
 - Updated translations
 - Several UI improvements and bug fixes
 - Note: Recipes created with previous versions of this app will not display accurate created date, my apologies for that
