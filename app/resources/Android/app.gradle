@@ -20,17 +20,12 @@ android {
     applicationId 'com.vishnuraghav.enrecipes'
     minSdkVersion 21
     generatedDensities = []
-    // ndk {
-    //   abiFilters.clear()
-    //   abiFilters.addAll(['x86','armeabi-v7a','arm64-v8a'])
-    // }
+    ndk {
+      abiFilters.clear()
+      abiFilters.addAll(['arm64-v8a', 'armeabi-v7a', 'x86'])
+    }
   }
   aaptOptions {
     additionalParameters "--no-version-vectors"
   }
-  // bundle {
-  //   language {
-  //     enableSplit = false
-  //   }
-  // }
 }
