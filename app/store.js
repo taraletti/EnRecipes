@@ -223,8 +223,8 @@ export default new Vuex.Store({
         locale: "de",
         title: "Deutsch"
       }, {
-        locale: "en",
-        title: "English"
+        locale: "en-GB",
+        title: "English (United Kingdom)"
       }, {
         locale: "es",
         title: "Español"
