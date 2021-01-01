@@ -62,10 +62,6 @@ Check out the [roadmap](https://github.com/vishnuraghavb/EnRecipes/projects/1) t
 
 Your feedback and suggestions are very important to make EnRecipes the best. If you have an idea to improve EnRecipes, [do let me know](#having-issues-suggestions-and-feedback). I'm always open to ideas ;)
 
-With the help of contributors around the world, EnRecipes currently supports a set of few languages. See the list of currently supported languages [here](https://github.com/vishnuraghavb/EnRecipes/projects/2).
-
-If you know to read and write in your native language, then you are all set to translate EnRecipes in your native language. Want to contribute? Please read the [Contribution Guide](https://github.com/vishnuraghavb/EnRecipes/blob/main/CONTRIBUTING.md)
-
 ## Contributors
 
 -   [mondstern](https://codeberg.org/mondstern) (Translations: Danish, Dutch and German)(discontinued)
@@ -74,11 +70,13 @@ If you know to read and write in your native language, then you are all set to t
 -   [AHaro88](https://github.com/taraletti) (Translations: Spanish)
 -   [RAPXT](https://github.com/RAPXT) (Translations: German)
 
-### Translators wanted!
+### Help translate EnRecipes
 
-[mondstern](https://codeberg.org/mondstern) recently discontinued maintaining the Danish and Dutch translations. So it would be great if you could maintain these languages and help EnRecipes reach more people.
+EnRecipes is being translated using Weblate.
 
-Interested? Please read the [Contribution Guide](https://github.com/vishnuraghavb/EnRecipes/blob/main/CONTRIBUTING.md)
+<a href="https://hosted.weblate.org/engage/enrecipes/">
+<img src="https://hosted.weblate.org/widgets/enrecipes/-/app-translations/287x66-grey.png" alt="Translation status" />
+</a>
 
 ## Credits
 
