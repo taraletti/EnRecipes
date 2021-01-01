@@ -17,7 +17,7 @@ Here are some important resources:
 
 #### Don't know what fork means? No issues.
 
-1.  Just [download the JSON file](https://raw.githubusercontent.com/vishnuraghavb/EnRecipes/main/app/i18n/en.default.json) and start translating its value(right side part after the colon":").
+1.  Just [download the JSON file](https://raw.githubusercontent.com/vishnuraghavb/EnRecipes/main/app/i18n/en.json) and start translating its value(right side part after the colon":").
 2.  Once done, share the file to the [EnRecipes Telegram group](http://t.me/enrecipes) or email it to apps@vishnuraghav.com for verification.
 
 If everything looks good, your translations will be included in the next update and you'll be added to the contributors list for your work.
