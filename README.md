@@ -80,7 +80,7 @@ EnRecipes is being translated using Weblate.
 
 ## Credits
 
-This app was written in my free time using NativeScript-Vue. I would like to thank all those people who helped me understand the concepts during the process and my special thanks to the NativeScript team and the community. I also would like to thank the members of the Telegram EnRecipes group for contributing their ideas for this project.
+This app was written in my free time using NativeScript-Vue. I would like to thank all those people who helped me understand the concepts during the process and my special thanks to the NativeScript team and the community. I also would like to thank the members of the [EnRecipes Telegram group](https://t.me/enrecipes) for contributing their ideas for this project.
 
 ### Recipes used in the Screenshots
 
@@ -90,7 +90,7 @@ This app was written in my free time using NativeScript-Vue. I would like to tha
 
 ### Assets
 
--   [Boxicons](https://boxicons.com/)
+-   Icon font from [Boxicons](https://boxicons.com/)
 -   Logo by [Vishnu Raghav](https://www.vishnuraghav.com/)
 
 ## License
