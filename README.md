@@ -64,15 +64,17 @@ Your feedback and suggestions are very important to make EnRecipes the best. If 
 
 ## Contributors
 
--   [mondstern](https://codeberg.org/mondstern) (Translations: Danish, Dutch and German)(discontinued)
--   [EpicalXYZ](https://github.com/epicalxyz) (Translations: Portuguese)
--   [dm9pZCAq](https://github.com/dm9pZCAq) (Translations: Russian)
--   [AHaro88](https://github.com/taraletti) (Translations: Spanish)
--   [RAPXT](https://github.com/RAPXT) (Translations: German)
+### Translators
+
+-   [mondstern](https://codeberg.org/mondstern) (Danish, Dutch and German)(discontinued)
+-   [EpicalXYZ](https://github.com/epicalxyz) (Portuguese)
+-   [dm9pZCAq](https://github.com/dm9pZCAq) (Russian)
+-   [AHaro88](https://github.com/taraletti) (Spanish)
+-   [RAPXT](https://github.com/RAPXT) (German)
 
 ### Help translate EnRecipes
 
-EnRecipes is being translated using Weblate.
+EnRecipes is being translated using [Weblate](https://hosted.weblate.org/engage/enrecipes/). See [translation instructions](https://github.com/vishnuraghavb/EnRecipes/wiki/Translation-Instructions) in the wiki for more information.
 
 <a href="https://hosted.weblate.org/engage/enrecipes/">
 <img src="https://hosted.weblate.org/widgets/enrecipes/-/app-translations/287x66-grey.png" alt="Translation status" />
