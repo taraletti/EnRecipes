@@ -178,7 +178,7 @@
     "Recipe photo": "Photo de recette",
     "REPLACE PHOTO": "REMPLACER LA PHOTO",
     "Crop photo": "Recadrer la photo",
-    "breakfast": "petit déjeuner",
+    "breakfast": "Petit déjeuner",
     "lunch": "déjeuner",
     "dinner": "dîner",
     "snacks": "en-cas",
@@ -284,5 +284,7 @@
     "Backup file is incorrect or corrupt.": "Le fichier de sauvegarde est incorrect ou corrompu.",
     "Backup file seems empty.": "Le fichier de sauvegarde semble vide.",
     "Backup file has been modified externally.": "Le fichier de sauvegarde a été modifié en externe.",
-    "Invalid file:": "Fichier invalide :"
+    "Invalid file:": "Fichier invalide :",
+    "Donate": "Faire un don",
+    "Combination": "Combinaison"
 }
