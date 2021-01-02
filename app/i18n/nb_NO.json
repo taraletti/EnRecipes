@@ -194,7 +194,7 @@
     "Permission denied": "Tilgang nektet",
     "Shared via EnRecipes. Get it on Play Store or F-Droid.": "Delt via EnRecipes. Skaff de på F-Droid eller IzzyOnDroid.",
     "Contributors": "Bidragsytere",
-    "Translator": "Oversetter",
+    "Translator": "Oversatt av",
     "View on GitHub": "Vis på GitHub",
     "Privacy policy": "Personvernspraksis",
     "User guide": "Brukerguide",
@@ -284,5 +284,7 @@
     "Backup file is incorrect or corrupt.": "Sikkerhetskopifilen er feilformatert eller skadet.",
     "Backup file seems empty.": "Sikkerhetskopifilen ser ut til å være tom.",
     "Backup file has been modified externally.": "Sikkerhetskopifilen har blitt endret eksternt.",
-    "Invalid file:": "Ugyldig fil:"
+    "Invalid file:": "Ugyldig fil:",
+    "Donate": "Doner",
+    "Combination": "Kombinasjon"
 }
