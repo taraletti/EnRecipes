@@ -284,5 +284,7 @@
     "Backup file is incorrect or corrupt.": "Sicherungsdatei ist falsch oder beschädigt.",
     "Backup file seems empty.": "Die Sicherungsdatei scheint leer zu sein.",
     "Backup file has been modified externally.": "Die Sicherungsdatei wurde extern geändert.",
-    "Invalid file:": "Ungültige Datei:"
+    "Invalid file:": "Ungültige Datei:",
+    "Combination": "Kombination",
+    "Donate": "Spenden"
 }
