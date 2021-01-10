@@ -1,12 +1,12 @@
 # Privacy Policy
 
-I(Vishnu Raghav B) built the app EnRecipes as an open source app for use as is.
+I (Vishnu Raghav B) built the app EnRecipes as an open source app for use as is.
 
 ## Your Privacy
 
 As a privacy-conscious internet user, I respect your privacy; that's why this app has NO Ads, NO User Tracking and does NOT collect or share any personal information.
 
-The app also does NOT use third party services that collect information used to identify you.
+The app also does NOT use third-party services that collect information used to identify you.
 
 ## Links To Third Party Websites
 
@@ -14,7 +14,7 @@ The app may contain links to other sites. If you click on a third-party link, yo
 
 ## Changes To This Privacy Policy
 
-I will occasionally update this Privacy Policy but only in a manner not affecting your privacy.  Thus, you are advised to review this page periodically. I will notify you of any changes by posting the new privacy policy on this page. I will also change the “Last Updated” date at the end of this privacy policy. Any changes I make to the privacy policy are effective as of this Last Updated date and replace any prior privacy policies.
+I will occasionally update this Privacy Policy but only in a manner not affecting your privacy. Thus, you are advised to review this page periodically. I will notify you of any changes by posting the new privacy policy on this page. I will also change the "Last Updated" date at the end of this privacy policy. Any changes I make to the privacy policy are effective as of this Last Updated date and replace any prior privacy policies.
 
 If I make any material changes to this privacy policy, I will notify you by placing a prominent notice on my app.
 
