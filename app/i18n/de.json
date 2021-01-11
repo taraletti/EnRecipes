@@ -286,5 +286,21 @@
     "Backup file has been modified externally.": "Sicherungsdatei an anderer Stelle geändert.",
     "Invalid file:": "Ungültige Datei:",
     "Combination": "Kombination",
-    "Donate": "Spenden"
+    "Donate": "Spenden",
+    "grocery": "Einkaufsliste",
+    "planner": "Essensplaner",
+    "favourites": "Favoriten",
+    "buSuc": "Datensicherung erfolgreich im Heruntergeladene-Ordner gespeichert",
+    "buMod": "Sicherungsdatei an anderer Stelle geändert.",
+    "buEmp": "Die Datensicherung ist leer.",
+    "buInc": "Fehlerhafte oder beschädigte Sicherungsdatei.",
+    "aFBu": "Füge zuerst ein Rezept hinzu, um eine Datensicherung durchzuführen",
+    "expReq": "Zum Exportieren einer Sicherung ist eine Speicherberechtigung erforderlich.",
+    "impInfo": "Unterstützt vollständige Datensicherungen, die von dieser Anwendung exportiert werden",
+    "expBu": "Vollständinge Datensicherung exportieren",
+    "trySer": "IN ALLEN REZEPTEN SUCHEN?",
+    "help": "Hilfe",
+    "appInfo": "EnRecipes ist ein quelloffenes, datenschutzfreundliches, digitales Kochbuch, mit dem Sie Ihre Rezepte erstellen, verwalten und teilen können.",
+    "donate": "Spenden",
+    "invFile": "Ungültige Datei"
 }
