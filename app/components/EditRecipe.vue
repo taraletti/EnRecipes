@@ -1,5 +1,5 @@
 <template>
-<Page @loaded="onPageLoad" @unloaded="releaseBackEvent">
+<Page @loaded="onPageLoad" @unloaded="onPageUnload">
   <ActionBar :androidElevation="viewIsScrolled ? 4 : 0">
     <GridLayout rows="*" columns="auto, *, auto">
       <MDButton variant="text" class="bx" :text="icon.back" automationText="Back" col="0" @tap="navigateBack" />
@@ -21,45 +21,45 @@
       </AbsoluteLayout>
       <StackLayout margin="0 16">
         <AbsoluteLayout class="inputField">
-          <TextField :hint="'My Healthy Recipe' | L" v-model="recipeContent.title" @loaded="setInputTypeText($event, 'words')" />
-          <Label top="0" class="fieldLabel" :text="'Title' | L" />
+          <TextField :hint="'recTitle' | L" v-model="recipeContent.title" @loaded="setInputTypeText($event, 'words')" />
+          <Label top="0" class="fieldLabel" :text="'title' | L" />
         </AbsoluteLayout>
         <GridLayout columns="*, 8, *">
           <AbsoluteLayout class="inputField" col="0">
             <TextField :text="`${recipeContent.cuisine}` | L" editable="false" @focus="modalOpen === false && showCuisine(true)" @tap="showCuisine(false)" />
-            <Label top="0" class="fieldLabel" :text="'Cuisine' | L" />
+            <Label top="0" class="fieldLabel" :text="'cui' | L" />
           </AbsoluteLayout>
           <AbsoluteLayout class="inputField" col="2">
             <TextField ref='category' :text="`${recipeContent.category}` | L" editable="false" @focus="modalOpen === false && showCategories(true)" @tap="showCategories(false)" />
-            <Label top="0" class="fieldLabel" :text="'Category' | L" />
+            <Label top="0" class="fieldLabel" :text="'cat' | L" />
           </AbsoluteLayout>
         </GridLayout>
         <AbsoluteLayout class="inputField">
-          <TextField autocapitalizationType="words" ref='tags' :hint="`${$options.filters.L('separate with spaces')}`" v-model="tags" @textChange="splitTags" returnKeyType="next" />
-          <Label top="0" class="fieldLabel" :text="`${$options.filters.L('Tags')} (${$options.filters.L('separate with spaces')})`" />
+          <TextField autocapitalizationType="words" ref='tags' :hint="`${$options.filters.L('tsInfo')}`" v-model="tags" @textChange="splitTags" returnKeyType="next" />
+          <Label top="0" class="fieldLabel" :text="`${$options.filters.L('ts')} (${$options.filters.L('tsInfo')})`" />
         </AbsoluteLayout>
         <GridLayout columns="*, 8, *">
           <AbsoluteLayout class="inputField" col="0">
             <TextField :text="timeRequired('prepTime')" editable="false" @focus="
                   modalOpen === false && setTimeRequired(true, 'prepTime')
                 " @tap="setTimeRequired(false, 'prepTime')" />
-            <Label top="0" class="fieldLabel" :text="'Preparation time' | L" />
+            <Label top="0" class="fieldLabel" :text="'prepT' | L" />
           </AbsoluteLayout>
           <AbsoluteLayout class="inputField" col="2">
             <TextField ref="cookTime" :text="timeRequired('cookTime')" editable="false" @focus="
                   modalOpen === false && setTimeRequired(true, 'cookTime')
                 " @tap="setTimeRequired(false, 'cookTime')" />
-            <Label top="0" class="fieldLabel" :text="'Cooking time' | L" />
+            <Label top="0" class="fieldLabel" :text="'cookT' | L" />
           </AbsoluteLayout>
         </GridLayout>
         <GridLayout columns="*, 8, *">
           <AbsoluteLayout class="inputField" col="0">
             <TextField ref="yieldQuantity" v-model="recipeContent.yield.quantity" hint="1" keyboardType="number" returnKeyType="next" />
-            <Label top="0" class="fieldLabel" :text="'Yield quantity' | L" />
+            <Label top="0" class="fieldLabel" :text="'yieldQ' | L" />
           </AbsoluteLayout>
           <AbsoluteLayout class="inputField" col="2">
             <TextField :text="`${recipeContent.yield.unit}` | L" editable="false" @focus="modalOpen === false && showYieldUnits(true)" @tap="showYieldUnits(false)" />
-            <Label top="0" class="fieldLabel" :text="'Yield measured in' | L" />
+            <Label top="0" class="fieldLabel" :text="'yieldU' | L" />
           </AbsoluteLayout>
         </GridLayout>
         <GridLayout columns="*, 8, *">
@@ -71,46 +71,46 @@
         <StackLayout class="hr" margin="24 16"></StackLayout>
       </StackLayout>
       <StackLayout margin="0 16">
-        <Label :text="'Ingredients' | L" class="sectionTitle" />
+        <Label :text="'ings' | L" class="sectionTitle" />
         <GridLayout columns="auto,8,auto,8,*,8,auto" v-for="(ingredient, index) in recipeContent.ingredients" :key="index">
 
           <TextField width="60" col="0" @loaded="!recipeContent.ingredients[index].item && focusField($event)" v-model="recipeContent.ingredients[index].quantity" hint="1.00" keyboardType="number" returnKeyType="next" />
 
           <TextField width="76" col="2" :text="`${recipeContent.ingredients[index].unit}` | L" editable="false" @focus="modalOpen === false && showUnits($event, true, index)" @tap="showUnits($event, false, index)" />
 
-          <TextField ref="ingredient" @loaded="setInputTypeText($event, 'sentence')" col="4" v-model="recipeContent.ingredients[index].item" :hint="`${$options.filters.L('Item')} ${index + 1}`"
+          <TextField ref="ingredient" @loaded="setInputTypeText($event, 'sentence')" col="4" v-model="recipeContent.ingredients[index].item" :hint="`${$options.filters.L('it')} ${index + 1}`"
             @returnPress="index+1 == recipeContent.ingredients.length && addIngredient()" />
 
           <MDButton variant="text" col="6" class="bx closeBtn" :text="icon.close" @tap="removeIngredient(index)" />
         </GridLayout>
-        <MDButton variant="text" class="text-btn orkm" :text="`+ ${$options.filters.L('ADD INGREDIENT')}`" @tap="addIngredient()" />
+        <MDButton variant="text" class="text-btn orkm" :text="`+ ${$options.filters.L('aIngBtn')}`" @tap="addIngredient()" />
         <StackLayout class="hr" margin="24 16"></StackLayout>
       </StackLayout>
       <StackLayout margin="0 16">
-        <Label :text="'Instructions' | L" class="sectionTitle" />
+        <Label :text="'inss' | L" class="sectionTitle" />
         <GridLayout columns="*,8,auto" v-for="(instruction, index) in recipeContent.instructions" :key="index">
-          <TextView @loaded="focusField($event, 'multiLine')" col="0" :hint="`${$options.filters.L('Step')} ${index + 1}`" v-model="recipeContent.instructions[index]" />
+          <TextView @loaded="focusField($event, 'multiLine')" col="0" :hint="`${$options.filters.L('stp')} ${index + 1}`" v-model="recipeContent.instructions[index]" />
           <MDButton variant="text" col="2" class="bx closeBtn" :text="icon.close" @tap="removeInstruction(index)" />
         </GridLayout>
-        <MDButton variant="text" class="text-btn orkm" :text="`+ ${$options.filters.L('ADD STEP')}`" @tap="addInstruction" />
+        <MDButton variant="text" class="text-btn orkm" :text="`+ ${$options.filters.L('aStpBtn')}`" @tap="addInstruction" />
         <StackLayout class="hr" margin="24 16"></StackLayout>
       </StackLayout>
       <StackLayout margin="0 16">
-        <Label :text="'Notes' | L" class="sectionTitle" />
+        <Label :text="'nos' | L" class="sectionTitle" />
         <GridLayout columns="*,8,auto" v-for="(note, index) in recipeContent.notes" :key="index">
-          <TextView @loaded="focusField($event, 'multiLine')" col="0" :hint="`${$options.filters.L('Note')} ${index + 1}`" v-model="recipeContent.notes[index]" />
+          <TextView @loaded="focusField($event, 'multiLine')" col="0" :hint="`${$options.filters.L('no')} ${index + 1}`" v-model="recipeContent.notes[index]" />
           <MDButton variant="text" col="2" class="bx closeBtn" :text="icon.close" @tap="removeNote(index)" />
         </GridLayout>
-        <MDButton variant="text" class="text-btn orkm" :text="`+ ${$options.filters.L('ADD NOTE')}`" @tap="addNote" />
+        <MDButton variant="text" class="text-btn orkm" :text="`+ ${$options.filters.L('aNoBtn')}`" @tap="addNote" />
         <StackLayout class="hr" margin="24 16"></StackLayout>
       </StackLayout>
       <StackLayout margin="0 16">
-        <Label :text="'Combinations' | L" class="sectionTitle" />
+        <Label :text="'cmbs' | L" class="sectionTitle" />
         <GridLayout columns="*,8,auto" v-for="(combination, index) in recipeContent.combinations" :key="index">
           <TextField class="combinationToken" col="0" :text="getCombinationTitle(combination)" editable="false" />
           <MDButton variant="text" col="2" class="bx closeBtn" :text="icon.close" @tap="removeCombination(combination)" />
         </GridLayout>
-        <MDButton variant="text" class="text-btn orkm" :text="`+ ${$options.filters.L('ADD COMBINATION')}`" @tap="showCombinations" />
+        <MDButton variant="text" class="text-btn orkm" :text="`+ ${$options.filters.L('addCmbBtn')}`" @tap="showCombinations" />
       </StackLayout>
     </StackLayout>
   </ScrollView>
@@ -144,6 +144,10 @@ import {
 }
 from "@nativescript/localize"
 import {
+  SnackBar
+} from '@nativescript-community/ui-material-snackbar';
+const snackbar = new SnackBar();
+import {
   mapState,
   mapActions
 }
@@ -159,7 +163,7 @@ export default {
   props: [ "recipeID", "selectedCuisine", "selectedCategory", "selectedTag", "filterFavourites", "filterTrylater", "navigationFromView", ],
   data() {
     return {
-      title: "New recipe",
+      title: "newRec",
       viewIsScrolled: false,
       recipeContent: {
         imageSrc: null,
@@ -184,6 +188,7 @@ export default {
         lastTried: null,
         lastModified: null,
         created: null,
+        inCart: false,
       },
       tempRecipeContent: {},
       tags: undefined,
@@ -219,6 +224,10 @@ export default {
       const page = args.object;
       page.bindingContext = new Observable();
       this.showFab = true
+    },
+    onPageUnload() {
+      this.releaseBackEvent()
+      snackbar.dismiss()
     },
     timeRequired( time ) {
       let t = this.recipeContent[ time ].split( ":" )
@@ -268,7 +277,7 @@ export default {
       let min = t[ 1 ]
       this.$showModal( ListPicker, {
         props: {
-          title: `${time == "prepTime" ? "Preparation" : "Cooking"} time`,
+          title: `${time == "prepTime" ? "prepT" : "cookT"}`,
           action: "SET",
           selectedHr: hr,
           selectedMin: min,
@@ -301,23 +310,24 @@ export default {
       this.releaseBackEvent()
       this.$showModal( ActionDialog, {
         props: {
-          title: "Cuisine",
+          title: "cui",
           list: this.cuisines,
           stretch: true,
-          action: "ADD NEW",
+          action: "aNBtn",
+          helpIcon: 'cuisine',
         },
       } ).then( ( action ) => {
-        if ( action == "ADD NEW" ) {
+        if ( action == "aNBtn" ) {
           this.$showModal( PromptDialog, {
             props: {
-              title: "New cuisine",
-              action: "ADD",
+              title: "newCui",
+              action: "aBtn",
+              helpIcon: 'cuisine',
             },
           } ).then( ( item ) => {
             this.hijackBackEvent()
             if ( item.length ) {
               this.recipeContent.cuisine = item
-              ApplicationSettings.setString( "previousCuisine", item )
               this.addListItemAction( {
                 item,
                 listName: 'cuisines'
@@ -328,7 +338,6 @@ export default {
           } )
         } else if ( action ) {
           this.recipeContent.cuisine = action
-          ApplicationSettings.setString( "previousCuisine", action )
           this.hijackBackEvent()
           this.modalOpen = false
           if ( focus ) this.autoFocusField( "category", false )
@@ -343,23 +352,24 @@ export default {
       this.releaseBackEvent()
       this.$showModal( ActionDialog, {
         props: {
-          title: "Category",
+          title: "cat",
           list: this.categories,
           stretch: true,
-          action: "ADD NEW",
+          action: "aNBtn",
+          helpIcon: 'category',
         },
       } ).then( ( action ) => {
-        if ( action == "ADD NEW" ) {
+        if ( action == "aNBtn" ) {
           this.$showModal( PromptDialog, {
             props: {
-              title: "New category",
-              action: "ADD",
+              title: "nwCat",
+              action: "aBtn",
+              helpIcon: 'category',
             },
           } ).then( ( item ) => {
             this.hijackBackEvent()
             if ( item.length ) {
               this.recipeContent.category = item
-              ApplicationSettings.setString( "previousCategory", item )
               this.addListItemAction( {
                 item,
                 listName: 'categories'
@@ -370,7 +380,6 @@ export default {
           } )
         } else if ( action ) {
           this.recipeContent.category = action
-          ApplicationSettings.setString( "previousCategory", action )
           this.hijackBackEvent()
           this.modalOpen = false
           if ( focus ) this.autoFocusField( "tags", true )
@@ -385,23 +394,24 @@ export default {
       this.releaseBackEvent()
       this.$showModal( ActionDialog, {
         props: {
-          title: "Yield measured in",
+          title: "yieldU",
           list: this.yieldUnits,
           stretch: true,
-          action: "ADD NEW",
+          action: "aNBtn",
+          helpIcon: 'dish',
         },
       } ).then( ( action ) => {
-        if ( action == "ADD NEW" ) {
+        if ( action == "aNBtn" ) {
           this.$showModal( PromptDialog, {
             props: {
-              title: "New yield unit",
-              action: "ADD",
+              title: "nwYiU",
+              action: "aBtn",
+              helpIcon: 'dish',
             },
           } ).then( ( item ) => {
             this.hijackBackEvent()
             if ( item.length ) {
               this.recipeContent.yield.unit = item
-              ApplicationSettings.setString( "previousYieldUnit", item )
               this.addListItemAction( {
                 item,
                 listName: 'yieldUnits'
@@ -412,7 +422,6 @@ export default {
           } )
         } else if ( action ) {
           this.recipeContent.yield.unit = action
-          ApplicationSettings.setString( "previousYieldUnit", action )
           this.hijackBackEvent()
           this.modalOpen = false
           if ( focus ) this.autoFocusField( "difficultyLevel", false )
@@ -430,6 +439,7 @@ export default {
           title: "Difficulty level",
           list: this.difficultyLevels,
           stretch: false,
+          helpIcon: 'meter',
         },
       } ).then( ( action ) => {
         if ( action ) {
@@ -448,18 +458,19 @@ export default {
       this.releaseBackEvent()
       this.$showModal( ActionDialog, {
         props: {
-          title: "Units",
+          title: "Unit",
           list: this.units,
           stretch: true,
-          action: "ADD NEW",
+          action: "aNBtn",
+          helpIcon: 'ruler',
         },
       } ).then( ( action ) => {
-        this.hijackBackEvent()
-        if ( action == "ADD NEW" ) {
+        if ( action == "aNBtn" ) {
           this.$showModal( PromptDialog, {
             props: {
-              title: "New unit",
-              action: "ADD",
+              title: "newUnit",
+              action: "aBtn",
+              helpIcon: 'ruler',
             },
           } ).then( ( item ) => {
             this.hijackBackEvent()
@@ -472,12 +483,11 @@ export default {
               this.modalOpen = false
               if ( focus && this.recipeContent.ingredients.length - 1 === index )
                 this.autoFocusRefField( 'ingredient', index )
-
-
             }
           } )
         } else if ( action ) {
           this.recipeContent.ingredients[ index ].unit = action
+          this.hijackBackEvent()
           this.modalOpen = false
           if ( focus && this.recipeContent.ingredients.length - 1 === index ) this.autoFocusRefField( 'ingredient', index )
         }
@@ -514,10 +524,12 @@ export default {
         this.blockModal = true
         this.$showModal( ConfirmDialog, {
           props: {
-            title: "Unsaved changes",
-            description: localize( "Are you sure you want to discard unsaved changes to this recipe?" ),
-            cancelButtonText: "DISCARD",
-            okButtonText: "KEEP EDITING",
+            title: "unsaved",
+            description: localize( "disc" ),
+            cancelButtonText: "disBtn",
+            okButtonText: "kEdit",
+            helpIcon: 'error',
+            bgColor: '#c92a2a',
           },
         } ).then( ( action ) => {
           this.blockModal = false
@@ -550,9 +562,11 @@ export default {
         this.blockModal = true
         this.$showModal( ConfirmDialog, {
           props: {
-            title: "Recipe photo",
-            cancelButtonText: "REMOVE",
-            okButtonText: "REPLACE PHOTO",
+            title: "recPic",
+            cancelButtonText: "rBtn",
+            okButtonText: "repBtn",
+            helpIcon: 'image',
+            bgColor: '#adb5bd',
           },
         } ).then( ( action ) => {
           this.blockModal = false
@@ -570,10 +584,12 @@ export default {
     permissionConfirmation() {
       return this.$showModal( ConfirmDialog, {
         props: {
-          title: "Grant permission",
-          description: localize( "EnRecipes requires storage permission in order to set recipe photo." ),
-          cancelButtonText: "NOT NOW",
-          okButtonText: "CONTINUE",
+          title: "grant",
+          description: localize( "reqAcc" ),
+          cancelButtonText: "nNBtn",
+          okButtonText: "conBtn",
+          helpIcon: 'folder',
+          bgColor: '#ff5200',
         },
       } )
     },
@@ -590,7 +606,7 @@ export default {
                   ApplicationSettings.setBoolean( "storagePermissionAsked", true )
                   break
                 case "denied":
-                  Toast.makeText( localize( "Permission denied" ) ).show()
+                  Toast.makeText( localize( "dend" ) ).show()
                   break
                 default:
                   break
@@ -618,7 +634,7 @@ export default {
             height: 1080,
           }, {
             hideBottomControls: true,
-            toolbarTitle: localize( "Crop photo" ),
+            toolbarTitle: localize( "cPic" ),
             statusBarColor: "#ff5200",
             toolbarTextColor: this.appTheme == "light" ? "#212529" : "#f1f3f5",
             toolbarColor: this.appTheme == "light" ? "#f1f3f5" : "#212529",
@@ -646,14 +662,16 @@ export default {
     joinTags() {
       this.tags = this.recipeContent.tags.join( " " )
     },
-    fieldDeletionConfirm( title ) {
-      return this.$showModal( ConfirmDialog, {
-        props: {
-          title,
-          cancelButtonText: "CANCEL",
-          okButtonText: "REMOVE",
-        },
-      } )
+    undoDeletion( message ) {
+      return snackbar
+        .action( {
+          message,
+          textColor: this.appTheme == "light" ? "#f1f3f5" : "#212529",
+          actionTextColor: '#ff5200',
+          backgroundColor: this.appTheme == "light" ? "#212529" : "#f1f3f5",
+          actionText: 'Undo',
+          hideDelay: 5000
+        } )
     },
     addIngredient() {
       let ingredients = this.recipeContent.ingredients
@@ -667,10 +685,11 @@ export default {
     removeIngredient( index ) {
       this.modalOpen = true
       if ( this.recipeContent.ingredients[ index ].item.length ) {
-        this.fieldDeletionConfirm( "Remove ingredient?" ).then( ( res ) => {
-          if ( res ) {
-            this.recipeContent.ingredients.splice( index, 1 )
-          }
+        let item = this.recipeContent.ingredients[ index ]
+        this.recipeContent.ingredients.splice( index, 1 )
+        this.undoDeletion( `${this.$options.filters.L('rmIng')}` ).then( res => {
+          if ( res.command === 'action' )
+            this.recipeContent.ingredients.splice( index, 0, item )
         } )
       } else {
         this.recipeContent.ingredients.splice( index, 1 )
@@ -682,15 +701,35 @@ export default {
     },
     removeInstruction( index ) {
       if ( this.recipeContent.instructions[ index ].length ) {
-        this.fieldDeletionConfirm( "Remove instruction?" ).then( ( res ) => {
-          res && this.recipeContent.instructions.splice( index, 1 )
+        let item = this.recipeContent.instructions[ index ]
+        this.recipeContent.instructions.splice( index, 1 )
+        this.undoDeletion( `${this.$options.filters.L('rmIns')}` ).then( res => {
+          if ( res.command === 'action' ) {
+            this.recipeContent.instructions.splice( index, 0, item )
+          }
         } )
       } else this.recipeContent.instructions.splice( index, 1 )
+    },
+    addNote() {
+      this.recipeContent.notes.push( "" )
+    },
+    removeNote( index ) {
+      if ( this.recipeContent.notes[ index ].length ) {
+        let item = this.recipeContent.notes[ index ]
+        this.recipeContent.notes.splice( index, 1 )
+        this.undoDeletion( `${this.$options.filters.L('rmN')}` ).then( res => {
+          if ( res.command === 'action' ) {
+            this.recipeContent.notes.splice( index, 0, item )
+          }
+        } )
+      } else this.recipeContent.notes.splice( index, 1 )
     },
     getCombinationTitle( id ) {
       return this.recipes.filter( ( e ) => e.id === id )[ 0 ].title
     },
     showCombinations() {
+      this.modalOpen = true
+      this.releaseBackEvent()
       let existingCombinations = [ ...this.recipeContent.combinations,
         this.recipeContent.id,
       ]
@@ -698,10 +737,12 @@ export default {
         ( e ) => !existingCombinations.includes( e.id ) )
       this.$showModal( ActionDialogWithSearch, {
         props: {
-          title: "Select a recipe",
+          title: "selRec",
           recipes: filteredRecipes,
+          helpIcon: 'outline',
         },
       } ).then( ( res ) => {
+        this.hijackBackEvent()
         if ( res ) {
           this.recipeContent.combinations.push( res )
         }
@@ -709,26 +750,18 @@ export default {
     },
     removeCombination( id ) {
       let index = this.recipeContent.combinations.indexOf( id )
-      this.fieldDeletionConfirm( "Remove combination?" ).then( res => {
-        if ( res ) {
-          this.recipeContent.combinations.splice( index, 1 )
-          this.unSyncCombinations.push( id )
+      this.recipeContent.combinations.splice( index, 1 )
+      this.unSyncCombinations.push( id )
+      this.undoDeletion( `${this.$options.filters.L('rmCmb')}` ).then( res => {
+        if ( res.command === 'action' ) {
+          console.log( this.recipeContent.combinations, index, id );
+          this.recipeContent.combinations.splice( index, 0, id )
         }
       } )
     },
-    addNote() {
-      this.recipeContent.notes.push( "" )
-    },
-    removeNote( index ) {
-      if ( this.recipeContent.notes[ index ].length ) {
-        this.fieldDeletionConfirm( "Remove note?" ).then( ( res ) => {
-          if ( res ) this.recipeContent.notes.splice( index, 1 )
-        } )
-      } else this.recipeContent.notes.splice( index, 1 )
-    },
     // SAVE OPERATION
     clearEmptyFields() {
-      if ( !this.recipeContent.title ) this.recipeContent.title = localize( "Untitled Recipe" )
+      if ( !this.recipeContent.title ) this.recipeContent.title = localize( "untRec" )
       if ( !this.recipeContent.yield.quantity ) this.recipeContent.yield.quantity = 1
       this.recipeContent.ingredients = this.recipeContent.ingredients.filter(
         ( e ) => e.item )
@@ -744,6 +777,9 @@ export default {
       this.saving = this.modalOpen = true
       this.clearEmptyFields()
       this.recipeContent.lastModified = new Date()
+      ApplicationSettings.setString( "previousCuisine", this.recipeContent.cuisine )
+      ApplicationSettings.setString( "previousCategory", this.recipeContent.category )
+      ApplicationSettings.setString( "previousYieldUnit", this.recipeContent.yield.unit )
       if ( this.cacheImagePath ) {
         let recipeImage = path.join( knownFolders.documents().getFolder( "EnRecipes" ).getFolder( "Images" ).path, `${this.getRandomID()}.jpg` )
         let binarySource = File.fromPath( this.cacheImagePath ).readSync()
@@ -787,16 +823,16 @@ export default {
     setTimeout( ( e ) => {
       this.setCurrentComponentAction( "EditRecipe" )
     }, 500 )
-    this.title = this.recipeID ? "Edit recipe" : "New recipe"
+    this.title = this.recipeID ? "editRec" : "newRec"
     if ( this.recipeID ) {
       let recipe = this.recipes.filter( ( e ) => e.id === this.recipeID )[ 0 ]
       Object.assign( this.recipeContent, JSON.parse( JSON.stringify( recipe ) ) )
       Object.assign( this.tempRecipeContent, JSON.parse( JSON.stringify( this.recipeContent ) ) )
       if ( this.recipeContent.tags.length ) this.joinTags()
     } else {
-      this.recipeContent.cuisine = this.selectedCuisine ? /All/.test( this.selectedCuisine ) ? "Undefined" : this.selectedCuisine : ApplicationSettings.getString( "previousCuisine", "Undefined" )
-      this.recipeContent.category = this.selectedCategory ? /All/.test( this.selectedCategory ) ? "Undefined" : this.selectedCategory : ApplicationSettings.getString( "previousCategory", "Undefined" )
-      if ( this.selectedTag && !/All/.test( this.selectedTag ) ) {
+      this.recipeContent.cuisine = this.selectedCuisine ? /all/.test( this.selectedCuisine ) ? "Undefined" : this.selectedCuisine : ApplicationSettings.getString( "previousCuisine", "Undefined" )
+      this.recipeContent.category = this.selectedCategory ? /all/.test( this.selectedCategory ) ? "Undefined" : this.selectedCategory : ApplicationSettings.getString( "previousCategory", "Undefined" )
+      if ( this.selectedTag && !/all/.test( this.selectedTag ) ) {
         this.tags = this.selectedTag
         this.splitTags()
       }

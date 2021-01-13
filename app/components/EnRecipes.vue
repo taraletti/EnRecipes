@@ -3,7 +3,7 @@
   <ActionBar :androidElevation="viewIsScrolled ? 4 : 0">
     <GridLayout v-if="showSearch" columns="auto, *" verticalAlignment="center">
       <MDButton class="bx" :text="icon.back" variant="text" automationText="Back" col="0" @tap="closeSearch" />
-      <SearchBar col="1" :hint="'Search' | L" v-model="searchQuery" @textChange="updateFilter" @clear="clearSearch" />
+      <SearchBar col="1" :hint="'ser' | L" v-model="searchQuery" @textChange="callUpdateFilter" @clear="clearSearch" />
     </GridLayout>
     <GridLayout v-else columns="auto, *, auto, auto">
       <MDButton class="bx" col="0" variant="text" @tap="showDrawer" :text="icon.menu" automationText="Back" />
@@ -32,9 +32,9 @@
               <StackLayout class="attrContainer" orientation="horizontal" row="0">
                 <Label class="bx small" :text="icon.starLine" />
                 <Label class="attr" :text="recipe.rating" />
-                <Label class="bx small" :text="icon.meter" />
+                <Label class="bx small" :text="icon.meterLine" />
                 <Label class="attr" :text="`${recipe.difficulty}` | L" />
-                <Label class="bx small" :text="icon.time" />
+                <Label class="bx small" :text="icon.timeLine" />
                 <Label class="attr" :text="
               `${
                 formattedTotalTime(recipe.prepTime, recipe.cookTime).time
@@ -67,32 +67,25 @@
               !filterTrylater
           " @tap="addRecipe">
         <Label class="bx icon" :text="icon.plusCircle" />
-        <Label class="title orkm" :text="'Start adding your recipes!' | L" textWrap="true" />
+        <Label class="title orkm" :text="'strAdd' | L" textWrap="true" />
         <StackLayout orientation="horizontal" horizontalAlignment="center">
-          <Label :text="'Use the plus button to add one' | L" textWrap="true" />
+          <Label :text="'plsAdd' | L" textWrap="true" />
         </StackLayout>
       </StackLayout>
       <StackLayout row="1" class="emptyState" v-if="!filteredRecipes.length && filterTrylater && !searchQuery">
         <Label class="bx icon" :text="icon.trylaterLine" textWrap="true" />
-        <Label class="title orkm" :text="'All done!' | L" textWrap="true" />
-        <Label :text="'Recipes you mark as try later will be listed here' | L" textWrap="true" />
+        <Label class="title orkm" :text="'aD' | L" textWrap="true" />
+        <Label :text="'tLInfo' | L" textWrap="true" />
       </StackLayout>
       <StackLayout row="1" class="emptyState" v-if="!filteredRecipes.length && filterFavourites && !searchQuery">
         <Label class="bx icon" :text="icon.heartLine" textWrap="true" />
-        <Label class="title orkm" :text="'No favourites yet' | L" textWrap="true" />
-        <Label :text="'Recipes you mark as favourite will be listed here' | L" textWrap="true" />
-      </StackLayout>
-      <StackLayout row="1" class="emptyState" v-if="selectedCuisine && !filteredRecipes.length && !searchQuery">
-        <Label class="bx icon" :text="icon.categoryLine" textWrap="true" />
-        <Label class="title orkm" :text="'Category looks empty' | L" textWrap="true" />
-        <StackLayout orientation="horizontal" horizontalAlignment="center">
-          <Label :text="'Use the plus button to add one' | L" textWrap="true" />
-        </StackLayout>
+        <Label class="title orkm" :text="'noFavs' | L" textWrap="true" />
+        <Label :text="'fsList' | L" textWrap="true" />
       </StackLayout>
       <StackLayout row="1" class="emptyState" v-if="!filteredRecipes.length && searchQuery">
         <Label class="bx icon" :text="icon.search" textWrap="true" />
-        <Label class="title orkm" :text="'No recipes found' | L" textWrap="true" />
-        <Label :text="`${noResultFor}` | L" textWrap="true" />
+        <Label class="title orkm" :text="`${noResultFor}` | L" textWrap="true" />
+        <MDButton v-if="filterFavourites || filterTrylater || selectedCuisine" variant="text" class="searchAll orkm" :text="'trySer' | L" @tap="searchAll" />
       </StackLayout>
     </GridLayout>
     <GridLayout id="btnFabContainer" rows="*, auto" columns="*, auto">
@@ -106,6 +99,7 @@
 
 <script>
 import {
+  Frame,
   ApplicationSettings,
   AndroidApplication,
   Utils,
@@ -142,6 +136,7 @@ let lastTime = 0;
 let lastShake = 0;
 let lastForce = 0;
 let shakeCount = 0;
+let typingTimer;
 export default {
   props: [ "filterFavourites", "filterTrylater", "closeDrawer", "selectedCategory", "selectedCuisine", "selectedTag", "hijackGlobalBackEvent", "releaseGlobalBackEvent" ],
   components: {
@@ -155,32 +150,41 @@ export default {
       showSearch: false,
       rightAction: false,
       deletionDialogActive: false,
-      showFAB: false
+      showFAB: false,
+      filterDone: true,
     };
   },
   computed: {
     ...mapState( [ "sortType", "icon", "recipes", "currentComponent", "shakeEnabled" ] ),
     filteredRecipes() {
       let ingredients = this.recipes.map( e => e.ingredients.map( f => f.item.toLowerCase() ).join() ).join()
-      let tags = this.recipes.map( e => e.tags.map( f => f.toLowerCase() ).join() ).join()
 
-      if ( this.filterFavourites ) {
-        return this.recipes.filter( e => e.isFavorite && ( tags.includes( this.searchQuery ) || e.title.toLowerCase().includes( this.searchQuery ) || ingredients.includes( this.searchQuery ) ) )
-      } else if ( this.filterTrylater ) {
-        return this.recipes.filter( e => !e.tried && ( tags.includes( this.searchQuery ) || e.title.toLowerCase().includes( this.searchQuery ) || ingredients.includes( this.searchQuery ) ) )
-      } else if ( this.selectedCuisine ) {
-        return this.recipes.filter( e => {
-          return this.recipeFilter( e ) && ( tags.includes( this.searchQuery ) || e.title.toLowerCase().includes( this.searchQuery ) || ingredients.includes( this.searchQuery ) )
-        } )
+      let vm = this
+
+      function getIngredients( e ) {
+        return e.ingredients.map( f => f.item.toLowerCase() ).join().includes( vm.searchQuery );
+      }
+      if ( this.filterDone ) {
+        if ( this.filterFavourites ) {
+          return this.recipes.filter( e => e.isFavorite && ( e.title.toLowerCase().includes( this.searchQuery ) || getIngredients( e ) ) )
+        } else if ( this.filterTrylater ) {
+          return this.recipes.filter( e => !e.tried && ( e.title.toLowerCase().includes( this.searchQuery ) || getIngredients( e ) ) )
+        } else if ( this.selectedCuisine ) {
+          return this.recipes.filter( e => {
+            return this.recipeFilter( e ) && ( e.title.toLowerCase().includes( this.searchQuery ) || getIngredients( e ) )
+          } )
+        } else {
+          return this.recipes.filter( e => e.title.toLowerCase().includes( this.searchQuery ) || getIngredients( e ) )
+        }
       } else {
-        return this.recipes.filter( e => tags.includes( this.searchQuery ) || e.title.toLowerCase().includes( this.searchQuery ) || ingredients.includes( this.searchQuery ) )
+        return "A";
       }
     },
     noResultFor() {
-      if ( this.selectedCuisine ) return "Your search did not match any recipes in the filtered result";
-      if ( this.filterFavourites ) return "Your search did not match any recipes in your favourites";
-      if ( this.filterTrylater ) return "Your search did not match any recipes in your try later list";
-      return "Your search did not match any recipes";
+      if ( this.filterFavourites ) return "noRecsInFavs";
+      if ( this.filterTrylater ) return "noRecsInTL";
+      if ( this.selectedCuisine ) return "noRecsInFtr";
+      return "noRecs";
     },
   },
   methods: {
@@ -188,13 +192,17 @@ export default {
     onPageLoad( args ) {
       const page = args.object;
       page.bindingContext = new Observable();
-      this.filterFavourites ? this.setComponent( "Favourites" ) : this.filterTrylater ? this.setComponent( "Try Later" ) : this.selectedCuisine ? this.setComponent( "Filtered result" ) : this.setComponent( "EnRecipes" );
+      this.filterFavourites ? this.setComponent( "Favourites" ) : this.filterTrylater ? this.setComponent( "Try Later" ) : this.selectedCuisine ? this.setComponent( "Filtered recipes" ) : this.setComponent( "EnRecipes" );
       this.showFAB = true;
       if ( this.shakeEnabled ) startAccelerometerUpdates( data => this.onSensorData( data ) )
+      if ( this.showSearch )
+        this.hijackLocalBackEvent()
+
     },
     onPageUnload() {
       if ( this.shakeEnabled ) stopAccelerometerUpdates();
       this.releaseGlobalBackEvent();
+      this.releaseLocalBackEvent();
     },
     // HELPERS
     showDrawer() {
@@ -246,14 +254,17 @@ export default {
     },
     recipeFilter( e ) {
       let cuisineMatched = e.cuisine === this.selectedCuisine
-      let allCuisines = /All/.test( this.selectedCuisine )
+      let allCuisines = /allCuis/.test( this.selectedCuisine )
       let categoryMatched = e.category === this.selectedCategory
-      let allCategories = /All/.test( this.selectedCategory )
+      let allCategories = /allCats/.test( this.selectedCategory )
       let tagMatched = e.tags.includes( this.selectedTag )
-      let allTags = /All/.test( this.selectedTag )
+      let allTags = /allTs/.test( this.selectedTag )
       let cuisine = cuisineMatched || allCuisines
 
       return this.selectedTag && !allTags ? ( categoryMatched || allCategories ) && cuisine && tagMatched : this.selectedCategory && !allCategories ? cuisine && categoryMatched : cuisine
+    },
+    searchAll() {
+      this.$emit( "backToHome" )
     },
     // NAVIGATION HANDLERS
     hijackLocalBackEvent() {
@@ -307,9 +318,11 @@ export default {
       this.releaseGlobalBackEvent();
       this.$showModal( ActionDialog, {
         props: {
-          title: "Sort by",
+          title: "srt",
           list: [ "Title", "Quickest first", "Slowest first", "Rating", "Difficulty level", "Last updated", "Newest first", "Oldest first" ],
-          stretch: false
+          stretch: false,
+          helpIcon: 'sort',
+          bgColor: '#adb5bd',
         }
       } ).then( action => {
         if ( action && action !== "Cancel" && this.sortType !== action ) {
@@ -377,24 +390,31 @@ export default {
           break;
       }
     },
+    callUpdateFilter() {
+      clearTimeout( typingTimer )
+      this.filterDone = false
+      typingTimer = setTimeout( e => {
+        this.updateFilter()
+      }, 750 )
+    },
     updateFilter() {
       let listView = this.$refs.listView.nativeView;
       setTimeout( e => {
         listView.filteringFunction = undefined;
         listView.filteringFunction = this.filterFunction;
       }, 1 );
+      this.filterDone = true
     },
     filterFunction( e ) {
-      let ingredients = e.ingredients.map( e => e.item.toLowerCase() ).join()
-      let tags = e.tags.map( e => e.toLowerCase() ).join()
+      let ingredients = e.ingredients.map( e => e.item.toLowerCase() ).join().includes( this.searchQuery )
       if ( this.filterFavourites ) {
-        return e.isFavorite ? tags.includes( this.searchQuery ) || e.title.toLowerCase().includes( this.searchQuery ) || ingredients.includes( this.searchQuery ) : false;
+        return e.isFavorite ? e.title.toLowerCase().includes( this.searchQuery ) || ingredients : false;
       } else if ( this.filterTrylater ) {
-        return e.tried ? false : tags.includes( this.searchQuery ) || e.title.toLowerCase().includes( this.searchQuery ) || ingredients.includes( this.searchQuery );
+        return e.tried ? false : e.title.toLowerCase().includes( this.searchQuery ) || ingredients
       } else if ( this.selectedCuisine ) {
-        return this.recipeFilter( e ) ? tags.includes( this.searchQuery ) || e.title.toLowerCase().includes( this.searchQuery ) || ingredients.includes( this.searchQuery ) : false;
+        return this.recipeFilter( e ) ? e.title.toLowerCase().includes( this.searchQuery ) || ingredients : false;
       } else {
-        return tags.includes( this.searchQuery ) || e.title.toLowerCase().includes( this.searchQuery ) || ingredients.includes( this.searchQuery );
+        return e.title.toLowerCase().includes( this.searchQuery ) || ingredients
       }
     },
     onSwiping( {
@@ -423,10 +443,12 @@ export default {
       this.deletionDialogActive = true;
       this.$showModal( ConfirmDialog, {
         props: {
-          title: localize( "Delete recipe?" ),
-          description: `${localize('Are you sure you want to delete the recipe')} "${this.recipes[index].title}"?`,
-          cancelButtonText: "CANCEL",
-          okButtonText: "DELETE"
+          title: localize( "conf" ),
+          description: `${localize('delRecInfo')} "${this.recipes[index].title}"`,
+          cancelButtonText: "cBtn",
+          okButtonText: "dBtn",
+          helpIcon: 'trash',
+          bgColor: '#c92a2a',
         }
       } ).then( action => {
         if ( action ) {
@@ -434,6 +456,8 @@ export default {
             index,
             id: recipeID
           } );
+          if ( !this.filteredRecipes.length )
+            this.$emit( 'backToHome' )
         }
         this.deletionDialogActive = false;
       } );

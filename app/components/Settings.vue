@@ -8,12 +8,12 @@
   </ActionBar>
   <ScrollView @scroll="onScroll">
     <StackLayout class="main-container">
-      <Label :text="'Interface' | L" class="group-header orkm" />
+      <Label :text="'intf' | L" class="group-header orkm" />
       <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="selectAppLanguage" />
         <Label col="0" verticalAlignment="center" class="bx" :text="icon.globe" />
         <StackLayout col="1">
-          <Label :text="'App language' | L" />
+          <Label :text="'lang' | L" />
           <Label :text="appLanguage" class="info" />
         </StackLayout>
       </GridLayout>
@@ -26,28 +26,23 @@
         </StackLayout>
       </GridLayout>
       <StackLayout class="hr m-10"></StackLayout>
-      <Label :text="'Options' | L" class="group-header orkm" />
-      <!-- <GridLayout columns="auto, *, auto" class="option">
-        <Label col="0" verticalAlignment="center" class="bx" :text="icon.show" />
-        <Label col="1" verticalAlignment="center" :text="'Keep display on while viewing a recipe' | L" textWrap="true" />
-        <Switch :color="shakeEnabled ? '#ff5200' : appTheme==='Light' ? '#495057' : '#adb5bd'" verticalAlignment="center" col="2" :checked="shakeEnabled" @checkedChange="toggleShake" />
-      </GridLayout> -->
+      <Label :text="'opts' | L" class="group-header orkm" />
       <GridLayout columns="auto, *, auto" class="option">
         <Label col="0" verticalAlignment="center" class="bx" :text="icon.shuffle" />
         <StackLayout col="1">
-          <Label :text="'Shake to view random recipe' | L" textWrap="true" />
-          <Label :text="`Helps you choose what to cook when you can't decide` | L" class="info" textWrap="true" />
+          <Label :text="'sVw' | L" textWrap="true" />
+          <Label :text="`sVwInfo` | L" class="info" textWrap="true" />
         </StackLayout>
         <Switch :color="shakeEnabled ? '#ff5200' : appTheme==='Light' ? '#495057' : '#adb5bd'" verticalAlignment="center" col="2" :checked="shakeEnabled" @checkedChange="toggleShake" />
       </GridLayout>
       <StackLayout class="hr m-10"></StackLayout>
-      <Label :text="'Database' | L" class="group-header orkm" />
+      <Label :text="'db' | L" class="group-header orkm" />
       <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="exportCheck" />
         <Label col="0" class="bx" :text="icon.export" />
         <StackLayout col="1">
-          <Label :text="'Export a full backup' | L" textWrap="true" />
-          <Label v-if="!backupInProgress" :text="'Generates a zip file that contains all your data. This file can be imported back.' | L" class="info" textWrap="true" />
+          <Label :text="'expBu' | L" textWrap="true" />
+          <Label v-if="!backupInProgress" :text="'buInfo' | L" class="info" textWrap="true" />
           <GridLayout class="progressContainer" v-else columns="*, 64">
             <MDProgress col="0" :value="backupProgress" maxValue="100"></MDProgress>
             <Label col="1" :text="`  ${backupProgress}%`" />
@@ -58,33 +53,76 @@
         <MDRipple colSpan="2" @tap="importCheck" />
         <Label col="0" class="bx" :text="icon.import" />
         <StackLayout col="1">
-          <Label :text="'Import from backup' | L" textWrap="true" />
-          <Label :text="'Supports full backups exported by this app' | L" class="info" textWrap="true" />
+          <Label :text="'impBu' | L" textWrap="true" />
+          <Label :text="'impInfo' | L" class="info" textWrap="true" />
         </StackLayout>
       </GridLayout>
       <StackLayout class="hr m-10"></StackLayout>
-      <Label :text="'Reset' | L" class="group-header orkm" />
+      <Label :text="'rest' | L" class="group-header orkm" />
       <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="resetListItems('cuisines')" />
         <Label col="0" class="bx" :text="icon.reset" />
-        <Label col="1" verticalAlignment="center" :text="'Reset cuisines list' | L" textWrap="true" />
+        <Label col="1" verticalAlignment="center" :text="'restCuiL' | L" textWrap="true" />
       </GridLayout>
       <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="resetListItems('categories')" />
         <Label col="0" class="bx" :text="icon.reset" />
-        <Label col="1" verticalAlignment="center" :text="'Reset categories list' | L" textWrap="true" />
+        <Label col="1" verticalAlignment="center" :text="'Reset category list' | L" textWrap="true" />
       </GridLayout>
       <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="resetListItems('yieldUnits')" />
         <Label col="0" class="bx" :text="icon.reset" />
-        <Label col="1" verticalAlignment="center" :text="'Reset yield units list' | L" textWrap="true" />
+        <Label col="1" verticalAlignment="center" :text="'Reset yield unit list' | L" textWrap="true" />
       </GridLayout>
       <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="resetListItems('units')" />
         <Label col="0" class="bx" :text="icon.reset" />
-        <Label col="1" verticalAlignment="center" :text="'Reset units list' | L" textWrap="true" />
+        <Label col="1" verticalAlignment="center" :text="'Reset unit list' | L" textWrap="true" />
       </GridLayout>
-      <Label class="group-info" :text="'Resetting a list will NOT delete your existing entries but only restores the deleted default entries.' | L" textWrap="true" />
+      <Label class="group-info" :text="'restInfo' | L" textWrap="true" />
+
+      <StackLayout class="hr m-10"></StackLayout>
+      <Label :text="'help' | L" class="group-header orkm" />
+
+      <GridLayout columns="auto, *" class="option">
+        <MDRipple colSpan="2" @tap="openURL('https://github.com/vishnuraghavb/EnRecipes/wiki/User-Guide')" />
+        <Label col="0" class="bx" :text="icon.compass" />
+        <Label verticalAlignment="center" col="1" :text="'guide' | L" textWrap="true" />
+      </GridLayout>
+      <GridLayout columns="auto, *" class="option">
+        <MDRipple colSpan="2" @tap="openURL('https://t.me/enrecipes')" />
+        <Label col="0" class="bx" :text="icon.telegram" />
+        <StackLayout col="1">
+          <Label :text="'joinTG' | L" textWrap="true" />
+          <Label :text="'tgInfo' | L" class="info" textWrap="true" />
+        </StackLayout>
+      </GridLayout>
+      <StackLayout class="hr m-10"></StackLayout>
+      <Label :text="'About' | L" class="group-header orkm" />
+
+      <GridLayout columns="auto, *" class="option">
+        <Label col="0" class="bx" :text="icon.info" />
+        <StackLayout col="1">
+          <Label :text="'ver' | L" />
+          <Label :text="getVersion" class="info" textWrap="true" />
+        </StackLayout>
+      </GridLayout>
+      <GridLayout columns="auto, *" class="option">
+        <MDRipple colSpan="2" @tap="openURL('https://github.com/vishnuraghavb/EnRecipes/blob/main/PRIVACY.md')" />
+        <Label col="0" class="bx" :text="icon.lock" />
+        <Label verticalAlignment="center" col="1" :text="'priv' | L" textWrap="true" />
+      </GridLayout>
+      <GridLayout columns="auto, *" class="option">
+        <MDRipple colSpan="2" @tap="openURL('https://github.com/vishnuraghavb/enrecipes')" />
+        <Label col="0" class="bx" :text="icon.github" />
+        <Label verticalAlignment="center" col="1" :text="'gh' | L" textWrap="true" />
+      </GridLayout>
+      <GridLayout columns="auto, *" class="option">
+        <MDRipple colSpan="2" @tap="openURL('https://www.vishnuraghav.com/donate')" />
+        <Label col="0" class="bx" :text="icon.donate" />
+        <Label verticalAlignment="center" col="1" :text="'donate' | L" textWrap="true" />
+      </GridLayout>
+      <Label class="group-info" :text="'appInfo' | L" textWrap="true" />
     </StackLayout>
   </ScrollView>
 </Page>
@@ -92,6 +130,8 @@
 
 <script>
 import {
+  Application,
+  Utils,
   ApplicationSettings,
   path,
   knownFolders,
@@ -134,6 +174,10 @@ export default {
   },
   computed: {
     ...mapState( [ "icon", "recipes", "cuisines", "categories", "yieldUnits", "units", "mealPlans", "currentComponent", "language", "shakeEnabled", "importSummary" ] ),
+    getVersion() {
+      let ctx = Application.android.context
+      return ctx.getPackageManager().getPackageInfo( ctx.getPackageName(), 0 ).versionName
+    },
   },
   methods: {
     ...mapActions( [ "setCurrentComponentAction", "importListItemsAction", "importRecipesAction", "importMealPlansAction", "resetListItemsAction", "setShakeAction", "unlinkBrokenImages" ] ),
@@ -149,14 +193,18 @@ export default {
     onScroll( args ) {
       this.viewIsScrolled = args.scrollY ? true : false
     },
+    openURL( url ) {
+      Utils.openUrl( url )
+    },
     // LANGUAGE SELECTION
     selectAppLanguage() {
       let languages = this.language.map( e => e.title )
       this.$showModal( ActionDialog, {
         props: {
-          title: "App language",
+          title: "lang",
           list: [ ...languages ],
           stretch: true,
+          helpIcon: 'globe',
         },
       } ).then( ( action ) => {
         if ( action && action !== "Cancel" && this.appLanguage !== action ) {
@@ -165,17 +213,19 @@ export default {
           if ( currentLocale !== locale ) {
             this.$showModal( ConfirmDialog, {
               props: {
-                title: "Restart required",
-                description: localize( "EnRecipes needs to be restarted for the app language to take effect." ),
-                cancelButtonText: "CANCEL",
-                okButtonText: "RESTART",
+                title: "appRst",
+                description: localize( "nLangInfo" ),
+                cancelButtonText: "cBtn",
+                okButtonText: "rst",
+                helpIcon: 'restart',
+                bgColor: '#ff5200',
               },
             } ).then( ( result ) => {
               if ( result ) {
                 this.appLanguage = action
                 ApplicationSettings.setString( "appLanguage", action )
                 overrideLocale( locale )
-                setTimeout( ( e ) => utils.restartApp(), 250 )
+                setTimeout( utils.restartApp, 250 )
               }
             } )
           }
@@ -188,22 +238,25 @@ export default {
         props: {
           title: "Theme",
           list: [ "Light", "Dark" ],
-          stretch: false
+          stretch: false,
+          helpIcon: 'theme',
         },
       } ).then( ( action ) => {
         if ( action && action !== "Cancel" && this.appTheme !== action ) {
           this.$showModal( ConfirmDialog, {
             props: {
-              title: "Restart required",
-              description: localize( "EnRecipes needs to be restarted for the theme change to take effect." ),
-              cancelButtonText: "CANCEL",
-              okButtonText: "RESTART",
+              title: "appRst",
+              description: localize( "nThmInfo" ),
+              cancelButtonText: "cBtn",
+              okButtonText: "rst",
+              helpIcon: 'restart',
+              bgColor: '#ff5200',
             },
           } ).then( ( result ) => {
             if ( result ) {
               this.appTheme = action
               ApplicationSettings.setString( "appTheme", action )
-              setTimeout( ( e ) => utils.restartApp(), 250 )
+              setTimeout( utils.restartApp, 250 )
             }
           } )
         }
@@ -219,9 +272,9 @@ export default {
     // EXPORT HANDLERS
     exportCheck() {
       if ( !this.recipes.length ) {
-        Toast.makeText( localize( "Add at least one recipe to perform a backup" ), "long" ).show()
+        Toast.makeText( localize( "aFBu" ) ).show()
       } else {
-        this.permissionCheck( this.permissionConfirmation, localize( "EnRecipes requires storage permission in order to backup your data to this device." ), this.exportBackup )
+        this.permissionCheck( this.permissionConfirmation, localize( "reqAcc" ), this.exportBackup )
       }
     },
     exportBackup() {
@@ -242,6 +295,7 @@ export default {
       } ).then( ( success ) => {
         Toast.makeText( "Backup file successfully saved to Download folder", "long" ).show()
         this.exportFiles( "delete" )
+        setTimeout( e => this.backupInProgress = false, 3000 )
       } )
     },
     exportFiles( option ) {
@@ -279,14 +333,14 @@ export default {
     },
     // IMPORT HANDLERS
     importCheck() {
-      this.permissionCheck( this.permissionConfirmation, localize( "EnRecipes requires storage permission in order to import your data from a previous backup." ), this.openFilePicker )
+      this.permissionCheck( this.permissionConfirmation, localize( "reqAcc" ), this.openFilePicker )
     },
     openFilePicker() {
       Filepicker.create( {
         mode: "single",
         extensions: [ "zip" ],
       } ).present().then( ( selection ) => {
-        Toast.makeText( localize( "Verifying..." ) ).show()
+        Toast.makeText( localize( "vrfy" ) + '...' ).show()
         let zipPath = selection[ 0 ]
         this.validateZipContent( zipPath )
       } )
@@ -344,7 +398,7 @@ export default {
           File.fromPath( file.path ).readText().then( ( data ) => {
             isValid[ i ] = this.hasValidJSON( data )
             if ( !isValid[ i ] ) {
-              this.failedImport( `${localize("Backup file has been modified externally.")}\n\n${localize("Invalid file:")} ${file.file}` )
+              this.failedImport( `${localize("buMod")}\n\n${localize("invFile")}: ${file.file}` )
               return 0;
             }
             if ( isValid.every( e => e === true ) ) {
@@ -357,15 +411,17 @@ export default {
           } )
         } )
       } else {
-        this.failedImport( localize( "Backup file seems empty." ) )
+        this.failedImport( localize( "buEmp" ) )
       }
     },
     failedImport( description ) {
       this.$showModal( ConfirmDialog, {
         props: {
-          title: "Import failed",
+          title: "impFail",
           description,
           okButtonText: "OK",
+          helpIcon: 'error',
+          bgColor: '#c92a2a',
         },
       } )
     },
@@ -415,7 +471,7 @@ export default {
           }, ] )
         } else {
           Folder.fromPath( extractedFolderPath ).remove()
-          this.failedImport( localize( "Backup file is incorrect or corrupt." ) )
+          this.failedImport( localize( "buInc" ) )
         }
         if ( Folder.exists( cacheFolderPath + "/Images" ) ) {
           this.importImages( cacheFolderPath + "/Images" )
@@ -429,7 +485,6 @@ export default {
         directory: dest,
         overwrite: true,
       } ).then( ( res ) => {
-        Toast.makeText( localize( "Import successful" ) ).show()
         this.showImportSummary()
         this.unlinkBrokenImages()
       } )
@@ -440,15 +495,17 @@ export default {
         imported,
         updated
       } = this.importSummary
-      let exists = found - imported + updated
-      let importedNote = `\n${imported} ${localize('recipes imported')}`
-      let existsNote = `\n${exists} ${localize('recipes already exists')}`
-      let updatedNote = `\n${updated} ${localize('recipes updated')}`
+      let exists = Math.abs( found - imported - updated ) + updated
+      let importedNote = `\n${imported} ${localize('recI')}`
+      let existsNote = `\n${exists} ${localize('recE')}`
+      let updatedNote = `\n${updated} ${localize('recU')}`
       this.$showModal( ConfirmDialog, {
         props: {
-          title: "Import summary",
-          description: `${found} ${localize('recipes found')}${ importedNote}${existsNote}${updatedNote}`,
+          title: "impSuc",
+          description: `${found} ${localize('recF')}${ importedNote}${existsNote}${updatedNote}`,
           okButtonText: "OK",
+          helpIcon: 'success',
+          bgColor: '#94d82d',
         },
       } )
     },
@@ -461,7 +518,7 @@ export default {
               let status = res[ Object.keys( res )[ 0 ] ]
               if ( status === "authorized" ) action()
               if ( status !== "denied" ) ApplicationSettings.setBoolean( "storagePermissionAsked", true )
-              else Toast.makeText( localize( "Permission denied" ) ).show()
+              else Toast.makeText( localize( "dend" ) ).show()
             } )
           }
         } )
@@ -479,22 +536,25 @@ export default {
     permissionConfirmation( description ) {
       return this.$showModal( ConfirmDialog, {
         props: {
-          title: "Grant permission",
+          title: "grant",
           description,
-          cancelButtonText: "NOT NOW",
-          okButtonText: "CONTINUE",
+          cancelButtonText: "nNBtn",
+          okButtonText: "conBtn",
+          helpIcon: 'folder',
+          bgColor: '#ff5200',
         },
       } )
     },
     // RESET
     resetListItems( listName ) {
       this.resetListItemsAction( listName )
-      Toast.makeText( localize( "Reset successful" ) ).show()
+      Toast.makeText( localize( "restDone" ) ).show()
     }
+
   },
   mounted() {
     this.appTheme = ApplicationSettings.getString( "appTheme", "Light" )
-    this.appLanguage = ApplicationSettings.getString( "appLanguage", localize( "System default" ) )
+    this.appLanguage = ApplicationSettings.getString( "appLanguage", localize( "sysDef" ) )
   },
 }
 </script>

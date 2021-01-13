@@ -22,6 +22,6 @@ EnRecipes is an easy to use, privacy-friendly digital cookbook that lets you cre
 * No internet access is required and never asks for any unwanted permissions
 * Private by Design
 
-<b>Credits</b>
+<b>Credits:</b>
 
 This app was written in my free time using NativeScript-Vue. I would like to thank all those people who helped me understand the concepts during the process and my special thanks to the NativeScript team and the community. I also would like to thank the members of the Telegram EnRecipes group for contributing their ideas for this project.

@@ -170,7 +170,7 @@ export default new Vuex.Store({
       plus: "\ueb21",
       plusCircle: "\ueb22",
       close: "\uebe9",
-      image: "\uea7f",
+      image: "\ued47",
       food: "\ueb3e",
       back: "\uea95",
       save: "\uedeb",
@@ -190,7 +190,8 @@ export default new Vuex.Store({
       copy: "\ue9e6",
       check: "\ue9a4",
       telegram: "\ueec7",
-      time: "\ueba2",
+      time: "\uee1a",
+      timeLine: "\ueba2",
       item: "\ue99d",
       step: "\ue948",
       source: "\ueaa0",
@@ -207,11 +208,21 @@ export default new Vuex.Store({
       reset: "\ueb3d",
       emptyCart: "\ue999",
       cart: "\uec77",
-      meter: "\ueb96",
+      meter: "\uee11",
+      meterLine: "\ueb96",
       star: "\uee0a",
       starLine: "\ueb83",
       compass: "\uecb4",
-      show: "\uedfd"
+      show: "\uedfd",
+      ruler: "\uede9",
+      dish: "\uecd9",
+      restart: "\ueb3f",
+      fail: "\uee58",
+      success: "\uec85",
+      folder: "\ued1e",
+      error: "\uecf7",
+      zip: "\ued03",
+      text: "\ued82"
     },
     currentComponent: "EnRecipes",
     sortType: "Oldest first",
@@ -270,6 +281,8 @@ export default new Vuex.Store({
           r.rating = 0
         if (!r.hasOwnProperty("created"))
           r.created = r.lastModified
+        if (!r.hasOwnProperty("inCart"))
+          r.inCart = false
         state.recipes.push(r);
       });
       state.shakeEnabled = ApplicationSettings.getBoolean("shakeEnabled", true)
@@ -298,6 +311,8 @@ export default new Vuex.Store({
             r.rating = 0
           if (!r.hasOwnProperty("created"))
             r.created = r.lastModified
+          if (!r.hasOwnProperty("inCart"))
+            r.inCart = false
           return r;
         });
       }
@@ -442,11 +457,7 @@ export default new Vuex.Store({
     resetListItems(state, listName) {
       let stateName = listItems[listName].stateName;
       let defaultItems = listItems[listName].defaultItems;
-      let items = new Set([
-        ...defaultItems,
-        ...state[listName]
-      ]);
-      state[listName] = [...items];
+      state[listName] = [...defaultItems];
       if (listItems[listName].sort) {
         state[stateName].sort();
       }
@@ -469,8 +480,17 @@ export default new Vuex.Store({
       ];
       mealPlansDB.updateDocument("mealPlans", {mealPlans: state.mealPlans});
     },
-    addMealPlan(state, {event, eventColor}) {
-      state.mealPlans.push({title: event.title, startDate: event.startDate, endDate: event.endDate, eventColor});
+    addMealPlan(state, {event, eventColor, index}) {
+      let mealPlan = {
+        title: event.title,
+        startDate: event.startDate,
+        endDate: event.endDate,
+        eventColor
+      }
+      if (index != null)
+        state.mealPlans.splice(index, 0, mealPlan);
+      else
+        state.mealPlans.push(mealPlan);
       mealPlansDB.updateDocument("mealPlans", {
         mealPlans: [...state.mealPlans]
       });
@@ -523,6 +543,11 @@ export default new Vuex.Store({
     setRating(state, {id, recipe, rating}) {
       let index = state.recipes.indexOf(state.recipes.filter(e => e.id === id)[0]);
       state.recipes[index].rating = rating
+      EnRecipesDB.updateDocument(id, recipe);
+    },
+    toggleCart(state, {id, recipe}) {
+      let index = state.recipes.indexOf(state.recipes.filter(e => e.id === id)[0]);
+      state.recipes[index].inCart = !state.recipes[index].inCart
       EnRecipesDB.updateDocument(id, recipe);
     },
     unlinkBrokenImages(state) {
@@ -639,6 +664,11 @@ export default new Vuex.Store({
       commit
     }, rating) {
       commit("setRating", rating);
+    },
+    toggleCartAction({
+      commit
+    }, recipe) {
+      commit("toggleCart", recipe);
     },
     unlinkBrokenImages({commit}) {
       commit("unlinkBrokenImages");

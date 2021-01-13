@@ -1,16 +1,17 @@
 <template>
 <Page>
-  <GridLayout columns="*" :rows="`auto, ${stretch? '*':'auto'}, auto`" class="dialogContainer" :class="appTheme">
-    <Label row="0" class="dialogTitle orkm" :text="`${title}` | L" />
-    <ScrollView row="1" width="100%">
+  <GridLayout columns="*" :rows="`auto, auto, ${stretch? '*':'auto'}, auto`" class="dialogContainer" :class="appTheme">
+    <Label row="0" class="bx dialogIcon" backgroundColor="#adb5bd" :color="iconColor" :text="icon[helpIcon]" />
+    <Label row="1" class="dialogTitle orkm" :text="`${title}` | L" />
+    <ScrollView row="2" width="100%">
       <StackLayout>
-        <MDButton v-for="(item, index) in newList" :key="index" class="actionItem" variant="text" :rippleColor="rippleColor" :text="`${title==='Sort by' && sortType=== item ? '→ ':''}${localized(item)}`" @loaded="onLabelLoaded" @tap="tapAction(item)"
+        <MDButton v-for="(item, index) in newList" :key="index" class="actionItem" :color="title==='srt' && sortType=== item ? '#ff5200':''" variant="text" :rippleColor="rippleColor" :text="`${localized(item)}${title==='srt' && sortType=== item ? '*':''}`" @loaded="onLabelLoaded" @tap="tapAction(item)"
           @longPress="removeItem(index)" />
       </StackLayout>
     </ScrollView>
-    <GridLayout row="2" rows="auto" columns="auto, *, auto" class="actionsContainer">
+    <GridLayout row="3" rows="auto" columns="auto, *, auto" class="actionsContainer">
       <MDButton :rippleColor="rippleColor" variant="text" v-if="action" col="0" class="action orkm pull-left" :text="`${action}` | L" @tap="$modal.close(action)" />
-      <MDButton :rippleColor="rippleColor" variant="text" col="2" class="action orkm pull-right" :text="'CANCEL' | L" @tap="$modal.close(false)" />
+      <MDButton :rippleColor="rippleColor" variant="text" col="2" class="action orkm pull-right" :text="'cBtn' | L" @tap="$modal.close(false)" />
     </GridLayout>
   </GridLayout>
 </Page>
@@ -18,8 +19,7 @@
 
 <script>
 import {
-  Application,
-  Screen
+  Application
 } from "@nativescript/core"
 import * as Toast from "nativescript-toast"
 import {
@@ -33,28 +33,31 @@ import {
 from "vuex"
 import ConfirmDialog from "./ConfirmDialog.vue"
 export default {
-  props: [ "title", "list", "stretch", "action" ],
+  props: [ "title", "list", "stretch", "action", "helpIcon" ],
   data() {
     return {
       newList: this.list,
     }
   },
   computed: {
-    ...mapState( [ "sortType" ] ),
+    ...mapState( [ "sortType", 'icon' ] ),
     appTheme() {
       return Application.systemAppearance()
     },
-    rippleColor() {
-      return this.appTheme == "light" ? "rgba(134,142,150,0.2)" : "rgba(206,212,218,0.1)"
+    isLightMode() {
+      return this.appTheme == "light"
     },
-    screenHeight() {
-      return Math.round( Screen.mainScreen.heightDIPs )
+    rippleColor() {
+      return this.isLightMode ? "rgba(134,142,150,0.2)" : "rgba(206,212,218,0.1)"
+    },
+    iconColor() {
+      return this.isLightMode ? "#f1f3f5" : "#212529"
     },
   },
   methods: {
     ...mapActions( [ "removeListItemAction" ] ),
     localized( item ) {
-      if ( this.title !== 'App language' )
+      if ( this.title !== 'lang' )
         return localize( item )
       else
         return item
@@ -68,10 +71,12 @@ export default {
     deletionConfirmation( type, description ) {
       return this.$showModal( ConfirmDialog, {
         props: {
-          title: `Remove ${type}?`,
+          title: 'conf',
           description,
-          cancelButtonText: "CANCEL",
-          okButtonText: "REMOVE",
+          cancelButtonText: "cBtn",
+          okButtonText: "rBtn",
+          helpIcon: 'fail',
+          bgColor: '#c92a2a',
         },
       } )
     },
@@ -79,29 +84,27 @@ export default {
       let item = this.newList[ index ]
       let vm = this
 
-      function removeListItem( type, listName ) {
-        vm.deletionConfirmation( type, `${vm.$options.filters.L('Are you sure you want to remove')} "${vm.$options.filters.L(item)}"?` ).then( action => {
-          if ( action != null && action ) {
-            vm.newList.splice( index, 1 )
+      function removeListItem( type, listName, desc ) {
+        vm.deletionConfirmation( type, `${localize(desc)} "${localize(item)}"\n\n${localize('rmLIInfo')}` ).then( action => {
+          if ( action != null && action )
             vm.removeListItemAction( {
               item,
               listName
             } )
-          }
         } )
       }
       switch ( this.title ) {
-        case "Cuisine":
-          removeListItem( 'cuisine', "cuisines" )
+        case "cui":
+          removeListItem( 'cuisine', "cuisines", "rmCuiInfo" )
           break;
-        case "Category":
-          removeListItem( "category", "categories" )
+        case "cat":
+          removeListItem( "category", "categories", "rmCatInfo" )
           break;
-        case "Yield measured in":
-          removeListItem( "yield unit", "yieldUnits" )
+        case "yieldU":
+          removeListItem( "yield unit", "yieldUnits", "rmYUInfo" )
           break;
-        case "Units":
-          removeListItem( "unit", "units" )
+        case "Unit":
+          removeListItem( "unit", "units", "rmUInfo" )
           break;
         default:
       }

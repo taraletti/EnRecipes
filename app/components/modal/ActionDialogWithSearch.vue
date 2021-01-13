@@ -1,17 +1,18 @@
 <template>
 <Page>
-  <GridLayout columns="*" rows="auto, auto, *, auto" class="dialogContainer" :class="appTheme">
-    <Label row="0" class="dialogTitle orkm" :text="`${title}` | L" textWrap='true' />
-    <StackLayout row="1" v-if="filteredRecipes.length || searchQuery" padding="0 24 24">
+  <GridLayout columns="*" rows="auto, auto, auto, *, auto" class="dialogContainer" :class="appTheme">
+    <Label row="0" class="bx dialogIcon" backgroundColor="#adb5bd" :color="iconColor" :text="icon[helpIcon]" />
+    <Label row="1" class="dialogTitle orkm" :text="`${title}` | L" textWrap='true' />
+    <StackLayout row="2" v-if="filteredRecipes.length || searchQuery" padding="0 24 24">
       <TextField :hint="'Search' | L" v-model="searchQuery" />
     </StackLayout>
-    <ScrollView row="2" width="100%" :height="height ? height : ''">
+    <ScrollView row="3" width="100%" :height="height ? height : ''">
       <StackLayout>
         <MDButton v-for="(recipe, index) in filteredRecipes" :key="index" class="actionItem" variant="text" :rippleColor="rippleColor" :text="recipe.title" @loaded="onLabelLoaded" @tap="tapAction(recipe)" />
-        <Label padding="24" lineHeight="6" v-if="!filteredRecipes.length" :text="'Nothing here! Add some recipes and try again.' | L" textAlignment="center" textWrap="true" />
+        <Label padding="24" lineHeight="6" v-if="!filteredRecipes.length" :text="'recListEmp' | L" textAlignment="center" textWrap="true" />
       </StackLayout>
     </ScrollView>
-    <GridLayout row="3" rows="auto" columns="auto, *, auto" class="actionsContainer">
+    <GridLayout row="4" rows="auto" columns="auto, *, auto" class="actionsContainer">
       <MDButton :rippleColor="rippleColor" variant="text" v-if="action" col="0" class="action orkm pull-left" :text="`${action}` | L" @tap="$modal.close(action)" />
       <MDButton :rippleColor="rippleColor" variant="text" col="2" class="action orkm pull-right" :text="'CANCEL' | L" @tap="$modal.close(false)" />
     </GridLayout>
@@ -21,26 +22,33 @@
 
 <script>
 import {
-  Application,
-  Screen
+  Application
 }
 from "@nativescript/core"
+import {
+  mapState
+}
+from "vuex"
 export default {
-  props: [ "title", "recipes", "height", "action" ],
+  props: [ "title", "recipes", "height", "action", "helpIcon" ],
   data() {
     return {
       searchQuery: "",
     }
   },
   computed: {
+    ...mapState( [ 'icon' ] ),
     appTheme() {
       return Application.systemAppearance()
     },
-    rippleColor() {
-      return this.appTheme == "light" ? "rgba(134,142,150,0.2)" : "rgba(206,212,218,0.1)"
+    isLightMode() {
+      return this.appTheme == "light"
     },
-    screenHeight() {
-      return Math.round( Screen.mainScreen.heightDIPs )
+    rippleColor() {
+      return this.isLightMode ? "rgba(134,142,150,0.2)" : "rgba(206,212,218,0.1)"
+    },
+    iconColor() {
+      return this.isLightMode ? "#f1f3f5" : "#212529"
     },
     filteredRecipes() {
       return this.recipes.map( ( e, i ) => {

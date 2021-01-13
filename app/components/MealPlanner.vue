@@ -1,9 +1,9 @@
 <template>
-<Page @loaded="onPageLoad">
+<Page @loaded="onPageLoad" @unloaded="onPageUnload">
   <ActionBar flat="true">
     <GridLayout rows="*" columns="auto, *, auto">
       <MDButton class="bx left" variant="text" :text="icon.menu" automationText="Back" @tap="showDrawer" col="0" />
-      <Label class="title orkm" :text="'Meal Planner' | L" col="1" />
+      <Label class="title orkm" :text="'planner' | L" col="1" />
       <MDButton class="bx left" variant="text" :text="icon.today" automationText="today" @tap="goToToday" col="2" />
     </GridLayout>
   </ActionBar>
@@ -13,13 +13,16 @@
     <ScrollView row="1" width="100%" height="100%" @scroll="onScroll">
       <StackLayout class="dayPlan">
         <StackLayout v-for="(mealType, index) in mealTimes" :key="'mealType' + index" class="plansContainer" :class="mealType">
-          <GridLayout columns="*, auto" class="header">
+          <GridLayout columns="auto, auto" class="header">
             <Label col="0" class="periodLabel orkm" :text="mealType | L" />
             <MDButton col="1" variant="text" class="bx" :text="icon.plus" @tap="addRecipe(mealType)" />
           </GridLayout>
-          <GridLayout class="recipes" :paddingTop="index == 0?8:0" columns="*" v-for="(recipeID, index) in getRecipes[mealType]" :key="mealType + index">
-            <MDRipple @tap="viewRecipe(recipeID)" @longPress="removeRecipe(mealType, recipeID)" />
-            <Label verticalAlignment="center" class="recipeTitle" col="0" :text="getRecipeTitle(recipeID)" textWrap="true" />
+          <GridLayout class="recipe" :paddingTop="index == 0?8:0" columns="*, auto" v-for="(recipeID, index) in getRecipes[mealType]" :key="mealType + index">
+            <GridLayout androidElevation="1" col="0" columns="*" class="titleContainer">
+              <MDRipple class="recipeRipple" @tap="viewRecipe(recipeID)" />
+              <Label verticalAlignment="center" class="recipeTitle" :text="getRecipeTitle(recipeID)" textWrap="true" />
+            </GridLayout>
+            <MDButton variant="text" col="1" class="bx closeBtn" :text="icon.close" @tap="removeRecipe(mealType, recipeID)" />
           </GridLayout>
         </StackLayout>
       </StackLayout>
@@ -52,6 +55,10 @@ import {
 }
 from "nativescript-ui-calendar"
 import {
+  SnackBar
+} from '@nativescript-community/ui-material-snackbar';
+const snackbar = new SnackBar();
+import {
   mapState,
   mapActions
 }
@@ -66,7 +73,6 @@ export default {
       viewIsScrolled: false,
       appTheme: "Light",
       mealTimes: [ "breakfast", "lunch", "dinner", "snacks" ],
-      eventList: [],
       selectedDayMealPlans: [],
       viewMode: CalendarViewMode.Month,
       transitionMode: CalendarTransitionMode.Slide,
@@ -204,6 +210,9 @@ export default {
       page.bindingContext = new Observable();
       this.setCurrentComponentAction( "MealPlanner" )
     },
+    onPageUnload(args){
+      snackbar.dismiss()
+    },
     onCalendarLoad( args ) {
       args.object.locale = `${Device.language}-${Device.language.toUpperCase()}`
       args.object.monthViewStyle = this.monthViewStyle
@@ -233,7 +242,7 @@ export default {
     },
     getRecipeTitle( id ) {
       let recipe = this.recipes.filter( ( e ) => e.id === id )[ 0 ]
-      return recipe ? recipe.title : `[ ${this.$options.filters.L('Recipe not found')} ]`
+      return recipe ? recipe.title : `[ ${this.$options.filters.L('resNF')} ]`
     },
     // NAVIGATION HANDLERS
     viewRecipe( recipeID ) {
@@ -253,21 +262,24 @@ export default {
       let filteredRecipes = this.recipes.filter( ( e ) => this.getRecipes[ mealType ] ? !this.getRecipes[ mealType ].includes( e.id ) : true )
       this.$showModal( ActionDialogWithSearch, {
         props: {
-          title: "Select a recipe",
+          title: "selRec",
           recipes: filteredRecipes,
+          helpIcon: "calendar",
         },
       } ).then( ( recipeID ) => {
-        recipeID && this.newEvent( recipeID, mealType )
+        recipeID && this.newEvent( recipeID, mealType, null )
       } )
     },
-    removeRecipeConfirm( mealType ) {
-      return this.$showModal( ConfirmDialog, {
-        props: {
-          title: `Remove recipe from ${mealType}?`,
-          cancelButtonText: "CANCEL",
-          okButtonText: "REMOVE",
-        },
-      } )
+    undoRemove( message ) {
+      return snackbar
+        .action( {
+          message,
+          textColor: this.appTheme == "Light" ? "#f1f3f5" : "#212529",
+          actionTextColor: '#ff5200',
+          backgroundColor: this.appTheme == "Light" ? "#212529" : "#f1f3f5",
+          actionText: 'Undo',
+          hideDelay: 5000
+        } )
     },
     removeRecipe( mealType, recipeID ) {
       let startHour = {
@@ -276,16 +288,19 @@ export default {
         dinner: 10,
         snacks: 15,
       }
-      this.removeRecipeConfirm( mealType ).then( ( res ) => {
-        if ( res ) {
-          let actualMealPlan = this.selectedDayMealPlans.filter(
-            ( e ) => e.startDate.getHours() === startHour[ mealType ] && e.title === recipeID )[ 0 ]
-          let mealPlan = {
-            title: actualMealPlan.title,
-            startDate: actualMealPlan.startDate,
-          }
-          this.deleteMealPlanAction( mealPlan )
-          this.updateSelectedDatePlans()
+      let actualMealPlan = this.selectedDayMealPlans.filter(
+        ( e ) => e.startDate.getHours() === startHour[ mealType ] && e.title === recipeID )[ 0 ]
+      let mealPlan = {
+        title: actualMealPlan.title,
+        startDate: actualMealPlan.startDate,
+      }
+      let index = this.mealPlans.findIndex( e =>
+        e.title === mealPlan.title && new Date( e.startDate ).getTime() === new Date( mealPlan.startDate ).getTime() )
+      this.deleteMealPlanAction( mealPlan )
+      this.updateSelectedDatePlans()
+      this.undoRemove( `${this.$options.filters.L('recRm')}` ).then( res => {
+        if ( res.command === 'action' ) {
+          this.newEvent( recipeID, mealType, index )
         }
       } )
     },
@@ -300,7 +315,7 @@ export default {
       this.selectedDate = args.date
       this.selectedDayMealPlans = args.object.getEventsForDate( args.date )
     },
-    newEvent( recipeID, mealType ) {
+    newEvent( recipeID, mealType, index ) {
       let date = new Date( this.selectedDate )
       const selectedDate = () => {
         return {
@@ -335,7 +350,8 @@ export default {
       let event = new CalendarEvent( recipeID, mealTime[ mealType ].start, mealTime[ mealType ].end, false, new Color( this.color[ mealType ] ) )
       this.addMealPlanAction( {
         event,
-        eventColor: this.color[ mealType ]
+        eventColor: this.color[ mealType ],
+        index
       } )
       this.updateSelectedDatePlans()
     },

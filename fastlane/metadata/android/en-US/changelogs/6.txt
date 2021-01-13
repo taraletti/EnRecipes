@@ -1,0 +1,6 @@
+- New: Grocery list
+- New: Share individual recipe as file
+- Added app languages: French, Norwegian Bokmål
+- Deprecated: Search recipe with tag.
+- Updated translations
+- Several UI improvements and bug fixes

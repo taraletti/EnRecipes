@@ -1,4 +1,4 @@
-<template>
+GroceryListcui<template>
 <Page @loaded="onPageLoad" actionBarHidden="true" :androidStatusBarBackground="appTheme == 'Light' ? '#f1f3f5' : '#212529'">
   <RadSideDrawer allowEdgeSwipe="true" showOverNavigation="true" ref="drawer" id="sideDrawer" drawerContentSize="280" gesturesEnabled="true" drawerTransition="SlideInOnTopTransition">
     <GridLayout rows="*, auto" columns="*" ~drawerContent class="sd">
@@ -6,9 +6,9 @@
         <GridLayout rows="48" columns="auto, *, auto" v-for="(item, index) in topmenu" :key="index" class="sd-item orkm" :class="{
               'selected-sd-item': currentComponent === item.component,
             }">
-          <MDRipple row="0" colSpan="3" @tap="navigateTo(item.component, item.component, false)" />
-          <Label col="0" row="0" class="bx" :text="icon[item.icon]" />
-          <Label col="1" row="0" :text="`${item.title}` | L" />
+          <MDRipple colSpan="3" @tap="navigateTo(item.component, item.component, false)" />
+          <Label col="0" class="bx" :text="icon[item.icon]" />
+          <Label col="1" :text="`${item.title}` | L" />
           <Label class="recipeCount" v-if="getRecipeCount(item.title)" :text="getRecipeCount(item.title)" col="2" />
         </GridLayout>
         <GridLayout class="sd-group-header orkm" rows="auto" columns="*, auto" v-if="cuisinesWithRecipes.length">
@@ -20,13 +20,13 @@
             <GridLayout v-for="(item, index) in getRecipeList" :key="index" class="sd-item orkm" :class="{
                   'selected-sd-item': selectedTag == item,
                 }" columns="auto, *, auto">
-              <MDRipple row="0" colSpan="3" @tap="setRecipeFilter(item)" />
+              <MDRipple colSpan="3" @tap="setFilter && setRecipeFilter(item)" />
               <Label col="0" class="bx" :text="icon[selectedFilterType]" />
               <Label col="1" :text="`${item}` | L" />
               <Label class="recipeCount" :text="getRecipeCount(item)" col="2" />
             </GridLayout>
-            <GridLayout v-if="selectedFilterType=='tag' && !tagsWithRecipes.length" columns="*" rows="*">
-              <Label class="noTags" :text="'No tags available' | L" textWrap="true" />
+            <GridLayout v-if="selectedFilterType =='tag' && !tagsWithRecipes.length" columns="*" rows="*">
+              <Label class="noTags" :text="'noTs' | L" textWrap="true" />
             </GridLayout>
           </StackLayout>
         </ScrollView>
@@ -34,32 +34,38 @@
       <StackLayout row="1">
         <StackLayout class="hr" margin="0 8 8"></StackLayout>
         <GridLayout rows="48" columns="auto, *" class="sd-item orkm" :class="{
-              'selected-sd-item': currentComponent === 'MealPlanner',
+              'selected-sd-item': currentComponent == 'MealPlanner',
             }">
           <MDRipple row="0" colSpan="3" @tap="navigateTo(MealPlanner, 'MealPlanner', true)" />
-          <Label col="0" row="0" class="bx" :text="icon.calendar" />
-          <Label col="2" row="0" :text="'Meal Planner' | L" />
+          <Label col="0" class="bx" :text="icon.calendar" />
+          <Label col="2" :text="'planner' | L" />
         </GridLayout>
-        <!-- <GridLayout rows="48" columns="auto, *" class="sd-item orkm" :class="{
-              'selected-sd-item': currentComponent === 'MealPlanner',
+
+        <GridLayout rows="48" columns="auto, *" class="sd-item orkm" :class="{
+              'selected-sd-item': currentComponent == 'GroceryList',
             }">
-          <MDRipple row="0" colSpan="3" @tap="navigateTo(MealPlanner, 'MealPlanner', true)" />
-          <Label col="0" row="0" class="bx" :text="icon.cart" />
-          <Label col="2" row="0" :text="'Shopping List' | L" />
-        </GridLayout> -->
+          <MDRipple row="0" colSpan="3" @tap="navigateTo(GroceryList, 'GroceryList', true)" />
+          <Label col="0" class="bx" :text="icon.cart" />
+          <Label col="2" :text="'grocery' | L" />
+        </GridLayout>
+
         <StackLayout class="hr" margin="8"></StackLayout>
+
         <GridLayout class="sd-item orkm" :class="{
-              'selected-sd-item': currentComponent == item.title,
-            }" v-for="(item, index) in bottommenu" :key="index" rows="48" columns="auto, *">
-          <MDRipple colSpan="3" @tap="navigateTo(item.component, 'item.title', true)" />
-          <Label class="bx" col="0" :text="icon[item.icon]" />
-          <Label col="2" :text="`${item.title}` | L" />
+              'selected-sd-item': currentComponent == 'Settings',
+            }" rows="48" columns="auto, *">
+          <MDRipple colSpan="3" @tap="navigateTo(Settings, 'Settings', true)" />
+          <Label class="bx" col="0" :text="icon.cog" />
+          <Label col="2" :text="'Settings' | L" />
         </GridLayout>
+
       </StackLayout>
     </GridLayout>
     <Frame ~mainContent id="main-frame">
       <EnRecipes ref="enrecipes" :filterFavourites="filterFavourites" :filterTrylater="filterTrylater" :selectedCuisine="selectedCuisine" :selectedCategory="selectedCategory" :selectedTag="selectedTag" :closeDrawer="closeDrawer"
-        :hijackGlobalBackEvent="hijackGlobalBackEvent" :releaseGlobalBackEvent="releaseGlobalBackEvent" />
+        :hijackGlobalBackEvent="hijackGlobalBackEvent" :releaseGlobalBackEvent="releaseGlobalBackEvent"
+        @backToHome="backToHome"
+        />
     </Frame>
   </RadSideDrawer>
 </Page>
@@ -87,9 +93,10 @@ import {
 from "vuex"
 import EnRecipes from "./EnRecipes"
 import MealPlanner from "./MealPlanner"
+import GroceryList from "./GroceryList"
 import Settings from "./Settings"
-import About from "./About"
 import PromptDialog from "./modal/PromptDialog"
+let filterTimer;
 export default {
   data() {
     return {
@@ -100,41 +107,37 @@ export default {
       filterFavourites: false,
       filterTrylater: false,
       MealPlanner: MealPlanner,
+      GroceryList: GroceryList,
+      Settings: Settings,
       topmenu: [ {
         title: "EnRecipes",
         component: "EnRecipes",
         icon: "home",
       }, {
-        title: "Try Later",
+        title: "trylater",
         component: "Try Later",
         icon: "trylater",
       }, {
-        title: "Favourites",
+        title: "favourites",
         component: "Favourites",
         icon: "heart",
       }, ],
-      bottommenu: [ {
-        title: "Settings",
-        component: Settings,
-        icon: "cog",
-      }, {
-        title: "About",
-        component: About,
-        icon: "info",
-      }, ],
       appTheme: "Light",
+      setFilter: true,
     }
   },
   components: {
     EnRecipes,
     MealPlanner,
+    GroceryList,
+    Settings
   },
   computed: {
     ...mapState( [ "icon", "recipes", "cuisines", "categories", "yieldUnits", "mealPlans", "currentComponent" ] ),
     getCurrentPath() {
       let path = "/"
       if ( this.selectedCuisine ) path += localize( this.selectedCuisine )
-      else path = "Cuisines"
+      else path = "cuis"
       if ( this.selectedCategory ) path += "/" + localize( this.selectedCategory )
       if ( this.selectedTag ) path += "/" + localize( this.selectedTag )
       return path;
@@ -153,22 +156,22 @@ export default {
       }
     },
     cuisinesWithRecipes() {
-      let arr = this.recipes.map( ( e ) => e.cuisine )
-      return arr.length ? [ "All Cuisines", ...new Set( arr ) ] : []
+      let arr = this.recipes.map( ( e ) => e.cuisine ).sort()
+      return arr.length ? [ "allCuis", ...new Set( arr ) ] : []
     },
     categoriesWithRecipes() {
-      let arr = this.recipes.map( e => ( this.selectedCuisine === "All Cuisines" || e.cuisine === this.selectedCuisine ) && e.category ).filter( e => e )
-      return arr.length ? [ "All Categories", ...new Set( arr ) ] : []
+      let arr = this.recipes.map( e => ( this.selectedCuisine === "allCuis" || e.cuisine === this.selectedCuisine ) && e.category ).filter( e => e ).sort()
+      return arr.length ? [ "allCats", ...new Set( arr ) ] : []
     },
     tagsWithRecipes() {
       let arr = this.recipes.map( e => {
-        if ( this.selectedCuisine === "All Cuisines" && this.selectedCategory === "All Categories" && e.tags.length ) return e.tags;
-        else if ( this.selectedCuisine === "All Cuisines" && e.category === this.selectedCategory && e.tags.length ) return e.tags;
-        else if ( this.selectedCategory === "All Categories" && e.cuisine === this.selectedCuisine && e.tags.length ) return e.tags;
+        if ( this.selectedCuisine === "allCuis" && this.selectedCategory === "allCats" && e.tags.length ) return e.tags;
+        else if ( this.selectedCuisine === "allCuis" && e.category === this.selectedCategory && e.tags.length ) return e.tags;
+        else if ( this.selectedCategory === "allCats" && e.cuisine === this.selectedCuisine && e.tags.length ) return e.tags;
         else if ( e.category === this.selectedCategory && e.cuisine === this.selectedCuisine && e.tags.length ) return e.tags;
-      } ).flat().filter( e => e )
-      let showAllTags = this.selectedCuisine === "All Cuisines" && this.selectedCategory === "All Categories"
-      return arr.length ? [ !showAllTags && "All Tags", ...new Set( arr ) ].filter( e => e ) : []
+      } ).flat().filter( e => e ).sort()
+      let showAllTags = this.selectedCuisine === "allCuis" && this.selectedCategory === "allCats"
+      return arr.length ? [ !showAllTags && "allTs", ...new Set( arr ) ].filter( e => e ) : []
     },
   },
   methods: {
@@ -183,36 +186,44 @@ export default {
     },
     // HELPERS
     setRecipeFilter( item ) {
+      this.setFilter = this.filterFavourites = this.filterTrylater = false
       this.$navigateBack( {
         frame: "main-frame",
         backstackVisible: false
       } )
-      this.filterFavourites = this.filterTrylater = false
-      if ( this.selectedCuisine == null ) {
-        this.selectedFilterType = 'category'
-        this.selectedCuisine = item
-      } else if ( this.selectedCategory == null ) {
-        this.selectedFilterType = 'tag'
-        this.selectedCategory = item
-        if ( !this.tagsWithRecipes.length ) this.closeDrawer()
-      } else {
-        this.selectedTag = item;
-        this.closeDrawer()
-      }
-      this.setCurrentComponentAction( "Filtered result" )
-      this.$refs.enrecipes.updateFilter()
+      setTimeout( e => {
+        if ( this.selectedCuisine == null ) {
+          this.selectedCuisine = item
+          this.selectedFilterType = 'category'
+        } else if ( this.selectedCategory == null ) {
+          this.selectedCategory = item
+          this.selectedFilterType = 'tag'
+          if ( !this.tagsWithRecipes.length ) this.closeDrawer()
+        } else {
+          this.selectedTag = item;
+          this.closeDrawer()
+        }
+        this.setFilter = true
+      }, 200 )
+
+      clearTimeout( filterTimer )
+      filterTimer = setTimeout( e => {
+        this.setCurrentComponentAction( "Filtered recipes" )
+        this.$refs.enrecipes.updateFilter()
+      }, 750 )
     },
     previousRecipeFilter() {
       if ( this.selectedCategory ) {
         this.selectedFilterType = 'category'
         this.selectedTag = this.selectedCategory = null
-        this.setCurrentComponentAction( "Filtered result" )
+        this.setCurrentComponentAction( "Filtered recipes" )
       } else {
         this.selectedFilterType = 'cuisine'
         this.selectedCuisine = null
         this.setCurrentComponentAction( "EnRecipes" )
       }
-      this.$refs.enrecipes.updateFilter()
+      clearTimeout( filterTimer )
+      filterTimer = setTimeout( e => this.$refs.enrecipes.updateFilter(), 750 )
     },
     closeDrawer() {
       this.$refs.drawer.nativeView.closeDrawer()
@@ -223,31 +234,31 @@ export default {
         case 'EnRecipes':
           count = this.recipes.length
           break;
-        case 'Try Later':
+        case 'trylater':
           count = this.recipes.filter( e => !e.tried ).length
           break;
-        case 'Favourites':
+        case 'favourites':
           count = this.recipes.filter( e => e.isFavorite ).length
           break;
         default: {
           switch ( this.selectedFilterType ) {
             case 'cuisine':
-              count = this.recipes.filter( e => arg === "All Cuisines" ? e.cuisine : e.cuisine === arg ).length
+              count = this.recipes.filter( e => arg === "allCuis" ? e.cuisine : e.cuisine === arg ).length
               break;
             case 'category':
-              count = this.recipes.filter( e => this.selectedCuisine === "All Cuisines" ? arg === "All Categories" ? e.category : e.category === arg : arg === "All Categories" ? e.cuisine === this.selectedCuisine && e.category : e.cuisine === this
+              count = this.recipes.filter( e => this.selectedCuisine === "allCuis" ? arg === "allCats" ? e.category : e.category === arg : arg === "allCats" ? e.cuisine === this.selectedCuisine && e.category : e.cuisine === this
                 .selectedCuisine && e.category === arg ).length
               break;
             case 'tag':
               count = this.recipes.filter( e => {
-                if ( this.selectedCuisine === "All Cuisines" && this.selectedCategory === "All Categories" ) {
-                  return e.tags.includes( arg ) || arg === "All Tags"
-                } else if ( this.selectedCuisine === "All Cuisines" && e.category === this.selectedCategory ) {
-                  return e.tags.includes( arg ) || arg === "All Tags"
-                } else if ( this.selectedCategory === "All Categories" && e.cuisine === this.selectedCuisine ) {
-                  return e.tags.includes( arg ) || arg === "All Tags"
+                if ( this.selectedCuisine === "allCuis" && this.selectedCategory === "allCats" ) {
+                  return e.tags.includes( arg ) || arg === "allTs"
+                } else if ( this.selectedCuisine === "allCuis" && e.category === this.selectedCategory ) {
+                  return e.tags.includes( arg ) || arg === "allTs"
+                } else if ( this.selectedCategory === "allCats" && e.cuisine === this.selectedCuisine ) {
+                  return e.tags.includes( arg ) || arg === "allTs"
                 } else if ( e.category === this.selectedCategory && e.cuisine === this.selectedCuisine ) {
-                  return e.tags.includes( arg ) || arg === "All Tags"
+                  return e.tags.includes( arg ) || arg === "allTs"
                 }
               } ).length
               break;
@@ -271,15 +282,18 @@ export default {
         preventDefault()
         this.closeDrawer()
       } else if (
-        [ "Favourites", "Try Later", "Filtered result" ].includes( this.currentComponent ) ) {
+        [ "Favourites", "Try Later", "Filtered recipes" ].includes( this.currentComponent ) ) {
         preventDefault()
-        this.setCurrentComponentAction( "EnRecipes" )
-        this.filterFavourites = this.filterTrylater = false
-        this.selectedTag = this.selectedCategory = this.selectedCuisine = null
-        this.selectedFilterType = "cuisine"
-        this.$refs.enrecipes.updateFilter()
+        this.backToHome()
         this.releaseGlobalBackEvent()
       }
+    },
+    backToHome() {
+      this.setCurrentComponentAction( "EnRecipes" )
+      this.filterFavourites = this.filterTrylater = false
+      this.selectedTag = this.selectedCategory = this.selectedCuisine = null
+      this.selectedFilterType = "cuisine"
+      this.$refs.enrecipes.updateFilter()
     },
     navigateTo( to, title, isTrueComponent ) {
       if ( title !== this.currentComponent ) {
