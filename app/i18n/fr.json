@@ -441,5 +441,14 @@
     "favourites": "Favoris",
     "trylater": "Essayer plus tard",
     "reqAcc": "EnRecipes nécessite une autorisation de stockage pour définir la photo de recette, exporter et importer des données",
-    "fil": "Recette comme fichier"
+    "fil": "Recette comme fichier",
+    "SAT": "sam",
+    "FRI": "ven",
+    "THU": "jeu",
+    "WED": "mer",
+    "TUE": "mar",
+    "MON": "lun",
+    "SUN": "dim",
+    "sltd": "sélectionné",
+    "delRecsInfo": "Vous êtes sur le point de supprimer définitivement :"
 }
