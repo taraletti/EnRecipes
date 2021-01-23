@@ -30,9 +30,9 @@
 ## Highlights
 
 -   100% free and open-source
+-   Private by Design
 -   No annoying ads or pop-ups
 -   No internet access is required and never asks for any unwanted permissions
--   Private by Design
 
 **Languages supported**: Danish, Dutch, English, French, German, Italian, Norwegian Bokmål,Portuguese, Russian, Spanish and Tamil
 
