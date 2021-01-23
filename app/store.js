@@ -180,9 +180,9 @@ export default new Vuex.Store({
       imp: "\ue918",
       info: "\ue919",
       items: "\ue91a",
-      l1:"\ue91b",
-      l2:"\ue91c",
-      l3:"\ue91d",
+      l1: "\ue91b",
+      l2: "\ue91c",
+      l3: "\ue91d",
       lang: "\ue91e",
       left: "\ue91f",
       menu: "\ue920",
@@ -190,8 +190,8 @@ export default new Vuex.Store({
       notes: "\ue922",
       plus: "\ue923",
       plusc: "\ue924",
-      price:"\ue925",
-      priv:"\ue926",
+      price: "\ue925",
+      priv: "\ue926",
       err: "\ue90f",
       res: "\ue927",
       reset: "\ue928",
@@ -296,7 +296,7 @@ export default new Vuex.Store({
           r.rating = 0
         if (!r.hasOwnProperty("created"))
           r.created = r.lastModified
-        // if (!r.hasOwnProperty("inBag"))
+          // if (!r.hasOwnProperty("inBag"))
         //   r.inBag = false
         state.recipes.push(r);
       });
@@ -326,7 +326,7 @@ export default new Vuex.Store({
             r.rating = 0
           if (!r.hasOwnProperty("created"))
             r.created = r.lastModified
-          // if (!r.hasOwnProperty("inBag"))
+            // if (!r.hasOwnProperty("inBag"))
           //   r.inBag = false
           return r;
         });
@@ -468,9 +468,9 @@ export default new Vuex.Store({
         state[stateName].push(item);
         db.updateDocument(key, {[key]: state[stateName]});
         if (listItems[listName].sort)
-          state[stateName].sort();
-        }
-      },
+          state[stateName].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+      }
+    },
     removeListItem(state, {item, listName}) {
       let db = listItems[listName].db;
       let key = listItems[listName].key;
