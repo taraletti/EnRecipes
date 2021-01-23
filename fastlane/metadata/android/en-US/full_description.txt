@@ -1,4 +1,4 @@
-EnRecipes is an easy to use, privacy-friendly digital cookbook that lets you create, manage and share your own recipes.
+EnRecipes is an open source, privacy-friendly digital cookbook that lets you create, manage and share your recipes.
 
 <b>Features:</b>
 
@@ -6,7 +6,7 @@ EnRecipes is an easy to use, privacy-friendly digital cookbook that lets you cre
 * Add photo, notes and combinations to your recipes
 * Organise your recipes by cuisine, category and tags
 * Mark recipes as favourites and add them to your Try Later list
-* Quickly search for recipes by name, ingredient or tag
+* Quickly search for recipes by title or ingredient
 * Scale your recipe ingredients to serve more or less people
 * Get notified of when you last tried a recipe
 * Share your recipe to anyone by any means as a nicely formatted message. You can share the recipe photo too.

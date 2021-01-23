@@ -1,12 +1,12 @@
 <template>
 <Page>
   <GridLayout columns="*" :rows="`auto, auto, ${stretch? '*':'auto'}, auto`" class="dialogContainer" :class="appTheme">
-    <Label row="0" class="bx dialogIcon" backgroundColor="#adb5bd" :color="iconColor" :text="icon[helpIcon]" />
+    <Label row="0" class="er dialogIcon" backgroundColor="#858585" :color="iconColor" :text="icon[helpIcon]" />
     <Label row="1" class="dialogTitle orkm" :text="`${title}` | L" />
     <ScrollView row="2" width="100%">
       <StackLayout>
-        <MDButton v-for="(item, index) in newList" :key="index" class="actionItem" :color="title==='srt' && sortType=== item ? '#ff5200':''" variant="text" :rippleColor="rippleColor" :text="`${localized(item)}${title==='srt' && sortType=== item ? '*':''}`" @loaded="onLabelLoaded" @tap="tapAction(item)"
-          @longPress="removeItem(index)" />
+        <MDButton v-for="(item, index) in newList" :key="index" class="actionItem" :class="{'orkm':title==='srt' && sortType=== item}" :color="title==='srt' && sortType=== item ? '#ff5200':''" variant="text" :rippleColor="rippleColor"
+          :text="`${localized(item)}${title==='srt' && sortType=== item ? '*':''}`" @loaded="centerLabel" @tap="tapAction(item)" @longPress="removeItem(index)" />
       </StackLayout>
     </ScrollView>
     <GridLayout row="3" rows="auto" columns="auto, *, auto" class="actionsContainer">
@@ -19,7 +19,8 @@
 
 <script>
 import {
-  Application
+  Application,
+  Color
 } from "@nativescript/core"
 import * as Toast from "nativescript-toast"
 import {
@@ -48,10 +49,10 @@ export default {
       return this.appTheme == "light"
     },
     rippleColor() {
-      return this.isLightMode ? "rgba(134,142,150,0.2)" : "rgba(206,212,218,0.1)"
+      return "rgba(133,133,133,0.2)"
     },
     iconColor() {
-      return this.isLightMode ? "#f1f3f5" : "#212529"
+      return this.isLightMode ? "#f0f0f0" : "#1A1A1A"
     },
   },
   methods: {
@@ -65,7 +66,7 @@ export default {
     tapAction( item ) {
       this.$modal.close( item )
     },
-    onLabelLoaded( args ) {
+    centerLabel( args ) {
       args.object.android.setGravity( 16 )
     },
     deletionConfirmation( type, description ) {
@@ -75,7 +76,7 @@ export default {
           description,
           cancelButtonText: "cBtn",
           okButtonText: "rBtn",
-          helpIcon: 'fail',
+          helpIcon: 'err',
           bgColor: '#c92a2a',
         },
       } )

@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="undo">"Undo"</string>
+  <string name="trnsl">"Translate"</string>
+  <string name="SAT">"SAT"</string>
+  <string name="FRI">"FRI"</string>
+  <string name="THU">"THU"</string>
+  <string name="WED">"WED"</string>
+  <string name="TUE">"TUE"</string>
+  <string name="MON">"MON"</string>
+  <string name="SUN">"SUN"</string>
+  <string name="December">"December"</string>
+  <string name="November">"November"</string>
+  <string name="October">"October"</string>
+  <string name="September">"September"</string>
+  <string name="August">"August"</string>
+  <string name="July">"July"</string>
+  <string name="June">"June"</string>
+  <string name="May">"May"</string>
+  <string name="April">"April"</string>
+  <string name="March">"March"</string>
+  <string name="February">"February"</string>
+  <string name="January">"January"</string>
   <string name="trySer">"SEARCH IN ALL THE RECIPES?"</string>
   <string name="help">"Help"</string>
   <string name="appInfo">"EnRecipes is an open source, privacy-friendly digital cookbook that lets you create, manage and share your recipes"</string>
@@ -115,8 +136,10 @@
   <string name="unsaved">"Unsaved changes"</string>
   <string name="ser">"Search"</string>
   <string name="dBtn">"DELETE"</string>
+  <string name="sltd">"selected"</string>
+  <string name="recs">"recipes"</string>
+  <string name="delRecsInfo">"You are about to permanently delete:"</string>
   <string name="delRecInfo">"You are about to permanently delete the recipe:"</string>
-  <string name="delRec">"Delete confirmation"</string>
   <string name="conf">"Confirm"</string>
   <string name="rmTry">"Removed from Try Later"</string>
   <string name="aTry">"Added to Try Later"</string>
@@ -440,6 +463,11 @@
   <string name="_Meal_Planner_2aq4oj">"Meal Planner"</string>
   <string name="Favourites">"Favourites"</string>
   <string name="_Try_Later_If7PG">"Try Later"</string>
+  <string name="delRec">"delRec"</string>
+  <string name="expReq">"expReq"</string>
   <string name="Donate">"Donate"</string>
   <string name="Combination">"Combination"</string>
+  <string name="impReq">"impReq"</string>
+  <string name="phtReq">"phtReq"</string>
+  <string name="noRecsHint">"noRecsHint"</string>
 </resources>

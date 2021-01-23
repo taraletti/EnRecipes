@@ -1,22 +1,24 @@
 // NativeScript core theme
 // @see https://docs.nativescript.org/ui/theme
 @import "~@nativescript/theme/core"; // Override variables here
-$gray1: #f1f3f5;
-$gray2: #e9ecef;
-$gray3: #dee2e6;
-$gray4: #ced4da;
-$gray5: #adb5bd;
-$gray6: #868e96;
-$gray7: #495057;
-$gray8: #343a40;
-$gray9: #212529;
+$gray0: #fff;
+$gray1: #f0f0f0;
+$gray2: #e0e0e0;
+$gray3: #d1d1d1;
+$gray4: #c2c2c2;
+$gray5: #858585;
+$gray6: #575757;
+$gray7: #393939;
+$gray8: #292929;
+$gray9: #1A1A1A;
+$gray10: #000;
 $orange: #ff5200;
-$fabRipple: #ff922b;
+$fabRipple: #ffa94d;
 $red: #c92a2a;
-$breakfast: #ff922b;
-$lunch: #94d82d;
-$dinner: #339af0;
-$snacks: #845ef7; // Global SCSS styling
+$breakfast: #ffa94d;
+$lunch: #69db7c;
+$dinner: #4dabf7;
+$snacks: #9775fa; // Global SCSS styling
 // @see https://docs.nativescript.org/ui/styling
 .ns-modal,
 Page {
@@ -25,8 +27,8 @@ Page {
 .orkm {
   font-family: 'Orkney-Medium';
 }
-.bx {
-  font-family: 'boxicons';
+.er {
+  font-family: 'enrecipes';
   font-size: 24;
   vertical-alignment: center;
   &.small {
@@ -34,7 +36,11 @@ Page {
     font-size: 16;
   }
 }
+.today {
+  color: $orange;
+}
 .ns-light {
+  .count,
   ActionBar,
   ListPicker,
   Page,
@@ -44,45 +50,41 @@ Page {
     color: $gray9;
     background: $gray1;
   }
-  MDButton,
-  MDRipple {
-    ripple-color: rgba($gray6, 0.2);
-  }
   .hr {
-    border-color: $gray3;
+    border-color: $gray2;
   }
   .fieldLabel,
   .sd {
     background: $gray1;
   }
   .combination,
+  .hasPlans,
   .overviewItem,
   .recipeItem,
-  .textCard,
   .titleContainer {
-    background: white;
+    background: $gray0;
   }
-  TextField.combinationToken {
-    background: $gray3;
+  .combinationToken,
+  .note,
+  .tag {
+    background: $gray2;
   }
-  .sd-group-header,
-  .sd-item,
-  .tag,
-  .time .bx {
-    color: $gray8;
-  }
+  .dayName,
   .group-info,
-  .option .bx,
   .option .info {
-    color: $gray7;
+    color: $gray6;
+  }
+  .done .count {
+    color: $gray0;
   }
   .imageHolder {
-    color: $gray4;
-    background: $gray3;
+    color: $gray3;
+    background: $gray2;
   }
-  .count,
-  .marker,
-  .noteCount {
+  .selected {
+    background: $gray2;
+  }
+  .activeDay {
     color: $gray1;
     background: $gray9;
   }
@@ -94,74 +96,79 @@ Page {
     progress-background-color: $gray4;
   }
   MDFloatingActionButton {
-    color: white;
+    color: $gray0;
   }
   .appIconContainer {
     background: $orange;
   }
+  .emptyState .icon {
+    color: $gray4;
+  }
 }
 .ns-dark {
+  .count,
   ActionBar,
   ListPicker,
   Page,
   SearchBar,
   TabStripItem,
   Tabs {
-    color: $gray1;
+    color: $gray2;
     background: $gray9;
   }
-  MDButton,
-  MDRipple {
-    ripple-color: rgba($gray4, 0.1);
-  }
   .hr {
-    border-color: #111;
+    border-color: $gray8;
   }
   .fieldLabel,
   .sd {
     background: $gray9;
   }
   .combination,
+  .hasPlans,
   .overviewItem,
   .recipeItem,
-  .textCard,
-  .titleContainer,
-  TextField.combinationToken {
+  .titleContainer {
     background: $gray8;
   }
-  .sd-group-header,
-  .sd-item,
-  .tag,
-  .time .bx {
-    color: $gray3;
+  .combinationToken,
+  .note,
+  .tag {
+    background: $gray10;
   }
+  .dayName,
   .group-info,
-  .option .bx,
   .option .info {
     color: $gray5;
   }
-  .imageHolder {
-    color: $gray8;
-    background: #111;
+  .done .count {
+    color: $gray10;
   }
-  .count,
-  .marker,
-  .noteCount {
+  .imageHolder {
     color: $gray9;
-    background: $gray1;
+    background: $gray10;
+  }
+  .selected {
+    background: $gray6;
+  }
+  .activeDay {
+    color: $gray9;
+    background: $gray2;
   }
   .dayContainer,
   .instruction {
-    border-color: $gray1;
+    border-color: $gray2;
   }
   MDProgress {
-    progress-background-color: $gray6;
+    progress-background-color: $gray5;
   }
   MDFloatingActionButton {
     color: $gray9;
   }
   .appIconContainer {
     background: $orange;
+  }
+  .emptyState .icon {
+    color: $gray6;
   }
 }
 // -----------------------------
@@ -175,8 +182,8 @@ TimePickerField {
   padding: 13 12;
   margin: 8 0 0;
   border-radius: 4;
-  border-color: $gray6;
-  placeholder-color: $gray6;
+  border-color: $gray5;
+  placeholder-color: $gray5;
 }
 TextView {
   line-height: 12;
@@ -187,10 +194,10 @@ ListPicker {
 SearchBar {
   font-family: 'Orkney-Regular';
   font-size: 14;
-  text-field-hint-color: $gray6;
+  text-field-hint-color: $gray5;
 }
 TabView {
-  tab-text-color: $gray6;
+  tab-text-color: $gray5;
 }
 .inputField {
   margin-bottom: 8;
@@ -203,6 +210,9 @@ TabView {
 .progressContainer {
   width: 100%;
 }
+.hr {
+  padding: 0;
+}
 // .category,
 // .group-header,
 .text-btn,
@@ -214,7 +224,7 @@ MDProgress {
 }
 Switch {
   background-color: $orange;
-  off-background-color: $gray6;
+  off-background-color: $gray5;
 }
 // -----------------------------
 // ActionBar
@@ -226,7 +236,7 @@ ActionBar {
     padding: 0;
     margin: 0;
   }
-  MDButton.bx {
+  MDButton.er {
     padding: 0;
     margin: 0;
   }
@@ -245,11 +255,14 @@ ActionBar {
   border-radius: 4;
   height: 48;
   vertical-alignment: center;
-  .bx {
+  .er {
     font-size: 24;
     margin: 0 24 0 0;
   }
-  &.selected-sd-item {
+  &.selected .er {
+    color: $orange;
+  }
+  &.selected {
     color: $orange;
     background: rgba($orange, 0.1);
     MDRipple {
@@ -261,14 +274,14 @@ ActionBar {
     padding: 2 16 0 0;
     font-size: 14;
     vertical-alignment: center;
-    &.bx {
+    &.er {
       padding: 0 0 0 16;
     }
   }
   MDRipple {
     padding: 0 16;
   }
-  MDButton.bx {
+  MDButton.er {
     margin: 0;
   }
   .recipeCount {
@@ -280,8 +293,8 @@ ActionBar {
 }
 .sd-group-header {
   width: 100%;
-  padding: 0 0 8 8;
-  MDButton.bx {
+  padding: 0 0 0 8;
+  MDButton.er {
     margin: 0;
   }
   .filterPath {
@@ -300,13 +313,17 @@ MDButton {
   padding: 8;
   min-width: 0;
   min-height: 0;
-  &.bx {
+  &.er {
     padding: 0;
     width: 48;
     height: 48;
     margin: 0 8 0 0;
     border-radius: 99;
   }
+}
+MDButton,
+MDRipple {
+  ripple-color: rgba($gray5, 0.2);
 }
 // -----------------------------
 // HOME
@@ -323,7 +340,6 @@ MDButton {
   .icon {
     font-size: 64;
     text-align: center;
-    color: $gray5;
     margin-bottom: 16;
   }
   .logo {
@@ -335,7 +351,7 @@ MDButton {
     text-align: center;
     padding: 0;
     horizontal-alignment: center;
-    .bx {
+    .er {
       font-size: 24;
       vertical-alignment: center;
     }
@@ -356,12 +372,21 @@ MDButton {
 }
 // -----------------------------
 // Recipe Items
-RadListView {
-  margin: 0 0 128;
+ListView {
   font-size: 14;
 }
-.recipeItem {
-  margin: 4 8;
+.recipeContainer {
+  padding: 0;
+}
+.firstItem {
+  padding: 12 0 0;
+}
+.lastItem {
+  padding: 0 0 84;
+}
+.layout1 {
+  padding: 0;
+  margin: 4 16;
   border-radius: 4;
   .recipeInfo {
     margin: 0;
@@ -384,20 +409,46 @@ RadListView {
     }
   }
 }
+.layout2 {
+  padding: 0;
+  margin: 4;
+  border-radius: 4;
+  .imageHolder {
+    vertical-alignment: center;
+    &.card {
+      border-radius: 4 4 0 0;
+      // prettier-ignore
+      Image {
+        border-radius: 4 4 0 0;
+      }
+    }
+  }
+  .recipeInfo {
+    margin: 0;
+    padding: 8;
+    .attr,
+    .category {
+      font-size: 10;
+      padding: 0;
+      margin: 0;
+    }
+    .title {
+      margin: 0;
+      padding: 2 0;
+    }
+  }
+  .tagsContainer {
+    padding: 4 0 0;
+  }
+}
 .tagsContainer {
   padding: 2 0 0;
-  .collapsedTagsCount {
-    font-size: 10;
-    padding: 1 0 0 2;
-  }
   .tag {
     font-size: 10;
-    padding: 0 4;
+    padding: 1 4;
     margin: 0 4 0 0;
     line-height: 0;
-    border-radius: 4;
-    border-width: 1;
-    border-color: $gray6;
+    border-radius: 2;
   }
 }
 .imageHolder {
@@ -435,7 +486,7 @@ RadListView {
   .option {
     font-size: 14;
     line-height: 6;
-    .bx {
+    .er {
       margin: 11 24 11 16;
     }
     .info {
@@ -481,32 +532,34 @@ RadListView {
     padding: 0 12;
   }
   .ratingContainer {
-    margin: 14 8 6;
-    .rating {
-      margin-right: 8;
-      color: $orange;
-    }
+    margin: 16 8 8;
   }
-  .subTitle {
-    font-size: 14;
-    line-height: 6;
+  .rate,
+  .rated {
+    padding: 0 8 0 0;
+  }
+  .rate {
+    color: $gray5;
+  }
+  .rated {
+    color: $orange;
   }
   .tagsContainer {
-    padding: 18 12 0;
+    padding: 0;
+    margin: 12 12 0;
     .tag {
-      padding: 1 6;
+      padding: 2 6;
       margin: 0 8 8 0;
     }
   }
   .overviewContainer {
-    margin: 12 0 24;
+    margin: 8 8 12;
     .overviewItem {
       border-radius: 4;
       margin: 4;
       android-elevation: 1;
-      .bx {
+      .er {
         padding: 16 0 0 16;
-        color: $gray6;
         horizontal-alignment: left;
       }
       .itemCount {
@@ -515,23 +568,16 @@ RadListView {
       }
     }
   }
-  .ingredient {
-    font-family: 'Orkney-Regular';
-    margin: 0 0 0 4;
-    color: blue;
-  }
-  .red {
-    color: red;
-  }
   .count {
     width: 24;
     height: 24;
-    padding-top: 4%;
     margin: 0 0 0 8;
     text-align: center;
     vertical-alignment: top;
     horizontal-alignment: center;
     border-radius: 99;
+    border-width: 2;
+    border-color: $gray5;
   }
   .instruction {
     font-size: 14;
@@ -539,12 +585,21 @@ RadListView {
     padding: 2 0 24 35;
     margin: 0 0 0 19;
     border-width: 0 0 0 2;
+    border-color: $gray5;
   }
   .instruction.noBorder {
     border-color: transparent;
   }
+  .done .count {
+    background: $orange;
+    border-color: $orange;
+  }
+  .done .instruction {
+    opacity: 0.4;
+    text-decoration: line-through;
+  }
   .combination {
-    margin: 0 8 8;
+    margin: 0 16 8;
     border-radius: 4;
     font-size: 14;
     .combinationTitle {
@@ -553,21 +608,12 @@ RadListView {
       line-height: 6;
     }
   }
-  .noteCount {
-    width: 24;
-    height: 24;
-    padding-top: 4%;
-    margin: 0 0 0 8;
-    text-align: center;
-    vertical-alignment: top;
-    horizontal-alignment: center;
-    clip-path: polygon(4% 12%, 12% 4%, 75% 4%, 96% 25%, 96% 88%, 88% 96%, 12% 96%, 4% 88%,);
-  }
   .note {
     font-size: 14;
     line-height: 6;
-    padding: 2 0 24 37;
-    margin: 0 0 0 19;
+    padding: 14 16;
+    margin: 0 0 8;
+    border-radius: 4;
   }
 }
 // -----------------------------
@@ -596,20 +642,47 @@ MDFloatingActionButton {
   margin: 8 0 0;
   min-width: 0;
 }
-MDButton.closeBtn {
-  margin: 16 0 0;
+MDButton.x {
+  margin: 8 0 0;
   width: 32;
   height: 32;
   min-width: 0;
-  vertical-alignment: top;
+  vertical-alignment: center;
 }
 // -----------------------------
 // MEAL PLANNER
+.calendar {
+  padding: 0 8;
+  .navBtn {
+    horizontal-alignment: center;
+    margin: 0;
+  }
+  .monthName {
+    text-align: center;
+    vertical-alignment: center;
+    font-size: 18;
+    padding: 24 0;
+  }
+  .dayName {
+    padding: 8 4;
+    font-size: 12;
+    text-align: center;
+  }
+  .day {
+    font-size: 14;
+    margin: 4;
+    width: 32;
+    height: 32;
+    // horizontal-alignment: center;
+    border-radius: 99;
+    text-align: center;
+  }
+}
 .dayPlan {
-  padding: 0 0 88;
+  padding: 0 8 88;
   width: 100%;
   .plansContainer {
-    margin: 16 8 0 16;
+    margin: 16 0 0 8;
     padding: 0;
     border-left-width: 8;
     &.breakfast {
@@ -634,7 +707,7 @@ MDButton.closeBtn {
       margin: 0 8;
       .titleContainer {
         border-radius: 4;
-        margin: 0 8 8;
+        margin: 0 0 8 8;
       }
       .recipeTitle {
         font-size: 14;
@@ -642,13 +715,9 @@ MDButton.closeBtn {
         line-height: 6;
       }
     }
-    .closeBtn {
-      margin: 8 0;
-      vertical-alignment: top;
-    }
-    MDButton,
-    MDRipple {
-      ripple-color: rgba($gray6, 0.2);
+    .x {
+      margin: 8 0 16 8;
+      vertical-alignment: center;
     }
   }
 }
@@ -661,16 +730,13 @@ MDButton.closeBtn {
   background: $gray1;
   font-size: 14;
   &.dark {
-    color: $gray1;
+    color: $gray2;
     background: $gray9;
   }
   .dialogIcon {
     text-align: center;
     padding: 32;
     font-size: 48;
-    &.flip {
-      transform: scaleX(-1);
-    }
   }
   .dialogTitle {
     line-height: 6;
@@ -704,7 +770,7 @@ MDButton.closeBtn {
     margin: 0 16 16;
     android-elevation: 1;
     text-align: center;
-    .bx {
+    .er {
       padding: 16 0 0;
     }
     .item {
@@ -774,32 +840,5 @@ MDActivityIndicator {
   100% {
     transform: scale(0);
     opacity: 0;
-  }
-}
-.dolly-enter-active {
-  animation-name: dolly;
-  animation-duration: 1s;
-  animation-delay: 0.25s;
-  animation-fill-mode: forwards;
-  animation-timing-function: ease-in-out;
-}
-.dolly-leave-active {
-  opacity: 0;
-}
-@keyframes dolly {
-  0% {
-    transform: rotate(20deg);
-  }
-  25% {
-    transform: rotate(-20deg);
-  }
-  50% {
-    transform: rotate(10deg);
-  }
-  75% {
-    transform: rotate(-10deg);
-  }
-  100% {
-    transform: rotate(0deg);
   }
 }

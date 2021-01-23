@@ -1,6 +1,10 @@
-- New: Grocery list
-- New: Share individual recipe as file
-- Added app languages: French, Norwegian Bokmål
-- Deprecated: Search recipe with tag.
+- Improvement: Recipe list loads quicker than before
+- Improvement: Long press to select multiple recipes
+- Improvement: Better search & filtering
+- Improvement: Tap to strike off completed instructions
+- Deprecated: Swipe to delete recipe
+- Deprecated: Search recipe with tag
+- Refreshed: Meal Planner calendar, Dialog boxes and UI icons
+- Added app languages: French, Italian, Norwegian Bokmål
 - Updated translations
 - Several UI improvements and bug fixes

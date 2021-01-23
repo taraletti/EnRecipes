@@ -2,9 +2,9 @@
 <Page @loaded="onPageLoad">
   <ActionBar flat="true">
     <GridLayout rows="*" columns="auto, *, auto">
-      <MDButton class="bx left" variant="text" :text="icon.menu" automationText="Back" @tap="showDrawer" col="0" />
+      <MDButton class="er left" variant="text" :text="icon.back" automationText="Back" @tap="$navigateBack()" col="0" />
       <Label class="title orkm" :text="'grocery' | L" col="1" />
-      <MDButton class="bx left" variant="text" :text="icon.today" automationText="today" col="2" />
+      <MDButton class="er left" variant="text" :text="icon.today" automationText="today" col="2" />
     </GridLayout>
   </ActionBar>
   <GridLayout columns="" rows="">
@@ -32,11 +32,9 @@ import {
 }
 from "vuex"
 import ConfirmDialog from "./modal/ConfirmDialog.vue"
-import * as utils from "~/shared/utils"
 export default {
   data() {
     return {
-      viewIsScrolled: false,
       appTheme: "Light",
     }
   },
@@ -55,12 +53,6 @@ export default {
       this.setCurrentComponentAction( "GroceryList" )
     },
     // HELPERS
-    showDrawer() {
-      utils.showDrawer()
-    },
-    onScroll( args ) {
-      this.viewIsScrolled = args.scrollY ? true : false
-    },
 
     // NAVIGATION HANDLERS
     viewRecipe( recipeID ) {
@@ -80,9 +72,9 @@ export default {
       return snackbar
         .action( {
           message,
-          textColor: this.appTheme == "Light" ? "#f1f3f5" : "#212529",
+          textColor: this.appTheme == "Light" ? "#fff" : "#292929",
           actionTextColor: '#ff5200',
-          backgroundColor: this.appTheme == "Light" ? "#212529" : "#f1f3f5",
+          backgroundColor: this.appTheme == "Light" ? "#292929" : "#fff",
           actionText: 'Undo',
           hideDelay: 5000
         } )

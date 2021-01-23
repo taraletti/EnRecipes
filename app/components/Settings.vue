@@ -1,17 +1,17 @@
 <template>
 <Page @loaded="onPageLoad">
-  <ActionBar :androidElevation="viewIsScrolled ? 4 : 0">
+  <ActionBar androidElevation="1">
     <GridLayout rows="*" columns="auto, *">
-      <MDButton class="bx left" variant="text" :text="icon.menu" automationText="Back" @tap="showDrawer" col="0" />
+      <MDButton class="er left" variant="text" :text="icon.back" automationText="Back" @tap="$navigateBack()" col="0" />
       <Label class="title orkm" :text="'Settings' | L" col="1" />
     </GridLayout>
   </ActionBar>
-  <ScrollView @scroll="onScroll">
+  <ScrollView>
     <StackLayout class="main-container">
       <Label :text="'intf' | L" class="group-header orkm" />
       <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="selectAppLanguage" />
-        <Label col="0" verticalAlignment="center" class="bx" :text="icon.globe" />
+        <Label col="0" verticalAlignment="center" class="er" :text="icon.lang" />
         <StackLayout col="1">
           <Label :text="'lang' | L" />
           <Label :text="appLanguage" class="info" />
@@ -19,7 +19,7 @@
       </GridLayout>
       <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="selectThemes" />
-        <Label col="0" verticalAlignment="center" class="bx" :text="icon.theme" />
+        <Label col="0" verticalAlignment="center" class="er" :text="icon.theme" />
         <StackLayout col="1">
           <Label :text="'Theme' | L" />
           <Label :text="`${appTheme}` | L" class="info" />
@@ -28,18 +28,18 @@
       <StackLayout class="hr m-10"></StackLayout>
       <Label :text="'opts' | L" class="group-header orkm" />
       <GridLayout columns="auto, *, auto" class="option">
-        <Label col="0" verticalAlignment="center" class="bx" :text="icon.shuffle" />
+        <Label col="0" verticalAlignment="center" class="er" :text="icon.shuf" />
         <StackLayout col="1">
           <Label :text="'sVw' | L" textWrap="true" />
           <Label :text="`sVwInfo` | L" class="info" textWrap="true" />
         </StackLayout>
-        <Switch :color="shakeEnabled ? '#ff5200' : appTheme==='Light' ? '#495057' : '#adb5bd'" verticalAlignment="center" col="2" :checked="shakeEnabled" @checkedChange="toggleShake" />
+        <Switch :color="shakeEnabled ? '#ff5200' : '#858585'" verticalAlignment="center" col="2" :checked="shakeEnabled" @checkedChange="toggleShake" />
       </GridLayout>
       <StackLayout class="hr m-10"></StackLayout>
       <Label :text="'db' | L" class="group-header orkm" />
       <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="exportCheck" />
-        <Label col="0" class="bx" :text="icon.export" />
+        <Label col="0" class="er" :text="icon.exp" />
         <StackLayout col="1">
           <Label :text="'expBu' | L" textWrap="true" />
           <Label v-if="!backupInProgress" :text="'buInfo' | L" class="info" textWrap="true" />
@@ -51,7 +51,7 @@
       </GridLayout>
       <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="importCheck" />
-        <Label col="0" class="bx" :text="icon.import" />
+        <Label col="0" class="er" :text="icon.imp" />
         <StackLayout col="1">
           <Label :text="'impBu' | L" textWrap="true" />
           <Label :text="'impInfo' | L" class="info" textWrap="true" />
@@ -61,23 +61,23 @@
       <Label :text="'rest' | L" class="group-header orkm" />
       <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="resetListItems('cuisines')" />
-        <Label col="0" class="bx" :text="icon.reset" />
+        <Label col="0" class="er" :text="icon.reset" />
         <Label col="1" verticalAlignment="center" :text="'restCuiL' | L" textWrap="true" />
       </GridLayout>
       <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="resetListItems('categories')" />
-        <Label col="0" class="bx" :text="icon.reset" />
-        <Label col="1" verticalAlignment="center" :text="'Reset category list' | L" textWrap="true" />
+        <Label col="0" class="er" :text="icon.reset" />
+        <Label col="1" verticalAlignment="center" :text="'restCatL' | L" textWrap="true" />
       </GridLayout>
       <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="resetListItems('yieldUnits')" />
-        <Label col="0" class="bx" :text="icon.reset" />
-        <Label col="1" verticalAlignment="center" :text="'Reset yield unit list' | L" textWrap="true" />
+        <Label col="0" class="er" :text="icon.reset" />
+        <Label col="1" verticalAlignment="center" :text="'restYUL' | L" textWrap="true" />
       </GridLayout>
       <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="resetListItems('units')" />
-        <Label col="0" class="bx" :text="icon.reset" />
-        <Label col="1" verticalAlignment="center" :text="'Reset unit list' | L" textWrap="true" />
+        <Label col="0" class="er" :text="icon.reset" />
+        <Label col="1" verticalAlignment="center" :text="'restUL' | L" textWrap="true" />
       </GridLayout>
       <Label class="group-info" :text="'restInfo' | L" textWrap="true" />
 
@@ -85,42 +85,47 @@
       <Label :text="'help' | L" class="group-header orkm" />
 
       <GridLayout columns="auto, *" class="option">
-        <MDRipple colSpan="2" @tap="openURL('https://github.com/vishnuraghavb/EnRecipes/wiki/User-Guide')" />
-        <Label col="0" class="bx" :text="icon.compass" />
-        <Label verticalAlignment="center" col="1" :text="'guide' | L" textWrap="true" />
-      </GridLayout>
-      <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="openURL('https://t.me/enrecipes')" />
-        <Label col="0" class="bx" :text="icon.telegram" />
+        <Label col="0" class="er" :text="icon.tg" />
         <StackLayout col="1">
           <Label :text="'joinTG' | L" textWrap="true" />
           <Label :text="'tgInfo' | L" class="info" textWrap="true" />
         </StackLayout>
       </GridLayout>
+      <GridLayout columns="auto, *" class="option">
+        <MDRipple colSpan="2" @tap="openURL('https://github.com/vishnuraghavb/EnRecipes/wiki/User-Guide')" />
+        <Label col="0" class="er" :text="icon.help" />
+        <Label verticalAlignment="center" col="1" :text="'guide' | L" textWrap="true" />
+      </GridLayout>
+      <GridLayout columns="auto, *" class="option">
+        <MDRipple colSpan="2" @tap="openURL('https://github.com/vishnuraghavb/EnRecipes/blob/main/PRIVACY.md')" />
+        <Label col="0" class="er" :text="icon.priv" />
+        <Label verticalAlignment="center" col="1" :text="'priv' | L" textWrap="true" />
+      </GridLayout>
       <StackLayout class="hr m-10"></StackLayout>
       <Label :text="'About' | L" class="group-header orkm" />
 
       <GridLayout columns="auto, *" class="option">
-        <Label col="0" class="bx" :text="icon.info" />
+        <Label col="0" class="er" :text="icon.info" />
         <StackLayout col="1">
           <Label :text="'ver' | L" />
           <Label :text="getVersion" class="info" textWrap="true" />
         </StackLayout>
       </GridLayout>
       <GridLayout columns="auto, *" class="option">
-        <MDRipple colSpan="2" @tap="openURL('https://github.com/vishnuraghavb/EnRecipes/blob/main/PRIVACY.md')" />
-        <Label col="0" class="bx" :text="icon.lock" />
-        <Label verticalAlignment="center" col="1" :text="'priv' | L" textWrap="true" />
-      </GridLayout>
-      <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="openURL('https://github.com/vishnuraghavb/enrecipes')" />
-        <Label col="0" class="bx" :text="icon.github" />
+        <Label col="0" class="er" :text="icon.gh" />
         <Label verticalAlignment="center" col="1" :text="'gh' | L" textWrap="true" />
       </GridLayout>
       <GridLayout columns="auto, *" class="option">
         <MDRipple colSpan="2" @tap="openURL('https://www.vishnuraghav.com/donate')" />
-        <Label col="0" class="bx" :text="icon.donate" />
+        <Label col="0" class="er" :text="icon.don" />
         <Label verticalAlignment="center" col="1" :text="'donate' | L" textWrap="true" />
+      </GridLayout>
+      <GridLayout columns="auto, *" class="option">
+        <MDRipple colSpan="2" @tap="openURL('https://hosted.weblate.org/projects/enrecipes/app-translations')" />
+        <Label col="0" class="er" :text="icon.trans" />
+        <Label verticalAlignment="center" col="1" :text="'trnsl' | L" textWrap="true" />
       </GridLayout>
       <Label class="group-info" :text="'appInfo' | L" textWrap="true" />
     </StackLayout>
@@ -165,7 +170,6 @@ import * as utils from "~/shared/utils"
 export default {
   data() {
     return {
-      viewIsScrolled: false,
       appTheme: "Light",
       appLanguage: "English",
       backupProgress: 0,
@@ -187,12 +191,6 @@ export default {
       this.setCurrentComponentAction( "Settings" )
     },
     // HELPERS
-    showDrawer() {
-      utils.showDrawer()
-    },
-    onScroll( args ) {
-      this.viewIsScrolled = args.scrollY ? true : false
-    },
     openURL( url ) {
       Utils.openUrl( url )
     },
@@ -204,7 +202,7 @@ export default {
           title: "lang",
           list: [ ...languages ],
           stretch: true,
-          helpIcon: 'globe',
+          helpIcon: 'lang',
         },
       } ).then( ( action ) => {
         if ( action && action !== "Cancel" && this.appLanguage !== action ) {
@@ -217,7 +215,7 @@ export default {
                 description: localize( "nLangInfo" ),
                 cancelButtonText: "cBtn",
                 okButtonText: "rst",
-                helpIcon: 'restart',
+                helpIcon: 'res',
                 bgColor: '#ff5200',
               },
             } ).then( ( result ) => {
@@ -249,7 +247,7 @@ export default {
               description: localize( "nThmInfo" ),
               cancelButtonText: "cBtn",
               okButtonText: "rst",
-              helpIcon: 'restart',
+              helpIcon: 'res',
               bgColor: '#ff5200',
             },
           } ).then( ( result ) => {
@@ -420,7 +418,7 @@ export default {
           title: "impFail",
           description,
           okButtonText: "OK",
-          helpIcon: 'error',
+          helpIcon: 'alert',
           bgColor: '#c92a2a',
         },
       } )
@@ -504,8 +502,8 @@ export default {
           title: "impSuc",
           description: `${found} ${localize('recF')}${ importedNote}${existsNote}${updatedNote}`,
           okButtonText: "OK",
-          helpIcon: 'success',
-          bgColor: '#94d82d',
+          helpIcon: 'succ',
+          bgColor: '#69db7c',
         },
       } )
     },

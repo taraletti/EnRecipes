@@ -2,20 +2,20 @@
 <Page @loaded="onPageLoad" @unloaded="onPageUnload">
   <ActionBar flat="true">
     <GridLayout rows="48" columns="auto, *, auto">
-      <MDButton variant="text" row="0" col="0" class="bx" :text="icon.back" automationText="Back" @tap="$navigateBack()" />
+      <MDButton variant="text" row="0" col="0" class="er" :text="icon.back" automationText="Back" @tap="$navigateBack()" />
       <FlexboxLayout row="0" col="2" alignItems="center">
-        <MDButton v-if="!filterTrylater" variant="text" class="bx" :text="recipe.tried ? icon.trylaterLine : icon.trylater" @tap="toggleTrylater" />
-        <MDButton v-else variant="text" class="bx" :text="icon.check" @tap="recipeTried" />
-        <MDButton variant="text" class="bx" :text="recipe.isFavorite ? icon.heart : icon.heartLine" @tap="toggleFavourite" />
-        <MDButton variant="text" class="bx" :text="recipe.inCart ? icon.cart : icon.emptyCart" @tap="toggleCart" />
-        <MDButton variant="text" v-if="!busy" class="bx" :text="icon.edit" @tap="editRecipe" />
+        <MDButton v-if="!filterTrylater" variant="text" class="er" :text="recipe.tried ? icon.try : icon.tried" @tap="toggleTrylater" />
+        <MDButton v-else variant="text" class="er" :text="icon.done" @tap="recipeTried" />
+        <MDButton variant="text" class="er" :text="recipe.isFavorite ? icon.faved : icon.fav" @tap="toggleFavourite" />
+        <!-- <MDButton variant="text" class="er" :text="recipe.inBag ? icon.bagged : icon.bag" @tap="toggleCart" /> -->
+        <MDButton variant="text" v-if="!busy" class="er" :text="icon.edit" @tap="editRecipe" />
         <MDActivityIndicator v-else :busy="busy" />
       </FlexboxLayout>
     </GridLayout>
   </ActionBar>
   <AbsoluteLayout>
     <Tabs width="100%" height="100%" :selectedIndex="selectedTabIndex" @selectedIndexChange="selectedIndexChange" class="viewRecipe">
-      <TabStrip :androidElevation="viewIsScrolled ? 4 : 0">
+      <TabStrip androidElevation="1">
         <TabStripItem>
           <Label :text="'ovw' | L"></Label>
         </TabStripItem>
@@ -33,17 +33,17 @@
         </TabStripItem>
       </TabStrip>
       <TabContentItem>
-        <ScrollView @scroll="onScroll" @loaded="overviewLoaded">
+        <ScrollView @loaded="overviewLoaded">
           <StackLayout>
             <StackLayout width="100%" :height="screenWidth" verticalAlignment="center" class="imageHolder">
               <Image v-if="recipe.imageSrc" :src="recipe.imageSrc" stretch="aspectFill" width="100%" :height="screenWidth" />
-              <Label v-else horizontalAlignment="center" class="bx" fontSize="160" :text="icon.image" />
+              <Label v-else horizontalAlignment="center" class="er" fontSize="160" :text="icon.img" />
             </StackLayout>
             <StackLayout margin="16 4 80">
               <Label class="category" :text="`${$options.filters.L(recipe.cuisine)} • ${$options.filters.L(recipe.category)}`" />
               <Label class="title orkm" :text="recipe.title" textWrap="true" />
               <FlexboxLayout class="ratingContainer">
-                <Label class="rating bx" v-for="n in 5" :key="n" :text="recipe.rating < n ?icon.starLine:icon.star" @tap="setRating(n)" @longPress="setRating(n)" />
+                <Label class="rate er" :class="{'rated':recipe.rating >= n}" v-for="n in 5" :key="n" :text="recipe.rating < n ? icon.star : icon.starred" @tap="recipe.rating==1 && n==1 ? setRating(0) : setRating(n)" @longPress="setRating(n)" />
               </FlexboxLayout>
               <Label class="attr" :text="`${$options.filters.L('Difficulty level')}: ${$options.filters.L(recipe.difficulty)}`" textWrap="true" />
               <Label class="attr" :text="`${$options.filters.L('Preparation time')}: ${formattedTime(recipe.prepTime)}`" textWrap="true" />
@@ -55,7 +55,7 @@
               <GridLayout rows="auto, auto" columns="*, *" class="overviewContainer">
                 <GridLayout class="overviewItem" row="0" col="0" rows="auto, auto" columns="*">
                   <MDRipple rowSpan="2" @tap="selectedTabIndex = 1" />
-                  <Label row="0" class="bx" :text="icon.item" />
+                  <Label row="0" class="er" :text="icon.items" />
                   <Label row="1" class="itemCount" :text="
                         `${recipe.ingredients.length} ${
                           recipe.ingredients.length == 1
@@ -66,7 +66,7 @@
                 </GridLayout>
                 <GridLayout class="overviewItem" row="0" col="1" rows="auto, auto" columns="*">
                   <MDRipple rowSpan="2" @tap="selectedTabIndex = 2" />
-                  <Label row="0" class="bx" :text="icon.step" />
+                  <Label row="0" class="er" :text="icon.steps" />
                   <Label row="1" class="itemCount" :text="
                         `${recipe.instructions.length} ${
                           recipe.instructions.length == 1
@@ -77,7 +77,7 @@
                 </GridLayout>
                 <GridLayout class="overviewItem" row="1" col="0" rows="auto, auto" columns="*">
                   <MDRipple rowSpan="2" @tap="selectedTabIndex = 3" />
-                  <Label row="0" class="bx" :text="icon.note" />
+                  <Label row="0" class="er" :text="icon.notes" />
                   <Label row="1" class="itemCount" :text="
                         `${recipe.notes.length} ${
                           recipe.notes.length == 1
@@ -88,7 +88,7 @@
                 </GridLayout>
                 <GridLayout class="overviewItem" row="1" col="1" rows="auto, auto" columns="*">
                   <MDRipple rowSpan="2" @tap="selectedTabIndex = 4" />
-                  <Label row="0" class="bx" :text="icon.outline" />
+                  <Label row="0" class="er" :text="icon.comb" />
                   <Label row="1" class="itemCount" :text="
                   `${recipe.combinations.length} ${
                     recipe.combinations.length == 1
@@ -105,14 +105,14 @@
         </ScrollView>
       </TabContentItem>
       <TabContentItem>
-        <ScrollView @scroll="onScroll">
+        <ScrollView>
           <GridLayout v-if="!recipe.ingredients.length" rows="*, auto, *, 88" columns="*" class="emptyStateContainer">
             <StackLayout col="0" row="1" class="emptyState">
-              <Label class="bx icon" :text="icon.item" textWrap="true" />
+              <Label class="er icon" :text="icon.items" textWrap="true" />
               <Label class="title orkm" :text="'pAIng' | L" textWrap="true" />
             </StackLayout>
           </GridLayout>
-          <StackLayout v-else padding="16 16 72">
+          <StackLayout v-else padding="24 16 72">
             <AbsoluteLayout class="inputField">
               <TextField width="50%" v-model="yieldMultiplier" keyboardType="number" />
               <Label top="0" class="fieldLabel" :text="`${$options.filters.L('req')} ${$options.filters.L(recipe.yield.unit)}`" />
@@ -120,7 +120,8 @@
             <Label padding="16 0 8" class="title orkm" :text="
                     `${$options.filters.L('ings')} (${positiveYieldMultiplier} ${$options.filters.L(recipe.yield.unit)})`
                   " textWrap="true" />
-            <check-box v-for="(item, index) in recipe.ingredients" :key="index" class="ingredient" style="font-family: 'Orkney-Regular'" checkPadding="16" @checkedChange="checkChange" :text="
+            <check-box v-for="(item, index) in recipe.ingredients" :key="index" class="ingredient" :color="isLightMode ? '#1A1A1A' : '#e0e0e0'" style="font-family: 'Orkney-Regular'" :checkPadding="checkPadding" marginLeft="4"
+              @checkedChange="checkChange" :text="
                     `${
                       roundedQuantity(item.quantity)
                         ? roundedQuantity(item.quantity) + ' '
@@ -133,44 +134,44 @@
         </ScrollView>
       </TabContentItem>
       <TabContentItem>
-        <ScrollView @scroll="onScroll">
+        <ScrollView>
           <GridLayout v-if="!recipe.instructions.length" rows="*, auto, *, 88" columns="*" class="emptyStateContainer">
             <StackLayout col="0" row="1" class="emptyState">
-              <Label class="bx icon" :text="icon.step" textWrap="true" />
+              <Label class="er icon" :text="icon.steps" textWrap="true" />
               <Label class="title orkm" :text="'pAIns' | L" textWrap="true" />
             </StackLayout>
           </GridLayout>
-          <StackLayout v-else padding="20 16 62">
-            <GridLayout columns="auto ,*" v-for="(instruction, index) in recipe.instructions" :key="index">
+          <StackLayout v-else padding="28 16 62">
+            <GridLayout @tap="stepDone" columns="auto ,*" v-for="(instruction, index) in recipe.instructions" :key="index">
               <Label col="0" colSpan="2" class="instruction" :class="{
                     noBorder: index === recipe.instructions.length - 1,
                   }" :text="instruction" textWrap="true" />
-              <Label class="count orkm" col="0" :text="index + 1" />
+              <Label @loaded="centerLabel" class="count orkm" col="0" :text="index + 1" />
             </GridLayout>
           </StackLayout>
         </ScrollView>
       </TabContentItem>
       <TabContentItem>
-        <ScrollView @scroll="onScroll">
+        <ScrollView>
           <GridLayout v-if="!recipe.notes.length" rows="*, auto, *, 88" columns="*" class="emptyStateContainer">
             <StackLayout col="0" row="1" class="emptyState">
-              <Label class="bx icon" :text="icon.note" textWrap="true" />
+              <Label class="er icon" :text="icon.notes" textWrap="true" />
               <Label class="title orkm" :text="'pANo' | L" textWrap="true" />
             </StackLayout>
           </GridLayout>
-          <StackLayout v-else padding="20 16 62" @loaded="createNotes">
+          <StackLayout v-else padding="16 16 62" @loaded="createNotes">
           </StackLayout>
         </ScrollView>
       </TabContentItem>
       <TabContentItem>
-        <ScrollView @scroll="onScroll">
+        <ScrollView>
           <GridLayout v-if="!recipe.combinations.length" rows="*, auto, *, 88" columns="*" class="emptyStateContainer">
             <StackLayout col="0" row="1" class="emptyState">
-              <Label class="bx icon" :text="icon.outline" textWrap="true" />
+              <Label class="er icon" :text="icon.comb" textWrap="true" />
               <Label class="title orkm" :text="'pACmb' | L" textWrap="true" />
             </StackLayout>
           </GridLayout>
-          <StackLayout v-else padding="8 0 80">
+          <StackLayout v-else padding="16 0 80">
             <GridLayout columns="*" v-for="(combination, index) in recipe.combinations" :key="index" androidElevation="1" class="combination">
               <MDRipple @tap="viewCombination(combination)" />
               <Label verticalAlignment="center" class="combinationTitle" :text="getCombinationTitle(combination)" textWrap="true" />
@@ -178,10 +179,9 @@
           </StackLayout>
         </ScrollView>
       </TabContentItem>
-
     </Tabs>
     <GridLayout id="btnFabContainer" rows="*, auto" columns="*, auto">
-      <transition name="dolly" appear>
+      <transition name="bounce" appear>
         <MDFloatingActionButton row="1" col="1" src="res://share" @tap="shareHandler" v-if="showFab" />
       </transition>
     </GridLayout>
@@ -202,6 +202,7 @@ import {
   GridLayout,
   ItemSpec,
   Observable,
+  GestureTypes
 }
 from "@nativescript/core"
 import {
@@ -236,11 +237,11 @@ export default {
       showFab: false,
       selectedTabIndex: 0,
       currentRecipeID: this.recipeID,
-      viewIsScrolled: false,
-      isScrolled: [ false, false, false, false, false, false ],
       hideActionBar: false,
       overviewTab: null,
       checks: [],
+      checkboxes: [],
+      steps: [],
     }
   },
   computed: {
@@ -254,6 +255,9 @@ export default {
     isLightMode() {
       return Application.systemAppearance() === "light"
     },
+    checkPadding() {
+      return `${Math.round( 20 * Utils.layout.getDisplayDensity() )},0,0,0`;
+    },
   },
   methods: {
     ...mapActions( [ "toggleStateAction", "setCurrentComponentAction", "overwriteRecipeAction", "setRecipeAsTriedAction", "setRatingAction", "toggleCartAction" ] ),
@@ -265,19 +269,20 @@ export default {
         this.setCurrentComponentAction( "ViewRecipe" )
       }, 500 )
       this.showFab = true
-      this.yieldMultiplier = this.recipe.yield.quantity
+      if ( this.yieldMultiplier == this.recipe.yield.quantity ) this.yieldMultiplier = this.recipe.yield.quantity
       this.keepScreenOn( true )
       this.syncCombinations()
     },
     onPageUnload() {
-      feedback.hide()
       this.keepScreenOn( false )
+      feedback.hide()
     },
     overviewLoaded( args ) {
       this.overviewTab = args
     },
+
     // HELPERS
-    niceDates( time ) {
+    niceDate( time ) {
       let lastTried = new Date( time ).getTime()
       let now = new Date().getTime()
       let midnight = new Date().setHours( 0, 0, 0, 0 )
@@ -294,14 +299,13 @@ export default {
     },
     selectedIndexChange( args ) {
       this.selectedTabIndex = args.object.selectedIndex
-      this.viewIsScrolled = this.isScrolled[ this.selectedTabIndex ]
     },
     showLastTried() {
       feedback.show( {
-        title: `${localize('triedInfo')} ${this.niceDates(
+        title: `${localize('triedInfo')} ${this.niceDate(
           this.recipe.lastTried
         )}`,
-        titleColor: new Color( `${this.isLightMode ? "#f1f3f5" : "#212529"}` ),
+        titleColor: new Color( `${this.isLightMode ? "#fff" : "#1A1A1A"}` ),
         backgroundColor: new Color( "#ff5200" ),
       } )
     },
@@ -352,12 +356,32 @@ export default {
     },
     checkChange( args, index ) {
       let check = args.object
+      this.checkboxes.push( check )
       this.checks[ index ] = !this.checks[ index ]
     },
-    // NAVIGATION HANDLERS
-    onScroll( args ) {
-      this.viewIsScrolled = this.isScrolled[ this.selectedTabIndex ] = args.scrollY > 8 ? true : false
+    stepDone( args ) {
+      let a = args.object
+      this.steps.push( a )
+      if ( a.className !== "done" ) a.className = "done"
+      else a.className = ""
     },
+    centerLabel( args ) {
+      args.object.android.setGravity( 17 )
+    },
+    clearChecks() {
+      this.checkboxes.forEach( e => {
+        if ( e.checked ) e.checked = false
+      } )
+      this.checkboxes = []
+    },
+    clearSteps() {
+      this.steps.forEach( e => {
+        if ( e.className === "done" ) e.className = ""
+      } )
+      this.steps = []
+    },
+
+    // NAVIGATION HANDLERS
     editRecipe() {
       this.showFab = false
       this.busy = true
@@ -372,6 +396,9 @@ export default {
     },
     viewCombination( combination ) {
       this.recipe = this.recipes.filter( ( e ) => e.id === combination )[ 0 ]
+      this.recipe.ingredients.forEach( e => this.checks.push( false ) )
+      this.clearChecks()
+      this.clearSteps()
       this.currentRecipeID = combination
       this.syncCombinations()
       this.selectedTabIndex = 0
@@ -379,6 +406,7 @@ export default {
       setTimeout(
         ( e ) => this.recipe.tried && this.recipe.lastTried && this.showLastTried(), 500 )
     },
+
     // SHARE ACTION
     shareHandler() {
       if ( this.recipe.imageSrc ) {
@@ -450,6 +478,7 @@ export default {
       shareContent += sharenote
       SocialShare.shareText( shareContent, "Share recipe using" )
     },
+
     // DATA HANDLERS
     toggle( key, setDate ) {
       this.toggleStateAction( {
@@ -475,8 +504,7 @@ export default {
       this.$navigateBack()
     },
     setRating( rating ) {
-      if ( rating !== this.recipe.rating ) {
-
+      if ( rating !== this.recipe.rating || rating === 1 ) {
         this.setRatingAction( {
           id: this.currentRecipeID,
           recipe: this.recipe,
@@ -484,9 +512,10 @@ export default {
         } )
       }
     },
+
     // SHOPPINGLIST
     toggleCart() {
-      if ( !this.recipe.inCart ) {
+      if ( !this.recipe.inBag ) {
 
       } else {
 
@@ -496,19 +525,16 @@ export default {
         recipe: this.recipe,
       } )
     },
+
     // NOTES
     createNote( note, i ) {
       const vm = this
       let regex = /(https?:\/\/[^\s]+)/g
       const grid = new GridLayout()
-      const firstCol = new ItemSpec( 1, "auto" )
-      const secondCol = new ItemSpec( 1, "star" )
-      const label1 = new Label()
-      const label2 = new Label()
-      label1.class = "note"
-      label1.textWrap = true
-      label2.class = "noteCount orkm"
-      label2.text = i + 1
+      const firstCol = new ItemSpec( 1, "star" )
+      const label = new Label()
+      label.class = "note"
+      label.textWrap = true
       let formattedString = new FormattedString()
       let textArray = note.split( regex )
 
@@ -526,14 +552,10 @@ export default {
       textArray.forEach( ( text ) => {
         createSpan( text, regex.test( text ) )
       } )
-      label1.formattedText = formattedString
-      grid.addChild( label1 )
-      grid.addChild( label2 )
-      GridLayout.setColumn( label1, 0 )
-      GridLayout.setColumn( label2, 0 )
-      GridLayout.setColumnSpan( label1, 2 )
+      label.formattedText = formattedString
+      grid.addChild( label )
+      GridLayout.setColumn( label, 0 )
       grid.addColumn( firstCol )
-      grid.addColumn( secondCol )
       return grid
     },
     createNotes( args ) {
@@ -547,10 +569,11 @@ export default {
   },
   created() {
     this.recipe = this.recipes.filter( ( e ) => e.id === this.currentRecipeID )[ 0 ]
-    this.checks = this.recipe.ingredients.map( e => true )
+    this.recipe.ingredients.forEach( e => this.checks.push( false ) )
   },
   mounted() {
     this.showFab = true
+    this.yieldMultiplier = this.recipe.yield.quantity
     setTimeout(
       ( e ) => this.recipe.tried && this.recipe.lastTried && this.showLastTried(), 500 )
   },

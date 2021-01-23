@@ -1,10 +1,10 @@
 <p align="center"><a href="https://enrecipes.vercel.app"><img src="fastlane/metadata/android/en-US/images/featureGraphic.png" width="100%"></a></p>
 
 <h3 align="center">A simple, offline recipe manager</h3>
-<h4 align="center">EnRecipes is an easy to use, privacy-friendly digital cookbook that lets you create, manage and share your own recipes.</h4>
+<h4 align="center">EnRecipes is an open source, privacy-friendly digital cookbook that lets you create, manage and share your recipes.</h4>
 <br>
 <p align="center">
-<a href="https://github.com/vishnuraghavb/EnRecipes/releases" alt="Release version"><img src="https://img.shields.io/github/v/release/vishnuraghavb/EnRecipes?label=Release"></a> <a href="https://github.com/vishnuraghavb/EnRecipes/releases" alt="Release date"><img src="https://img.shields.io/github/release-date/vishnuraghavb/EnRecipes?color=blue&label=Release%20date"></a> <a href="https://www.gnu.org/licenses/gpl-3.0" alt="License: GPLv3"><img src="https://img.shields.io/badge/License-GPL%20v3-blue"></a> <a href="https://github.com/vishnuraghavb/EnRecipes/issues" alt="GitHub issues"><img src="https://img.shields.io/github/issues/vishnuraghavb/EnRecipes?label=Issues"></a> <a href="https://liberapay.com/vishnuraghavb/donate" alt="Translation Status"><img src="https://img.shields.io/liberapay/patrons/vishnuraghavb.svg?logo=liberapay"></a> <a href="https://paypal.me/vishnuraghav" alt="Donate via PayPal"><img src="https://img.shields.io/badge/Donate%20via-PayPal-blue"></a>
+<a href="https://github.com/vishnuraghavb/EnRecipes/releases" alt="Release version"><img src="https://img.shields.io/github/v/release/vishnuraghavb/EnRecipes?label=Release"></a> <a href="https://www.gnu.org/licenses/gpl-3.0" alt="License: GPLv3"><img src="https://img.shields.io/badge/License-GPL%20v3-blue"></a> <a href="https://github.com/vishnuraghavb/EnRecipes/issues" alt="GitHub issues"><img src="https://img.shields.io/github/issues/vishnuraghavb/EnRecipes?label=Issues"></a> <a href="https://liberapay.com/vishnuraghavb/donate" alt="Translation Status"><img src="https://img.shields.io/liberapay/patrons/vishnuraghavb.svg?logo=liberapay"></a> <a href="https://www.vishnuraghav.com/donate" alt="Donate"><img src="https://img.shields.io/badge/Donate%20to-Vishnu%20Raghav-brightgreen"></a>
 
 <hr>
 <p align="center"><a href="#features">Features</a> - <a href="#downloads">Downloads</a> - <a href="#screenshots">Screenshots</a> - <a href="#future">Future</a> - <a href="#contributors">Contributors</a> - <a href="#credits">Credits</a> - <a href="#license">License</a></p>
@@ -18,7 +18,7 @@
 -   Add photo, notes and combinations to your recipes
 -   Organise your recipes by cuisine, category and tags
 -   Mark recipes as Favourites and add them to your Try Later list
--   Quickly search for recipes by name, ingredient or tag
+-   Quickly search for recipes by title or ingredient
 -   Scale your recipe ingredients to serve more or less people
 -   Get notified of the last time you tried a recipe
 -   Share your recipe to anyone by any means as a nicely formatted message. You can share the recipe photo too
@@ -26,12 +26,15 @@
 -   Create meal plans
 -   Import/Export recipes
 -   Light & Dark theme
+
+## Highlights
+
+-   100% free and open-source
 -   No annoying ads or pop-ups
 -   No internet access is required and never asks for any unwanted permissions
 -   Private by Design
--   100% free and open-source
 
-**Languages supported**: Danish, Dutch, English, German, Portuguese, Russian, Spanish and Tamil
+**Languages supported**: Danish, Dutch, English, French, German, Italian, Norwegian Bokmål,Portuguese, Russian, Spanish and Tamil
 
 Check the [Roadmap](https://github.com/vishnuraghavb/EnRecipes/projects/1) for upcoming features.
 
@@ -92,8 +95,7 @@ This app was written in my free time using NativeScript-Vue. I would like to tha
 
 ### Assets
 
--   Icon font from [Boxicons](https://boxicons.com/)
--   Logo by [Vishnu Raghav](https://www.vishnuraghav.com/)
+-   Icon font and Logo by [Vishnu Raghav](https://www.vishnuraghav.com/)
 
 ## License
 

@@ -1,27 +1,28 @@
-GroceryListcui<template>
-<Page @loaded="onPageLoad" actionBarHidden="true" :androidStatusBarBackground="appTheme == 'Light' ? '#f1f3f5' : '#212529'">
-  <RadSideDrawer allowEdgeSwipe="true" showOverNavigation="true" ref="drawer" id="sideDrawer" drawerContentSize="280" gesturesEnabled="true" drawerTransition="SlideInOnTopTransition">
-    <GridLayout rows="*, auto" columns="*" ~drawerContent class="sd">
+<template>
+<Page @loaded="onPageLoad" actionBarHidden="true" :androidStatusBarBackground="appTheme == 'Light' ? '#f0f0f0' : '#1A1A1A'">
+
+  <Drawer @loaded="drawerLoad" :gestureEnabled="gestures" leftSwipeDistance="128">
+    <GridLayout ~leftDrawer rows="*, auto" columns="*" width="280" class="sd">
       <StackLayout row="0">
         <GridLayout rows="48" columns="auto, *, auto" v-for="(item, index) in topmenu" :key="index" class="sd-item orkm" :class="{
-              'selected-sd-item': currentComponent === item.component,
+              'selected': currentComponent === item.component,
             }">
           <MDRipple colSpan="3" @tap="navigateTo(item.component, item.component, false)" />
-          <Label col="0" class="bx" :text="icon[item.icon]" />
+          <Label col="0" class="er" :text="icon[item.icon]" />
           <Label col="1" :text="`${item.title}` | L" />
           <Label class="recipeCount" v-if="getRecipeCount(item.title)" :text="getRecipeCount(item.title)" col="2" />
         </GridLayout>
         <GridLayout class="sd-group-header orkm" rows="auto" columns="*, auto" v-if="cuisinesWithRecipes.length">
           <Label class="filterPath" verticalAlignment="center" col="0" :text="getCurrentPath | L" textWrap='true' />
-          <MDButton :visibility="selectedCuisine?'visible':'hidden'" variant="text" @tap="previousRecipeFilter" class="bx" col="2" :text="icon.back" />
+          <MDButton :visibility="selectedCuisine?'visible':'hidden'" variant="text" @tap="previousRecipeFilter" class="er" col="2" :text="icon.back" />
         </GridLayout>
         <ScrollView height="100%">
           <StackLayout>
             <GridLayout v-for="(item, index) in getRecipeList" :key="index" class="sd-item orkm" :class="{
-                  'selected-sd-item': selectedTag == item,
+                  'selected': selectedTag == item,
                 }" columns="auto, *, auto">
               <MDRipple colSpan="3" @tap="setFilter && setRecipeFilter(item)" />
-              <Label col="0" class="bx" :text="icon[selectedFilterType]" />
+              <Label col="0" class="er" :text="icon[selectedFilterType]" />
               <Label col="1" :text="`${item}` | L" />
               <Label class="recipeCount" :text="getRecipeCount(item)" col="2" />
             </GridLayout>
@@ -34,28 +35,35 @@ GroceryListcui<template>
       <StackLayout row="1">
         <StackLayout class="hr" margin="0 8 8"></StackLayout>
         <GridLayout rows="48" columns="auto, *" class="sd-item orkm" :class="{
-              'selected-sd-item': currentComponent == 'MealPlanner',
+              'selected': currentComponent == 'MealPlanner',
             }">
           <MDRipple row="0" colSpan="3" @tap="navigateTo(MealPlanner, 'MealPlanner', true)" />
-          <Label col="0" class="bx" :text="icon.calendar" />
+          <Label col="0" class="er" :text="icon.cal" />
           <Label col="2" :text="'planner' | L" />
         </GridLayout>
 
-        <GridLayout rows="48" columns="auto, *" class="sd-item orkm" :class="{
-              'selected-sd-item': currentComponent == 'GroceryList',
+        <!-- <GridLayout rows="48" columns="auto, *" class="sd-item orkm" :class="{
+              'selected': currentComponent == 'GroceryList',
             }">
           <MDRipple row="0" colSpan="3" @tap="navigateTo(GroceryList, 'GroceryList', true)" />
-          <Label col="0" class="bx" :text="icon.cart" />
+          <Label col="0" class="er" :text="icon.bag" />
           <Label col="2" :text="'grocery' | L" />
         </GridLayout>
+        <GridLayout rows="48" columns="auto, *" class="sd-item orkm" :class="{
+              'selected': currentComponent == 'GroceryList',
+            }">
+          <MDRipple row="0" colSpan="3" @tap="navigateTo(GroceryList, 'GroceryList', true)" />
+          <Label col="0" class="er" :text="icon.price" />
+          <Label col="2" :text="'Price List' | L" />
+        </GridLayout> -->
 
         <StackLayout class="hr" margin="8"></StackLayout>
 
         <GridLayout class="sd-item orkm" :class="{
-              'selected-sd-item': currentComponent == 'Settings',
+              'selected': currentComponent == 'Settings',
             }" rows="48" columns="auto, *">
           <MDRipple colSpan="3" @tap="navigateTo(Settings, 'Settings', true)" />
-          <Label class="bx" col="0" :text="icon.cog" />
+          <Label class="er" col="0" :text="icon.cog" />
           <Label col="2" :text="'Settings' | L" />
         </GridLayout>
 
@@ -63,11 +71,9 @@ GroceryListcui<template>
     </GridLayout>
     <Frame ~mainContent id="main-frame">
       <EnRecipes ref="enrecipes" :filterFavourites="filterFavourites" :filterTrylater="filterTrylater" :selectedCuisine="selectedCuisine" :selectedCategory="selectedCategory" :selectedTag="selectedTag" :closeDrawer="closeDrawer"
-        :hijackGlobalBackEvent="hijackGlobalBackEvent" :releaseGlobalBackEvent="releaseGlobalBackEvent"
-        @backToHome="backToHome"
-        />
+        :hijackGlobalBackEvent="hijackGlobalBackEvent" :releaseGlobalBackEvent="releaseGlobalBackEvent" @backToHome="backToHome" :showDrawer="showDrawer" @selectModeOn="selectModeOn" />
     </Frame>
-  </RadSideDrawer>
+  </Drawer>
 </Page>
 </template>
 
@@ -92,6 +98,7 @@ import {
 }
 from "vuex"
 import EnRecipes from "./EnRecipes"
+import ViewRecipe from "./ViewRecipe"
 import MealPlanner from "./MealPlanner"
 import GroceryList from "./GroceryList"
 import Settings from "./Settings"
@@ -116,18 +123,21 @@ export default {
       }, {
         title: "trylater",
         component: "Try Later",
-        icon: "trylater",
+        icon: "try",
       }, {
         title: "favourites",
         component: "Favourites",
-        icon: "heart",
+        icon: "fav",
       }, ],
       appTheme: "Light",
       setFilter: true,
+      gestures: true,
+      drawer: null,
     }
   },
   components: {
     EnRecipes,
+    ViewRecipe,
     MealPlanner,
     GroceryList,
     Settings
@@ -184,6 +194,10 @@ export default {
         decorView.setSystemUiVisibility( View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR )
       }
     },
+    drawerLoad( args ) {
+      this.drawer = args.object
+    },
+
     // HELPERS
     setRecipeFilter( item ) {
       this.setFilter = this.filterFavourites = this.filterTrylater = false
@@ -204,13 +218,8 @@ export default {
           this.closeDrawer()
         }
         this.setFilter = true
-      }, 200 )
-
-      clearTimeout( filterTimer )
-      filterTimer = setTimeout( e => {
-        this.setCurrentComponentAction( "Filtered recipes" )
-        this.$refs.enrecipes.updateFilter()
-      }, 750 )
+      }, 250 )
+      this.setCurrentComponentAction( "Filtered recipes" )
     },
     previousRecipeFilter() {
       if ( this.selectedCategory ) {
@@ -222,11 +231,12 @@ export default {
         this.selectedCuisine = null
         this.setCurrentComponentAction( "EnRecipes" )
       }
-      clearTimeout( filterTimer )
-      filterTimer = setTimeout( e => this.$refs.enrecipes.updateFilter(), 750 )
+    },
+    showDrawer() {
+      this.drawer.open()
     },
     closeDrawer() {
-      this.$refs.drawer.nativeView.closeDrawer()
+      this.drawer.close()
     },
     getRecipeCount( arg ) {
       let count = ''
@@ -267,6 +277,9 @@ export default {
       }
       return count
     },
+    selectModeOn( bool ) {
+      this.gestures = bool
+    },
     // NAVIGATION HANDLERS
     hijackGlobalBackEvent() {
       AndroidApplication.on( AndroidApplication.activityBackPressedEvent, this.globalBackEvent )
@@ -275,17 +288,13 @@ export default {
       AndroidApplication.off( AndroidApplication.activityBackPressedEvent, this.globalBackEvent )
     },
     globalBackEvent( args ) {
-      function preventDefault() {
+      if ( this.drawer && this.drawer.isOpened() ) {
         args.cancel = true
-      }
-      if ( this.$refs.drawer && this.$refs.drawer.nativeView.getIsOpen() ) {
-        preventDefault()
         this.closeDrawer()
       } else if (
         [ "Favourites", "Try Later", "Filtered recipes" ].includes( this.currentComponent ) ) {
-        preventDefault()
+        args.cancel = true
         this.backToHome()
-        this.releaseGlobalBackEvent()
       }
     },
     backToHome() {
@@ -293,34 +302,29 @@ export default {
       this.filterFavourites = this.filterTrylater = false
       this.selectedTag = this.selectedCategory = this.selectedCuisine = null
       this.selectedFilterType = "cuisine"
-      this.$refs.enrecipes.updateFilter()
     },
     navigateTo( to, title, isTrueComponent ) {
       if ( title !== this.currentComponent ) {
         if ( isTrueComponent ) {
           this.$navigateTo( to, {
-            frame: "main-frame",
-            backstackVisible: false
+            backstackVisible: true
           } )
           this.closeDrawer()
         } else {
-          this.releaseGlobalBackEvent()
-          this.hijackGlobalBackEvent()
           this.setCurrentComponentAction( to )
           this.$navigateBack( {
             frame: "main-frame",
             backstackVisible: false
           } )
-          this.filterFavourites = to === "Favourites" ? true : false
-          this.filterTrylater = to === "Try Later" ? true : false
-          this.$refs.enrecipes.updateFilter()
+          this.filterFavourites = to === "Favourites"
+          this.filterTrylater = to === "Try Later"
           this.closeDrawer()
+          this.selectedTag = this.selectedCategory = this.selectedCuisine = null
+          this.selectedFilterType = "cuisine"
         }
       } else {
         this.closeDrawer()
       }
-      this.selectedTag = this.selectedCategory = this.selectedCuisine = null
-      this.selectedFilterType = "cuisine"
     },
   },
   created() {

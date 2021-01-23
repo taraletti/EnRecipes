@@ -44,7 +44,7 @@
 			@color/ns_accent
 		</item>
 		<item name="colorControlNormal">
-			#868e96
+			#858585
 		</item>
 	</style>
 	<style name="AppTheme" parent="AppThemeBase">

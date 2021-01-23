@@ -1,15 +1,16 @@
 <template>
 <Page>
   <GridLayout columns="*" rows="auto, auto, auto, *, auto" class="dialogContainer" :class="appTheme">
-    <Label row="0" class="bx dialogIcon" backgroundColor="#adb5bd" :color="iconColor" :text="icon[helpIcon]" />
+    <Label row="0" class="er dialogIcon" backgroundColor="#858585" :color="iconColor" :text="icon[helpIcon]" />
     <Label row="1" class="dialogTitle orkm" :text="`${title}` | L" textWrap='true' />
     <StackLayout row="2" v-if="filteredRecipes.length || searchQuery" padding="0 24 24">
       <TextField :hint="'Search' | L" v-model="searchQuery" />
     </StackLayout>
     <ScrollView row="3" width="100%" :height="height ? height : ''">
       <StackLayout>
-        <MDButton v-for="(recipe, index) in filteredRecipes" :key="index" class="actionItem" variant="text" :rippleColor="rippleColor" :text="recipe.title" @loaded="onLabelLoaded" @tap="tapAction(recipe)" />
-        <Label padding="24" lineHeight="6" v-if="!filteredRecipes.length" :text="'recListEmp' | L" textAlignment="center" textWrap="true" />
+        <MDButton v-for="(recipe, index) in filteredRecipes" :key="index" class="actionItem" variant="text" :rippleColor="rippleColor" :text="recipe.title" @loaded="centerLabel" @tap="tapAction(recipe)" />
+        <Label padding="24" lineHeight="6" v-if="!filteredRecipes.length && !searchQuery" :text="'recListEmp' | L" textAlignment="center" textWrap="true" />
+        <Label padding="24" lineHeight="6" v-if="!filteredRecipes.length && searchQuery" :text="'noRecs' | L" textAlignment="center" textWrap="true" />
       </StackLayout>
     </ScrollView>
     <GridLayout row="4" rows="auto" columns="auto, *, auto" class="actionsContainer">
@@ -45,10 +46,10 @@ export default {
       return this.appTheme == "light"
     },
     rippleColor() {
-      return this.isLightMode ? "rgba(134,142,150,0.2)" : "rgba(206,212,218,0.1)"
+      return "rgba(133,133,133,0.2)"
     },
     iconColor() {
-      return this.isLightMode ? "#f1f3f5" : "#212529"
+      return this.isLightMode ? "#f0f0f0" : "#1A1A1A"
     },
     filteredRecipes() {
       return this.recipes.map( ( e, i ) => {
@@ -68,7 +69,7 @@ export default {
     tapAction( recipe ) {
       this.$modal.close( recipe.id )
     },
-    onLabelLoaded( args ) {
+    centerLabel( args ) {
       args.object.android.setGravity( 16 )
     },
     recipeFilter( e ) {

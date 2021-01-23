@@ -1,7 +1,7 @@
 <template>
 <Page>
   <StackLayout class="dialogContainer" :class="appTheme">
-    <Label class="bx dialogIcon" backgroundColor="#adb5bd" :color="iconColor" :text="icon.time" />
+    <Label class="er dialogIcon" backgroundColor="#858585" :color="iconColor" :text="icon.time" />
     <Label class="dialogTitle orkm" :text="`${title}` | L" />
     <StackLayout class="dialogListPicker" orientation="horizontal" horizontalAlignment="center">
       <ListPicker ref="hrPicker" :items="hrsList" :selectedIndex="hrIndex" @selectedIndexChange="setHrs"></ListPicker>
@@ -63,10 +63,10 @@ export default {
       return this.appTheme == "light"
     },
     rippleColor() {
-      return this.isLightMode ? "rgba(134,142,150,0.2)" : "rgba(206,212,218,0.1)"
+      return "rgba(133,133,133,0.2)"
     },
     iconColor() {
-      return this.isLightMode ? "#f1f3f5" : "#212529"
+      return this.isLightMode ? "#f0f0f0" : "#1A1A1A"
     },
     selectedTime() {
       return this.selectedHrs + ":" + this.selectedMins

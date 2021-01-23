@@ -1,22 +1,22 @@
 <template>
 <Page @loaded="onPageLoad" @unloaded="onPageUnload">
-  <ActionBar :androidElevation="viewIsScrolled ? 4 : 0">
+  <ActionBar androidElevation="1">
     <GridLayout rows="*" columns="auto, *, auto">
-      <MDButton variant="text" class="bx" :text="icon.back" automationText="Back" col="0" @tap="navigateBack" />
+      <MDButton variant="text" class="er" :text="icon.back" automationText="Back" col="0" @tap="navigateBack" />
       <Label class="title orkm" :text="`${title}` | L" col="1" />
-      <MDButton variant="text" v-if="hasChanges && !saving" class="bx" :text="icon.save" col="2" @tap="saveOperation" />
+      <MDButton variant="text" v-if="hasChanges && !saving" class="er" :text="icon.save" col="2" @tap="saveOperation" />
       <MDActivityIndicator col="2" v-if="saving" :busy="saving" />
     </GridLayout>
   </ActionBar>
-  <ScrollView width="100%" height="100%" @scroll="onScroll">
+  <ScrollView width="100%" height="100%">
     <StackLayout width="100%" padding="0 0 88">
       <AbsoluteLayout>
         <StackLayout width="100%" :height="screenWidth" class="imageHolder" verticalAlignment="center">
           <Image v-if="recipeContent.imageSrc" :src="recipeContent.imageSrc" stretch="aspectFill" width="100%" :height="screenWidth" />
-          <Label v-else horizontalAlignment="center" class="bx" fontSize="160" :text="icon.image" />
+          <Label v-else horizontalAlignment="center" class="er" fontSize="160" :text="icon.img" />
         </StackLayout>
         <transition :name="recipeContent.imageSrc ? 'null' : 'bounce'">
-          <MDFloatingActionButton v-if="showFab" :top="screenWidth - 44" :left="screenWidth - 88" class="bx" src="res://camera" @tap="imageHandler" />
+          <MDFloatingActionButton v-if="showFab" :top="screenWidth - 44" :left="screenWidth - 88" class="er" src="res://cam" @tap="imageHandler" />
         </transition>
       </AbsoluteLayout>
       <StackLayout margin="0 16">
@@ -81,7 +81,7 @@
           <TextField ref="ingredient" @loaded="setInputTypeText($event, 'sentence')" col="4" v-model="recipeContent.ingredients[index].item" :hint="`${$options.filters.L('it')} ${index + 1}`"
             @returnPress="index+1 == recipeContent.ingredients.length && addIngredient()" />
 
-          <MDButton variant="text" col="6" class="bx closeBtn" :text="icon.close" @tap="removeIngredient(index)" />
+          <MDButton variant="text" col="6" class="er x" :text="icon.x" @tap="removeIngredient(index)" />
         </GridLayout>
         <MDButton variant="text" class="text-btn orkm" :text="`+ ${$options.filters.L('aIngBtn')}`" @tap="addIngredient()" />
         <StackLayout class="hr" margin="24 16"></StackLayout>
@@ -90,7 +90,7 @@
         <Label :text="'inss' | L" class="sectionTitle" />
         <GridLayout columns="*,8,auto" v-for="(instruction, index) in recipeContent.instructions" :key="index">
           <TextView @loaded="focusField($event, 'multiLine')" col="0" :hint="`${$options.filters.L('stp')} ${index + 1}`" v-model="recipeContent.instructions[index]" />
-          <MDButton variant="text" col="2" class="bx closeBtn" :text="icon.close" @tap="removeInstruction(index)" />
+          <MDButton variant="text" col="2" class="er x" :text="icon.x" @tap="removeInstruction(index)" />
         </GridLayout>
         <MDButton variant="text" class="text-btn orkm" :text="`+ ${$options.filters.L('aStpBtn')}`" @tap="addInstruction" />
         <StackLayout class="hr" margin="24 16"></StackLayout>
@@ -99,7 +99,7 @@
         <Label :text="'nos' | L" class="sectionTitle" />
         <GridLayout columns="*,8,auto" v-for="(note, index) in recipeContent.notes" :key="index">
           <TextView @loaded="focusField($event, 'multiLine')" col="0" :hint="`${$options.filters.L('no')} ${index + 1}`" v-model="recipeContent.notes[index]" />
-          <MDButton variant="text" col="2" class="bx closeBtn" :text="icon.close" @tap="removeNote(index)" />
+          <MDButton variant="text" col="2" class="er x" :text="icon.x" @tap="removeNote(index)" />
         </GridLayout>
         <MDButton variant="text" class="text-btn orkm" :text="`+ ${$options.filters.L('aNoBtn')}`" @tap="addNote" />
         <StackLayout class="hr" margin="24 16"></StackLayout>
@@ -108,7 +108,7 @@
         <Label :text="'cmbs' | L" class="sectionTitle" />
         <GridLayout columns="*,8,auto" v-for="(combination, index) in recipeContent.combinations" :key="index">
           <TextField class="combinationToken" col="0" :text="getCombinationTitle(combination)" editable="false" />
-          <MDButton variant="text" col="2" class="bx closeBtn" :text="icon.close" @tap="removeCombination(combination)" />
+          <MDButton variant="text" col="2" class="er x" :text="icon.x" @tap="removeCombination(combination)" />
         </GridLayout>
         <MDButton variant="text" class="text-btn orkm" :text="`+ ${$options.filters.L('addCmbBtn')}`" @tap="showCombinations" />
       </StackLayout>
@@ -164,7 +164,6 @@ export default {
   data() {
     return {
       title: "newRec",
-      viewIsScrolled: false,
       recipeContent: {
         imageSrc: null,
         title: undefined,
@@ -188,7 +187,7 @@ export default {
         lastTried: null,
         lastModified: null,
         created: null,
-        inCart: false,
+        inBag: false,
       },
       tempRecipeContent: {},
       tags: undefined,
@@ -301,9 +300,6 @@ export default {
         }
       } )
     },
-    onScroll( args ) {
-      this.viewIsScrolled = args.scrollY ? true : false
-    },
     // DATA LIST
     showCuisine( focus ) {
       this.modalOpen = true
@@ -398,7 +394,7 @@ export default {
           list: this.yieldUnits,
           stretch: true,
           action: "aNBtn",
-          helpIcon: 'dish',
+          helpIcon: 'yield',
         },
       } ).then( ( action ) => {
         if ( action == "aNBtn" ) {
@@ -406,7 +402,7 @@ export default {
             props: {
               title: "nwYiU",
               action: "aBtn",
-              helpIcon: 'dish',
+              helpIcon: 'yield',
             },
           } ).then( ( item ) => {
             this.hijackBackEvent()
@@ -439,7 +435,7 @@ export default {
           title: "Difficulty level",
           list: this.difficultyLevels,
           stretch: false,
-          helpIcon: 'meter',
+          helpIcon: 'diff',
         },
       } ).then( ( action ) => {
         if ( action ) {
@@ -462,7 +458,7 @@ export default {
           list: this.units,
           stretch: true,
           action: "aNBtn",
-          helpIcon: 'ruler',
+          helpIcon: 'unit',
         },
       } ).then( ( action ) => {
         if ( action == "aNBtn" ) {
@@ -470,7 +466,7 @@ export default {
             props: {
               title: "newUnit",
               action: "aBtn",
-              helpIcon: 'ruler',
+              helpIcon: 'unit',
             },
           } ).then( ( item ) => {
             this.hijackBackEvent()
@@ -528,7 +524,7 @@ export default {
             description: localize( "disc" ),
             cancelButtonText: "disBtn",
             okButtonText: "kEdit",
-            helpIcon: 'error',
+            helpIcon: 'alert',
             bgColor: '#c92a2a',
           },
         } ).then( ( action ) => {
@@ -565,8 +561,8 @@ export default {
             title: "recPic",
             cancelButtonText: "rBtn",
             okButtonText: "repBtn",
-            helpIcon: 'image',
-            bgColor: '#adb5bd',
+            helpIcon: 'img',
+            bgColor: '#858585',
           },
         } ).then( ( action ) => {
           this.blockModal = false
@@ -622,11 +618,11 @@ export default {
     },
     imagePicker() {
       ApplicationSettings.setBoolean( "storagePermissionAsked", true )
-      this.cacheImagePath = path.join( knownFolders.temp().path, `${this.getRandomID()}.jpg` )
       Filepicker.create( {
         mode: "single",
         extensions: [ "png", "jpeg", "jpg" ],
       } ).present().then( ( selection ) => {
+        this.cacheImagePath = path.join( knownFolders.temp().path, `${this.getRandomID()}.jpg` )
         let imgPath = selection[ 0 ]
         ImageSource.fromFile( imgPath ).then( ( image ) => {
           ImageCropper.prototype.show( image, {
@@ -636,8 +632,8 @@ export default {
             hideBottomControls: true,
             toolbarTitle: localize( "cPic" ),
             statusBarColor: "#ff5200",
-            toolbarTextColor: this.appTheme == "light" ? "#212529" : "#f1f3f5",
-            toolbarColor: this.appTheme == "light" ? "#f1f3f5" : "#212529",
+            toolbarTextColor: this.appTheme == "light" ? "#1A1A1A" : "#e0e0e0",
+            toolbarColor: this.appTheme == "light" ? "#e0e0e0" : "#1A1A1A",
             cropFrameColor: "#ff5200",
           } ).then( ( cropped ) => {
             cropped.image.saveToFile( this.cacheImagePath, "jpg", 75 )
@@ -666,10 +662,10 @@ export default {
       return snackbar
         .action( {
           message,
-          textColor: this.appTheme == "light" ? "#f1f3f5" : "#212529",
+          textColor: this.appTheme == "light" ? "#fff" : "#292929",
           actionTextColor: '#ff5200',
-          backgroundColor: this.appTheme == "light" ? "#212529" : "#f1f3f5",
-          actionText: 'Undo',
+          backgroundColor: this.appTheme == "light" ? "#292929" : "#fff",
+          actionText: localize('undo'),
           hideDelay: 5000
         } )
     },
@@ -739,7 +735,7 @@ export default {
         props: {
           title: "selRec",
           recipes: filteredRecipes,
-          helpIcon: 'outline',
+          helpIcon: 'comb',
         },
       } ).then( ( res ) => {
         this.hijackBackEvent()
@@ -754,7 +750,6 @@ export default {
       this.unSyncCombinations.push( id )
       this.undoDeletion( `${this.$options.filters.L('rmCmb')}` ).then( res => {
         if ( res.command === 'action' ) {
-          console.log( this.recipeContent.combinations, index, id );
           this.recipeContent.combinations.splice( index, 0, id )
         }
       } )

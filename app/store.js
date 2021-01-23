@@ -154,75 +154,72 @@ export default new Vuex.Store({
     units: [],
     mealPlans: [],
     icon: {
-      home: "\ued3b",
-      heart: "\ued36",
-      heartLine: "\uea6c",
-      cuisine: "\ueb3e",
-      category: "\uec7c",
-      categoryLine: "\ue99c",
-      tag: "\uee12",
-      tagLine: "\ueb97",
-      cog: "\ueca6",
-      info: "\ued49",
-      menu: "\ueac1",
-      search: "\ueb54",
-      sort: "\ueac2",
-      plus: "\ueb21",
-      plusCircle: "\ueb22",
-      close: "\uebe9",
-      image: "\ued47",
-      food: "\ueb3e",
-      back: "\uea95",
-      save: "\uedeb",
-      camera: "\uec61",
-      share: "\uedf3",
-      edit: "\uedba",
-      theme: "\uecaa",
-      link: "\ueaa0",
-      file: "\ued02",
-      detail: "\ue9f9",
-      user: "\uee33",
-      trash: "\uee26",
-      donate: "\uece2",
-      trylater: "\uec31",
-      trylaterLine: "\ue94a",
-      note: "\ueb04",
-      copy: "\ue9e6",
-      check: "\ue9a4",
-      telegram: "\ueec7",
-      time: "\uee1a",
-      timeLine: "\ueba2",
-      item: "\ue99d",
-      step: "\ue948",
-      source: "\ueaa0",
-      export: "\ued07",
-      import: "\ued0c",
-      outline: "\ueb07",
-      calendar: "\uec55",
-      today: "\ue97c",
-      globe: "\uea5a",
-      lock: "\ued61",
-      github: "\uee8b",
-      gitlab: "\uee8c",
-      shuffle: "\ueb6b",
-      reset: "\ueb3d",
-      emptyCart: "\ue999",
-      cart: "\uec77",
-      meter: "\uee11",
-      meterLine: "\ueb96",
-      star: "\uee0a",
-      starLine: "\ueb83",
-      compass: "\uecb4",
-      show: "\uedfd",
-      ruler: "\uede9",
-      dish: "\uecd9",
-      restart: "\ueb3f",
-      fail: "\uee58",
-      success: "\uec85",
-      folder: "\ued1e",
-      error: "\uecf7",
-      zip: "\ued03",
-      text: "\ued82"
+      alert: "\ue900",
+      back: "\ue901",
+      bag: "\ue902",
+      bagged: "\ue903",
+      cal: "\ue904",
+      cam: "\ue905",
+      category: "\ue906",
+      cog: "\ue907",
+      comb: "\ue908",
+      cuisine: "\ue909",
+      del: "\ue90a",
+      diff: "\ue90b",
+      don: "\ue90c",
+      done: "\ue90d",
+      edit: "\ue90e",
+      exp: "\ue910",
+      fav: "\ue911",
+      faved: "\ue912",
+      folder: "\ue913",
+      gh: "\ue914",
+      help: "\ue915",
+      home: "\ue916",
+      img: "\ue917",
+      imp: "\ue918",
+      info: "\ue919",
+      items: "\ue91a",
+      l1:"\ue91b",
+      l2:"\ue91c",
+      l3:"\ue91d",
+      lang: "\ue91e",
+      left: "\ue91f",
+      menu: "\ue920",
+      noresult: "\ue921",
+      notes: "\ue922",
+      plus: "\ue923",
+      plusc: "\ue924",
+      price:"\ue925",
+      priv:"\ue926",
+      err: "\ue90f",
+      res: "\ue927",
+      reset: "\ue928",
+      right: "\ue929",
+      save: "\ue92a",
+      sear: "\ue92b",
+      selall: "\ue92c",
+      share: "\ue92d",
+      shuf: "\ue92e",
+      sort: "\ue92f",
+      star: "\ue930",
+      starred: "\ue931",
+      steps: "\ue932",
+      succ: "\ue933",
+      tag: "\ue934",
+      text: "\ue935",
+      tg: "\ue936",
+      theme: "\ue937",
+      time: "\ue938",
+      timer: "\ue939",
+      tod: "\ue93a",
+      trans: "\ue93b",
+      tried: "\ue93c",
+      try: "\ue93d",
+      unit: "\ue93e",
+      x: "\ue93f",
+      yield: "\ue940",
+      zip: "\ue941"
     },
     currentComponent: "EnRecipes",
     sortType: "Oldest first",
@@ -235,10 +232,28 @@ export default new Vuex.Store({
         title: "Deutsch"
       }, {
         locale: "en-GB",
-        title: "English (United Kingdom)"
+        title: "English (UK)"
       }, {
         locale: "es",
         title: "Español"
+      }, {
+        locale: "fr",
+        title: "Français"
+      }, {
+        locale: "fr-BE",
+        title: "Français (BE)"
+      }, {
+        locale: "fr-CA",
+        title: "Français (CA)"
+      }, {
+        locale: "fr-CH",
+        title: "Français (CH)"
+      }, {
+        locale: "it",
+        title: "Italiano"
+      }, {
+        locale: "nb-NO",
+        title: "Norsk bokmål"
       }, {
         locale: "nl",
         title: "Nederlands"
@@ -281,8 +296,8 @@ export default new Vuex.Store({
           r.rating = 0
         if (!r.hasOwnProperty("created"))
           r.created = r.lastModified
-        if (!r.hasOwnProperty("inCart"))
-          r.inCart = false
+        // if (!r.hasOwnProperty("inBag"))
+        //   r.inBag = false
         state.recipes.push(r);
       });
       state.shakeEnabled = ApplicationSettings.getBoolean("shakeEnabled", true)
@@ -311,8 +326,8 @@ export default new Vuex.Store({
             r.rating = 0
           if (!r.hasOwnProperty("created"))
             r.created = r.lastModified
-          if (!r.hasOwnProperty("inCart"))
-            r.inCart = false
+          // if (!r.hasOwnProperty("inBag"))
+          //   r.inBag = false
           return r;
         });
       }
@@ -384,6 +399,20 @@ export default new Vuex.Store({
         }
       });
     },
+    deleteRecipes(state, ids) {
+      ids.forEach(id => {
+        let index = state.recipes.findIndex(e => e.id === id)
+        getFileAccess().deleteFile(state.recipes[index].imageSrc);
+        state.recipes.splice(index, 1);
+        EnRecipesDB.deleteDocument(id);
+        state.recipes.forEach((e, i) => {
+          if (e.combinations.includes(id)) {
+            state.recipes[i].combinations.splice(e.combinations.indexOf(id), 1);
+            EnRecipesDB.updateDocument(state.recipes[i].id, state.recipes[i]);
+          }
+        });
+      });
+    },
     initializeListItems(state) {
       function initialize(listName) {
         let userItems;
@@ -431,7 +460,6 @@ export default new Vuex.Store({
       db.updateDocument(key, {[key]: state[stateName]});
     },
     addListItem(state, {item, listName}) {
-      console.log(item, listName);
       let db = listItems[listName].db;
       let key = listItems[listName].key;
       let stateName = listItems[listName].stateName;
@@ -465,27 +493,102 @@ export default new Vuex.Store({
     initializeMealPlans(state) {
       let isMealPlansDBStored = mealPlansDB.query({select: []}).length;
       if (isMealPlansDBStored) {
-        state.mealPlans = mealPlansDB.getDocument("mealPlans").mealPlans;
+        let plans = mealPlansDB.getDocument("mealPlans").mealPlans
+        if (plans.length && plans[0].hasOwnProperty("eventColor")) {
+          plans.forEach(p => {
+            let d = new Date(p.startDate)
+            p.date = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0).getTime()
+            switch (new Date(p.date).getHours()) {
+              case 0:
+                p.type = "breakfast"
+                break;
+              case 5:
+                p.type = "lunch"
+                break;
+              case 10:
+                p.type = "dinner"
+                break;
+              case 15:
+                p.type = "snacks"
+                break;
+            }
+            delete p.startDate
+            delete p.endDate
+            delete p.eventColor
+            state.mealPlans.push(p)
+          })
+          mealPlansDB.updateDocument("mealPlans", {mealPlans: state.mealPlans})
+        } else
+          state.mealPlans = [...plans]
       } else {
         mealPlansDB.createDocument({
           mealPlans: []
-        }, "mealPlans");
+        }, "mealPlans")
       }
     },
     importMealPlans(state, mealPlans) {
-      let newMealPlans = mealPlans.filter(e => !state.mealPlans.some(f => f.title === e.title && f.startDate === e.startDate));
+      let newMealPlans = mealPlans.filter(e => {
+        if (e.hasOwnProperty("eventColor")) {
+          return !state.mealPlans.some(f => {
+            let d = new Date(e.startDate)
+            let date = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0).getTime()
+            let type
+            switch (d.getHours()) {
+              case 0:
+                type = "breakfast"
+                break;
+              case 5:
+                type = "lunch"
+                break;
+              case 10:
+                type = "dinner"
+                break;
+              case 15:
+                type = "snacks"
+                break;
+            }
+            return f.title === e.title && f.date === date && f.type === type
+          })
+        } else {
+          return !state.mealPlans.some(f => f.title === e.title && f.date === e.date && f.type === e.type)
+        }
+      })
+      let updatedMealPlans = []
+      if (newMealPlans[0].hasOwnProperty("eventColor")) {
+        newMealPlans.forEach(p => {
+          let d = new Date(p.startDate)
+          p.date = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0).getTime()
+          switch (d.getHours()) {
+            case 0:
+              p.type = "breakfast"
+              break;
+            case 5:
+              p.type = "lunch"
+              break;
+            case 10:
+              p.type = "dinner"
+              break;
+            case 15:
+              p.type = "snacks"
+              break;
+          }
+          delete p.startDate
+          delete p.endDate
+          delete p.eventColor
+          updatedMealPlans.push(p)
+        });
+      }
       state.mealPlans = [
         ...state.mealPlans,
-        ...newMealPlans
+        ...updatedMealPlans
       ];
       mealPlansDB.updateDocument("mealPlans", {mealPlans: state.mealPlans});
     },
-    addMealPlan(state, {event, eventColor, index}) {
+    addMealPlan(state, {title, date, type, index}) {
       let mealPlan = {
-        title: event.title,
-        startDate: event.startDate,
-        endDate: event.endDate,
-        eventColor
+        title,
+        date,
+        type
       }
       if (index != null)
         state.mealPlans.splice(index, 0, mealPlan);
@@ -495,18 +598,11 @@ export default new Vuex.Store({
         mealPlans: [...state.mealPlans]
       });
     },
-    deleteMealPlan(state, {title, startDate}) {
-      let mealPlan = state.mealPlans.filter(e => {
-        let sd = new Date(e.startDate).getTime();
-        return e.title === title && sd === startDate.getTime();
-      })[0];
-      let index = state.mealPlans.indexOf(mealPlan);
+    deleteMealPlan(state, {title, date, type, index}) {
       state.mealPlans.splice(index, 1);
       state.mealPlans = [...state.mealPlans];
-      let mealPlans = mealPlansDB.getDocument("mealPlans").mealPlans;
-      mealPlans.splice(index, 1);
       mealPlansDB.updateDocument("mealPlans", {
-        mealPlans: [...mealPlans]
+        mealPlans: [...state.mealPlans]
       });
     },
     toggleState(state, {id, recipe, key, setDate}) {
@@ -547,7 +643,7 @@ export default new Vuex.Store({
     },
     toggleCart(state, {id, recipe}) {
       let index = state.recipes.indexOf(state.recipes.filter(e => e.id === id)[0]);
-      state.recipes[index].inCart = !state.recipes[index].inCart
+      state.recipes[index].inBag = !state.recipes[index].inBag
       EnRecipesDB.updateDocument(id, recipe);
     },
     unlinkBrokenImages(state) {
@@ -588,6 +684,11 @@ export default new Vuex.Store({
       commit
     }, recipe) {
       commit("deleteRecipe", recipe);
+    },
+    deleteRecipesAction({
+      commit
+    }, ids) {
+      commit("deleteRecipes", ids);
     },
     initializeListItems({commit}) {
       commit("initializeListItems");

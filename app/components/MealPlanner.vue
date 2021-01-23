@@ -1,59 +1,52 @@
 <template>
 <Page @loaded="onPageLoad" @unloaded="onPageUnload">
-  <ActionBar flat="true">
-    <GridLayout rows="*" columns="auto, *, auto">
-      <MDButton class="bx left" variant="text" :text="icon.menu" automationText="Back" @tap="showDrawer" col="0" />
+  <ActionBar androidElevation="1">
+    <GridLayout rows="*" columns="auto, *, auto, auto">
+      <MDButton class="er" variant="text" :text="icon.back" automationText="Back" @tap="$navigateBack()" col="0" />
       <Label class="title orkm" :text="'planner' | L" col="1" />
-      <MDButton class="bx left" variant="text" :text="icon.today" automationText="today" @tap="goToToday" col="2" />
+      <MDButton class="er" variant="text" :text="icon.tod" automationText="today" @tap="goToToday" col="2" />
+      <MDButton class="er" variant="text" :text="edit ? icon.done : icon.edit" automationText="edit" @tap="edit = !edit" col="3" />
     </GridLayout>
   </ActionBar>
-  <GridLayout rows="280, *">
-    <RadCalendar :androidElevation="viewIsScrolled ? 4 : 0" class="orkm" row="0" ref="calendar" @loaded="onCalendarLoad" @dateSelected="onDateSelected" :viewMode="viewMode" :transitionMode="transitionMode" :selectionMode="selectionMode"
-      :eventsViewMode="eventsViewMode" :eventSource="getMealPlans"></RadCalendar>
-    <ScrollView row="1" width="100%" height="100%" @scroll="onScroll">
-      <StackLayout class="dayPlan">
+  <ScrollView width="100%" height="100%">
+    <GridLayout rows="auto, *">
+      <GridLayout class="calendar" width="100%" row="0" columns="*, *, *, *, *, *, *" rows="auto, auto, auto, auto, auto, auto, auto, auto">
+        <MDButton variant="text" class="er navBtn" col="0" :text="icon.left" @tap="prevMonth" />
+        <Label class="monthName" col="1" colSpan="5" :text="$options.filters.L(mNames[month]) + ' ' + year" />
+        <MDButton variant="text" class="er navBtn" col="6" :text="icon.right" @tap="nextMonth" />
+        <Label class="dayName" row="1" :col="i" v-for="(d,i) in dNames" :key="d" :text="$options.filters.L(d)" />
+        <Label @loaded="centerLabel" class="day orkm" :androidElevation="hasPlans(d) ? 1 : 0" :class="{'today': isToday(d), 'activeDay': isActive(d),'hasPlans': hasPlans(d)}" :row="getrow(i)" :col="i % 7" v-for="(d, i) in getCal" :key="i"
+          :text="d ? d : null" @tap="setToday(d)" />
+      </GridLayout>
+      <StackLayout row="1" class="dayPlan">
+        <StackLayout class="hr" margin="16 0 0"></StackLayout>
         <StackLayout v-for="(mealType, index) in mealTimes" :key="'mealType' + index" class="plansContainer" :class="mealType">
           <GridLayout columns="auto, auto" class="header">
-            <Label col="0" class="periodLabel orkm" :text="mealType | L" />
-            <MDButton col="1" variant="text" class="bx" :text="icon.plus" @tap="addRecipe(mealType)" />
+            <Label col="0" @tap="edit = true" class="periodLabel orkm" :text="mealType | L" />
+            <MDButton :visibility="edit ? 'visible' : 'hidden'" col="1" variant="text" class="er" :text="icon.plus" @tap="addRecipe(mealType)" />
           </GridLayout>
-          <GridLayout class="recipe" :paddingTop="index == 0?8:0" columns="*, auto" v-for="(recipeID, index) in getRecipes[mealType]" :key="mealType + index">
+          <GridLayout class="recipe" :paddingTop="index == 0?8:0" :columns="`*, ${edit ? 'auto' : 0}`" v-for="(recipeID, index) in getRecipes[mealType]" :key="mealType + index">
             <GridLayout androidElevation="1" col="0" columns="*" class="titleContainer">
               <MDRipple class="recipeRipple" @tap="viewRecipe(recipeID)" />
               <Label verticalAlignment="center" class="recipeTitle" :text="getRecipeTitle(recipeID)" textWrap="true" />
             </GridLayout>
-            <MDButton variant="text" col="1" class="bx closeBtn" :text="icon.close" @tap="removeRecipe(mealType, recipeID)" />
+            <MDButton :visibility="edit ? 'visible' : 'hidden'" variant="text" col="1" class="er x" :text="icon.x" @tap="removeRecipe(recipeID, mealType)" />
           </GridLayout>
         </StackLayout>
       </StackLayout>
-    </ScrollView>
-  </GridLayout>
+    </GridLayout>
+  </ScrollView>
 </Page>
 </template>
 
 <script>
 import {
   ApplicationSettings,
-  Color,
   Page,
   Observable,
-  Device
+  GestureTypes,
 }
 from "@nativescript/core"
-import {
-  CalendarViewMode,
-  CalendarTransitionMode,
-  CalendarSelectionMode,
-  CalendarMonthViewStyle,
-  CalendarSelectionShape,
-  DayCellStyle,
-  CalendarFontStyle,
-  CalendarCellAlignment,
-  CellStyle,
-  CalendarEventsViewMode,
-  CalendarEvent
-}
-from "nativescript-ui-calendar"
 import {
   SnackBar
 } from '@nativescript-community/ui-material-snackbar';
@@ -66,184 +59,78 @@ from "vuex"
 import ViewRecipe from "./ViewRecipe.vue"
 import ActionDialogWithSearch from "./modal/ActionDialogWithSearch.vue"
 import ConfirmDialog from "./modal/ConfirmDialog.vue"
-import * as utils from "~/shared/utils"
 export default {
   data() {
     return {
-      viewIsScrolled: false,
       appTheme: "Light",
       mealTimes: [ "breakfast", "lunch", "dinner", "snacks" ],
-      selectedDayMealPlans: [],
-      viewMode: CalendarViewMode.Month,
-      transitionMode: CalendarTransitionMode.Slide,
-      selectionMode: CalendarSelectionMode.Single,
-      eventsViewMode: CalendarEventsViewMode.None,
-      color: {
-        white: new Color( "#ffffff" ),
-        gray1: new Color( "#f1f3f5" ),
-        gray2: new Color( "#e9ecef" ),
-        gray3: new Color( "#dee2e6" ),
-        gray4: new Color( "#ced4da" ),
-        gray5: new Color( "#adb5bd" ),
-        gray6: new Color( "#868e96" ),
-        gray7: new Color( "#495057" ),
-        gray8: new Color( "#343a40" ),
-        gray9: new Color( "#212529" ),
-        black: new Color( "#111111" ),
-        orange: new Color( "#ff5200" ),
-        breakfast: "#ff922b",
-        lunch: "#94d82d",
-        dinner: "#339af0",
-        snacks: "#845ef7",
-      },
-      appFontRegular: "Orkney-Regular",
-      appFontMedium: "Orkney-Medium",
-      selectedDate: null,
+      dNames: [ 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT' ],
+      year: 2021,
+      mNames: [ "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ],
+      month: 0,
+      today: null,
+      edit: false,
     }
   },
   computed: {
     ...mapState( [ "icon", "recipes", "mealPlans" ] ),
-    isLightMode() {
-      return this.appTheme === "Light"
-    },
-    monthViewStyle() {
-      const monthViewStyle = new CalendarMonthViewStyle()
-      monthViewStyle.backgroundColor = this.isLightMode ? this.color.gray1 : this.color.gray9
-      monthViewStyle.showTitle = true
-      monthViewStyle.showWeekNumbers = false
-      monthViewStyle.showDayNames = true
-      const titleCellStyle = new DayCellStyle()
-      titleCellStyle.cellBackgroundColor = this.isLightMode ? this.color.gray2 : this.color.black
-      titleCellStyle.cellBorderWidth = 1
-      titleCellStyle.cellBorderColor = this.isLightMode ? this.color.gray2 : this.color.black
-      titleCellStyle.cellTextSize = 16
-      titleCellStyle.cellTextColor = this.isLightMode ? this.color.gray9 : this.color.gray1
-      titleCellStyle.cellTextFontName = this.appFontMedium
-      monthViewStyle.titleCellStyle = titleCellStyle
-      const dayNameCellStyle = new CellStyle()
-      dayNameCellStyle.cellBackgroundColor = this.isLightMode ? this.color.gray2 : this.color.black
-      dayNameCellStyle.cellTextColor = this.isLightMode ? this.color.gray9 : this.color.gray1
-      dayNameCellStyle.cellBorderWidth = 1
-      dayNameCellStyle.cellBorderColor = this.isLightMode ? this.color.gray2 : this.color.black
-      dayNameCellStyle.cellTextSize = 10
-      dayNameCellStyle.cellAlignment = CalendarCellAlignment.Center
-      dayNameCellStyle.cellTextFontName = this.appFontMedium
-      monthViewStyle.dayNameCellStyle = dayNameCellStyle
-      const dayCellStyle = new DayCellStyle()
-      dayCellStyle.showEventsText = false
-      dayCellStyle.eventTextColor = this.color.orange
-      dayCellStyle.eventFontName = this.appFontRegular
-      dayCellStyle.eventFontStyle = CalendarFontStyle.Bold
-      dayCellStyle.eventTextSize = 8
-      dayCellStyle.cellTextSize = 16
-      dayCellStyle.cellTextColor = this.isLightMode ? this.color.gray9 : this.color.gray1
-      dayCellStyle.cellAlignment = CalendarCellAlignment.Bottom
-      dayCellStyle.cellBackgroundColor = this.isLightMode ? this.color.gray1 : this.color.gray9
-      dayCellStyle.cellTextFontName = this.appFontRegular
-      dayCellStyle.cellBorderWidth = 1
-      dayCellStyle.cellBorderColor = this.isLightMode ? this.color.gray2 : this.color.black
-      monthViewStyle.dayCellStyle = dayCellStyle
-      const todayCellStyle = new DayCellStyle()
-      todayCellStyle.cellBackgroundColor = this.isLightMode ? this.color.gray1 : this.color.gray9
-      todayCellStyle.cellTextColor = this.color.orange
-      todayCellStyle.cellBorderWidth = 1
-      todayCellStyle.cellTextFontName = this.appFontMedium
-      todayCellStyle.cellTextFontStyle = CalendarFontStyle.Bold
-      todayCellStyle.cellTextSize = 16
-      todayCellStyle.cellAlignment = CalendarCellAlignment.Bottom
-      todayCellStyle.cellBorderColor = this.isLightMode ? this.color.gray2 : this.color.black
-      monthViewStyle.todayCellStyle = todayCellStyle
-      const selectedCellStyle = new DayCellStyle()
-      selectedCellStyle.eventTextSize = 1
-      selectedCellStyle.cellAlignment = CalendarCellAlignment.Bottom
-      selectedCellStyle.cellBackgroundColor = this.isLightMode ? this.color.white : this.color.gray8
-      selectedCellStyle.cellBorderWidth = 1
-      selectedCellStyle.cellBorderColor = this.color.orange
-      selectedCellStyle.cellTextColor = this.isLightMode ? this.color.gray9 : this.color.gray1
-      selectedCellStyle.cellTextFontName = this.appFontMedium
-      selectedCellStyle.cellTextFontStyle = CalendarFontStyle.Bold
-      selectedCellStyle.cellTextSize = 16
-      monthViewStyle.selectedDayCellStyle = selectedCellStyle
-      return monthViewStyle
+    todaysTime() {
+      return new Date( this.year, this.month, this.today, 0 ).getTime()
     },
     getRecipes() {
-      if ( this.selectedDayMealPlans.length ) {
-        return this.selectedDayMealPlans.reduce( ( acc, e ) => {
-          switch ( e.startDate.getHours() ) {
-            case 0: //breakfast
-              acc[ "breakfast" ] = [ ...( acc[ "breakfast" ] || [] ), e.title ]
-              break
-            case 5: //lunch
-              acc[ "lunch" ] = [ ...( acc[ "lunch" ] || [] ), e.title ]
-              break
-            case 10: //dinner
-              acc[ "dinner" ] = [ ...( acc[ "dinner" ] || [] ), e.title ]
-              break
-            case 15: //snacks
-              acc[ "snacks" ] = [ ...( acc[ "snacks" ] || [] ), e.title ]
-              break
-            default:
-              break
+      if ( this.mealPlans.length ) {
+        return this.mealPlans.reduce( ( acc, e ) => {
+          if ( e.date == this.todaysTime ) {
+            acc[ e.type ] = [ ...( acc[ e.type ] || [] ), e.title ]
           }
           return acc
         }, {} )
       } else return 0
     },
-    getMealPlans() {
-      const getDate = ( date ) => {
-        let d = new Date( date )
-        let result = new Date( d.getFullYear(), d.getMonth(), d.getDate(), d.getHours() )
-        return result
+    getCal() {
+      let y = this.year
+      let m = this.month
+      let t = this.today
+      let d = new Date( y, m, t )
+      let ds = new Date( y, m + 1, 0 ).getDate()
+      let fd = new Date( y, m, 1 ).getDay()
+      let days = new Array( fd ).fill( 0 )
+      for ( let i = 1; i <= ds; i++ ) {
+        days.push( i )
       }
-      let events = []
-      this.mealPlans.forEach( ( plan ) => {
-        let e = new CalendarEvent( plan.title, getDate( plan.startDate ), getDate( plan.endDate ), false, new Color( plan.eventColor ) )
-        events = [ ...events, e ]
-      } )
-      return events
+      return days;
     },
   },
   methods: {
-    ...mapActions( [ "setCurrentComponentAction", "initializeMealPlans", "addMealPlanAction", "deleteMealPlanAction", ] ),
+    ...mapActions( [ "setCurrentComponentAction", "addMealPlanAction", "deleteMealPlanAction", ] ),
     onPageLoad( args ) {
       const page = args.object;
       page.bindingContext = new Observable();
       this.setCurrentComponentAction( "MealPlanner" )
+      if ( !this.today || this.today === new Date().getDate() ) this.goToToday()
     },
-    onPageUnload(args){
+    onPageUnload( args ) {
       snackbar.dismiss()
     },
-    onCalendarLoad( args ) {
-      args.object.locale = `${Device.language}-${Device.language.toUpperCase()}`
-      args.object.monthViewStyle = this.monthViewStyle
-      args.object.android.getGestureManager().setDoubleTapToChangeDisplayMode( false )
-      args.object.android.getGestureManager().setPinchCloseToChangeDisplayMode( false )
-      if ( args.object.selectedDate == null ) args.object.selectedDate = new Date()
-      if ( args.object.nativeView.getEventAdapter() ) {
-        args.object.nativeView.getEventAdapter().getRenderer().setEventRenderMode( com.telerik.widget.calendar.events.EventRenderMode.Shape )
-      }
-    },
     // HELPERS
-    showDrawer() {
-      utils.showDrawer()
-    },
-    onScroll( args ) {
-      this.viewIsScrolled = args.scrollY ? true : false
+    getrow( i ) {
+      return Math.floor( 2 + i / 7 );
     },
     getDate( index ) {
       let date = new Date()
       date.setDate( date.getDate() + index )
       return date.getTime()
     },
-    getDateString( days ) {
-      let date = new Date()
-      date.setDate( date.getDate() + days )
-      return date.toDateString().slice( 0, -5 )
-    },
     getRecipeTitle( id ) {
       let recipe = this.recipes.filter( ( e ) => e.id === id )[ 0 ]
       return recipe ? recipe.title : `[ ${this.$options.filters.L('resNF')} ]`
     },
+    centerLabel( args ) {
+      args.object.android.setGravity( 17 )
+    },
+
     // NAVIGATION HANDLERS
     viewRecipe( recipeID ) {
       let recipe = this.recipes.filter( ( e ) => e.id === recipeID )[ 0 ]
@@ -253,119 +140,94 @@ export default {
             filterTrylater: true,
             recipeID,
           },
-          backstackVisible: false,
         } )
       }
     },
+    // CALENDAR
+    prevMonth() {
+      if ( this.month == 0 ) {
+        this.year--
+        this.month = 11
+      } else this.month--
+    },
+    nextMonth() {
+      if ( this.month == 11 ) {
+        this.year++
+        this.month = 0
+      } else this.month++
+    },
+    goToToday() {
+      let d = new Date()
+      this.year = d.getFullYear()
+      this.month = d.getMonth()
+      this.today = d.getDate()
+    },
+    isToday( date ) {
+      let d = new Date()
+      return this.year == d.getFullYear() && this.month == d.getMonth() && date == d.getDate()
+    },
+    isActive( date ) {
+      return this.today == date
+    },
+    hasPlans( date ) {
+      let d = new Date( this.year, this.month, date, 0 ).getTime()
+      return this.mealPlans.filter( e => e.date == d ).length
+    },
+    setToday( date ) {
+      if ( date ) this.today = date
+    },
+    newMealPlan( title, date, type, index ) {
+      this.addMealPlanAction( {
+        title,
+        date: date ? date : this.todaysTime,
+        type,
+        index
+      } )
+    },
     // DATA HANDLERS
-    addRecipe( mealType ) {
-      let filteredRecipes = this.recipes.filter( ( e ) => this.getRecipes[ mealType ] ? !this.getRecipes[ mealType ].includes( e.id ) : true )
+    addRecipe( type ) {
+      let filteredRecipes = this.recipes.filter( ( e ) => this.getRecipes[ type ] ? !this.getRecipes[ type ].includes( e.id ) : true )
       this.$showModal( ActionDialogWithSearch, {
         props: {
           title: "selRec",
           recipes: filteredRecipes,
-          helpIcon: "calendar",
+          helpIcon: "cal",
         },
-      } ).then( ( recipeID ) => {
-        recipeID && this.newEvent( recipeID, mealType, null )
+      } ).then( ( title ) => {
+        title && this.newMealPlan( title, null, type, null )
+      } )
+    },
+    removeRecipe( title, type ) {
+      let date = this.todaysTime
+      let index = this.mealPlans.findIndex( e => e.title === title && e.type === type && e.date === date )
+      let mealPlan = {
+        title,
+        date,
+        type,
+        index
+      }
+      this.deleteMealPlanAction( mealPlan )
+      this.undoRemove( `${this.$options.filters.L('recRm')}` ).then( res => {
+        if ( res.command === 'action' ) {
+          this.newMealPlan( title, date, type, index )
+        }
       } )
     },
     undoRemove( message ) {
       return snackbar
         .action( {
           message,
-          textColor: this.appTheme == "Light" ? "#f1f3f5" : "#212529",
+          textColor: this.appTheme == "Light" ? "#fff" : "#292929",
           actionTextColor: '#ff5200',
-          backgroundColor: this.appTheme == "Light" ? "#212529" : "#f1f3f5",
+          backgroundColor: this.appTheme == "Light" ? "#292929" : "#fff",
           actionText: 'Undo',
           hideDelay: 5000
         } )
     },
-    removeRecipe( mealType, recipeID ) {
-      let startHour = {
-        breakfast: 0,
-        lunch: 5,
-        dinner: 10,
-        snacks: 15,
-      }
-      let actualMealPlan = this.selectedDayMealPlans.filter(
-        ( e ) => e.startDate.getHours() === startHour[ mealType ] && e.title === recipeID )[ 0 ]
-      let mealPlan = {
-        title: actualMealPlan.title,
-        startDate: actualMealPlan.startDate,
-      }
-      let index = this.mealPlans.findIndex( e =>
-        e.title === mealPlan.title && new Date( e.startDate ).getTime() === new Date( mealPlan.startDate ).getTime() )
-      this.deleteMealPlanAction( mealPlan )
-      this.updateSelectedDatePlans()
-      this.undoRemove( `${this.$options.filters.L('recRm')}` ).then( res => {
-        if ( res.command === 'action' ) {
-          this.newEvent( recipeID, mealType, index )
-        }
-      } )
-    },
-    // CALENDAR
-    updateSelectedDatePlans() {
-      let date = new Date( this.selectedDate )
-      setTimeout( () => {
-        this.selectedDayMealPlans = this.$refs.calendar.nativeView.getEventsForDate( date )
-      }, 100 )
-    },
-    onDateSelected( args ) {
-      this.selectedDate = args.date
-      this.selectedDayMealPlans = args.object.getEventsForDate( args.date )
-    },
-    newEvent( recipeID, mealType, index ) {
-      let date = new Date( this.selectedDate )
-      const selectedDate = () => {
-        return {
-          y: date.getFullYear(),
-          m: date.getMonth(),
-          d: date.getDate(),
-        }
-      }
-      let {
-        y,
-        m,
-        d
-      } = selectedDate()
-      let mealTime = {
-        breakfast: {
-          start: new Date( y, m, d, 0 ),
-          end: new Date( y, m, d, 4 ),
-        },
-        lunch: {
-          start: new Date( y, m, d, 5 ),
-          end: new Date( y, m, d, 9 ),
-        },
-        dinner: {
-          start: new Date( y, m, d, 10 ),
-          end: new Date( y, m, d, 14 ),
-        },
-        snacks: {
-          start: new Date( y, m, d, 15 ),
-          end: new Date( y, m, d, 19 ),
-        },
-      }
-      let event = new CalendarEvent( recipeID, mealTime[ mealType ].start, mealTime[ mealType ].end, false, new Color( this.color[ mealType ] ) )
-      this.addMealPlanAction( {
-        event,
-        eventColor: this.color[ mealType ],
-        index
-      } )
-      this.updateSelectedDatePlans()
-    },
-    goToToday() {
-      const date = new Date()
-      this.$refs.calendar.goToDate( date )
-      this.$refs.calendar.nativeView.selectedDate = date
-    },
+
   },
   created() {
     this.appTheme = ApplicationSettings.getString( "appTheme", "Light" )
-    let d = new Date()
-    d.setHours( 0, 0, 0 )
-    this.selectedDate = d
   },
 }
 </script>
