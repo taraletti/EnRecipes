@@ -464,5 +464,6 @@
     "sltd": "sélectionné",
     "recs": "recettes",
     "delRecsInfo": "Vous êtes sur le point de supprimer définitivement:",
-    "trnsl": "Traduire"
+    "trnsl": "Traduire",
+    "undo": "Annuler"
 }
