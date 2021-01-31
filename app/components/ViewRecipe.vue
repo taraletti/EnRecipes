@@ -50,7 +50,7 @@
               <Label class="attr" :text="`${$options.filters.L('Cooking time')}: ${formattedTime(recipe.cookTime)}`" textWrap="true" />
               <FlexboxLayout v-if="recipe.tags.length" class="tagsContainer" flexWrap="wrap">
                 <Label class="tagsTitle" :text="`${$options.filters.L('ts')}: `" />
-                <Label v-for="(tag, index) in recipe.tags" :key="index" v-if="tag" :text="tag" class="tag" textWrap="false" />
+                <Label v-for="(tag, index) in recipe.tags" :key="index" :text="tag" class="tag" textWrap="false" />
               </FlexboxLayout>
               <GridLayout rows="auto, auto" columns="*, *" class="overviewContainer">
                 <GridLayout class="overviewItem" row="0" col="0" rows="auto, auto" columns="*">

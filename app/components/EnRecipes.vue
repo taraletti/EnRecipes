@@ -41,7 +41,7 @@
               " />
                 </StackLayout>
                 <StackLayout class="tagsContainer" orientation="horizontal" row="2">
-                  <Label v-for="(tag, index) in recipe.tags" :key="index" v-if="tag" class="tag" :text="tag" />
+                  <Label v-for="(tag, index) in recipe.tags" :key="index" class="tag" :text="tag" />
                 </StackLayout>
               </GridLayout>
             </StackLayout>
@@ -117,17 +117,13 @@
   </AbsoluteLayout>
 </Page>
 </template>
-
 <script>
 import {
-  Frame,
   ApplicationSettings,
   AndroidApplication,
   Utils,
   Observable,
   Device,
-  ObservableArray,
-  GestureTypes,
   Screen
 }
 from "@nativescript/core";

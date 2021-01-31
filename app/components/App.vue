@@ -82,12 +82,9 @@ import {
   ApplicationSettings,
   AndroidApplication,
   Application,
-  Device
 }
 from "@nativescript/core"
 import Theme from "@nativescript/theme"
-import * as Toast from "nativescript-toast"
-import * as application from "tns-core-modules/application"
 import {
   localize
 }

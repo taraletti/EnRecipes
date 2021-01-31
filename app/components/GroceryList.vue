@@ -16,10 +16,7 @@
 <script>
 import {
   ApplicationSettings,
-  Color,
-  Page,
   Observable,
-  Device
 }
 from "@nativescript/core"
 import {
@@ -31,7 +28,6 @@ import {
   mapActions
 }
 from "vuex"
-import ConfirmDialog from "./modal/ConfirmDialog.vue"
 export default {
   data() {
     return {
