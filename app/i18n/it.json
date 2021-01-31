@@ -1,5 +1,5 @@
 {
-    "app.name": "",
+    "app.name": "EnRecipes",
     "EnRecipes": "EnRecipes",
     "trylater": "Prova più tardi",
     "favourites": "Preferiti",
@@ -305,5 +305,6 @@
     "January": "gennaio",
     "trySer": "CERCARE IN TUTTE LE RICETTE?",
     "reqAcc": "EnRecipes richiede l'autorizzazione all'archiviazione per impostare la foto della ricetta, esportare e importare i dati",
-    "trnsl": "Traduci"
+    "trnsl": "Traduci",
+    "undo": "Annulla"
 }

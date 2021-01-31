@@ -1,5 +1,5 @@
 {
-    "app.name": "",
+    "app.name": "EnRecipes",
     "EnRecipes": "EnRecipes",
     "Try Later": "",
     "Favourites": "",
@@ -464,5 +464,6 @@
     "sltd": "sélectionné",
     "recs": "recettes",
     "delRecsInfo": "Vous êtes sur le point de supprimer définitivement :",
-    "trnsl": "Traduire"
+    "trnsl": "Traduire",
+    "undo": "Annuler"
 }
