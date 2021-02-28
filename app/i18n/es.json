@@ -301,5 +301,6 @@
     "FRI": "VIE",
     "SAT": "SAB",
     "trnsl": "Traducir",
-    "undo": "Deshacer"
+    "undo": "Deshacer",
+    "noAccSensor": "El sensor del acelerómetro está desactivado o no funciona"
 }
