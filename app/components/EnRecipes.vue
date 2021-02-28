@@ -347,6 +347,7 @@ import EditRecipe from "./EditRecipe.vue";
 import ViewRecipe from "./ViewRecipe.vue";
 import ActionDialog from "./modal/ActionDialog.vue";
 import ConfirmDialog from "./modal/ConfirmDialog.vue";
+import * as utils from "~/shared/utils.js";
 let lastTime = 0;
 let lastShake = 0;
 let lastForce = 0;
@@ -465,6 +466,7 @@ export default {
       "setSortTypeAction",
       "deleteRecipeAction",
       "deleteRecipesAction",
+      "setShakeAction",
     ]),
     onPageLoad(args) {
       const page = args.object;
@@ -477,8 +479,11 @@ export default {
         ? this.setComponent("Filtered recipes")
         : this.setComponent("EnRecipes");
       if (!this.selectMode) this.showFAB = true;
-      if (this.shakeEnabled)
-        startAccelerometerUpdates((data) => this.onSensorData(data));
+      if (this.shakeEnabled) {
+        if (utils.hasAccelerometer())
+          startAccelerometerUpdates((data) => this.onSensorData(data));
+        else this.setShakeAction(false);
+      }
       if (this.showSearch || this.selectMode) this.hijackLocalBackEvent();
       this.showDrawer();
       this.closeDrawer();

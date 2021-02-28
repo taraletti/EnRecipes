@@ -397,9 +397,13 @@ export default {
     // SHAKE VIEW RANDOM RECIPE
     toggleShake(args) {
       let checked = args.object.checked;
-      // let checked = !this.shakeEnabled
-      ApplicationSettings.setBoolean("shakeEnabled", checked);
-      this.setShakeAction(checked);
+      if (checked && !utils.hasAccelerometer()) {
+        args.object.checked = false;
+        Toast.makeText(localize("noAccSensor"), "long").show();
+      } else {
+        ApplicationSettings.setBoolean("shakeEnabled", checked);
+        this.setShakeAction(checked);
+      }
     },
     // EXPORT HANDLERS
     exportCheck() {
