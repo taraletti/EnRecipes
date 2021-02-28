@@ -1,6 +1,6 @@
 // NativeScript core theme
 // @see https://docs.nativescript.org/ui/theme
-@import "~@nativescript/theme/core"; // Override variables here
+@import '~@nativescript/theme/core'; // Override variables here
 $gray0: #fff;
 $gray1: #f0f0f0;
 $gray2: #e0e0e0;
@@ -10,7 +10,7 @@ $gray5: #858585;
 $gray6: #575757;
 $gray7: #393939;
 $gray8: #292929;
-$gray9: #1A1A1A;
+$gray9: #1a1a1a;
 $gray10: #000;
 $orange: #ff5200;
 $fabRipple: #ffa94d;
@@ -265,7 +265,7 @@ ActionBar {
   &.selected {
     color: $orange;
     background: rgba($orange, 0.1);
-    MDRipple {
+    .mdr {
       ripple-color: transparent;
     }
   }
@@ -278,7 +278,7 @@ ActionBar {
       padding: 0 0 0 16;
     }
   }
-  MDRipple {
+  .mdr {
     padding: 0 16;
   }
   MDButton.er {
@@ -306,7 +306,7 @@ ActionBar {
   text-align: center;
   margin: 8;
 }
-MDRipple {
+.mdr {
   border-radius: 4;
 }
 MDButton {
@@ -322,7 +322,7 @@ MDButton {
   }
 }
 MDButton,
-MDRipple {
+.mdr {
   ripple-color: rgba($gray5, 0.2);
 }
 // -----------------------------
