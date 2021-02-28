@@ -301,5 +301,6 @@
     "FRI": "ven",
     "SAT": "sab",
     "trnsl": "Traduci",
-    "undo": "Annulla"
+    "undo": "Annulla",
+    "noAccSensor": "Il sensore dell’accelerometro è disabilitato o non funziona"
 }
