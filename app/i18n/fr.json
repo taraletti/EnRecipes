@@ -301,5 +301,6 @@
     "FRI": "ven",
     "SAT": "sam",
     "trnsl": "Traduire",
-    "undo": "Annuler"
+    "undo": "Annuler",
+    "noAccSensor": "Le capteur de l’accéléromètre est désactivé ou ne fonctionne pas"
 }
