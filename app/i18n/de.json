@@ -301,5 +301,6 @@
     "FRI": "Fr.",
     "SAT": "Sa.",
     "trnsl": "Übersetzen",
-    "undo": "Rückgängig"
+    "undo": "Rückgängig",
+    "noAccSensor": "Der Beschleunigungssensor ist entweder deaktiviert oder funktioniert nicht"
 }
