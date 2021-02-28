@@ -301,5 +301,6 @@
   "FRI": "FRI",
   "SAT": "SAT",
   "trnsl": "Translate",
-  "undo": "Undo"
+  "undo": "Undo",
+  "noAccSensor": "Accelerometer sensor is either disabled or is not working"
 }
