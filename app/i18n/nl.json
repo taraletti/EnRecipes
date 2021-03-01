@@ -302,5 +302,9 @@
     "SAT": "ZA",
     "trnsl": "Vertalen",
     "undo": "Ongedaan maken",
-    "noAccSensor": "De versnellingsmetersensor is uitgeschakeld of werkt niet"
+    "noAccSensor": "De versnellingsmetersensor is uitgeschakeld of werkt niet",
+    "grid": "Rooster",
+    "simple": "Eenvoudig",
+    "detailed": "Uitgebreid",
+    "listVM": "Lijstweergave"
 }
