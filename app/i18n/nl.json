@@ -301,5 +301,6 @@
     "FRI": "VRIJ",
     "SAT": "ZA",
     "trnsl": "Vertalen",
-    "undo": "Ongedaan maken"
+    "undo": "Ongedaan maken",
+    "noAccSensor": "De versnellingsmetersensor is uitgeschakeld of werkt niet"
 }
