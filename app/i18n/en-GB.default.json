@@ -302,5 +302,9 @@
   "SAT": "SAT",
   "trnsl": "Translate",
   "undo": "Undo",
-  "noAccSensor": "Accelerometer sensor is either disabled or is not working"
+  "noAccSensor": "Accelerometer sensor is either disabled or is not working",
+  "listVM": "List view mode",
+  "detailed": "Detailed",
+  "simple": "Simple",
+  "grid": "Grid"
 }

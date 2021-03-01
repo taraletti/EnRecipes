@@ -41,7 +41,14 @@
           :text="`${currentComponent}` | L"
           col="1"
         />
-        <!-- <MDButton v-if="recipes.length" class="er" :text="layout== 1 ? icon.l1 : layout==2 ? icon.l2 : icon.l3" variant="text" col="2" @tap="switchLayout" /> -->
+        <MDButton
+          v-if="recipes.length"
+          class="er mdr"
+          :text="layout == 1 ? icon.l1 : layout == 2 ? icon.l2 : icon.l3"
+          variant="text"
+          col="2"
+          @tap="switchLayout"
+        />
         <MDButton
           v-if="recipes.length && !selectMode"
           class="er"
@@ -61,14 +68,14 @@
       </GridLayout>
     </ActionBar>
     <AbsoluteLayout>
-      <ListView
+      <CollectionView
         width="100%"
         height="100%"
         for="recipe in filteredRecipes"
-        @loaded="listViewLoad"
+        ref="listview"
         :itemTemplateSelector="getLayout"
       >
-        <v-template key="one">
+        <v-template name="one">
           <GridLayout class="recipeContainer" :class="isFirstItem(recipe.id)">
             <GridLayout
               class="recipeItem layout1 mdr"
@@ -152,8 +159,7 @@
             </GridLayout>
           </GridLayout>
         </v-template>
-
-        <!-- <v-template key="two">
+        <v-template name="two">
           <GridLayout class="recipeContainer" :class="isFirstItem(recipe.id)">
             <GridLayout
               class="recipeItem layout2 mdr"
@@ -218,7 +224,7 @@
             </GridLayout>
           </GridLayout>
         </v-template>
-        <v-template key="three">
+        <v-template name="three">
           <GridLayout class="recipeContainer" :class="isFirstItem(recipe.id)">
             <GridLayout
               class="recipeItem layout1 mdr"
@@ -257,8 +263,8 @@
               </StackLayout>
             </GridLayout>
           </GridLayout>
-        </v-template> -->
-      </ListView>
+        </v-template>
+      </CollectionView>
       <GridLayout rows="*, auto, *, 88" columns="*" class="emptyStateContainer">
         <StackLayout
           row="1"
@@ -499,10 +505,11 @@ export default {
       e.setDivider(null);
       e.setDividerHeight(1);
     },
-    // switchLayout() {
-    //   if ( this.layout == 2 ) this.layout = 1
-    //   else this.layout++
-    // },
+    switchLayout() {
+      if (this.layout == 3) this.layout = 1;
+      else this.layout++;
+      this.$refs.listview.refresh();
+    },
     getLayout() {
       switch (this.layout) {
         case 1:
@@ -739,17 +746,20 @@ export default {
 
     // DATA HANDLERS
     addToSelection(args, id) {
+      // console.log(args, id);
       this.showFAB = false;
       if (!this.selectMode) this.hijackLocalBackEvent();
       this.selectMode = true;
       this.$emit("selectModeOn", false);
       let item = args.object;
-      if (item.className === "selected") {
-        item.className = "";
+      console.log(item.className);
+      let classes = item.className;
+      if (classes.includes("selected")) {
+        item.className = classes.replace(/selected/g, "");
         this.selection.splice(this.selection.indexOf(id), 1);
         this.recipeList.splice(this.selection.indexOf(id), 1);
       } else {
-        item.className = "selected";
+        item.className = classes + " selected";
         this.selection.push(id);
         this.recipeList.push(item);
       }
@@ -759,7 +769,9 @@ export default {
       this.selectMode = false;
       this.$emit("selectModeOn", true);
       this.selection = [];
-      this.recipeList.forEach((e) => (e.className = ""));
+      this.recipeList.forEach((e) => {
+        e.className = e.className.replace(/selected/g, "");
+      });
       this.releaseLocalBackEvent();
       this.showFAB = true;
     },
