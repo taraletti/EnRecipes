@@ -182,7 +182,7 @@
     "recPic": "Oppskriftsbilde",
     "repBtn": "Erstatt bilde",
     "cPic": "Beskjær bilde",
-    "breakfast": "frokost",
+    "breakfast": "Frokost",
     "lunch": "lunsj",
     "dinner": "middag",
     "snacks": "snacks",
@@ -301,5 +301,10 @@
     "FRI": "Fre",
     "SAT": "Sat",
     "trnsl": "Oversett",
-    "undo": "Angre"
+    "undo": "Angre",
+    "noAccSensor": "Akselerometer enten avksrudd eller ute av stand",
+    "listVM": "Listevisingsmodus",
+    "simple": "Enkelt",
+    "grid": "Rutenett",
+    "detailed": "Detaljert"
 }
