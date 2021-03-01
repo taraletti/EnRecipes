@@ -78,10 +78,10 @@
     "large": "stor",
     "strAdd": "Begynd at tilføje dine opskrifter",
     "plsAdd": "Brug knappen for at tilføje en",
-    "pAIng": "",
-    "pAIns": "",
-    "pACmb": "",
-    "pANo": "",
+    "pAIng": "Brug blyantknappen til at tilføje ingredienser",
+    "pAIns": "Brug blyantknappen til at tilføje nstruktioner",
+    "pACmb": "Brug blyantknappen til at tilføje kombinationer",
+    "pANo": "Brug blyantknappen til at tilføje notater",
     "aD": "Fuldendt!",
     "tLInfo": "Opskrifter du vil prøve senere, er vist her",
     "noFavs": "Endnu ingen favoritter",
@@ -300,6 +300,6 @@
     "THU": "",
     "FRI": "",
     "SAT": "",
-    "trnsl": "",
+    "trnsl": "Oversæt",
     "undo": ""
 }
