@@ -302,5 +302,9 @@
     "SAT": "sab",
     "trnsl": "Traduci",
     "undo": "Annulla",
-    "noAccSensor": "Il sensore dell’accelerometro è disabilitato o non funziona"
+    "noAccSensor": "Il sensore dell’accelerometro è disabilitato o non funziona",
+    "grid": "Griglia",
+    "simple": "Semplice",
+    "detailed": "Dettagliata",
+    "listVM": "Modalità visualizzazione lista"
 }
