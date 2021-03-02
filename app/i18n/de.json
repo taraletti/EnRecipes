@@ -302,5 +302,9 @@
     "SAT": "Sa.",
     "trnsl": "Übersetzen",
     "undo": "Rückgängig",
-    "noAccSensor": "Der Beschleunigungssensor ist entweder deaktiviert oder funktioniert nicht"
+    "noAccSensor": "Der Beschleunigungssensor ist entweder deaktiviert oder funktioniert nicht",
+    "grid": "Raster",
+    "simple": "Einfach",
+    "detailed": "Detailliert",
+    "listVM": "Art der Listenansicht"
 }
