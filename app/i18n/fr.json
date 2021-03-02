@@ -302,5 +302,9 @@
     "SAT": "sam",
     "trnsl": "Traduire",
     "undo": "Annuler",
-    "noAccSensor": "Le capteur de l’accéléromètre est désactivé ou ne fonctionne pas"
+    "noAccSensor": "Le capteur de l’accéléromètre est désactivé ou ne fonctionne pas",
+    "listVM": "Type de vue en liste",
+    "grid": "Grille",
+    "simple": "Simple",
+    "detailed": "Détaillée"
 }
