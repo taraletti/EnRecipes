@@ -302,5 +302,9 @@
     "SAT": "SAB",
     "trnsl": "Traducir",
     "undo": "Deshacer",
-    "noAccSensor": "El sensor del acelerómetro está desactivado o no funciona"
+    "noAccSensor": "El sensor del acelerómetro está desactivado o no funciona",
+    "grid": "Cuadrícula",
+    "simple": "Simple",
+    "detailed": "Detallado",
+    "listVM": "Modo vista en lista"
 }
