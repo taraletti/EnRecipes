@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page @loaded="onPageLoad" backgroundColor="transparent">
     <GridLayout
       columns="*"
       rows="auto, auto, auto, *, auto"
@@ -118,6 +118,16 @@ export default {
     },
   },
   methods: {
+    onPageLoad(args) {
+      args.object._dialogFragment
+        .getDialog()
+        .getWindow()
+        .setBackgroundDrawable(
+          new android.graphics.drawable.ColorDrawable(
+            android.graphics.Color.TRANSPARENT
+          )
+        );
+    },
     tapAction(recipe) {
       this.$modal.close(recipe.id);
     },

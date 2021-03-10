@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page @loaded="onPageLoad" backgroundColor="transparent">
     <StackLayout class="dialogContainer" :class="appTheme">
       <Label
         class="er dialogIcon"
@@ -74,6 +74,18 @@ export default {
     },
     bgColor() {
       return this.isLightMode ? "#fff" : "#292929";
+    },
+  },
+  methods: {
+    onPageLoad(args) {
+      args.object._dialogFragment
+        .getDialog()
+        .getWindow()
+        .setBackgroundDrawable(
+          new android.graphics.drawable.ColorDrawable(
+            android.graphics.Color.TRANSPARENT
+          )
+        );
     },
   },
 };

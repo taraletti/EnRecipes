@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page @loaded="onPageLoad" backgroundColor="transparent">
     <StackLayout class="dialogContainer" :class="appTheme">
       <Label
         class="er dialogIcon"
@@ -97,6 +97,16 @@ export default {
     },
   },
   methods: {
+    onPageLoad(args) {
+      args.object._dialogFragment
+        .getDialog()
+        .getWindow()
+        .setBackgroundDrawable(
+          new android.graphics.drawable.ColorDrawable(
+            android.graphics.Color.TRANSPARENT
+          )
+        );
+    },
     setHrs(args) {
       let hr = "0" + this.hrs[args.object.selectedIndex];
       this.selectedHrs = hr.slice(-2);

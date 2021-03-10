@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page @loaded="onPageLoad" backgroundColor="transparent">
     <StackLayout class="dialogContainer" :class="appTheme">
       <Label
         class="er dialogIcon"
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { Application } from "@nativescript/core";
+import { Application, Color } from "@nativescript/core";
 import { mapState } from "vuex";
 export default {
   props: [
@@ -57,6 +57,18 @@ export default {
     },
     iconColor() {
       return this.isLightMode ? "#f0f0f0" : "#1A1A1A";
+    },
+  },
+  methods: {
+    onPageLoad(args) {
+      args.object._dialogFragment
+        .getDialog()
+        .getWindow()
+        .setBackgroundDrawable(
+          new android.graphics.drawable.ColorDrawable(
+            android.graphics.Color.TRANSPARENT
+          )
+        );
     },
   },
 };

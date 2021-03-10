@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page @loaded="onPageLoad" backgroundColor="transparent">
     <StackLayout class="dialogContainer" :class="appTheme">
       <Label
         class="er dialogIcon"
@@ -61,6 +61,16 @@ export default {
     },
   },
   methods: {
+    onPageLoad(args) {
+      args.object._dialogFragment
+        .getDialog()
+        .getWindow()
+        .setBackgroundDrawable(
+          new android.graphics.drawable.ColorDrawable(
+            android.graphics.Color.TRANSPARENT
+          )
+        );
+    },
     focusField(args) {
       args.object.focus();
       setTimeout((e) => Utils.ad.showSoftInput(args.object.android), 1);

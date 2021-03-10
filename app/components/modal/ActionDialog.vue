@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page @loaded="onPageLoad" backgroundColor="transparent">
     <GridLayout
       columns="*"
       :rows="`auto, auto, ${stretch ? '*' : 'auto'}, auto`"
@@ -64,6 +64,7 @@ import * as Toast from "nativescript-toast";
 import { localize } from "@nativescript/localize";
 import { mapState, mapActions } from "vuex";
 import ConfirmDialog from "./ConfirmDialog.vue";
+
 export default {
   props: ["title", "list", "stretch", "action", "helpIcon"],
   data() {
@@ -85,6 +86,16 @@ export default {
   },
   methods: {
     ...mapActions(["removeListItemAction"]),
+    onPageLoad(args) {
+      args.object._dialogFragment
+        .getDialog()
+        .getWindow()
+        .setBackgroundDrawable(
+          new android.graphics.drawable.ColorDrawable(
+            android.graphics.Color.TRANSPARENT
+          )
+        );
+    },
     localized(item) {
       if (this.title !== "lang") return localize(item);
       else return item;
