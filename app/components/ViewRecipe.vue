@@ -51,8 +51,9 @@
         :selectedIndex="selectedTabIndex"
         @selectedIndexChange="selectedIndexChange"
         class="viewRecipe"
+        elevation="0"
       >
-        <TabStrip androidElevation="1">
+        <TabStrip flat="true">
           <TabStripItem>
             <Label :text="'ovw' | L"></Label>
           </TabStripItem>
@@ -274,20 +275,19 @@
               </StackLayout>
             </GridLayout>
             <StackLayout v-else padding="24 16 72">
-              <AbsoluteLayout class="inputField">
-                <TextField
-                  width="50%"
-                  v-model="yieldMultiplier"
-                  keyboardType="number"
-                />
+              <StackLayout class="inputField">
                 <Label
-                  top="0"
                   class="fieldLabel"
                   :text="`${$options.filters.L('req')} ${$options.filters.L(
                     recipe.yield.unit
                   )}`"
                 />
-              </AbsoluteLayout>
+                <TextField
+                  width="50%"
+                  v-model="yieldMultiplier"
+                  keyboardType="number"
+                />
+              </StackLayout>
               <Label
                 padding="16 0 8"
                 class="title orkm"
@@ -395,7 +395,7 @@
                 columns="*"
                 v-for="(combination, index) in recipe.combinations"
                 :key="index"
-                androidElevation="1"
+                elevation="1"
                 class="combination mdr"
                 @tap="viewCombination(combination)"
               >

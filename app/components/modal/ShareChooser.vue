@@ -1,13 +1,13 @@
 <template>
   <Page @loaded="onPageLoad" backgroundColor="transparent">
     <StackLayout class="dialogContainer" :class="appTheme">
-      <Label
-        class="er dialogIcon"
-        backgroundColor="#858585"
-        :color="iconColor"
-        :text="icon[helpIcon]"
-      />
-      <Label class="dialogTitle orkm" :text="`${title}` | L" />
+      <StackLayout class="dialogHeader" orientation="horizontal">
+        <Label
+          class="er dialogIcon"
+          :text="icon[helpIcon]"
+        />
+        <Label class="dialogTitle orkm" :text="`${title}` | L" />
+      </StackLayout>
       <GridLayout rows="auto, auto, auto" columns="*" class="actionsContainer">
         <GridLayout
           class="shareItem mdr"
@@ -68,9 +68,6 @@ export default {
     },
     isLightMode() {
       return this.appTheme == "light";
-    },
-    iconColor() {
-      return this.isLightMode ? "#f0f0f0" : "#1A1A1A";
     },
     bgColor() {
       return this.isLightMode ? "#fff" : "#292929";

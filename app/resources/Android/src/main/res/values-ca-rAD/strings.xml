@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="undo">""</string>
   <string name="trnsl">""</string>
   <string name="SAT">""</string>
   <string name="FRI">""</string>
@@ -309,5 +310,4 @@
   <string name="detailed">"Detailed"</string>
   <string name="listVM">"List view mode"</string>
   <string name="noAccSensor">"Accelerometer sensor is either disabled or is not working"</string>
-  <string name="undo">"Undo"</string>
 </resources>

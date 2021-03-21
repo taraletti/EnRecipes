@@ -1,13 +1,18 @@
 <template>
   <Page @loaded="onPageLoad" backgroundColor="transparent">
     <StackLayout class="dialogContainer" :class="appTheme">
-      <Label
-        class="er dialogIcon"
-        :backgroundColor="bgColor"
-        :color="iconColor"
-        :text="icon[helpIcon]"
-      />
-      <Label class="dialogTitle orkm" :text="`${title}` | L" textWrap="true" />
+      <StackLayout class="dialogHeader" orientation="horizontal">
+        <Label
+          class="er dialogIcon"
+          :color="iconColor"
+          :text="icon[helpIcon]"
+        />
+        <Label
+          class="dialogTitle orkm"
+          :text="`${title}` | L"
+          textWrap="true"
+        />
+      </StackLayout>
       <Label
         v-if="description"
         class="dialogDescription"
@@ -45,18 +50,12 @@ export default {
     "cancelButtonText",
     "okButtonText",
     "helpIcon",
-    "bgColor",
+    "iconColor",
   ],
   computed: {
     ...mapState(["icon"]),
     appTheme() {
       return Application.systemAppearance();
-    },
-    isLightMode() {
-      return this.appTheme == "light";
-    },
-    iconColor() {
-      return this.isLightMode ? "#f0f0f0" : "#1A1A1A";
     },
   },
   methods: {

@@ -1,6 +1,6 @@
 <template>
   <Page @loaded="onPageLoad" @unloaded="onPageUnload">
-    <ActionBar androidElevation="1">
+    <ActionBar flat="true">
       <GridLayout
         v-if="showSearch"
         columns="auto, *"
@@ -21,7 +21,7 @@
           @clear="clearSearch"
         />
       </GridLayout>
-      <GridLayout v-else columns="auto, *, auto, auto, auto">
+      <GridLayout v-else columns="auto, *, auto, auto">
         <MDButton
           class="er"
           col="0"
@@ -42,19 +42,11 @@
           col="1"
         />
         <MDButton
-          v-if="recipes.length"
-          class="er mdr"
-          :text="layout == 1 ? icon.l1 : layout == 2 ? icon.l2 : icon.l3"
-          variant="text"
-          col="2"
-          @tap="switchLayout"
-        />
-        <MDButton
           v-if="recipes.length && !selectMode"
           class="er"
           :text="selectMode ? icon.export : icon.sear"
           variant="text"
-          col="3"
+          col="2"
           @tap="selectMode ? exportSelection() : openSearch()"
         />
         <MDButton
@@ -62,7 +54,7 @@
           class="er"
           :text="selectMode ? icon.del : icon.sort"
           variant="text"
-          col="4"
+          col="3"
           @tap="selectMode ? deleteSelection() : sortDialog()"
         />
       </GridLayout>
@@ -74,14 +66,15 @@
         for="recipe in filteredRecipes"
         ref="listview"
         :itemTemplateSelector="getLayout"
+        :colWidth="layout == 'grid' ? '50%' : '100%'"
       >
-        <v-template name="one">
-          <GridLayout class="recipeContainer" :class="isFirstItem(recipe.id)">
+        <v-template name="detailed">
+          <GridLayout class="recipeContainer" :class="getItemPos(recipe.id)">
+            <!-- elevation="1" -->
             <GridLayout
               class="recipeItem layout1 mdr"
               rows="104"
               columns="104, *"
-              androidElevation="1"
               ref="recipe"
               @longPress="
                 selectMode
@@ -123,7 +116,7 @@
                   class="category"
                 />
                 <Label :text="recipe.title" class="orkm title" />
-                <GridLayout columns="*" rows="auto, *, auto">
+                <GridLayout columns="*" rows="auto, auto">
                   <StackLayout
                     class="attrContainer"
                     orientation="horizontal"
@@ -145,7 +138,7 @@
                   <StackLayout
                     class="tagsContainer"
                     orientation="horizontal"
-                    row="2"
+                    row="1"
                   >
                     <Label
                       v-for="(tag, index) in recipe.tags"
@@ -159,13 +152,57 @@
             </GridLayout>
           </GridLayout>
         </v-template>
-        <v-template name="two">
-          <GridLayout class="recipeContainer" :class="isFirstItem(recipe.id)">
+        <v-template name="simple">
+          <GridLayout class="recipeContainer" :class="getItemPos(recipe.id)">
+            <!-- elevation="1" -->
             <GridLayout
-              class="recipeItem layout2 mdr"
+              class="recipeItem layout1 layout2 mdr"
+              rows="auto"
+              columns="*"
+              ref="recipe"
+              @longPress="
+                selectMode
+                  ? viewRecipe(recipe.id)
+                  : addToSelection($event, recipe.id)
+              "
+              @tap="
+                selectMode
+                  ? addToSelection($event, recipe.id)
+                  : viewRecipe(recipe.id)
+              "
+            >
+              <StackLayout class="recipeInfo">
+                <Label
+                  :text="`${$options.filters.L(
+                    recipe.cuisine
+                  )} • ${$options.filters.L(recipe.category)}`"
+                  class="category"
+                />
+                <Label :text="recipe.title" class="orkm title" />
+                <StackLayout
+                  class="tagsContainer"
+                  v-if="recipe.tags.length"
+                  orientation="horizontal"
+                >
+                  <Label
+                    v-for="(tag, index) in recipe.tags"
+                    :key="index"
+                    v-if="tag"
+                    class="tag"
+                    :text="tag"
+                  />
+                </StackLayout>
+              </StackLayout>
+            </GridLayout>
+          </GridLayout>
+        </v-template>
+        <v-template name="grid">
+          <GridLayout class="recipeContainer" :class="getItemPos(recipe.id)">
+            <!-- elevation="1" -->
+            <GridLayout
+              class="recipeItem layout3 mdr"
               rows="auto, auto"
               columns="*"
-              androidElevation="1"
               ref="recipe"
               @longPress="
                 selectMode
@@ -212,46 +249,6 @@
                   orientation="horizontal"
                   row="2"
                 >
-                  <Label
-                    v-for="(tag, index) in recipe.tags"
-                    :key="index"
-                    v-if="tag"
-                    class="tag"
-                    :text="tag"
-                  />
-                </StackLayout>
-              </StackLayout>
-            </GridLayout>
-          </GridLayout>
-        </v-template>
-        <v-template name="three">
-          <GridLayout class="recipeContainer" :class="isFirstItem(recipe.id)">
-            <GridLayout
-              class="recipeItem layout1 mdr"
-              rows="auto"
-              columns="*"
-              androidElevation="1"
-              ref="recipe"
-              @longPress="
-                selectMode
-                  ? viewRecipe(recipe.id)
-                  : addToSelection($event, recipe.id)
-              "
-              @tap="
-                selectMode
-                  ? addToSelection($event, recipe.id)
-                  : viewRecipe(recipe.id)
-              "
-            >
-              <StackLayout class="recipeInfo">
-                <Label
-                  :text="`${$options.filters.L(
-                    recipe.cuisine
-                  )} • ${$options.filters.L(recipe.category)}`"
-                  class="category"
-                />
-                <Label :text="recipe.title" class="orkm title" />
-                <StackLayout class="tagsContainer" orientation="horizontal">
                   <Label
                     v-for="(tag, index) in recipe.tags"
                     :key="index"
@@ -387,7 +384,6 @@ export default {
       selectMode: false,
       recipeList: [],
       // listView: null,
-      layout: 1,
     };
   },
   computed: {
@@ -397,6 +393,7 @@ export default {
       "recipes",
       "currentComponent",
       "shakeEnabled",
+      "layout",
     ]),
     filteredRecipes() {
       let ingredients = this.recipes
@@ -505,20 +502,8 @@ export default {
       e.setDivider(null);
       e.setDividerHeight(1);
     },
-    switchLayout() {
-      if (this.layout == 3) this.layout = 1;
-      else this.layout++;
-      this.$refs.listview.refresh();
-    },
     getLayout() {
-      switch (this.layout) {
-        case 1:
-          return "one";
-        case 2:
-          return "two";
-        case 3:
-          return "three";
-      }
+      return this.layout;
     },
 
     // HELPERS
@@ -640,23 +625,26 @@ export default {
           break;
       }
     },
-    isFirstItem(id) {
+    getItemPos(id) {
       let length = this.filteredRecipes.length;
-      return id == this.filteredRecipes[0].id
-        ? "firstItem"
-        : id == this.filteredRecipes[length - 1].id
-        ? "lastItem"
-        : "";
+      let l2 = this.layout == "grid";
+      let itemPos =
+        id == this.filteredRecipes[0].id ||
+        (length > 1 && l2 && id == this.filteredRecipes[1].id)
+          ? "firstItem"
+          : id == this.filteredRecipes[length - 1].id ||
+            (length > 1 &&
+              l2 &&
+              this.oddOrEven(id) == " odd" &&
+              id == this.filteredRecipes[length - 2].id)
+          ? "lastItem"
+          : "";
+      return l2 ? itemPos + this.oddOrEven(id) : itemPos;
     },
-    isLastItem(id) {
-      let length = this.filteredRecipes.length;
-      // let lastIsOdd = ( length - 1 ) % 2 == 0
-      // if ( this.filteredRecipes.length > 1 ) {
-      //   if ( id == this.filteredRecipes[ length - 2 ].id ) {
-      //     if ( !lastIsOdd ) return 'lastItem'
-      //   }
-      // }
-      if (id == this.filteredRecipes[length - 1].id) return "lastItem";
+    oddOrEven(id) {
+      return this.filteredRecipes.map((e) => e.id).indexOf(id) % 2 === 0
+        ? " odd"
+        : " even";
     },
 
     // NAVIGATION HANDLERS
@@ -707,7 +695,7 @@ export default {
       this.showFAB = false;
       this.$navigateTo(ViewRecipe, {
         props: {
-          filterTrylater: false,
+          filterTrylater: true,
           recipeID: this.randomRecipeID(),
         },
         backstackVisible: false,
@@ -733,6 +721,7 @@ export default {
           stretch: false,
           helpIcon: "sort",
           bgColor: "#858585",
+          count: 8,
         },
       }).then((action) => {
         if (action && action !== "Cancel" && this.sortType !== action) {
@@ -793,7 +782,7 @@ export default {
           cancelButtonText: "cBtn",
           okButtonText: "dBtn",
           helpIcon: "del",
-          bgColor: "#c92a2a",
+          iconColor: "#c92a2a",
         },
       }).then((action) => {
         if (action) {
@@ -818,7 +807,7 @@ export default {
           cancelButtonText: "cBtn",
           okButtonText: "dBtn",
           helpIcon: "del",
-          bgColor: "#c92a2a",
+          iconColor: "#c92a2a",
         },
       }).then((action) => {
         if (action) {

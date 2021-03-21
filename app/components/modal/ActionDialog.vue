@@ -6,32 +6,32 @@
       class="dialogContainer"
       :class="appTheme"
     >
-      <Label
-        row="0"
-        class="er dialogIcon"
-        backgroundColor="#858585"
-        :color="iconColor"
-        :text="icon[helpIcon]"
-      />
-      <Label row="1" class="dialogTitle orkm" :text="`${title}` | L" />
-      <ScrollView row="2" width="100%">
-        <StackLayout>
-          <MDButton
-            v-for="(item, index) in newList"
-            :key="index"
-            class="actionItem"
-            :class="{ orkm: title === 'srt' && sortType === item }"
-            :color="title === 'srt' && sortType === item ? '#ff5200' : ''"
-            variant="text"
-            :text="`${localized(item)}${
-              title === 'srt' && sortType === item ? '*' : ''
-            }`"
-            @loaded="centerLabel"
-            @tap="tapAction(item)"
-            @longPress="removeItem(index)"
-          />
-        </StackLayout>
-      </ScrollView>
+      <StackLayout row="0" class="dialogHeader" orientation="horizontal">
+        <Label class="er dialogIcon" :text="icon[helpIcon]" />
+        <Label class="dialogTitle orkm" :text="`${title}` | L" />
+      </StackLayout>
+      <ListView
+        rowHeight="48"
+        row="2"
+        @loaded="listViewLoad"
+        for="item in newList"
+        :height="stretch ? '100%' : itemInView"
+      >
+        <v-template>
+          <StackLayout margin="0" padding="0">
+            <Label
+              class="actionItem mdr"
+              :class="{ orkm: title === 'srt' && sortType === item }"
+              :color="title === 'srt' && sortType === item ? '#ff5200' : ''"
+              :text="`${localized(item)}${
+                title === 'srt' && sortType === item ? '*' : ''
+              }`"
+              @tap="tapAction(item)"
+              @longPress="removeItem(item)"
+            />
+          </StackLayout>
+        </v-template>
+      </ListView>
       <GridLayout
         row="3"
         rows="auto"
@@ -59,17 +59,18 @@
 </template>
 
 <script>
-import { Application, Color } from "@nativescript/core";
+import { Application } from "@nativescript/core";
 import * as Toast from "nativescript-toast";
 import { localize } from "@nativescript/localize";
 import { mapState, mapActions } from "vuex";
 import ConfirmDialog from "./ConfirmDialog.vue";
 
 export default {
-  props: ["title", "list", "stretch", "action", "helpIcon"],
+  props: ["title", "list", "stretch", "action", "helpIcon", "count"],
   data() {
     return {
       newList: this.list,
+      rowHeight: null,
     };
   },
   computed: {
@@ -77,11 +78,8 @@ export default {
     appTheme() {
       return Application.systemAppearance();
     },
-    isLightMode() {
-      return this.appTheme == "light";
-    },
-    iconColor() {
-      return this.isLightMode ? "#f0f0f0" : "#1A1A1A";
+    itemInView() {
+      return this.rowHeight * this.count;
     },
   },
   methods: {
@@ -96,6 +94,13 @@ export default {
           )
         );
     },
+    listViewLoad(args) {
+      this.rowHeight = args.object.rowHeight;
+      let e = args.object.android;
+      e.setSelector(new android.graphics.drawable.StateListDrawable());
+      e.setDivider(null);
+      e.setDividerHeight(0);
+    },
     localized(item) {
       if (this.title !== "lang") return localize(item);
       else return item;
@@ -103,9 +108,9 @@ export default {
     tapAction(item) {
       this.$modal.close(item);
     },
-    centerLabel(args) {
-      args.object.android.setGravity(16);
-    },
+    // centerLabel(args) {
+    //   args.object.android.setGravity(16);
+    // },
     deletionConfirmation(type, description) {
       return this.$showModal(ConfirmDialog, {
         props: {
@@ -114,12 +119,12 @@ export default {
           cancelButtonText: "cBtn",
           okButtonText: "rBtn",
           helpIcon: "err",
-          bgColor: "#c92a2a",
+          iconColor: "#c92a2a",
         },
       });
     },
-    removeItem(index) {
-      let item = this.newList[index];
+    removeItem(item) {
+      // let item = this.newList[index];
       let vm = this;
 
       function removeListItem(type, listName, desc) {

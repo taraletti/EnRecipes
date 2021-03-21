@@ -1,6 +1,6 @@
 <template>
   <Page @loaded="onPageLoad" @unloaded="onPageUnload">
-    <ActionBar androidElevation="1">
+    <ActionBar flat="true">
       <GridLayout rows="*" columns="auto, *, auto, auto">
         <MDButton
           class="er"
@@ -69,7 +69,6 @@
           <Label
             @loaded="centerLabel"
             class="day orkm"
-            :androidElevation="hasPlans(d) ? 1 : 0"
             :class="{
               today: isToday(d),
               activeDay: isActive(d),
@@ -83,8 +82,7 @@
             @tap="setToday(d)"
           />
         </GridLayout>
-        <StackLayout row="1" class="dayPlan">
-          <StackLayout class="hr" margin="16 0 0"></StackLayout>
+        <StackLayout row="1" class="dayPlan" margin="16 0 0">
           <StackLayout
             v-for="(mealType, index) in mealTimes"
             :key="'mealType' + index"
@@ -114,8 +112,8 @@
               v-for="(recipeID, index) in getRecipes[mealType]"
               :key="mealType + index"
             >
+                <!-- elevation="1" -->
               <GridLayout
-                androidElevation="1"
                 col="0"
                 columns="*"
                 class="titleContainer mdr"
@@ -156,7 +154,6 @@ const snackbar = new SnackBar();
 import { mapState, mapActions } from "vuex";
 import ViewRecipe from "./ViewRecipe.vue";
 import ActionDialogWithSearch from "./modal/ActionDialogWithSearch.vue";
-import ConfirmDialog from "./modal/ConfirmDialog.vue";
 export default {
   data() {
     return {

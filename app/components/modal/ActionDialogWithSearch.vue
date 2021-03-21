@@ -6,23 +6,18 @@
       class="dialogContainer"
       :class="appTheme"
     >
-      <Label
-        row="0"
-        class="er dialogIcon"
-        backgroundColor="#858585"
-        :color="iconColor"
-        :text="icon[helpIcon]"
-      />
-      <Label
-        row="1"
-        class="dialogTitle orkm"
-        :text="`${title}` | L"
-        textWrap="true"
-      />
+      <StackLayout row="0" class="dialogHeader" orientation="horizontal">
+        <Label class="er dialogIcon" :text="icon[helpIcon]" />
+        <Label
+          class="dialogTitle orkm"
+          :text="`${title}` | L"
+          textWrap="true"
+        />
+      </StackLayout>
       <StackLayout
         row="2"
         v-if="filteredRecipes.length || searchQuery"
-        padding="0 24 24"
+        padding="0 24 8"
       >
         <TextField :hint="'Search' | L" v-model="searchQuery" />
       </StackLayout>
@@ -95,12 +90,6 @@ export default {
     ...mapState(["icon"]),
     appTheme() {
       return Application.systemAppearance();
-    },
-    isLightMode() {
-      return this.appTheme == "light";
-    },
-    iconColor() {
-      return this.isLightMode ? "#f0f0f0" : "#1A1A1A";
     },
     filteredRecipes() {
       return this.recipes

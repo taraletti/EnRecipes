@@ -84,7 +84,6 @@
           </ScrollView>
         </StackLayout>
         <StackLayout row="1">
-          <StackLayout class="hr" margin="0 8 8"></StackLayout>
           <GridLayout
             rows="48"
             columns="auto, *"
@@ -122,9 +121,6 @@
             <Label col="0" class="er" :text="icon.price" />
             <Label col="2" :text="'Price List' | L" />
           </GridLayout> -->
-
-          <StackLayout class="hr" margin="8"></StackLayout>
-
           <GridLayout
             class="sd-item orkm mdr"
             :class="{
@@ -173,7 +169,6 @@ import ViewRecipe from "./ViewRecipe";
 import MealPlanner from "./MealPlanner";
 import GroceryList from "./GroceryList";
 import Settings from "./Settings";
-import PromptDialog from "./modal/PromptDialog";
 let filterTimer;
 export default {
   data() {
@@ -228,11 +223,12 @@ export default {
       "currentComponent",
     ]),
     getCurrentPath() {
-      let path = "/";
-      if (this.selectedCuisine) path += localize(this.selectedCuisine);
+      let path = null;
+      if (this.selectedCuisine) path = localize(this.selectedCuisine);
       else path = "cuis";
-      if (this.selectedCategory) path += "/" + localize(this.selectedCategory);
-      if (this.selectedTag) path += "/" + localize(this.selectedTag);
+      if (this.selectedCategory)
+        path += " > " + localize(this.selectedCategory);
+      if (this.selectedTag) path += " > " + localize(this.selectedTag);
       return path;
     },
     getRecipeList() {
@@ -310,6 +306,7 @@ export default {
       "initializeRecipes",
       "initializeMealPlans",
       "setShakeAction",
+      "setLayout",
     ]),
     onPageLoad() {
       if (this.appTheme === "Light") {
@@ -483,6 +480,7 @@ export default {
     },
   },
   created() {
+    this.setLayout(ApplicationSettings.getString("layout", "detailed"));
     this.appTheme = ApplicationSettings.getString("appTheme", "Light");
     setTimeout((e) => {
       Theme.setMode(Theme[this.appTheme]);

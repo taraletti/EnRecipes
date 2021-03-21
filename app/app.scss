@@ -1,6 +1,6 @@
 // NativeScript core theme
 // @see https://docs.nativescript.org/ui/theme
-@import '~@nativescript/theme/core'; // Override variables here
+@import "~@nativescript/theme/core"; // Override variables here
 $gray0: #fff;
 $gray1: #f0f0f0;
 $gray2: #e0e0e0;
@@ -22,13 +22,16 @@ $snacks: #9775fa; // Global SCSS styling
 // @see https://docs.nativescript.org/ui/styling
 .ns-modal,
 Page {
-  font-family: 'Orkney-Regular';
+  font-family: "Orkney-Regular";
 }
 .orkm {
-  font-family: 'Orkney-Medium';
+  font-family: "Orkney-Medium";
+}
+.orkb {
+  font-family: "Orkney-Bold";
 }
 .er {
-  font-family: 'enrecipes';
+  font-family: "enrecipes";
   font-size: 24;
   vertical-alignment: center;
   &.small {
@@ -38,6 +41,16 @@ Page {
 }
 .today {
   color: $orange;
+}
+.ns-modal {
+  TextField,
+  TextView,
+  TimePickerField {
+    border-color: $gray2;
+    &.ns-dark {
+      border-color: $gray8;
+    }
+  }
 }
 .ns-light {
   .count,
@@ -50,25 +63,30 @@ Page {
     color: $gray9;
     background: $gray1;
   }
+  TextField,
+  TextView,
+  TimePickerField {
+    border-color: $gray2;
+  }
   .hr {
     border-color: $gray2;
   }
-  .fieldLabel,
   .sd {
     background: $gray1;
   }
   .combination,
   .hasPlans,
   .overviewItem,
-  .recipeItem,
+  // .recipeItem,
   .titleContainer {
     background: $gray0;
   }
-  .combinationToken,
   .note,
   .tag {
     background: $gray2;
   }
+  .combinationToken,
+  .fieldLabel,
   .dayName,
   .group-info,
   .option .info {
@@ -98,9 +116,6 @@ Page {
   MDFloatingActionButton {
     color: $gray0;
   }
-  .appIconContainer {
-    background: $orange;
-  }
   .emptyState .icon {
     color: $gray4;
   }
@@ -116,10 +131,14 @@ Page {
     color: $gray2;
     background: $gray9;
   }
+  TextField,
+  TextView,
+  TimePickerField {
+    border-color: $gray8;
+  }
   .hr {
     border-color: $gray8;
   }
-  .fieldLabel,
   .sd {
     background: $gray9;
   }
@@ -130,14 +149,15 @@ Page {
   .titleContainer {
     background: $gray8;
   }
-  .combinationToken,
   .note,
   .tag {
     background: $gray10;
   }
+  .combinationToken,
   .dayName,
   .group-info,
-  .option .info {
+  .option .info,
+  .fieldLabel {
     color: $gray5;
   }
   .done .count {
@@ -164,9 +184,6 @@ Page {
   MDFloatingActionButton {
     color: $gray9;
   }
-  .appIconContainer {
-    background: $orange;
-  }
   .emptyState .icon {
     color: $gray6;
   }
@@ -177,12 +194,11 @@ TextField,
 TextView,
 TimePickerField {
   width: 100%;
-  border-width: 1;
   font-size: 14;
-  padding: 13 12;
-  margin: 8 0 0;
-  border-radius: 4;
-  border-color: $gray5;
+  padding: 12 8;
+  margin: 0 0 4;
+  border-bottom-width: 1;
+  // border-bottom-color: $gray5;
   placeholder-color: $gray5;
 }
 TextView {
@@ -192,7 +208,7 @@ ListPicker {
   width: 25%;
 }
 SearchBar {
-  font-family: 'Orkney-Regular';
+  font-family: "Orkney-Regular";
   font-size: 14;
   text-field-hint-color: $gray5;
 }
@@ -200,12 +216,15 @@ TabView {
   tab-text-color: $gray5;
 }
 .inputField {
-  margin-bottom: 8;
+  margin-bottom: 16;
+  TextField {
+    horizontal-alignment: left;
+  }
 }
 .fieldLabel {
   font-size: 12;
-  margin-left: 8;
-  padding: 0 4;
+  // margin-left: 8;
+  padding: 0;
 }
 .progressContainer {
   width: 100%;
@@ -252,7 +271,7 @@ ActionBar {
   padding: 8;
 }
 .sd-item {
-  border-radius: 4;
+  border-radius: 8;
   height: 48;
   vertical-alignment: center;
   .er {
@@ -307,7 +326,7 @@ ActionBar {
   margin: 8;
 }
 .mdr {
-  border-radius: 4;
+  border-radius: 8;
 }
 MDButton {
   padding: 8;
@@ -362,7 +381,7 @@ MDButton,
     height: auto;
     min-width: 0;
     padding: 12;
-    border-radius: 4;
+    border-radius: 8;
     letter-spacing: 0;
     // text-transform: none;
     margin: 16;
@@ -372,7 +391,7 @@ MDButton,
 }
 // -----------------------------
 // Recipe Items
-ListView {
+CollectionView {
   font-size: 14;
 }
 .recipeContainer {
@@ -384,11 +403,26 @@ ListView {
 .lastItem {
   padding: 0 0 84;
 }
+.odd {
+  padding-left: 12;
+}
+.even {
+  padding-right: 12;
+}
 .layout1 {
   padding: 0;
   margin: 4 16;
-  border-radius: 4;
+  border-radius: 8;
+  .imageHolder {
+    &.card {
+      border-radius: 8;
+      Image {
+        border-radius: 8;
+      }
+    }
+  }
   .recipeInfo {
+    vertical-align: top;
     margin: 0;
     padding: 8;
     .attr,
@@ -407,19 +441,30 @@ ListView {
         padding: 1 8 0 2;
       }
     }
+    .tagsContainer {
+      margin-top: 4;
+    }
   }
 }
 .layout2 {
+  .recipeInfo {
+    vertical-alignment: stretch;
+    padding: 8;
+    .tagsContainer {
+      margin-top: 2;
+    }
+  }
+}
+.layout3 {
   padding: 0;
-  margin: 4;
-  border-radius: 4;
+  margin: 4 4 16;
+  border-radius: 8;
   .imageHolder {
     vertical-alignment: center;
     &.card {
-      border-radius: 4 4 0 0;
-      // prettier-ignore
+      border-radius: 8;
       Image {
-        border-radius: 4 4 0 0;
+        border-radius: 8;
       }
     }
   }
@@ -441,6 +486,7 @@ ListView {
     padding: 4 0 0;
   }
 }
+
 .tagsContainer {
   padding: 2 0 0;
   .tag {
@@ -466,7 +512,7 @@ ListView {
   background: $red;
   color: #fff;
   height: 104;
-  border-radius: 4;
+  border-radius: 8;
 }
 // -----------------------------
 // SETTINGS
@@ -475,38 +521,60 @@ ListView {
   padding: 8;
 }
 .group-info {
-  text-align: center;
-  padding: 16;
+  padding: 16 16 16 35;
+  margin: 16 27;
+  border-left-width: 2;
+  border-color: $red;
   line-height: 6;
-  // margin-top: 8;
-  border-radius: 4;
 }
+
 .main-container {
   padding: 8 8 88;
   .option {
+    padding: 14 0;
     font-size: 14;
-    line-height: 6;
     .er {
-      margin: 11 24 11 16;
+      padding: 0;
+      margin: 0 24 0 16;
     }
     .info {
       font-size: 12;
       padding-top: 0;
+      line-height: 4;
+    }
+    Label {
+      padding: 0;
     }
     StackLayout {
-      margin: 9 24 9 0;
+      margin: 0;
+      padding: 0;
+      // margin: 9 24 9 0;
     }
   }
 }
 // -----------------------------
 // ABOUT
-.appIconContainer {
-  background: $orange;
-  padding: 24 0;
-  width: 100%;
-  border-radius: 4;
-  .appIcon {
-    height: 104;
+.app-info-container {
+  .app-icon {
+    margin-top: 16;
+    background: $orange;
+    border-radius: 99;
+    horizontal-alignment: center;
+  }
+  .app-name {
+    font-size: 20;
+    padding: 0;
+    margin-top: 16;
+    horizontal-alignment: center;
+  }
+  .app-version {
+    font-size: 14;
+    horizontal-alignment: center;
+  }
+  .app-info {
+    text-align: center;
+    padding: 8 16 24;
+    line-height: 6;
   }
 }
 // -----------------------------
@@ -555,9 +623,9 @@ ListView {
   .overviewContainer {
     margin: 8 8 12;
     .overviewItem {
-      border-radius: 4;
+      border-radius: 8;
       margin: 4;
-      android-elevation: 1;
+      // elevation: 1;
       .er {
         padding: 16 0 0 16;
         horizontal-alignment: left;
@@ -600,7 +668,7 @@ ListView {
   }
   .combination {
     margin: 0 16 8;
-    border-radius: 4;
+    border-radius: 8;
     font-size: 14;
     .combinationTitle {
       padding: 14 16;
@@ -613,7 +681,7 @@ ListView {
     line-height: 6;
     padding: 14 16;
     margin: 0 0 8;
-    border-radius: 4;
+    border-radius: 8;
   }
 }
 // -----------------------------
@@ -643,7 +711,7 @@ MDFloatingActionButton {
   min-width: 0;
 }
 MDButton.x {
-  margin: 8 0 0;
+  margin: 0 0 5;
   width: 32;
   height: 32;
   min-width: 0;
@@ -706,7 +774,7 @@ MDButton.x {
     .recipe {
       margin: 0 8;
       .titleContainer {
-        border-radius: 4;
+        border-radius: 8;
         margin: 0 0 8 8;
       }
       .recipeTitle {
@@ -728,20 +796,26 @@ MDButton.x {
   width: 100%;
   color: $gray9;
   background: $gray1;
+  border-radius: 8;
   font-size: 14;
+  margin: 64 0;
   &.dark {
     color: $gray2;
     background: $gray9;
   }
+  .dialogHeader {
+    border-radius: 4 4 0 0;
+    padding: 24;
+  }
   .dialogIcon {
-    text-align: center;
-    padding: 32;
-    font-size: 48;
+    font-size: 24;
+    vertical-alignment: center;
   }
   .dialogTitle {
     line-height: 6;
-    padding: 24 24 16;
+    padding: 0 0 0 18;
     font-size: 18;
+    vertical-alignment: center;
   }
   .dialogInput {
     padding: 0 24 16;
@@ -751,13 +825,15 @@ MDButton.x {
     padding: 0 24 8;
   }
   .actionItem {
+    width: 100%;
     letter-spacing: 0;
     text-transform: none;
-    line-height: 6;
+    line-height: 1;
     padding: 13 24;
     margin: 0;
     border-radius: 1;
     background: transparent;
+    // background: red;
   }
   .actionToggle {
     background: $orange;
@@ -766,9 +842,9 @@ MDButton.x {
     padding: 8;
   }
   .shareItem {
-    border-radius: 4;
-    margin: 0 16 16;
-    android-elevation: 1;
+    border-radius: 8;
+    margin: 0 8 8;
+    // elevation: 1;
     text-align: center;
     .er {
       padding: 16 0 0;
@@ -789,7 +865,7 @@ MDButton.x {
     height: auto;
     min-width: 0;
     padding: 16 24;
-    border-radius: 4;
+    border-radius: 8;
     letter-spacing: 0;
     text-transform: none;
     margin: 0 16 16;

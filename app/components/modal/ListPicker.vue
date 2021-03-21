@@ -1,13 +1,10 @@
 <template>
   <Page @loaded="onPageLoad" backgroundColor="transparent">
     <StackLayout class="dialogContainer" :class="appTheme">
-      <Label
-        class="er dialogIcon"
-        backgroundColor="#858585"
-        :color="iconColor"
-        :text="icon.time"
-      />
-      <Label class="dialogTitle orkm" :text="`${title}` | L" />
+      <StackLayout class="dialogHeader" orientation="horizontal">
+        <Label class="er dialogIcon" :text="icon.time" />
+        <Label class="dialogTitle orkm" :text="`${title}` | L" />
+      </StackLayout>
       <StackLayout
         class="dialogListPicker"
         orientation="horizontal"
@@ -85,12 +82,6 @@ export default {
     },
     appTheme() {
       return Application.systemAppearance();
-    },
-    isLightMode() {
-      return this.appTheme == "light";
-    },
-    iconColor() {
-      return this.isLightMode ? "#f0f0f0" : "#1A1A1A";
     },
     selectedTime() {
       return this.selectedHrs + ":" + this.selectedMins;
