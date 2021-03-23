@@ -9,7 +9,7 @@
       <StackLayout row="0" class="dialogHeader" orientation="horizontal">
         <Label class="er dialogIcon" :text="icon[helpIcon]" />
         <Label
-          class="dialogTitle orkm"
+          class="dialogTitle"
           :text="`${title}` | L"
           textWrap="true"
         />
@@ -60,14 +60,14 @@
           variant="text"
           v-if="action"
           col="0"
-          class="action orkm pull-left"
+          class="action tb pull-left"
           :text="`${action}` | L"
           @tap="$modal.close(action)"
         />
         <MDButton
           variant="text"
           col="2"
-          class="action orkm pull-right"
+          class="action tb pull-right"
           :text="'CANCEL' | L"
           @tap="$modal.close(false)"
         />

@@ -10,7 +10,7 @@
           @tap="$navigateBack()"
           col="0"
         />
-        <Label class="title orkm" :text="'About' | L" col="1" />
+        <Label class="title tb" :text="'About' | L" col="1" />
       </GridLayout>
     </ActionBar>
     <GridLayout rows="auto, *" columns="*" class="main-container">
@@ -20,8 +20,8 @@
           src="res://ic_launcher_foreground"
           stretch="none"
         />
-        <Label class="app-name orkb" :text="'EnRecipes' | L" textWrap="true" />
-        <Label :text="getVersion" class="app-version orkm" textWrap="true" />
+        <Label class="app-name tb" :text="'EnRecipes' | L" textWrap="true" />
+        <Label :text="getVersion" class="app-version tb" textWrap="true" />
 
         <Label class="app-info" :text="'appInfo' | L" textWrap="true" />
       </StackLayout>

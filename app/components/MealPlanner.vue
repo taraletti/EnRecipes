@@ -10,7 +10,7 @@
           @tap="$navigateBack()"
           col="0"
         />
-        <Label class="title orkm" :text="'planner' | L" col="1" />
+        <Label class="title tb" :text="'planner' | L" col="1" />
         <MDButton
           class="er"
           variant="text"
@@ -68,7 +68,7 @@
           />
           <Label
             @loaded="centerLabel"
-            class="day orkm"
+            class="day tb"
             :class="{
               today: isToday(d),
               activeDay: isActive(d),
@@ -93,7 +93,7 @@
               <Label
                 col="0"
                 @tap="edit = true"
-                class="periodLabel orkm"
+                class="periodLabel tb"
                 :text="mealType | L"
               />
               <MDButton

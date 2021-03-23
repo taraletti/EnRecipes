@@ -10,7 +10,7 @@
           @tap="$navigateBack()"
           col="0"
         />
-        <Label class="title orkm" :text="'grocery' | L" col="1" />
+        <Label class="title tb" :text="'grocery' | L" col="1" />
         <MDButton
           class="er left"
           variant="text"

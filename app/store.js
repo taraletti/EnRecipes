@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
-import { Couchbase } from 'nativescript-couchbase-plugin'
+import { CouchBase } from '@triniwiz/nativescript-couchbase'
 import { getFileAccess, File, ApplicationSettings } from '@nativescript/core'
-const EnRecipesDB = new Couchbase('EnRecipes')
-const userCuisinesDB = new Couchbase('userCuisines')
-const userCategoriesDB = new Couchbase('userCategories')
-const userYieldUnitsDB = new Couchbase('userYieldUnits')
-const userUnitsDB = new Couchbase('userUnits')
-const mealPlansDB = new Couchbase('mealPlans')
+const EnRecipesDB = new CouchBase('EnRecipes')
+const userCuisinesDB = new CouchBase('userCuisines')
+const userCategoriesDB = new CouchBase('userCategories')
+const userYieldUnitsDB = new CouchBase('userYieldUnits')
+const userUnitsDB = new CouchBase('userUnits')
+const mealPlansDB = new CouchBase('mealPlans')
 const defaultCuisines = [
   'American',
   'Brazilian',

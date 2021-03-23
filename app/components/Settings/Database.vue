@@ -10,7 +10,7 @@
           @tap="$navigateBack()"
           col="0"
         />
-        <Label class="title orkm" :text="'db' | L" col="1" />
+        <Label class="title tb" :text="'db' | L" col="1" />
       </GridLayout>
     </ActionBar>
     <StackLayout class="main-container">

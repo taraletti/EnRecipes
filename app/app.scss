@@ -22,13 +22,10 @@ $snacks: #9775fa; // Global SCSS styling
 // @see https://docs.nativescript.org/ui/styling
 .ns-modal,
 Page {
-  font-family: "Orkney-Regular";
+  font-family: "Inter-Medium";
 }
-.orkm {
-  font-family: "Orkney-Medium";
-}
-.orkb {
-  font-family: "Orkney-Bold";
+.tb {
+  font-family: "Inter-Bold";
 }
 .er {
   font-family: "enrecipes";
@@ -99,9 +96,6 @@ Page {
     color: $gray3;
     background: $gray2;
   }
-  .selected {
-    background: $gray2;
-  }
   .activeDay {
     color: $gray1;
     background: $gray9;
@@ -145,7 +139,7 @@ Page {
   .combination,
   .hasPlans,
   .overviewItem,
-  .recipeItem,
+  // .recipeItem,
   .titleContainer {
     background: $gray8;
   }
@@ -166,9 +160,6 @@ Page {
   .imageHolder {
     color: $gray9;
     background: $gray10;
-  }
-  .selected {
-    background: $gray6;
   }
   .activeDay {
     color: $gray9;
@@ -208,7 +199,7 @@ ListPicker {
   width: 25%;
 }
 SearchBar {
-  font-family: "Orkney-Regular";
+  font-family: "Inter-Regular";
   font-size: 14;
   text-field-hint-color: $gray5;
 }
@@ -260,7 +251,8 @@ ActionBar {
     margin: 0;
   }
   .title {
-    padding-left: 12;
+    @extend .tb;
+    padding: 0 0 0 12;
     text-align: left;
     font-size: 18;
   }
@@ -268,10 +260,11 @@ ActionBar {
 // -----------------------------
 // Side Drawer
 .sd {
-  padding: 8;
+  padding: 8 0;
 }
 .sd-item {
   border-radius: 8;
+  margin: 0 8;
   height: 48;
   vertical-alignment: center;
   .er {
@@ -288,9 +281,8 @@ ActionBar {
       ripple-color: transparent;
     }
   }
-  // prettier-ignore
   Label {
-    padding: 2 16 0 0;
+    padding: 0 16 0 0;
     font-size: 14;
     vertical-alignment: center;
     &.er {
@@ -312,12 +304,15 @@ ActionBar {
 }
 .sd-group-header {
   width: 100%;
-  padding: 0 0 0 8;
+  padding: 8 8 8 16;
   MDButton.er {
     margin: 0;
+    width: 32;
+    height: 32;
+    min-width: 0;
   }
   .filterPath {
-    line-height: 6;
+    line-height: 0;
   }
 }
 .noTags {
@@ -397,21 +392,9 @@ CollectionView {
 .recipeContainer {
   padding: 0;
 }
-.firstItem {
-  padding: 12 0 0;
-}
-.lastItem {
-  padding: 0 0 84;
-}
-.odd {
-  padding-left: 12;
-}
-.even {
-  padding-right: 12;
-}
 .layout1 {
   padding: 0;
-  margin: 4 16;
+  margin: 8 16;
   border-radius: 8;
   .imageHolder {
     &.card {
@@ -433,12 +416,12 @@ CollectionView {
     }
     .title {
       margin: 0;
-      padding: 2 0;
+      padding: 0;
     }
     .attrContainer {
-      padding: 0;
+      padding: 2 0 0;
       .attr {
-        padding: 1 8 0 2;
+        padding: 0 8 0 2;
       }
     }
     .tagsContainer {
@@ -457,7 +440,7 @@ CollectionView {
 }
 .layout3 {
   padding: 0;
-  margin: 4 4 16;
+  margin: 8;
   border-radius: 8;
   .imageHolder {
     vertical-alignment: center;
@@ -479,40 +462,49 @@ CollectionView {
     }
     .title {
       margin: 0;
-      padding: 2 0;
+      padding: 0;
     }
   }
   .tagsContainer {
     padding: 4 0 0;
   }
 }
-
+.firstItem {
+  padding: 8 0 0;
+}
+.lastItem {
+  padding-top: 0;
+  padding-right: 0;
+  padding-left: 0;
+  padding-bottom: 84;
+}
+.odd {
+  padding-left: 8;
+}
+.even {
+  padding-right: 8;
+}
+.selected {
+  background: rgba($orange, 0.1);
+}
 .tagsContainer {
   padding: 2 0 0;
   .tag {
     font-size: 10;
-    padding: 1 4;
+    padding: 1 6 2;
     margin: 0 4 0 0;
     line-height: 0;
-    border-radius: 2;
+    border-radius: 8;
   }
 }
 .imageHolder {
   vertical-alignment: center;
   &.card {
-    border-radius: 4 0 0 4;
-    // prettier-ignore
+    border-radius: 8;
     Image {
-      border-radius: 4 0 0 4;
+      border-radius: 8;
     }
   }
-}
-.swipe-item {
-  margin: 0 8;
-  background: $red;
-  color: #fff;
-  height: 104;
-  border-radius: 8;
 }
 // -----------------------------
 // SETTINGS
@@ -521,10 +513,7 @@ CollectionView {
   padding: 8;
 }
 .group-info {
-  padding: 16 16 16 35;
-  margin: 16 27;
-  border-left-width: 2;
-  border-color: $red;
+  padding: 16 16 16 64;
   line-height: 6;
 }
 
@@ -616,8 +605,8 @@ CollectionView {
     padding: 0;
     margin: 12 12 0;
     .tag {
-      padding: 2 6;
-      margin: 0 8 8 0;
+      padding: 0 6 2;
+      margin: 2 8 8 0;
     }
   }
   .overviewContainer {
@@ -646,6 +635,7 @@ CollectionView {
     border-radius: 99;
     border-width: 2;
     border-color: $gray5;
+    line-height: 0;
   }
   .instruction {
     font-size: 14;
@@ -701,6 +691,7 @@ MDFloatingActionButton {
 // -----------------------------
 // EDIT RECIPE
 .sectionTitle {
+  @extend .tb;
   font-size: 18;
 }
 .text-btn {
@@ -804,7 +795,6 @@ MDButton.x {
     background: $gray9;
   }
   .dialogHeader {
-    border-radius: 4 4 0 0;
     padding: 24;
   }
   .dialogIcon {
@@ -812,6 +802,7 @@ MDButton.x {
     vertical-alignment: center;
   }
   .dialogTitle {
+    @extend .tb;
     line-height: 6;
     padding: 0 0 0 18;
     font-size: 18;

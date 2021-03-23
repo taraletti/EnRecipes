@@ -31,13 +31,13 @@
         />
         <Label
           v-if="selectMode"
-          class="title orkm"
+          class="title tb"
           :text="`${selection.length} ${$options.filters.L('sltd')}`"
           col="1"
         />
         <Label
           v-else
-          class="title orkm"
+          class="title tb"
           :text="`${currentComponent}` | L"
           col="1"
         />
@@ -73,8 +73,8 @@
             <!-- elevation="1" -->
             <GridLayout
               class="recipeItem layout1 mdr"
-              rows="104"
-              columns="104, *"
+              rows="96"
+              columns="96, *"
               ref="recipe"
               @longPress="
                 selectMode
@@ -87,15 +87,15 @@
                   : viewRecipe(recipe.id)
               "
             >
-              <GridLayout class="imageHolder card" rows="104" columns="104">
+              <GridLayout class="imageHolder card" rows="96" columns="96">
                 <Image
                   row="0"
                   col="0"
                   v-if="recipe.imageSrc"
                   :src="recipe.imageSrc"
                   stretch="aspectFill"
-                  decodeWidth="104"
-                  decodeHeight="104"
+                  decodeWidth="96"
+                  decodeHeight="96"
                   loadMode="async"
                 />
                 <Label
@@ -115,7 +115,7 @@
                   )} • ${$options.filters.L(recipe.category)}`"
                   class="category"
                 />
-                <Label :text="recipe.title" class="orkm title" />
+                <Label :text="recipe.title" class="tb title" />
                 <GridLayout columns="*" rows="auto, auto">
                   <StackLayout
                     class="attrContainer"
@@ -178,7 +178,7 @@
                   )} • ${$options.filters.L(recipe.category)}`"
                   class="category"
                 />
-                <Label :text="recipe.title" class="orkm title" />
+                <Label :text="recipe.title" class="tb title" />
                 <StackLayout
                   class="tagsContainer"
                   v-if="recipe.tags.length"
@@ -243,7 +243,7 @@
                   )} • ${$options.filters.L(recipe.category)}`"
                   class="category"
                 />
-                <Label :text="recipe.title" class="orkm title" />
+                <Label :text="recipe.title" class="tb title" />
                 <StackLayout
                   class="tagsContainer"
                   orientation="horizontal"
@@ -270,7 +270,7 @@
           @tap="addRecipe"
         >
           <Label class="er icon" :text="icon.plusc" />
-          <Label class="title orkm" :text="'strAdd' | L" textWrap="true" />
+          <Label class="title tb" :text="'strAdd' | L" textWrap="true" />
           <StackLayout orientation="horizontal" horizontalAlignment="center">
             <Label :text="'plsAdd' | L" textWrap="true" />
           </StackLayout>
@@ -281,7 +281,7 @@
           v-if="!filteredRecipes.length && filterTrylater && !searchQuery"
         >
           <Label class="er icon" :text="icon.try" textWrap="true" />
-          <Label class="title orkm" :text="'aD' | L" textWrap="true" />
+          <Label class="title tb" :text="'aD' | L" textWrap="true" />
           <Label :text="'tLInfo' | L" textWrap="true" />
         </StackLayout>
         <StackLayout
@@ -290,7 +290,7 @@
           v-if="!filteredRecipes.length && filterFavourites && !searchQuery"
         >
           <Label class="er icon" :text="icon.fav" textWrap="true" />
-          <Label class="title orkm" :text="'noFavs' | L" textWrap="true" />
+          <Label class="title tb" :text="'noFavs' | L" textWrap="true" />
           <Label :text="'fsList' | L" textWrap="true" />
         </StackLayout>
         <StackLayout
@@ -300,14 +300,14 @@
         >
           <Label class="er icon" :text="icon.noresult" textWrap="true" />
           <Label
-            class="title orkm"
+            class="title tb"
             :text="`${noResultFor}` | L"
             textWrap="true"
           />
           <MDButton
             v-if="filterFavourites || filterTrylater || selectedCuisine"
             variant="text"
-            class="searchAll orkm"
+            class="searchAll tb"
             :text="'trySer' | L"
             @tap="searchAll"
           />
@@ -342,7 +342,7 @@ import { time } from "tns-core-modules/profiling";
 import {
   startAccelerometerUpdates,
   stopAccelerometerUpdates,
-} from "nativescript-accelerometer";
+} from "@triniwiz/nativescript-accelerometer";
 import { Vibrate } from "nativescript-vibrate";
 let vibrator = new Vibrate();
 import { mapActions, mapState } from "vuex";
@@ -460,7 +460,7 @@ export default {
       return Screen.mainScreen.widthDIPs;
     },
     imgWidth() {
-      return Screen.mainScreen.widthDIPs / 2 - 20;
+      return Screen.mainScreen.widthDIPs / 2 - 16;
     },
   },
   methods: {
@@ -735,13 +735,11 @@ export default {
 
     // DATA HANDLERS
     addToSelection(args, id) {
-      // console.log(args, id);
       this.showFAB = false;
       if (!this.selectMode) this.hijackLocalBackEvent();
       this.selectMode = true;
       this.$emit("selectModeOn", false);
       let item = args.object;
-      console.log(item.className);
       let classes = item.className;
       if (classes.includes("selected")) {
         item.className = classes.replace(/selected/g, "");

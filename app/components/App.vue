@@ -16,7 +16,7 @@
             columns="auto, *, auto"
             v-for="(item, index) in topmenu"
             :key="index"
-            class="sd-item orkm mdr"
+            class="sd-item mdr"
             :class="{
               selected: currentComponent === item.component,
             }"
@@ -32,7 +32,7 @@
             />
           </GridLayout>
           <GridLayout
-            class="sd-group-header orkm"
+            class="sd-group-header"
             rows="auto"
             columns="*, auto"
             v-if="cuisinesWithRecipes.length"
@@ -58,7 +58,7 @@
               <GridLayout
                 v-for="(item, index) in getRecipeList"
                 :key="index"
-                class="sd-item orkm mdr"
+                class="sd-item mdr"
                 :class="{
                   selected: selectedTag == item,
                 }"
@@ -87,7 +87,8 @@
           <GridLayout
             rows="48"
             columns="auto, *"
-            class="sd-item orkm mdr"
+            class="sd-item mdr"
+            marginTop="8"
             :class="{
               selected: currentComponent == 'MealPlanner',
             }"
@@ -100,7 +101,7 @@
           <!-- <GridLayout
             rows="48"
             columns="auto, *"
-            class="sd-item orkm mdr"
+            class="sd-item tb mdr"
             :class="{
               selected: currentComponent == 'GroceryList',
             }"
@@ -112,7 +113,7 @@
           <GridLayout
             rows="48"
             columns="auto, *"
-            class="sd-item orkm mdr"
+            class="sd-item tb mdr"
             :class="{
               selected: currentComponent == 'GroceryList',
             }"
@@ -122,7 +123,7 @@
             <Label col="2" :text="'Price List' | L" />
           </GridLayout> -->
           <GridLayout
-            class="sd-item orkm mdr"
+            class="sd-item mdr"
             :class="{
               selected: currentComponent == 'Settings',
             }"

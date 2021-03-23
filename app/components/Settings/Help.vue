@@ -10,7 +10,7 @@
           @tap="$navigateBack()"
           col="0"
         />
-        <Label class="title orkm" :text="'help' | L" col="1" />
+        <Label class="title tb" :text="'help' | L" col="1" />
       </GridLayout>
     </ActionBar>
     <GridLayout rows="*" columns="*" class="main-container">

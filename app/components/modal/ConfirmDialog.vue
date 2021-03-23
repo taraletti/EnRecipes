@@ -8,7 +8,7 @@
           :text="icon[helpIcon]"
         />
         <Label
-          class="dialogTitle orkm"
+          class="dialogTitle "
           :text="`${title}` | L"
           textWrap="true"
         />
@@ -24,14 +24,14 @@
           v-if="cancelButtonText"
           variant="text"
           col="1"
-          class="action orkm"
+          class="action tb"
           :text="`${cancelButtonText}` | L"
           @tap="$modal.close(false)"
         />
         <MDButton
           variant="text"
           col="2"
-          class="action orkm"
+          class="action tb"
           :text="`${okButtonText}` | L"
           @tap="$modal.close(true)"
         />

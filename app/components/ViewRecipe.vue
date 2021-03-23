@@ -102,7 +102,7 @@
                   )} • ${$options.filters.L(recipe.category)}`"
                 />
                 <Label
-                  class="title orkm"
+                  class="title tb"
                   :text="recipe.title"
                   textWrap="true"
                 />
@@ -271,7 +271,7 @@
             >
               <StackLayout col="0" row="1" class="emptyState">
                 <Label class="er icon" :text="icon.items" textWrap="true" />
-                <Label class="title orkm" :text="'pAIng' | L" textWrap="true" />
+                <Label class="title tb" :text="'pAIng' | L" textWrap="true" />
               </StackLayout>
             </GridLayout>
             <StackLayout v-else padding="24 16 72">
@@ -290,7 +290,7 @@
               </StackLayout>
               <Label
                 padding="16 0 8"
-                class="title orkm"
+                class="title tb"
                 :text="`${$options.filters.L(
                   'ings'
                 )} (${positiveYieldMultiplier} ${$options.filters.L(
@@ -303,7 +303,7 @@
                 :key="index"
                 class="ingredient"
                 :color="isLightMode ? '#1A1A1A' : '#e0e0e0'"
-                style="font-family: 'Orkney-Regular'"
+                style="font-family: 'Inter-Medium'"
                 :checkPadding="checkPadding"
                 marginLeft="4"
                 @checkedChange="checkChange"
@@ -330,7 +330,7 @@
             >
               <StackLayout col="0" row="1" class="emptyState">
                 <Label class="er icon" :text="icon.steps" textWrap="true" />
-                <Label class="title orkm" :text="'pAIns' | L" textWrap="true" />
+                <Label class="title tb" :text="'pAIns' | L" textWrap="true" />
               </StackLayout>
             </GridLayout>
             <StackLayout v-else padding="28 16 62">
@@ -352,7 +352,7 @@
                 />
                 <Label
                   @loaded="centerLabel"
-                  class="count orkm"
+                  class="count tb"
                   col="0"
                   :text="index + 1"
                 />
@@ -370,7 +370,7 @@
             >
               <StackLayout col="0" row="1" class="emptyState">
                 <Label class="er icon" :text="icon.notes" textWrap="true" />
-                <Label class="title orkm" :text="'pANo' | L" textWrap="true" />
+                <Label class="title tb" :text="'pANo' | L" textWrap="true" />
               </StackLayout>
             </GridLayout>
             <StackLayout v-else padding="16 16 62" @loaded="createNotes">
@@ -387,7 +387,7 @@
             >
               <StackLayout col="0" row="1" class="emptyState">
                 <Label class="er icon" :text="icon.comb" textWrap="true" />
-                <Label class="title orkm" :text="'pACmb' | L" textWrap="true" />
+                <Label class="title tb" :text="'pACmb' | L" textWrap="true" />
               </StackLayout>
             </GridLayout>
             <StackLayout v-else padding="16 0 80">

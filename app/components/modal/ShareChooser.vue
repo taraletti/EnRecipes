@@ -6,7 +6,7 @@
           class="er dialogIcon"
           :text="icon[helpIcon]"
         />
-        <Label class="dialogTitle orkm" :text="`${title}` | L" />
+        <Label class="dialogTitle " :text="`${title}` | L" />
       </StackLayout>
       <GridLayout rows="auto, auto, auto" columns="*" class="actionsContainer">
         <GridLayout
@@ -47,7 +47,7 @@
         <MDButton
           variant="text"
           col="1"
-          class="action orkm mdr"
+          class="action tb mdr"
           :text="'cBtn' | L"
           @tap="$modal.close()"
         />

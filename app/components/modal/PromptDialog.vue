@@ -4,7 +4,7 @@
       <StackLayout class="dialogHeader" orientation="horizontal">
         <Label class="er dialogIcon" :text="icon[helpIcon]" />
         <Label
-          class="dialogTitle orkm"
+          class="dialogTitle "
           :text="`${title}` | L"
           textWrap="true"
         />
@@ -22,14 +22,14 @@
         <MDButton
           variant="text"
           col="1"
-          class="action orkm"
+          class="action tb"
           :text="'cBtn' | L"
           @tap="$modal.close(false)"
         />
         <MDButton
           variant="text"
           col="2"
-          class="action orkm"
+          class="action tb"
           :text="`${action}` | L"
           @tap="$modal.close(category)"
         />

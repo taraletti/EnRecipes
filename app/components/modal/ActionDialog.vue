@@ -8,7 +8,7 @@
     >
       <StackLayout row="0" class="dialogHeader" orientation="horizontal">
         <Label class="er dialogIcon" :text="icon[helpIcon]" />
-        <Label class="dialogTitle orkm" :text="`${title}` | L" />
+        <Label class="dialogTitle" :text="`${title}` | L" />
       </StackLayout>
       <ListView
         rowHeight="48"
@@ -21,7 +21,7 @@
           <StackLayout margin="0" padding="0">
             <Label
               class="actionItem mdr"
-              :class="{ orkm: title === 'srt' && sortType === item }"
+              :class="{ tb: title === 'srt' && sortType === item }"
               :color="title === 'srt' && sortType === item ? '#ff5200' : ''"
               :text="`${localized(item)}${
                 title === 'srt' && sortType === item ? '*' : ''
@@ -42,14 +42,14 @@
           variant="text"
           v-if="action"
           col="0"
-          class="action orkm pull-left"
+          class="action tb pull-left"
           :text="`${action}` | L"
           @tap="$modal.close(action)"
         />
         <MDButton
           variant="text"
           col="2"
-          class="action orkm pull-right"
+          class="action tb pull-right"
           :text="'cBtn' | L"
           @tap="$modal.close(false)"
         />

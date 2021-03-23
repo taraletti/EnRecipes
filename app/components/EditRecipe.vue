@@ -10,7 +10,7 @@
           col="0"
           @tap="navigateBack"
         />
-        <Label class="title orkm" :text="`${title}` | L" col="1" />
+        <Label class="title tb" :text="`${title}` | L" col="1" />
         <MDButton
           variant="text"
           v-if="hasChanges && !saving"
@@ -219,7 +219,7 @@
           </GridLayout>
           <MDButton
             variant="text"
-            class="text-btn orkm"
+            class="text-btn tb"
             :text="`+ ${$options.filters.L('aIngBtn')}`"
             @tap="addIngredient()"
           />
@@ -247,7 +247,7 @@
           </GridLayout>
           <MDButton
             variant="text"
-            class="text-btn orkm"
+            class="text-btn tb"
             :text="`+ ${$options.filters.L('aStpBtn')}`"
             @tap="addInstruction"
           />
@@ -275,7 +275,7 @@
           </GridLayout>
           <MDButton
             variant="text"
-            class="text-btn orkm"
+            class="text-btn tb"
             :text="`+ ${$options.filters.L('aNoBtn')}`"
             @tap="addNote"
           />
@@ -303,7 +303,7 @@
           </GridLayout>
           <MDButton
             variant="text"
-            class="text-btn orkm"
+            class="text-btn tb"
             :text="`+ ${$options.filters.L('addCmbBtn')}`"
             @tap="showCombinations"
           />
