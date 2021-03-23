@@ -411,7 +411,7 @@
         </TabContentItem>
       </Tabs>
       <GridLayout id="btnFabContainer" rows="*, auto" columns="*, auto">
-        <transition name="bounce" appear>
+        <!-- <transition name="bounce" appear>
           <MDFloatingActionButton
             row="1"
             col="1"
@@ -419,7 +419,7 @@
             @tap="shareHandler"
             v-if="showFab"
           />
-        </transition>
+        </transition> -->
       </GridLayout>
     </AbsoluteLayout>
   </Page>

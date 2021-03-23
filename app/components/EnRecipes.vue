@@ -1,66 +1,8 @@
 <template>
-  <Page @loaded="onPageLoad" @unloaded="onPageUnload">
-    <ActionBar flat="true">
-      <GridLayout
-        v-if="showSearch"
-        columns="auto, *"
-        verticalAlignment="center"
-      >
-        <MDButton
-          class="er"
-          :text="icon.back"
-          variant="text"
-          automationText="Back"
-          col="0"
-          @tap="closeSearch"
-        />
-        <SearchBar
-          col="1"
-          :hint="'ser' | L"
-          @textChange="updateList($event.value)"
-          @clear="clearSearch"
-        />
-      </GridLayout>
-      <GridLayout v-else columns="auto, *, auto, auto">
-        <MDButton
-          class="er"
-          col="0"
-          variant="text"
-          @tap="selectMode ? clearSelection() : showDrawer()"
-          :text="selectMode ? icon.x : icon.menu"
-        />
-        <Label
-          v-if="selectMode"
-          class="title tb"
-          :text="`${selection.length} ${$options.filters.L('sltd')}`"
-          col="1"
-        />
-        <Label
-          v-else
-          class="title tb"
-          :text="`${currentComponent}` | L"
-          col="1"
-        />
-        <MDButton
-          v-if="recipes.length && !selectMode"
-          class="er"
-          :text="selectMode ? icon.export : icon.sear"
-          variant="text"
-          col="2"
-          @tap="selectMode ? exportSelection() : openSearch()"
-        />
-        <MDButton
-          v-if="recipes.length"
-          class="er"
-          :text="selectMode ? icon.del : icon.sort"
-          variant="text"
-          col="3"
-          @tap="selectMode ? deleteSelection() : sortDialog()"
-        />
-      </GridLayout>
-    </ActionBar>
-    <AbsoluteLayout>
+  <Page @loaded="onPageLoad" @unloaded="onPageUnload" actionBarHidden="true">
+    <GridLayout rows="*, auto" columns="*">
       <CollectionView
+        rowSpan="2"
         width="100%"
         height="100%"
         for="recipe in filteredRecipes"
@@ -68,9 +10,11 @@
         :itemTemplateSelector="getLayout"
         :colWidth="layout == 'grid' ? '50%' : '100%'"
       >
+        <v-template name="header">
+          <StackLayout> <Label text="Title" textWrap="true" /> </StackLayout>
+        </v-template>
         <v-template name="detailed">
           <GridLayout class="recipeContainer" :class="getItemPos(recipe.id)">
-            <!-- elevation="1" -->
             <GridLayout
               class="recipeItem layout1 mdr"
               rows="96"
@@ -154,7 +98,6 @@
         </v-template>
         <v-template name="simple">
           <GridLayout class="recipeContainer" :class="getItemPos(recipe.id)">
-            <!-- elevation="1" -->
             <GridLayout
               class="recipeItem layout1 layout2 mdr"
               rows="auto"
@@ -187,7 +130,6 @@
                   <Label
                     v-for="(tag, index) in recipe.tags"
                     :key="index"
-                    v-if="tag"
                     class="tag"
                     :text="tag"
                   />
@@ -198,7 +140,6 @@
         </v-template>
         <v-template name="grid">
           <GridLayout class="recipeContainer" :class="getItemPos(recipe.id)">
-            <!-- elevation="1" -->
             <GridLayout
               class="recipeItem layout3 mdr"
               rows="auto, auto"
@@ -252,7 +193,6 @@
                   <Label
                     v-for="(tag, index) in recipe.tags"
                     :key="index"
-                    v-if="tag"
                     class="tag"
                     :text="tag"
                   />
@@ -262,7 +202,12 @@
           </GridLayout>
         </v-template>
       </CollectionView>
-      <GridLayout rows="*, auto, *, 88" columns="*" class="emptyStateContainer">
+      <GridLayout
+        rowSpan="2"
+        rows="*, auto, *, 88"
+        columns="*"
+        class="emptyStateContainer"
+      >
         <StackLayout
           row="1"
           class="emptyState"
@@ -313,19 +258,76 @@
           />
         </StackLayout>
       </GridLayout>
-      <GridLayout id="btnFabContainer" rows="*, auto" columns="*, auto">
+      <GridLayout
+        row="1"
+        class="appbar"
+        rows="auto"
+        columns="auto, *, auto, auto, auto"
+      >
+        <MDButton
+          class="er menu"
+          variant="text"
+          @tap="
+            showSearch
+              ? closeSearch()
+              : selectMode
+              ? clearSelection()
+              : showDrawer()
+          "
+          :text="showSearch ? icon.back : selectMode ? icon.x : icon.menu"
+        />
+        <TextField
+          class="searchBar"
+          @loaded="focusField"
+          v-if="showSearch"
+          col="1"
+          colSpan="4"
+          :hint="'ser' | L"
+          @textChange="updateList($event.value)"
+        />
+        <Label
+          v-if="selectMode"
+          class="title tb"
+          :text="`${selection.length} ${$options.filters.L('sltd')}`"
+          col="1"
+        />
+        <MDButton
+          v-if="recipes.length && !selectMode && !showSearch"
+          class="er"
+          :text="selectMode ? icon.export : icon.sear"
+          variant="text"
+          col="2"
+          @tap="selectMode ? exportSelection() : openSearch()"
+        />
+        <MDButton
+          v-if="recipes.length && !showSearch && !selectMode"
+          class="er"
+          :text="icon.sort"
+          variant="text"
+          col="3"
+          @tap="sortDialog()"
+        />
         <transition name="bounce">
-          <MDFloatingActionButton
+          <MDButton
             v-if="showFAB"
-            row="1"
-            col="1"
-            class="er fab-button"
-            src="res://plus"
-            @tap="addRecipe"
+            class="er fab"
+            :text="icon.plus"
+          variant="text"
+
+            col="4"
+            @tap="showFAB && addRecipe()"
           />
         </transition>
+        <MDButton
+          v-if="selectMode"
+          class="er"
+          :text="icon.del"
+          variant="text"
+          col="4"
+          @tap="deleteSelection()"
+        />
       </GridLayout>
-    </AbsoluteLayout>
+    </GridLayout>
   </Page>
 </template>
 <script>
@@ -376,6 +378,7 @@ export default {
     return {
       searchQuery: "",
       showSearch: false,
+      searchBar: null,
       rightAction: false,
       deletionDialogActive: false,
       showFAB: false,
@@ -508,28 +511,31 @@ export default {
 
     // HELPERS
     openSearch() {
-      this.showSearch = true;
       this.showFAB = false;
+      this.showSearch = true;
       this.hijackLocalBackEvent();
     },
+    focusField(args) {
+      setTimeout((e) => {
+        args.object.focus();
+        setTimeout((e) => Utils.ad.showSoftInput(args.object.android), 100);
+      }, 100);
+    },
     closeSearch() {
+      this.showFAB = true;
       this.searchQuery = "";
       Utils.ad.dismissSoftInput();
       this.showSearch = false;
-      this.showFAB = true;
       this.releaseLocalBackEvent();
     },
     setComponent(comp) {
       this.setCurrentComponentAction(comp);
       this.hijackGlobalBackEvent();
     },
-    clearSearch() {
-      this.searchQuery = "";
-    },
     updateList(value) {
       clearTimeout(typingTimer);
       typingTimer = setTimeout((e) => {
-        this.searchQuery = value;
+        this.searchQuery = value.toLowerCase();
       }, 750);
     },
     formattedTotalTime(prepTime, cookTime) {
@@ -753,6 +759,7 @@ export default {
       if (!this.selection.length) this.clearSelection();
     },
     clearSelection() {
+      this.showFAB = true;
       this.selectMode = false;
       this.$emit("selectModeOn", true);
       this.selection = [];
@@ -760,7 +767,6 @@ export default {
         e.className = e.className.replace(/selected/g, "");
       });
       this.releaseLocalBackEvent();
-      this.showFAB = true;
     },
     deleteSelection() {
       this.selection.length === 1

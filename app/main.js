@@ -30,9 +30,6 @@ Vue.use(ButtonPlugin)
 import ActivityIndicatorPlugin from '@nativescript-community/ui-material-activityindicator/vue'
 Vue.use(ActivityIndicatorPlugin)
 
-import FloatingActionButtonPlugin from '@nativescript-community/ui-material-floatingactionbutton/vue'
-Vue.use(FloatingActionButtonPlugin)
-
 import ProgressPlugin from '@nativescript-community/ui-material-progress/vue'
 Vue.use(ProgressPlugin)
 

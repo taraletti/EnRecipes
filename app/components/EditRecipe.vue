@@ -46,7 +46,7 @@
               :text="icon.img"
             />
           </StackLayout>
-          <transition :name="recipeContent.imageSrc ? 'null' : 'bounce'">
+          <!-- <transition :name="recipeContent.imageSrc ? 'null' : 'bounce'">
             <MDFloatingActionButton
               v-if="showFab"
               :top="screenWidth - 44"
@@ -55,7 +55,7 @@
               src="res://cam"
               @tap="imageHandler"
             />
-          </transition>
+          </transition> -->
         </AbsoluteLayout>
         <StackLayout margin="0 16 24">
           <StackLayout class="inputField">

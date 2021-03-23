@@ -54,7 +54,6 @@ Page {
   ActionBar,
   ListPicker,
   Page,
-  SearchBar,
   TabStripItem,
   Tabs {
     color: $gray9;
@@ -107,7 +106,7 @@ Page {
   MDProgress {
     progress-background-color: $gray4;
   }
-  MDFloatingActionButton {
+  .fab {
     color: $gray0;
   }
   .emptyState .icon {
@@ -119,7 +118,6 @@ Page {
   ActionBar,
   ListPicker,
   Page,
-  SearchBar,
   TabStripItem,
   Tabs {
     color: $gray2;
@@ -172,7 +170,7 @@ Page {
   MDProgress {
     progress-background-color: $gray5;
   }
-  MDFloatingActionButton {
+  .fab {
     color: $gray9;
   }
   .emptyState .icon {
@@ -198,10 +196,9 @@ TextView {
 ListPicker {
   width: 25%;
 }
-SearchBar {
-  font-family: "Inter-Regular";
-  font-size: 14;
-  text-field-hint-color: $gray5;
+TextField.searchBar {
+  margin: 0;
+  border-color: transparent;
 }
 TabView {
   tab-text-color: $gray5;
@@ -235,27 +232,6 @@ MDProgress {
 Switch {
   background-color: $orange;
   off-background-color: $gray5;
-}
-// -----------------------------
-// ActionBar
-ActionBar {
-  height: 64;
-  margin: 0;
-  padding: 0 8;
-  GridLayout {
-    padding: 0;
-    margin: 0;
-  }
-  MDButton.er {
-    padding: 0;
-    margin: 0;
-  }
-  .title {
-    @extend .tb;
-    padding: 0 0 0 12;
-    text-align: left;
-    font-size: 18;
-  }
 }
 // -----------------------------
 // Side Drawer
@@ -675,18 +651,41 @@ CollectionView {
   }
 }
 // -----------------------------
-// FAB
-#btnFabContainer {
-  z-index: 100;
-  width: 100%;
-  height: 100%;
-}
-MDFloatingActionButton {
-  width: 56;
+// APPBAR
+.appbar {
+  z-index: 99;
   height: 56;
-  margin: 16;
-  background: $orange;
-  ripple-color: $fabRipple;
+  margin: 8;
+  padding: 0;
+  border-radius: 99;
+  background: $gray0;
+  elevation: 16;
+  android-elevation: 16;
+  GridLayout {
+    padding: 0;
+    margin: 0;
+  }
+  .er {
+    padding: 0;
+    margin: 4 4 4 0;
+    &.menu {
+      margin: 4;
+    }
+  }
+  .fab {
+    width: 56;
+    height: 56;
+    margin: 0;
+    background: $orange;
+    ripple-color: $fabRipple;
+  }
+  .title {
+    @extend .tb;
+    padding: 0 0 0 8;
+    text-align: left;
+    vertical-align: center;
+    font-size: 18;
+  }
 }
 // -----------------------------
 // EDIT RECIPE
@@ -877,9 +876,8 @@ MDActivityIndicator {
   animation-timing-function: ease-in-out;
 }
 .bounce-leave-active {
-  animation-name: bounce-out;
-  animation-duration: 0.25s;
-  animation-fill-mode: forwards;
+  transform: scale(0);
+  opacity: 0;
 }
 @keyframes bounce-in {
   0% {
@@ -887,25 +885,13 @@ MDActivityIndicator {
     opacity: 0;
   }
   25% {
-    transform: scale(1.2);
+    transform: scale(1);
     opacity: 1;
   }
-  50% {
-    transform: scale(0.9);
+  55% {
+    transform: scale(0.8);
   }
-  75% {
-    transform: scale(1.1);
-  }
-  100% {
+  80% {
     transform: scale(1);
-  }
-}
-@keyframes bounce-out {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0);
-    opacity: 0;
   }
 }

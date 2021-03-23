@@ -7,7 +7,7 @@
     <Drawer
       @loaded="drawerLoad"
       :gestureEnabled="gestures"
-      leftSwipeDistance="128"
+      leftSwipeDistance="32"
     >
       <GridLayout ~leftDrawer rows="*, auto" columns="*" width="280" class="sd">
         <StackLayout row="0">

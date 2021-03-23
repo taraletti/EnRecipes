@@ -23,9 +23,7 @@
               class="actionItem mdr"
               :class="{ tb: title === 'srt' && sortType === item }"
               :color="title === 'srt' && sortType === item ? '#ff5200' : ''"
-              :text="`${localized(item)}${
-                title === 'srt' && sortType === item ? '*' : ''
-              }`"
+              :text="`${localized(item)}`"
               @tap="tapAction(item)"
               @longPress="removeItem(item)"
             />
