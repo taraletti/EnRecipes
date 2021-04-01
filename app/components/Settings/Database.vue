@@ -50,7 +50,6 @@ import {
 } from "@nativescript/core";
 import * as Permissions from "@nativescript-community/perms";
 import { Zip } from "@nativescript/zip";
-import * as Toast from "nativescript-toast";
 import * as Filepicker from "nativescript-plugin-filepicker";
 import { localize } from "@nativescript/localize";
 import ConfirmDialog from "../modal/ConfirmDialog.vue";
@@ -109,7 +108,7 @@ export default {
     // EXPORT HANDLERS
     exportCheck() {
       if (!this.recipes.length) {
-        Toast.makeText(localize("aFBu")).show();
+        // Toast.makeText(localize("aFBu")).show();
       } else {
         this.permissionCheck(
           this.permissionConfirmation,
@@ -147,10 +146,10 @@ export default {
           this.backupProgress = progress;
         },
       }).then((success) => {
-        Toast.makeText(
-          "Backup file successfully saved to Download folder",
-          "long"
-        ).show();
+        // Toast.makeText(
+        //   "Backup file successfully saved to Download folder",
+        //   "long"
+        // ).show();
         this.exportFiles("delete");
         setTimeout((e) => (this.backupInProgress = false), 3000);
       });
@@ -222,7 +221,7 @@ export default {
       })
         .present()
         .then((selection) => {
-          Toast.makeText(localize("vrfy") + "...").show();
+          // Toast.makeText(localize("vrfy") + "...").show();
           let zipPath = selection[0];
           this.validateZipContent(zipPath);
         });
@@ -412,7 +411,7 @@ export default {
               if (status === "authorized") action();
               if (status !== "denied")
                 ApplicationSettings.setBoolean("storagePermissionAsked", true);
-              else Toast.makeText(localize("dend")).show();
+              // else Toast.makeText(localize("dend")).show();
             });
           }
         });

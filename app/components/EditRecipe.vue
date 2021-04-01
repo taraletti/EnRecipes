@@ -301,7 +301,6 @@ import {
   Observable,
 } from "@nativescript/core";
 import * as Permissions from "@nativescript-community/perms";
-import * as Toast from "nativescript-toast";
 import * as Filepicker from "nativescript-plugin-filepicker";
 import { ImageCropper } from "nativescript-imagecropper";
 import { localize } from "@nativescript/localize";
@@ -814,7 +813,7 @@ export default {
                   );
                   break;
                 case "denied":
-                  Toast.makeText(localize("dend")).show();
+                  // Toast.makeText(localize("dend")).show();
                   break;
                 default:
                   break;

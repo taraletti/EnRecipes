@@ -46,7 +46,6 @@
 import { ApplicationSettings, Observable } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
 import { mapState, mapActions } from "vuex";
-import * as Toast from "nativescript-toast";
 import * as utils from "~/shared/utils";
 
 export default {
@@ -78,7 +77,7 @@ export default {
       let checked = args.object.checked;
       if (checked && !utils.hasAccelerometer()) {
         args.object.checked = false;
-        Toast.makeText(localize("noAccSensor"), "long").show();
+        // Toast.makeText(localize("noAccSensor"), "long").show();
       } else {
         ApplicationSettings.setBoolean("shakeEnabled", checked);
         this.setShakeAction(checked);

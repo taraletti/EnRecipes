@@ -38,7 +38,6 @@
 <script>
 import { Observable } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
-import * as Toast from "nativescript-toast";
 import { mapState, mapActions } from "vuex";
 
 export default {
@@ -77,7 +76,7 @@ export default {
     // RESET
     resetListItems(listName) {
       this.resetListItemsAction(listName);
-      Toast.makeText(localize("restDone")).show();
+      // Toast.makeText(localize("restDone")).show();
     },
     touch({ object, action }, type) {
       object.className = action.match(/down|move/) ? "option fade" : "option";
