@@ -2,22 +2,9 @@
   <Page @loaded="onPageLoad">
     <ActionBar flat="true">
       <GridLayout rows="*" columns="auto, *, auto">
-        <MDButton
-          class="er left"
-          variant="text"
-          :text="icon.back"
-          automationText="Back"
-          @tap="$navigateBack()"
-          col="0"
-        />
-        <Label class="title orkm" :text="'grocery' | L" col="1" />
-        <MDButton
-          class="er left"
-          variant="text"
-          :text="icon.today"
-          automationText="today"
-          col="2"
-        />
+        <Button class="ico left" :text="icon.back" @tap="$navigateBack()" />
+        <Label class="title tb" :text="'grocery' | L" col="1" />
+        <Button class="ico left" :text="icon.today" col="2" />
       </GridLayout>
     </ActionBar>
     <GridLayout columns="" rows=""> </GridLayout>
@@ -26,8 +13,6 @@
 
 <script>
 import { ApplicationSettings, Observable } from "@nativescript/core";
-import { SnackBar } from "@nativescript-community/ui-material-snackbar";
-const snackbar = new SnackBar();
 import { mapState, mapActions } from "vuex";
 export default {
   data() {
@@ -42,11 +27,11 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["setCurrentComponentAction"]),
+    ...mapActions(["setComponent"]),
     onPageLoad(args) {
       const page = args.object;
       page.bindingContext = new Observable();
-      this.setCurrentComponentAction("GroceryList");
+      this.setComponent("GroceryList");
     },
     // HELPERS
 
@@ -64,16 +49,6 @@ export default {
       }
     },
     // DATA HANDLERS
-    undoRemove(message) {
-      return snackbar.action({
-        message,
-        textColor: this.appTheme == "Light" ? "#fff" : "#292929",
-        actionTextColor: "#ff5200",
-        backgroundColor: this.appTheme == "Light" ? "#292929" : "#fff",
-        actionText: "Undo",
-        hideDelay: 5000,
-      });
-    },
   },
   created() {
     this.appTheme = ApplicationSettings.getString("appTheme", "Light");

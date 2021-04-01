@@ -1,14 +1,9 @@
 <template>
-  <Page>
-    <StackLayout class="dialogContainer" :class="appTheme">
-      <Label
-        class="er dialogIcon"
-        backgroundColor="#858585"
-        :color="iconColor"
-        :text="icon.time"
-      />
-      <Label class="dialogTitle orkm" :text="`${title}` | L" />
+  <Page @loaded="onPageLoad" backgroundColor="transparent" :class="appTheme">
+    <GridLayout rows="auto, auto, auto" class="modal">
+      <Label class="title" :text="title | L" />
       <StackLayout
+        row="1"
         class="dialogListPicker"
         orientation="horizontal"
         horizontalAlignment="center"
@@ -26,23 +21,21 @@
           @selectedIndexChange="setMins"
         ></ListPicker>
       </StackLayout>
-      <GridLayout rows="auto" columns="*, auto, auto" class="actionsContainer">
-        <MDButton
-          variant="text"
+      <GridLayout row="2" columns="*, auto, auto" class="actions">
+        <Button
           col="1"
-          class="action orkm"
+          class="text sm"
           :text="'cBtn' | L"
           @tap="$modal.close(false)"
         />
-        <MDButton
-          variant="text"
+        <Button
           col="2"
-          class="action orkm"
-          :text="`${action}` | L"
+          class="text sm"
+          :text="action | L"
           @tap="$modal.close(selectedTime)"
         />
       </GridLayout>
-    </StackLayout>
+    </GridLayout>
   </Page>
 </template>
 
@@ -61,7 +54,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon"]),
+    ...mapState(["icon", "appTheme"]),
     hrsList() {
       let h = [...Array(24).keys()];
       this.hrs = h;
@@ -83,20 +76,21 @@ export default {
     minIndex() {
       return this.mins.indexOf(parseInt(this.selectedMin));
     },
-    appTheme() {
-      return Application.systemAppearance();
-    },
-    isLightMode() {
-      return this.appTheme == "light";
-    },
-    iconColor() {
-      return this.isLightMode ? "#f0f0f0" : "#1A1A1A";
-    },
     selectedTime() {
       return this.selectedHrs + ":" + this.selectedMins;
     },
   },
   methods: {
+    onPageLoad(args) {
+      args.object._dialogFragment
+        .getDialog()
+        .getWindow()
+        .setBackgroundDrawable(
+          new android.graphics.drawable.ColorDrawable(
+            android.graphics.Color.TRANSPARENT
+          )
+        );
+    },
     setHrs(args) {
       let hr = "0" + this.hrs[args.object.selectedIndex];
       this.selectedHrs = hr.slice(-2);

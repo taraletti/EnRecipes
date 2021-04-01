@@ -1,62 +1,62 @@
 <template>
-  <Page>
-    <StackLayout class="dialogContainer" :class="appTheme">
+  <Page @loaded="onPageLoad" backgroundColor="transparent" :class="appTheme">
+    <GridLayout rows="auto, auto, auto" class="modal">
+      <Label class="title" :text="title | L" />
       <Label
-        class="er dialogIcon"
-        :backgroundColor="bgColor"
-        :color="iconColor"
-        :text="icon[helpIcon]"
-      />
-      <Label class="dialogTitle orkm" :text="`${title}` | L" textWrap="true" />
-      <Label
+        row="1"
         v-if="description"
-        class="dialogDescription"
+        class="description tw"
         :text="description"
-        textWrap="true"
       />
-      <GridLayout rows="auto" columns="*, auto, auto" class="actionsContainer">
-        <MDButton
+      <GridLayout row="2" columns="auto, *, auto, auto" class="actions">
+        <Button
+          v-if="secondButtonText"
+          col="0"
+          class="text sm"
+          :text="secondButtonText | L"
+          @tap="$modal.close(-1)"
+        />
+        <Button
           v-if="cancelButtonText"
-          variant="text"
-          col="1"
-          class="action orkm"
-          :text="`${cancelButtonText}` | L"
+          col="2"
+          class="text sm"
+          :text="cancelButtonText | L"
           @tap="$modal.close(false)"
         />
-        <MDButton
-          variant="text"
-          col="2"
-          class="action orkm"
-          :text="`${okButtonText}` | L"
+        <Button
+          col="3"
+          class="text sm"
+          :text="okButtonText | L"
           @tap="$modal.close(true)"
         />
       </GridLayout>
-    </StackLayout>
+    </GridLayout>
   </Page>
 </template>
 
 <script>
-import { Application } from "@nativescript/core";
 import { mapState } from "vuex";
 export default {
   props: [
     "title",
     "description",
+    "secondButtonText",
     "cancelButtonText",
     "okButtonText",
-    "helpIcon",
-    "bgColor",
   ],
   computed: {
-    ...mapState(["icon"]),
-    appTheme() {
-      return Application.systemAppearance();
-    },
-    isLightMode() {
-      return this.appTheme == "light";
-    },
-    iconColor() {
-      return this.isLightMode ? "#f0f0f0" : "#1A1A1A";
+    ...mapState(["icon", "appTheme"]),
+  },
+  methods: {
+    onPageLoad(args) {
+      args.object._dialogFragment
+        .getDialog()
+        .getWindow()
+        .setBackgroundDrawable(
+          new android.graphics.drawable.ColorDrawable(
+            android.graphics.Color.TRANSPARENT
+          )
+        );
     },
   },
 };

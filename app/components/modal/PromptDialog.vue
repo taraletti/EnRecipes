@@ -1,75 +1,71 @@
 <template>
-  <Page>
-    <StackLayout class="dialogContainer" :class="appTheme">
-      <Label
-        class="er dialogIcon"
-        backgroundColor="#858585"
-        :color="iconColor"
-        :text="icon[helpIcon]"
-      />
-      <Label class="dialogTitle orkm" :text="`${title}` | L" textWrap="true" />
-      <StackLayout class="dialogInput">
+  <Page @loaded="onPageLoad" backgroundColor="transparent" :class="appTheme">
+    <GridLayout rows="auto, auto, auto" class="modal">
+      <Label class="title" :text="title | L" />
+      <StackLayout row="1" class="input">
         <TextField
+          class="modalInput"
           @loaded="focusField"
-          :hint="hint ? hint : ''"
-          v-model="category"
-          autocapitalizationType="words"
-          @returnPress="$modal.close(category)"
+          v-model="text"
+          @returnPress="$modal.close(text)"
         />
       </StackLayout>
-      <GridLayout rows="auto" columns="*, auto, auto" class="actionsContainer">
-        <MDButton
-          variant="text"
+      <GridLayout row="2" columns="*, auto, auto" class="actions">
+        <Button
           col="1"
-          class="action orkm"
+          class="text sm"
           :text="'cBtn' | L"
           @tap="$modal.close(false)"
         />
-        <MDButton
-          variant="text"
+        <Button
           col="2"
-          class="action orkm"
-          :text="`${action}` | L"
-          @tap="$modal.close(category)"
+          class="text sm"
+          :text="action | L"
+          @tap="$modal.close(text)"
         />
       </GridLayout>
-    </StackLayout>
+    </GridLayout>
   </Page>
 </template>
 
 <script>
-import { Application, Utils } from "@nativescript/core";
+import { Utils } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
 import { mapState } from "vuex";
 export default {
-  props: ["title", "hint", "text", "action", "helpIcon"],
+  props: ["title", "hint", "placeholder", "action"],
   data() {
     return {
-      category: null,
+      text: null,
     };
   },
   computed: {
-    ...mapState(["icon"]),
-    appTheme() {
-      return Application.systemAppearance();
-    },
-    isLightMode() {
-      return this.appTheme == "light";
-    },
-    iconColor() {
-      return this.isLightMode ? "#f0f0f0" : "#1A1A1A";
-    },
+    ...mapState(["icon", "appTheme"]),
   },
   methods: {
-    focusField(args) {
-      args.object.focus();
-      setTimeout((e) => Utils.ad.showSoftInput(args.object.android), 1);
+    onPageLoad(args) {
+      args.object._dialogFragment
+        .getDialog()
+        .getWindow()
+        .setBackgroundDrawable(
+          new android.graphics.drawable.ColorDrawable(
+            android.graphics.Color.TRANSPARENT
+          )
+        );
+    },
+    focusField({ object }) {
+      let a = this.placeholder;
+      typeof a == "number"
+        ? (object.keyboardType = "number")
+        : (object.autocapitalizationType = "words");
+      object.hint = this.hint;
+      object.focus();
+      setTimeout(() => Utils.ad.showSoftInput(object.android), 1);
     },
   },
-  mounted() {
-    if (this.text) {
-      this.category = localize(this.text);
-    }
+  created() {
+    let a = this.placeholder;
+    if (a) this.text = typeof a == "number" ? a : localize(a);
   },
 };
 </script>

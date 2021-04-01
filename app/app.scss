@@ -1,225 +1,196 @@
-// NativeScript core theme
-// @see https://docs.nativescript.org/ui/theme
-@import '~@nativescript/theme/core'; // Override variables here
-$gray0: #fff;
-$gray1: #f0f0f0;
-$gray2: #e0e0e0;
-$gray3: #d1d1d1;
-$gray4: #c2c2c2;
-$gray5: #858585;
-$gray6: #575757;
-$gray7: #393939;
-$gray8: #292929;
-$gray9: #1a1a1a;
-$gray10: #000;
+$gray0: #f8f9fa;
+$gray1: #f1f3f5;
+$gray2: #e9ecef;
+$gray3: #dee2e6;
+$gray4: #ced4da;
+$gray5: #adb5bd;
+$gray6: #868e96;
+$gray7: #495057;
+$gray8: #343a40;
+$gray9: #212529;
+$gray10: #000000;
 $orange: #ff5200;
-$fabRipple: #ffa94d;
-$red: #c92a2a;
-$breakfast: #ffa94d;
-$lunch: #69db7c;
-$dinner: #4dabf7;
-$snacks: #9775fa; // Global SCSS styling
-// @see https://docs.nativescript.org/ui/styling
-.ns-modal,
+
 Page {
-  font-family: 'Orkney-Regular';
+  font-family: "Inter-Medium";
+  font-size: 14;
 }
-.orkm {
-  font-family: 'Orkney-Medium';
+.tb {
+  font-family: "Inter-Bold";
 }
-.er {
-  font-family: 'enrecipes';
+.ico {
+  font-family: "enrecipes";
   font-size: 24;
   vertical-alignment: center;
-  &.small {
-    padding: 0;
+  &.sm {
     font-size: 16;
   }
 }
-.today {
-  color: $orange;
+.tac {
+  text-align: center;
 }
-.ns-light {
-  .count,
-  ActionBar,
-  ListPicker,
+.tw {
+  text-wrap: true;
+}
+.pageTitle {
+  @extend .tb;
+  @extend .tw;
+  font-size: 25;
+  padding: 16;
+}
+.Light {
+  color: $gray9;
+  background: $gray1;
   Page,
-  SearchBar,
-  TabStripItem,
-  Tabs {
-    color: $gray9;
+  .filters {
     background: $gray1;
   }
-  .hr {
+  TextField,
+  TextView {
+    border-color: $gray3;
+    placeholder-color: $gray5;
+  }
+  .modalInput {
     border-color: $gray2;
   }
-  .fieldLabel,
-  .sd {
-    background: $gray1;
-  }
-  .combination,
-  .hasPlans,
-  .overviewItem,
-  .recipeItem,
-  .titleContainer {
+  .appbar,
+  .modal,
+  .topPlate {
     background: $gray0;
   }
-  .combinationToken,
-  .note,
-  .tag {
-    background: $gray2;
-  }
+  .fieldLabel,
   .dayName,
-  .group-info,
-  .option .info {
+  .sub {
     color: $gray6;
   }
-  .done .count {
-    color: $gray0;
-  }
-  .imageHolder {
+  .imgHolder {
     color: $gray3;
     background: $gray2;
   }
-  .selected {
-    background: $gray2;
-  }
-  .activeDay {
+  .snackBar {
     color: $gray1;
     background: $gray9;
   }
-  .dayContainer,
-  .instruction {
-    border-color: $gray9;
-  }
-  MDProgress {
+  Progress {
     progress-background-color: $gray4;
   }
-  MDFloatingActionButton {
-    color: $gray0;
-  }
-  .appIconContainer {
-    background: $orange;
-  }
-  .emptyState .icon {
-    color: $gray4;
+  .fab,
+  .hlMsg {
+    color: $gray1;
   }
 }
-.ns-dark {
-  .count,
-  ActionBar,
-  ListPicker,
+.Dark {
+  color: $gray1;
+  background: $gray9;
   Page,
-  SearchBar,
-  TabStripItem,
-  Tabs {
-    color: $gray2;
+  .filters {
     background: $gray9;
   }
-  .hr {
+  TextField,
+  TextView {
     border-color: $gray8;
+    placeholder-color: $gray6;
   }
-  .fieldLabel,
-  .sd {
-    background: $gray9;
+  .modalInput {
+    border-color: $gray7;
   }
-  .combination,
-  .hasPlans,
-  .overviewItem,
-  .recipeItem,
-  .titleContainer {
+  .appbar,
+  .modal,
+  .topPlate {
+    color: $gray0;
     background: $gray8;
   }
-  .combinationToken,
-  .note,
-  .tag {
-    background: $gray10;
-  }
+  .fieldLabel,
   .dayName,
-  .group-info,
-  .option .info {
+  .sub {
     color: $gray5;
   }
-  .done .count {
-    color: $gray10;
-  }
-  .imageHolder {
+  .imgHolder {
     color: $gray9;
     background: $gray10;
   }
-  .selected {
-    background: $gray6;
-  }
-  .activeDay {
+  .snackBar {
     color: $gray9;
-    background: $gray2;
+    background: $gray1;
   }
-  .dayContainer,
-  .instruction {
-    border-color: $gray2;
-  }
-  MDProgress {
+  Progress {
     progress-background-color: $gray5;
   }
-  MDFloatingActionButton {
+  .fab,
+  .hlMsg {
     color: $gray9;
   }
-  .appIconContainer {
-    background: $orange;
+}
+.Black {
+  color: $gray2;
+  background: $gray10;
+  Page {
+    background: $gray10;
   }
-  .emptyState .icon {
+  TextField,
+  TextView {
+    border-color: $gray9;
+    placeholder-color: $gray7;
+  }
+  .modalInput {
+    border-color: $gray8;
+  }
+  .appbar,
+  .modal,
+  .topPlate {
+    color: $gray1;
+    background: $gray9;
+  }
+  .fieldLabel,
+  .dayName,
+  .sub {
     color: $gray6;
   }
+  .imgHolder {
+    color: $gray10;
+    background: $gray9;
+  }
+  .snackBar {
+    color: $gray10;
+    background: $gray2;
+  }
+  Progress {
+    progress-background-color: $gray5;
+  }
+  .fab,
+  .hlMsg {
+    color: $gray10;
+  }
+}
+TextField.combField,
+#searchBar {
+  border-color: transparent;
 }
 // -----------------------------
 // Elements
 TextField,
-TextView,
-TimePickerField {
+TextView {
   width: 100%;
-  border-width: 1;
-  font-size: 14;
-  padding: 13 12;
-  margin: 8 0 0;
-  border-radius: 4;
-  border-color: $gray5;
-  placeholder-color: $gray5;
+  padding: 14 8;
+  border-bottom-width: 1;
 }
 TextView {
-  line-height: 12;
+  line-height: 4;
 }
-ListPicker {
-  width: 25%;
-}
-SearchBar {
-  font-family: 'Orkney-Regular';
-  font-size: 14;
-  text-field-hint-color: $gray5;
-}
-TabView {
-  tab-text-color: $gray5;
+#searchBar {
+  padding-left: 0;
+  margin: 0;
 }
 .inputField {
-  margin-bottom: 8;
+  margin-bottom: 24;
 }
 .fieldLabel {
   font-size: 12;
-  margin-left: 8;
-  padding: 0 4;
 }
 .progressContainer {
   width: 100%;
 }
-.hr {
-  padding: 0;
-}
-// .category,
-// .group-header,
-.text-btn,
-MDActivityIndicator {
-  color: $orange;
-}
-MDProgress {
+Progress {
   progress-color: $orange;
 }
 Switch {
@@ -227,618 +198,434 @@ Switch {
   off-background-color: $gray5;
 }
 // -----------------------------
-// ActionBar
-ActionBar {
-  height: 64;
-  margin: 0;
-  padding: 0 8;
-  GridLayout {
-    padding: 0;
-    margin: 0;
-  }
-  MDButton.er {
-    padding: 0;
-    margin: 0;
-  }
-  .title {
-    padding-left: 12;
-    text-align: left;
-    font-size: 18;
-  }
-}
-// -----------------------------
 // Side Drawer
-.sd {
-  padding: 8;
-}
-.sd-item {
-  border-radius: 4;
-  height: 48;
-  vertical-alignment: center;
-  .er {
-    font-size: 24;
-    margin: 0 24 0 0;
-  }
-  &.selected .er {
-    color: $orange;
-  }
-  &.selected {
-    color: $orange;
-    background: rgba($orange, 0.1);
-    .mdr {
-      ripple-color: transparent;
-    }
-  }
-  // prettier-ignore
-  Label {
-    padding: 2 16 0 0;
-    font-size: 14;
-    vertical-alignment: center;
-    &.er {
-      padding: 0 0 0 16;
-    }
-  }
-  .mdr {
-    padding: 0 16;
-  }
-  MDButton.er {
-    margin: 0;
-  }
-  .recipeCount {
-    padding: 4;
-    font-size: 14;
-    margin: 0 8 0 0;
+.segment {
+  border-radius: 8;
+  margin: 0 4 0 0;
+  padding: 0 12;
+  .value {
+    padding-left: 8;
     vertical-alignment: center;
   }
-}
-.sd-group-header {
-  width: 100%;
-  padding: 0 0 0 8;
-  MDButton.er {
-    margin: 0;
-  }
-  .filterPath {
-    line-height: 6;
+  &.select {
+    color: $orange;
+    @extend .hl;
   }
 }
-.noTags {
-  font-size: 14;
-  text-align: center;
-  margin: 8;
-}
-.mdr {
-  border-radius: 4;
-}
-MDButton {
+Button {
+  background-color: transparent;
+  z-index: 0;
   padding: 8;
+  border-radius: 8;
   min-width: 0;
   min-height: 0;
-  &.er {
+  &:active {
+    @extend .fade;
+  }
+  &.ico {
     padding: 0;
+    margin: 0;
     width: 48;
     height: 48;
-    margin: 0 8 0 0;
-    border-radius: 99;
   }
-}
-MDButton,
-.mdr {
-  ripple-color: rgba($gray5, 0.2);
+  &.text {
+    @extend .tb;
+    horizontal-alignment: left;
+    color: $orange;
+  }
+  &.big {
+    margin-top: 8;
+    padding: 16 0;
+  }
+  &.sm {
+    font-size: 12;
+    padding: 12;
+  }
+  &.min {
+    width: 40;
+    height: 40;
+  }
+  &.x {
+    width: 32;
+    height: 32;
+    min-width: 0;
+    margin: 0 0 0 8;
+    vertical-alignment: center;
+  }
+  &.rate {
+    margin: 0 4 0 0;
+    width: 32;
+    height: 32;
+  }
 }
 // -----------------------------
 // HOME
-.emptyStateContainer {
-  width: 100%;
-  height: 100%;
-}
 .emptyState {
-  line-height: 8;
-  padding: 0 32;
-  text-align: center;
-  font-size: 14;
-  horizontal-alignment: center;
-  .icon {
-    font-size: 64;
-    text-align: center;
-    margin-bottom: 16;
-  }
-  .logo {
-    width: 64;
-    margin-bottom: 16;
+  padding: 16 16 8;
+  Label {
+    @extend .tw;
   }
   .title {
-    font-size: 18;
-    text-align: center;
-    padding: 0;
-    horizontal-alignment: center;
-    .er {
-      font-size: 24;
-      vertical-alignment: center;
-    }
-  }
-  .searchAll {
-    font-size: 14;
-    width: auto;
-    height: auto;
-    min-width: 0;
-    padding: 12;
-    border-radius: 4;
-    letter-spacing: 0;
-    // text-transform: none;
-    margin: 16;
-    color: $orange;
-    horizontal-alignment: center;
+    @extend .tb;
+    font-size: 17;
   }
 }
 // -----------------------------
 // Recipe Items
-ListView {
-  font-size: 14;
+.recipeItem {
+  padding: 8 16;
+  .recipeInfo {
+    vertical-alignment: top;
+    padding: 4 0 4 8;
+  }
+  .title {
+    padding: 0 0 4;
+  }
+  .attributes {
+    padding-top: 2;
+    .attr {
+      font-size: 10;
+      padding: 0 6 1 2;
+    }
+  }
 }
-.recipeContainer {
+.simple .recipeInfo {
+  padding: 8 0;
+}
+.minimal .title {
   padding: 0;
 }
-.firstItem {
-  padding: 12 0 0;
+
+.grid {
+  padding: 8;
+  .recipeInfo {
+    padding: 8 8 0;
+  }
+  &.odd {
+    padding: 8 8 8 16;
+  }
+  &.even {
+    padding: 8 16 8 8;
+  }
 }
 .lastItem {
-  padding: 0 0 84;
+  margin-bottom: 128;
 }
-.layout1 {
-  padding: 0;
-  margin: 4 16;
-  border-radius: 4;
-  .recipeInfo {
-    margin: 0;
-    padding: 8;
-    .attr,
-    .category {
-      font-size: 10;
-      padding: 0;
-      margin: 0;
-    }
-    .title {
-      margin: 0;
-      padding: 2 0;
-    }
-    .attrContainer {
-      padding: 0;
-      .attr {
-        padding: 1 8 0 2;
-      }
-    }
-  }
+.selected {
+  @extend .hl;
 }
-.layout2 {
-  padding: 0;
-  margin: 4;
-  border-radius: 4;
-  .imageHolder {
-    vertical-alignment: center;
-    &.card {
-      border-radius: 4 4 0 0;
-      // prettier-ignore
-      Image {
-        border-radius: 4 4 0 0;
-      }
-    }
-  }
-  .recipeInfo {
-    margin: 0;
-    padding: 8;
-    .attr,
-    .category {
-      font-size: 10;
-      padding: 0;
-      margin: 0;
-    }
-    .title {
-      margin: 0;
-      padding: 2 0;
-    }
-  }
-  .tagsContainer {
-    padding: 4 0 0;
-  }
+.unselected {
+  background-color: transparent;
 }
-.tagsContainer {
-  padding: 2 0 0;
-  .tag {
-    font-size: 10;
-    padding: 1 4;
-    margin: 0 4 0 0;
-    line-height: 0;
-    border-radius: 2;
-  }
-}
-.imageHolder {
-  vertical-alignment: center;
-  &.card {
-    border-radius: 4 0 0 4;
-    // prettier-ignore
-    Image {
-      border-radius: 4 0 0 4;
-    }
-  }
-}
-.swipe-item {
-  margin: 0 8;
-  background: $red;
-  color: #fff;
-  height: 104;
-  border-radius: 4;
+.imgHolder {
+  border-radius: 8;
 }
 // -----------------------------
 // SETTINGS
-.group-header {
-  // text-transform: uppercase;
-  padding: 8;
-}
 .group-info {
-  text-align: center;
-  padding: 16;
-  line-height: 6;
-  // margin-top: 8;
-  border-radius: 4;
+  padding: 16 16 16 72;
+  line-height: 4;
 }
-.main-container {
-  padding: 8 8 88;
+.options-list {
   .option {
-    font-size: 14;
-    line-height: 6;
-    .er {
-      margin: 11 24 11 16;
+    padding: 14 8;
+    margin: 0 16;
+    .ico {
+      padding: 0;
+      margin: 0 24 0 16;
     }
-    .info {
+    .info,
+    .sub {
+      @extend .tw;
+    }
+    .sub {
       font-size: 12;
-      padding-top: 0;
-    }
-    StackLayout {
-      margin: 9 24 9 0;
     }
   }
+  .listSpace {
+    height: 72;
+  }
 }
+
 // -----------------------------
 // ABOUT
-.appIconContainer {
-  background: $orange;
-  padding: 24 0;
-  width: 100%;
-  border-radius: 4;
-  .appIcon {
-    height: 104;
+.app-info {
+  .icon {
+    margin: 16;
+    background: $orange;
+    border-radius: 99;
+    horizontal-alignment: center;
+  }
+  .name {
+    font-size: 17;
+  }
+  .info {
+    padding: 8 16 24;
+    line-height: 4;
   }
 }
 // -----------------------------
 // VIEW RECIPE
-.viewRecipe {
-  .attr,
-  .category,
-  .ingredient,
-  .tag,
-  .tagsTitle {
-    font-size: 14;
-  }
-  .attr,
-  .category {
-    margin: 0 12;
-  }
-  .small {
-    font-size: 10;
-  }
+.photo {
+  border-radius: 8;
+  margin: 24 16 0 0;
+  vertical-align: top;
+}
+.attribute {
+  margin: 8 16;
   .title {
-    font-size: 18;
-    line-height: 6;
-    padding: 0 12;
+    margin-right: 8;
+    font-size: 12;
+    color: $gray6;
   }
-  .ratingContainer {
-    margin: 16 8 8;
+  .value {
+    @extend .tb;
+    @extend .tw;
   }
-  .rate,
-  .rated {
-    padding: 0 8 0 0;
-  }
-  .rate {
-    color: $gray5;
-  }
-  .rated {
+  .clickable {
     color: $orange;
   }
-  .tagsContainer {
-    padding: 0;
-    margin: 12 12 0;
-    .tag {
-      padding: 2 6;
-      margin: 0 8 8 0;
-    }
+}
+.ingredient {
+  padding: 0 16;
+  .value {
+    @extend .tw;
+    vertical-align: center;
+    padding: 14 0 14 16;
+    line-height: 4;
   }
-  .overviewContainer {
-    margin: 8 8 12;
-    .overviewItem {
-      border-radius: 4;
-      margin: 4;
-      android-elevation: 1;
-      .er {
-        padding: 16 0 0 16;
-        horizontal-alignment: left;
-      }
-      .itemCount {
-        font-size: 14;
-        padding: 8 16 16;
-      }
-    }
-  }
+}
+.instruction {
+  padding: 0 16;
   .count {
-    width: 24;
-    height: 24;
-    margin: 0 0 0 8;
-    text-align: center;
-    vertical-alignment: top;
-    horizontal-alignment: center;
-    border-radius: 99;
-    border-width: 2;
-    border-color: $gray5;
+    @extend .tb;
+    font-size: 17;
   }
-  .instruction {
-    font-size: 14;
-    line-height: 6;
-    padding: 2 0 24 35;
-    margin: 0 0 0 19;
-    border-width: 0 0 0 2;
-    border-color: $gray5;
+  .value {
+    @extend .tw;
+    padding: 14 0 14 16;
+    line-height: 4;
   }
-  .instruction.noBorder {
-    border-color: transparent;
-  }
-  .done .count {
-    background: $orange;
-    border-color: $orange;
-  }
-  .done .instruction {
-    opacity: 0.4;
+}
+.done {
+  opacity: 0.5;
+  // @extend .fade;
+  .value {
     text-decoration: line-through;
   }
-  .combination {
-    margin: 0 16 8;
-    border-radius: 4;
-    font-size: 14;
-    .combinationTitle {
-      padding: 14 16;
-      margin: 0;
-      line-height: 6;
-    }
-  }
-  .note {
-    font-size: 14;
-    line-height: 6;
-    padding: 14 16;
-    margin: 0 0 8;
-    border-radius: 4;
-  }
+}
+.combination {
+  @extend .tw;
+  text-align: left;
+  padding: 16;
+  line-height: 4;
+}
+.note {
+  @extend .tw;
+  line-height: 4;
+  padding: 16 0;
 }
 // -----------------------------
-// FAB
-#btnFabContainer {
-  z-index: 100;
-  width: 100%;
-  height: 100%;
+// APPBAR
+.appbar {
+  z-index: 99;
+  min-height: 56;
+  margin: 8;
+  padding: 4;
+  border-radius: 10;
+  elevation: 16;
+  &.hlMsg {
+    background: $orange;
+  }
+  .title {
+    @extend .tb;
+    @extend .tw;
+    vertical-align: center;
+    line-height: 4;
+  }
+  .msg {
+    padding: 14 16;
+  }
+  .fab {
+    margin-left: 4;
+  }
 }
-MDFloatingActionButton {
-  width: 56;
-  height: 56;
-  margin: 16;
+.toolbar {
+  z-index: 98;
+  padding: 4;
+  margin-bottom: 0;
+  horizontal-alignment: left;
+  .tool {
+    padding: 0 12;
+    Label {
+      vertical-alignment: center;
+    }
+    .ico {
+      padding-right: 8;
+    }
+  }
+}
+.fab {
+  width: 48;
+  height: 48;
+  margin: 0 4 0 0;
+  border-radius: 8;
   background: $orange;
-  ripple-color: $fabRipple;
 }
 // -----------------------------
 // EDIT RECIPE
 .sectionTitle {
-  font-size: 18;
+  @extend .tb;
+  @extend .tw;
+  font-size: 21;
+  padding: 0;
+  margin: 32 0 16;
 }
-.text-btn {
-  font-size: 14;
-  horizontal-alignment: left;
-  padding: 12;
-  margin: 8 0 0;
-  min-width: 0;
-}
-MDButton.x {
-  margin: 8 0 0;
-  width: 32;
-  height: 32;
-  min-width: 0;
-  vertical-alignment: center;
+.countdown {
+  background-color: transparent;
+  width: 48;
+  height: 48;
+  z-index: 0;
+  font-size: 17;
+  color: $orange;
 }
 // -----------------------------
 // MEAL PLANNER
 .calendar {
   padding: 0 8;
   .navBtn {
-    horizontal-alignment: center;
     margin: 0;
   }
   .monthName {
     text-align: center;
     vertical-alignment: center;
-    font-size: 18;
-    padding: 24 0;
+    font-size: 17;
   }
   .dayName {
-    padding: 8 4;
+    margin: 8 0;
     font-size: 12;
     text-align: center;
   }
   .day {
-    font-size: 14;
-    margin: 4;
-    width: 32;
-    height: 32;
-    // horizontal-alignment: center;
-    border-radius: 99;
-    text-align: center;
+    border-radius: 8;
+  }
+  .hasPlans {
+    color: $orange;
+  }
+  .activeDay {
+    background-color: rgba($orange, 0.2);
   }
 }
 .dayPlan {
-  padding: 0 8 88;
+  padding: 16 16 80;
   width: 100%;
-  .plansContainer {
-    margin: 16 0 0 8;
-    padding: 0;
-    border-left-width: 8;
-    &.breakfast {
-      border-left-color: $breakfast;
-    }
-    &.lunch {
-      border-left-color: $lunch;
-    }
-    &.dinner {
-      border-left-color: $dinner;
-    }
-    &.snacks {
-      border-left-color: $snacks;
-    }
-    .periodLabel {
-      text-transform: capitalize;
-      vertical-alignment: center;
-      font-size: 14;
-      padding: 0 0 0 16;
-    }
-    .recipe {
-      margin: 0 8;
-      .titleContainer {
-        border-radius: 4;
-        margin: 0 0 8 8;
-      }
-      .recipeTitle {
-        font-size: 14;
-        padding: 14 16;
-        line-height: 6;
-      }
-    }
-    .x {
-      margin: 8 0 16 8;
-      vertical-alignment: center;
-    }
+  .periodLabel {
+    font-size: 17;
+    text-transform: capitalize;
+    vertical-align: center;
+  }
+  .recipeTitle {
+    @extend .tw;
+    text-align: left;
+    padding: 16 0;
+    line-height: 4;
   }
 }
 // -----------------------------
 // DIALOGS
-.dialogContainer {
-  max-width: 480;
+.modal {
+  max-width: 320;
   width: 100%;
-  color: $gray9;
-  background: $gray1;
-  font-size: 14;
-  &.dark {
-    color: $gray2;
-    background: $gray9;
+  border-radius: 10;
+  margin: 72 0;
+  .title {
+    @extend .tb;
+    @extend .tw;
+    padding: 16;
+    font-size: 21;
   }
-  .dialogIcon {
-    text-align: center;
-    padding: 32;
-    font-size: 48;
+  .input {
+    padding: 0 16 8;
   }
-  .dialogTitle {
-    line-height: 6;
-    padding: 24 24 16;
-    font-size: 18;
+  .description {
+    line-height: 4;
+    padding: 0 16 8;
   }
-  .dialogInput {
-    padding: 0 24 16;
+  ListPicker {
+    width: 25%;
+    height: 160;
   }
-  .dialogDescription {
-    line-height: 6;
-    padding: 0 24 8;
-  }
-  .actionItem {
+  .listItem {
+    @extend .tw;
+    width: 100%;
     letter-spacing: 0;
     text-transform: none;
-    line-height: 6;
-    padding: 13 24;
+    line-height: 4;
+    padding: 13 16;
     margin: 0;
-    border-radius: 1;
     background: transparent;
   }
-  .actionToggle {
-    background: $orange;
-  }
-  .actionsContainer {
-    padding: 8;
-  }
   .shareItem {
-    border-radius: 4;
-    margin: 0 16 16;
-    android-elevation: 1;
+    border-radius: 8;
+    margin: 0 8 8;
     text-align: center;
-    .er {
+    .ico {
       padding: 16 0 0;
     }
     .item {
+      @extend .tw;
       padding: 8 16 16;
     }
   }
-  .action {
-    font-size: 12;
-    padding: 12;
-    min-width: 0;
-    color: $orange;
+  .actions {
+    padding: 4;
   }
-  MDButton.actionIcon {
-    font-size: 14;
-    width: auto;
-    height: auto;
-    min-width: 0;
-    padding: 16 24;
-    border-radius: 4;
-    letter-spacing: 0;
-    text-transform: none;
-    margin: 0 16 16;
+  .filters {
+    padding: 8;
+    margin: 0 0 8;
   }
 }
+.noResInfo {
+  @extend .tac;
+  @extend .tw;
+  padding: 16;
+  line-height: 4;
+}
 // -----------------------------
-MDActivityIndicator {
+ActivityIndicator {
   width: 24;
   height: 24;
-  margin: 16 12;
+  margin: 12;
+  color: $orange;
 }
 // -----------------------------
 // Transitions
-.bounce-enter-active {
-  animation-name: bounce-in;
-  animation-duration: 1s;
+.hl {
+  animation-name: hl;
+  animation-duration: 0.2s;
   animation-fill-mode: forwards;
-  animation-timing-function: ease-in-out;
+  animation-timing-function: ease-out;
 }
-.bounce-leave-active {
-  animation-name: bounce-out;
-  animation-duration: 0.25s;
-  animation-fill-mode: forwards;
-}
-@keyframes bounce-in {
+@keyframes hl {
   0% {
-    transform: scale(0);
-    opacity: 0;
+    opacity: 0.5;
+    background-color: transparent;
   }
-  25% {
-    transform: scale(1.2);
+  100% {
     opacity: 1;
-  }
-  50% {
-    transform: scale(0.9);
-  }
-  75% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
+    background-color: rgba($orange, 0.2);
   }
 }
-@keyframes bounce-out {
+.fade {
+  animation-name: fade;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-out;
+}
+@keyframes fade {
   0% {
-    transform: scale(1);
   }
   100% {
-    transform: scale(0);
-    opacity: 0;
+    opacity: 0.5;
   }
 }

@@ -1,0 +1,8 @@
+- New: Redesigned user interface
+- New: Recipe list view modes
+- New: Black theme
+- Fixed: Crash on app start with blocked sensors #30
+- Improvement: Faster app start and navigation
+- Added app languages: French, Italian, Norwegian Bokmål
+- Updated translations
+- Several bug fixes

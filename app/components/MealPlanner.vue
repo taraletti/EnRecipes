@@ -1,162 +1,138 @@
 <template>
-  <Page @loaded="onPageLoad" @unloaded="onPageUnload">
-    <ActionBar androidElevation="1">
-      <GridLayout rows="*" columns="auto, *, auto, auto">
-        <MDButton
-          class="er"
-          variant="text"
-          :text="icon.back"
-          automationText="Back"
-          @tap="$navigateBack()"
-          col="0"
-        />
-        <Label class="title orkm" :text="'planner' | L" col="1" />
-        <MDButton
-          class="er"
-          variant="text"
+  <Page @loaded="onPageLoad" actionBarHidden="true">
+    <GridLayout rows="*, auto" columns="*">
+      <ScrollView
+        @scroll="!edit && onScroll($event)"
+        rowSpan="2"
+        scrollBarIndicatorVisible="false"
+      >
+        <StackLayout>
+          <Label class="pageTitle" :text="'planner' | L" />
+          <GridLayout
+            class="calendar"
+            columns="*, *, *, *, *, *, *"
+            rows="auto, auto, auto, auto, auto, auto, auto, auto"
+          >
+            <Button class="ico navBtn" :text="icon.left" @tap="prevMonth" />
+            <Label
+              class="monthName"
+              col="1"
+              colSpan="5"
+              :text="$options.filters.L(mNames[month]) + ' ' + year"
+            />
+            <Button
+              class="ico navBtn"
+              col="6"
+              :text="icon.right"
+              @tap="nextMonth"
+            />
+            <Label
+              class="dayName"
+              row="1"
+              :col="i"
+              v-for="(d, i) in dNames"
+              :key="d"
+              :text="d | L"
+            />
+            <Button
+              class="min day"
+              :class="{
+                tb: isToday(d),
+                activeDay: isActive(d),
+                hasPlans: hasPlans(d),
+              }"
+              :row="getrow(i)"
+              :col="i % 7"
+              v-for="(d, i) in getCal"
+              :key="i"
+              :text="d ? d : null"
+              @tap="setToday(d)"
+            />
+          </GridLayout>
+          <StackLayout class="dayPlan">
+            <StackLayout
+              v-for="(mealType, index) in mealTimesWithRecipes"
+              :key="'mealType' + index"
+            >
+              <GridLayout columns="auto, auto">
+                <Label
+                  class="periodLabel tb"
+                  :class="mealType"
+                  :text="mealType | L"
+                />
+                <Button
+                  :visibility="edit ? 'visible' : 'hidden'"
+                  col="1"
+                  class="ico"
+                  :text="icon.plus"
+                  @tap="addRecipe(mealType)"
+                />
+              </GridLayout>
+              <GridLayout
+                :columns="`*, ${edit ? 'auto' : 0}`"
+                v-for="(recipeID, index) in getRecipes[mealType]"
+                :key="mealType + index"
+              >
+                <Button
+                  class="recipeTitle"
+                  :text="getRecipeTitle(recipeID)"
+                  @tap="viewRecipe(recipeID)"
+                />
+                <Button
+                  :visibility="edit ? 'visible' : 'hidden'"
+                  col="1"
+                  class="ico x"
+                  :text="icon.x"
+                  @tap="removeRecipe(recipeID, mealType)"
+                />
+              </GridLayout>
+            </StackLayout>
+          </StackLayout>
+        </StackLayout>
+      </ScrollView>
+      <GridLayout
+        row="1"
+        @loaded="onAppBarLoad"
+        class="appbar"
+        v-show="!showUndo"
+        columns="auto, *, auto, auto"
+      >
+        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
+        <Button
+          class="ico"
           :text="icon.tod"
-          automationText="today"
+          v-if="!isExactlyToday"
           @tap="goToToday"
           col="2"
         />
-        <MDButton
-          class="er"
-          variant="text"
+        <Button
+          class="ico fab"
           :text="edit ? icon.done : icon.edit"
-          automationText="edit"
-          @tap="edit = !edit"
+          @tap="toggleEditMode"
           col="3"
         />
       </GridLayout>
-    </ActionBar>
-    <ScrollView width="100%" height="100%">
-      <GridLayout rows="auto, *">
-        <GridLayout
-          class="calendar"
-          width="100%"
-          row="0"
-          columns="*, *, *, *, *, *, *"
-          rows="auto, auto, auto, auto, auto, auto, auto, auto"
-        >
-          <MDButton
-            variant="text"
-            class="er navBtn"
-            col="0"
-            :text="icon.left"
-            @tap="prevMonth"
-          />
-          <Label
-            class="monthName"
-            col="1"
-            colSpan="5"
-            :text="$options.filters.L(mNames[month]) + ' ' + year"
-          />
-          <MDButton
-            variant="text"
-            class="er navBtn"
-            col="6"
-            :text="icon.right"
-            @tap="nextMonth"
-          />
-          <Label
-            class="dayName"
-            row="1"
-            :col="i"
-            v-for="(d, i) in dNames"
-            :key="d"
-            :text="$options.filters.L(d)"
-          />
-          <Label
-            @loaded="centerLabel"
-            class="day orkm"
-            :androidElevation="hasPlans(d) ? 1 : 0"
-            :class="{
-              today: isToday(d),
-              activeDay: isActive(d),
-              hasPlans: hasPlans(d),
-            }"
-            :row="getrow(i)"
-            :col="i % 7"
-            v-for="(d, i) in getCal"
-            :key="i"
-            :text="d ? d : null"
-            @tap="setToday(d)"
-          />
-        </GridLayout>
-        <StackLayout row="1" class="dayPlan">
-          <StackLayout class="hr" margin="16 0 0"></StackLayout>
-          <StackLayout
-            v-for="(mealType, index) in mealTimes"
-            :key="'mealType' + index"
-            class="plansContainer"
-            :class="mealType"
-          >
-            <GridLayout columns="auto, auto" class="header">
-              <Label
-                col="0"
-                @tap="edit = true"
-                class="periodLabel orkm"
-                :text="mealType | L"
-              />
-              <MDButton
-                :visibility="edit ? 'visible' : 'hidden'"
-                col="1"
-                variant="text"
-                class="er"
-                :text="icon.plus"
-                @tap="addRecipe(mealType)"
-              />
-            </GridLayout>
-            <GridLayout
-              class="recipe"
-              :paddingTop="index == 0 ? 8 : 0"
-              :columns="`*, ${edit ? 'auto' : 0}`"
-              v-for="(recipeID, index) in getRecipes[mealType]"
-              :key="mealType + index"
-            >
-              <GridLayout
-                androidElevation="1"
-                col="0"
-                columns="*"
-                class="titleContainer mdr"
-                @tap="viewRecipe(recipeID)"
-              >
-                <Label
-                  verticalAlignment="center"
-                  class="recipeTitle"
-                  :text="getRecipeTitle(recipeID)"
-                  textWrap="true"
-                />
-              </GridLayout>
-              <MDButton
-                :visibility="edit ? 'visible' : 'hidden'"
-                variant="text"
-                col="1"
-                class="er x"
-                :text="icon.x"
-                @tap="removeRecipe(recipeID, mealType)"
-              />
-            </GridLayout>
-          </StackLayout>
-        </StackLayout>
+      <GridLayout
+        row="1"
+        class="appbar snackBar"
+        v-show="showUndo"
+        columns="auto, *, auto"
+      >
+        <Button :text="countdown" class="countdown tb" />
+        <Label class="title" col="1" :text="snackMsg | L" />
+        <Button class="ico fab" :text="icon.alert" @tap="undoDel" col="3" />
       </GridLayout>
-    </ScrollView>
+    </GridLayout>
   </Page>
 </template>
 
 <script>
-import {
-  ApplicationSettings,
-  Page,
-  Observable,
-  GestureTypes,
-} from "@nativescript/core";
-import { SnackBar } from "@nativescript-community/ui-material-snackbar";
-const snackbar = new SnackBar();
+import { ApplicationSettings, Observable } from "@nativescript/core";
 import { mapState, mapActions } from "vuex";
 import ViewRecipe from "./ViewRecipe.vue";
 import ActionDialogWithSearch from "./modal/ActionDialogWithSearch.vue";
-import ConfirmDialog from "./modal/ConfirmDialog.vue";
+let undoTimer;
+
 export default {
   data() {
     return {
@@ -181,6 +157,12 @@ export default {
       month: 0,
       today: null,
       edit: false,
+      scrollPos: 1,
+      appbar: null,
+      countdown: 5,
+      snackMsg: null,
+      showUndo: false,
+      undo: false,
     };
   },
   computed: {
@@ -211,23 +193,61 @@ export default {
       }
       return days;
     },
+    isExactlyToday() {
+      let d = new Date();
+      return (
+        this.year == d.getFullYear() &&
+        this.month == d.getMonth() &&
+        this.today == d.getDate()
+      );
+    },
+    mealTimesWithRecipes() {
+      return this.mealTimes.filter(
+        (e) => (this.getRecipes[e] && this.getRecipes[e].length) || this.edit
+      );
+    },
   },
   methods: {
     ...mapActions([
-      "setCurrentComponentAction",
+      "setComponent",
       "addMealPlanAction",
       "deleteMealPlanAction",
     ]),
     onPageLoad(args) {
       const page = args.object;
       page.bindingContext = new Observable();
-      this.setCurrentComponentAction("MealPlanner");
+      this.setComponent("MealPlanner");
       if (!this.today || this.today === new Date().getDate()) this.goToToday();
     },
-    onPageUnload(args) {
-      snackbar.dismiss();
+    onAppBarLoad({ object }) {
+      this.appbar = object;
+    },
+    onScroll(args) {
+      let scrollUp;
+      let y = args.scrollY;
+      if (y) {
+        scrollUp = y < this.scrollPos;
+        this.scrollPos = Math.abs(y);
+        let ab = this.appbar.translateY;
+        if (!scrollUp && ab == 0) {
+          this.animateInOut(
+            250,
+            false,
+            (val) => (this.appbar.translateY = val * 64)
+          );
+        } else if (scrollUp && ab == 64) {
+          this.animateInOut(
+            250,
+            true,
+            (val) => (this.appbar.translateY = val * 64)
+          );
+        }
+      }
     },
     // HELPERS
+    showAppBar() {
+      this.appbar.translateY = 0;
+    },
     getrow(i) {
       return Math.floor(2 + i / 7);
     },
@@ -240,9 +260,6 @@ export default {
       let recipe = this.recipes.filter((e) => e.id === id)[0];
       return recipe ? recipe.title : `[ ${this.$options.filters.L("resNF")} ]`;
     },
-    centerLabel(args) {
-      args.object.android.setGravity(17);
-    },
 
     // NAVIGATION HANDLERS
     viewRecipe(recipeID) {
@@ -253,6 +270,12 @@ export default {
             filterTrylater: true,
             recipeID,
           },
+          transition: {
+            name: "fade",
+            duration: 250,
+            curve: "easeOut",
+          },
+          // backstackVisible: false,
         });
       }
     },
@@ -262,18 +285,21 @@ export default {
         this.year--;
         this.month = 11;
       } else this.month--;
+      this.showAppBar();
     },
     nextMonth() {
       if (this.month == 11) {
         this.year++;
         this.month = 0;
       } else this.month++;
+      this.showAppBar();
     },
     goToToday() {
       let d = new Date();
       this.year = d.getFullYear();
       this.month = d.getMonth();
       this.today = d.getDate();
+      this.showAppBar();
     },
     isToday(date) {
       let d = new Date();
@@ -301,6 +327,9 @@ export default {
         index,
       });
     },
+    toggleEditMode() {
+      this.edit = !this.edit;
+    },
     // DATA HANDLERS
     addRecipe(type) {
       let filteredRecipes = this.recipes.filter((e) =>
@@ -310,7 +339,6 @@ export default {
         props: {
           title: "selRec",
           recipes: filteredRecipes,
-          helpIcon: "cal",
         },
       }).then((title) => {
         title && this.newMealPlan(title, null, type, null);
@@ -328,21 +356,34 @@ export default {
         index,
       };
       this.deleteMealPlanAction(mealPlan);
-      this.undoRemove(`${this.$options.filters.L("recRm")}`).then((res) => {
-        if (res.command === "action") {
-          this.newMealPlan(title, date, type, index);
-        }
+      this.showUndoBar("recRm").then((res) =>
+        this.newMealPlan(title, date, type, index)
+      );
+    },
+    showUndoBar(message) {
+      return new Promise((resolve, reject) => {
+        this.showUndo = true;
+        this.snackMsg = message;
+        this.countdown = 5;
+        let a = 5;
+        clearTimeout(undoTimer);
+        undoTimer = setInterval(() => {
+          if (this.undo) {
+            this.showUndo = this.undo = false;
+            clearTimeout(undoTimer);
+            resolve(true);
+          }
+          this.countdown = Math.round((a -= 0.1));
+          if (this.countdown < 1) {
+            this.showUndo = false;
+            clearTimeout(undoTimer);
+            reject(true);
+          }
+        }, 100);
       });
     },
-    undoRemove(message) {
-      return snackbar.action({
-        message,
-        textColor: this.appTheme == "Light" ? "#fff" : "#292929",
-        actionTextColor: "#ff5200",
-        backgroundColor: this.appTheme == "Light" ? "#292929" : "#fff",
-        actionText: "Undo",
-        hideDelay: 5000,
-      });
+    undoDel() {
+      this.undo = true;
     },
   },
   created() {

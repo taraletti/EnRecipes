@@ -1,417 +1,470 @@
 <template>
-  <Page @loaded="onPageLoad" @unloaded="onPageUnload">
-    <ActionBar androidElevation="1">
-      <GridLayout
-        v-if="showSearch"
-        columns="auto, *"
-        verticalAlignment="center"
-      >
-        <MDButton
-          class="er"
-          :text="icon.back"
-          variant="text"
-          automationText="Back"
-          col="0"
-          @tap="closeSearch"
-        />
-        <SearchBar
-          col="1"
-          :hint="'ser' | L"
-          @textChange="updateList($event.value)"
-          @clear="clearSearch"
-        />
-      </GridLayout>
-      <GridLayout v-else columns="auto, *, auto, auto, auto">
-        <MDButton
-          class="er"
-          col="0"
-          variant="text"
-          @tap="selectMode ? clearSelection() : showDrawer()"
-          :text="selectMode ? icon.x : icon.menu"
-        />
-        <Label
-          v-if="selectMode"
-          class="title orkm"
-          :text="`${selection.length} ${$options.filters.L('sltd')}`"
-          col="1"
-        />
-        <Label
-          v-else
-          class="title orkm"
-          :text="`${currentComponent}` | L"
-          col="1"
-        />
-        <MDButton
-          v-if="recipes.length"
-          class="er mdr"
-          :text="layout == 1 ? icon.l1 : layout == 2 ? icon.l2 : icon.l3"
-          variant="text"
-          col="2"
-          @tap="switchLayout"
-        />
-        <MDButton
-          v-if="recipes.length && !selectMode"
-          class="er"
-          :text="selectMode ? icon.export : icon.sear"
-          variant="text"
-          col="3"
-          @tap="selectMode ? exportSelection() : openSearch()"
-        />
-        <MDButton
-          v-if="recipes.length"
-          class="er"
-          :text="selectMode ? icon.del : icon.sort"
-          variant="text"
-          col="4"
-          @tap="selectMode ? deleteSelection() : sortDialog()"
-        />
-      </GridLayout>
-    </ActionBar>
-    <AbsoluteLayout>
-      <CollectionView
-        width="100%"
-        height="100%"
-        for="recipe in filteredRecipes"
-        ref="listview"
-        :itemTemplateSelector="getLayout"
-      >
-        <v-template name="one">
-          <GridLayout class="recipeContainer" :class="isFirstItem(recipe.id)">
-            <GridLayout
-              class="recipeItem layout1 mdr"
-              rows="104"
-              columns="104, *"
-              androidElevation="1"
-              ref="recipe"
-              @longPress="
-                selectMode
-                  ? viewRecipe(recipe.id)
-                  : addToSelection($event, recipe.id)
-              "
-              @tap="
-                selectMode
-                  ? addToSelection($event, recipe.id)
-                  : viewRecipe(recipe.id)
-              "
-            >
-              <GridLayout class="imageHolder card" rows="104" columns="104">
-                <Image
-                  row="0"
-                  col="0"
-                  v-if="recipe.imageSrc"
-                  :src="recipe.imageSrc"
-                  stretch="aspectFill"
-                  decodeWidth="104"
-                  decodeHeight="104"
-                  loadMode="async"
-                />
-                <Label
-                  v-else
-                  row="0"
-                  col="0"
-                  horizontalAlignment="center"
-                  class="er"
-                  fontSize="56"
-                  :text="icon.img"
-                />
-              </GridLayout>
-              <StackLayout class="recipeInfo" col="1">
-                <Label
-                  :text="`${$options.filters.L(
-                    recipe.cuisine
-                  )} • ${$options.filters.L(recipe.category)}`"
-                  class="category"
-                />
-                <Label :text="recipe.title" class="orkm title" />
-                <GridLayout columns="*" rows="auto, *, auto">
-                  <StackLayout
-                    class="attrContainer"
-                    orientation="horizontal"
-                    row="0"
-                  >
-                    <Label class="er small" :text="icon.star" />
-                    <Label class="attr" :text="recipe.rating" />
-                    <Label class="er small" :text="icon.diff" />
-                    <Label class="attr" :text="`${recipe.difficulty}` | L" />
-                    <Label class="er small" :text="icon.time" />
-                    <Label
-                      class="attr"
-                      :text="`${
-                        formattedTotalTime(recipe.prepTime, recipe.cookTime)
-                          .time
-                      }`"
-                    />
-                  </StackLayout>
-                  <StackLayout
-                    class="tagsContainer"
-                    orientation="horizontal"
-                    row="2"
-                  >
-                    <Label
-                      v-for="(tag, index) in recipe.tags"
-                      :key="index"
-                      class="tag"
-                      :text="tag"
-                    />
-                  </StackLayout>
-                </GridLayout>
-              </StackLayout>
+  <Frame @loaded="onFrameLoad" :class="appTheme">
+    <Page @loaded="onPageLoad" @unloaded="onPageUnload" actionBarHidden="true">
+      <GridLayout rows="*, auto, auto" columns="*">
+        <CollectionView
+          rowSpan="3"
+          :spanSize="getSpanSize"
+          for="recipe in getList"
+          @loaded="onListLoad"
+          :itemTemplateSelector="getLayout"
+          :colWidth="layout == 'grid' ? '50%' : '100%'"
+          @scroll="!selectMode && onScroll($event)"
+        >
+          <v-template name="header">
+            <GridLayout rows="auto" columns="*, auto, 12">
+              <Label class="pageTitle" :text="`${currentComponent}` | L" />
+              <Button
+                col="1"
+                class="ico"
+                :text="icon.cog"
+                @tap="navigateTo(Settings, 'Settings', true)"
+              />
             </GridLayout>
-          </GridLayout>
-        </v-template>
-        <v-template name="two">
-          <GridLayout class="recipeContainer" :class="isFirstItem(recipe.id)">
-            <GridLayout
-              class="recipeItem layout2 mdr"
-              rows="auto, auto"
-              columns="*"
-              androidElevation="1"
-              ref="recipe"
-              @longPress="
-                selectMode
-                  ? viewRecipe(recipe.id)
-                  : addToSelection($event, recipe.id)
-              "
-              @tap="
-                selectMode
-                  ? addToSelection($event, recipe.id)
-                  : viewRecipe(recipe.id)
-              "
-            >
-              <GridLayout class="imageHolder card" :rows="imgWidth" columns="*">
-                <Image
-                  row="0"
-                  col="0"
-                  v-if="recipe.imageSrc"
-                  :src="recipe.imageSrc"
-                  stretch="aspectFill"
-                  :decodeWidth="imgWidth"
-                  :decodeHeight="imgWidth"
-                  loadMode="async"
-                />
+          </v-template>
+          <v-template name="lists">
+            <StackLayout orientation="horizontal" padding="0 16 16">
+              <GridLayout
+                rows="48"
+                columns="auto, auto"
+                class="segment"
+                v-for="(item, index) in topmenu"
+                :key="index"
+                :class="{
+                  select: currentComponent === item.component,
+                }"
+                @touch="touchSelector($event, item.component)"
+              >
+                <Label class="ico" :text="icon[item.icon]" />
                 <Label
-                  v-else
-                  row="0"
-                  col="0"
-                  horizontalAlignment="center"
-                  class="er"
-                  :fontSize="imgWidth / 2"
-                  :text="icon.img"
+                  class="value"
+                  v-if="getRecipeCount(item.title)"
+                  :text="getRecipeCount(item.title)"
+                  col="1"
                 />
               </GridLayout>
-              <StackLayout class="recipeInfo" row="1">
+              <GridLayout
+                v-if="currentComponent === 'Filtered recipes'"
+                rows="48"
+                columns="auto, auto"
+                class="segment"
+                :class="{
+                  select: currentComponent === 'Filtered recipes',
+                }"
+              >
+                <Label class="ico" :text="icon.sort" />
                 <Label
-                  :text="`${$options.filters.L(
-                    recipe.cuisine
-                  )} • ${$options.filters.L(recipe.category)}`"
-                  class="category"
+                  class="value"
+                  :text="getRecipeCount('filtered')"
+                  col="1"
                 />
-                <Label :text="recipe.title" class="orkm title" />
+              </GridLayout>
+            </StackLayout>
+          </v-template>
+          <v-template name="detailed">
+            <GridLayout
+              class="recipeItem"
+              :class="getItemPos(recipe.id)"
+              rows="96"
+              columns="96, *"
+              ref="recipe"
+              @longPress="
+                selectMode ? viewRecipe(recipe.id) : addToSelection(recipe.id)
+              "
+              @tap="
+                selectMode ? addToSelection(recipe.id) : viewRecipe(recipe.id)
+              "
+            >
+              <Image
+                class="imgHolder"
+                v-if="recipe.imageSrc"
+                :src="recipe.imageSrc"
+                stretch="aspectFit"
+                decodeWidth="96"
+                decodeHeight="96"
+                loadMode="async"
+              />
+              <Label
+                v-else
+                class="ico imgHolder"
+                @loaded="centerLabel"
+                width="96"
+                height="96"
+                fontSize="48"
+                :text="icon.img"
+              />
+              <StackLayout class="recipeInfo" col="1">
+                <Label :text="recipe.title" class="tb title" />
+                <StackLayout class="attributes" orientation="horizontal">
+                  <Label class="ico sm" :text="icon.cuisine" />
+                  <Label class="attr" :text="recipe.cuisine | L" />
+                  <Label class="ico sm" :text="icon.category" />
+                  <Label class="attr" :text="recipe.category | L" />
+                </StackLayout>
                 <StackLayout
-                  class="tagsContainer"
+                  v-if="recipe.tags.length"
+                  class="attributes"
                   orientation="horizontal"
-                  row="2"
                 >
+                  <Label class="ico sm" :text="icon.tag" />
+                  <Label class="attr" :text="getTags(recipe.tags)" />
+                </StackLayout>
+                <StackLayout class="attributes" orientation="horizontal">
+                  <Label class="ico sm" :text="icon.star" />
+                  <Label class="attr" :text="recipe.rating" />
+                  <Label class="ico sm" :text="icon.time" />
                   <Label
-                    v-for="(tag, index) in recipe.tags"
-                    :key="index"
-                    v-if="tag"
-                    class="tag"
-                    :text="tag"
+                    class="attr"
+                    :text="`${
+                      formattedTotalTime(recipe.prepTime, recipe.cookTime).time
+                    }`"
                   />
+                  <Label class="ico sm" :text="icon.diff" />
+                  <Label class="attr" :text="recipe.difficulty | L" />
                 </StackLayout>
               </StackLayout>
             </GridLayout>
-          </GridLayout>
-        </v-template>
-        <v-template name="three">
-          <GridLayout class="recipeContainer" :class="isFirstItem(recipe.id)">
+          </v-template>
+          <v-template name="grid">
             <GridLayout
-              class="recipeItem layout1 mdr"
-              rows="auto"
+              class="recipeItem grid"
+              :class="getItemPos(recipe.id)"
+              rows="auto, auto"
               columns="*"
-              androidElevation="1"
               ref="recipe"
               @longPress="
-                selectMode
-                  ? viewRecipe(recipe.id)
-                  : addToSelection($event, recipe.id)
+                selectMode ? viewRecipe(recipe.id) : addToSelection(recipe.id)
               "
               @tap="
-                selectMode
-                  ? addToSelection($event, recipe.id)
-                  : viewRecipe(recipe.id)
+                selectMode ? addToSelection(recipe.id) : viewRecipe(recipe.id)
+              "
+            >
+              <Image
+                class="imgHolder"
+                v-if="recipe.imageSrc"
+                :src="recipe.imageSrc"
+                stretch="aspectFit"
+                :decodeWidth="imgWidth"
+                :decodeHeight="imgWidth"
+                loadMode="async"
+              />
+              <Label
+                v-else
+                width="100%"
+                :height="imgWidth"
+                @loaded="centerLabel"
+                class="ico imgHolder"
+                :fontSize="imgWidth / 2"
+                :text="icon.img"
+              />
+              <StackLayout class="recipeInfo" row="1">
+                <Label :text="recipe.title" class="tb title" />
+                <StackLayout class="attributes" orientation="horizontal">
+                  <Label class="ico sm" :text="icon.cuisine" />
+                  <Label class="attr" :text="recipe.cuisine | L" />
+                </StackLayout>
+                <StackLayout class="attributes" orientation="horizontal">
+                  <Label class="ico sm" :text="icon.category" />
+                  <Label class="attr" :text="recipe.category | L" />
+                </StackLayout>
+                <StackLayout
+                  v-if="recipe.tags.length"
+                  class="attributes"
+                  orientation="horizontal"
+                >
+                  <Label class="ico sm" :text="icon.tag" />
+                  <Label class="attr" :text="getTags(recipe.tags)" />
+                </StackLayout>
+              </StackLayout>
+            </GridLayout>
+          </v-template>
+          <v-template name="simple">
+            <GridLayout
+              class="recipeItem simple"
+              :class="getItemPos(recipe.id)"
+              columns="*"
+              ref="recipe"
+              @longPress="
+                selectMode ? viewRecipe(recipe.id) : addToSelection(recipe.id)
+              "
+              @tap="
+                selectMode ? addToSelection(recipe.id) : viewRecipe(recipe.id)
               "
             >
               <StackLayout class="recipeInfo">
-                <Label
-                  :text="`${$options.filters.L(
-                    recipe.cuisine
-                  )} • ${$options.filters.L(recipe.category)}`"
-                  class="category"
-                />
-                <Label :text="recipe.title" class="orkm title" />
-                <StackLayout class="tagsContainer" orientation="horizontal">
-                  <Label
-                    v-for="(tag, index) in recipe.tags"
-                    :key="index"
-                    v-if="tag"
-                    class="tag"
-                    :text="tag"
-                  />
+                <Label :text="recipe.title" class="tb title" />
+                <StackLayout class="attributes" orientation="horizontal">
+                  <Label class="ico sm" :text="icon.cuisine" />
+                  <Label class="attr" :text="recipe.cuisine | L" />
+                  <Label class="ico sm" :text="icon.category" />
+                  <Label class="attr" :text="recipe.category | L" />
+                </StackLayout>
+                <StackLayout
+                  v-if="recipe.tags.length"
+                  class="attributes"
+                  orientation="horizontal"
+                >
+                  <Label class="ico sm" :text="icon.tag" />
+                  <Label class="attr" :text="getTags(recipe.tags)" />
                 </StackLayout>
               </StackLayout>
             </GridLayout>
-          </GridLayout>
-        </v-template>
-      </CollectionView>
-      <GridLayout rows="*, auto, *, 88" columns="*" class="emptyStateContainer">
-        <StackLayout
-          row="1"
-          class="emptyState"
-          v-if="!recipes.length && !filterFavourites && !filterTrylater"
-          @tap="addRecipe"
-        >
-          <Label class="er icon" :text="icon.plusc" />
-          <Label class="title orkm" :text="'strAdd' | L" textWrap="true" />
-          <StackLayout orientation="horizontal" horizontalAlignment="center">
-            <Label :text="'plsAdd' | L" textWrap="true" />
-          </StackLayout>
-        </StackLayout>
-        <StackLayout
-          row="1"
-          class="emptyState"
-          v-if="!filteredRecipes.length && filterTrylater && !searchQuery"
-        >
-          <Label class="er icon" :text="icon.try" textWrap="true" />
-          <Label class="title orkm" :text="'aD' | L" textWrap="true" />
-          <Label :text="'tLInfo' | L" textWrap="true" />
-        </StackLayout>
-        <StackLayout
-          row="1"
-          class="emptyState"
-          v-if="!filteredRecipes.length && filterFavourites && !searchQuery"
-        >
-          <Label class="er icon" :text="icon.fav" textWrap="true" />
-          <Label class="title orkm" :text="'noFavs' | L" textWrap="true" />
-          <Label :text="'fsList' | L" textWrap="true" />
-        </StackLayout>
-        <StackLayout
-          row="1"
-          class="emptyState"
-          v-if="!filteredRecipes.length && searchQuery"
-        >
-          <Label class="er icon" :text="icon.noresult" textWrap="true" />
-          <Label
-            class="title orkm"
-            :text="`${noResultFor}` | L"
-            textWrap="true"
-          />
-          <MDButton
-            v-if="filterFavourites || filterTrylater || selectedCuisine"
-            variant="text"
-            class="searchAll orkm"
-            :text="'trySer' | L"
-            @tap="searchAll"
-          />
-        </StackLayout>
-      </GridLayout>
-      <GridLayout id="btnFabContainer" rows="*, auto" columns="*, auto">
-        <transition name="bounce">
-          <MDFloatingActionButton
-            v-if="showFAB"
+          </v-template>
+          <v-template name="minimal">
+            <GridLayout
+              class="recipeItem simple minimal"
+              :class="getItemPos(recipe.id)"
+              columns="*"
+              ref="recipe"
+              @longPress="
+                selectMode ? viewRecipe(recipe.id) : addToSelection(recipe.id)
+              "
+              @tap="
+                selectMode ? addToSelection(recipe.id) : viewRecipe(recipe.id)
+              "
+            >
+              <StackLayout class="recipeInfo">
+                <Label :text="recipe.title" class="tb title" />
+              </StackLayout>
+            </GridLayout>
+          </v-template>
+        </CollectionView>
+        <GridLayout rowSpan="2" rows="*, auto" columns="*">
+          <StackLayout
             row="1"
-            col="1"
-            class="er fab-button"
-            src="res://plus"
-            @tap="addRecipe"
+            class="emptyState"
+            v-if="!recipes.length && !filterFavourites && !filterTrylater"
+          >
+            <Label class="title" :text="'strAdd' | L" />
+            <Label :text="'plsAdd' | L" />
+          </StackLayout>
+          <StackLayout
+            row="1"
+            class="emptyState"
+            v-if="!filteredRecipes.length && filterTrylater && !searchQuery"
+          >
+            <Label class="title" :text="'aD' | L" />
+            <Label :text="'tLInfo' | L" />
+          </StackLayout>
+          <StackLayout
+            row="1"
+            class="emptyState"
+            v-if="!filteredRecipes.length && filterFavourites && !searchQuery"
+          >
+            <Label class="title" :text="'noFavs' | L" />
+            <Label :text="'fsList' | L" />
+          </StackLayout>
+          <StackLayout
+            row="1"
+            class="emptyState"
+            v-if="!filteredRecipes.length && searchQuery"
+          >
+            <Label class="title" :text="`${noResultFor}` | L" />
+            <Button
+              v-if="filterFavourites || filterTrylater || selectedCuisine"
+              class="text big"
+              :text="'trySer' | L"
+              @tap="goToHome"
+            />
+          </StackLayout>
+        </GridLayout>
+        <GridLayout
+          row="1"
+          rows="auto"
+          columns="auto"
+          class="appbar toolbar"
+          v-if="showTools"
+        >
+          <GridLayout
+            row="1"
+            rows="48"
+            class="tool"
+            columns="auto, *"
+            @touch="touchTool($event, MealPlanner, 'MealPlanner')"
+          >
+            <Label class="ico" :text="icon.cal" />
+            <Label col="1" :text="'planner' | L" />
+          </GridLayout>
+        </GridLayout>
+        <GridLayout
+          row="2"
+          @loaded="onAppBarLoad"
+          class="appbar"
+          columns="auto, *, auto, auto, auto, auto"
+        >
+          <Button
+            class="ico"
+            @tap="
+              showSearch
+                ? closeSearch()
+                : selectMode
+                ? clearSelection()
+                : toggleTools()
+            "
+            :text="
+              showSearch
+                ? icon.back
+                : selectMode || showTools
+                ? icon.x
+                : icon.menu
+            "
           />
-        </transition>
+          <TextField
+            id="searchBar"
+            @loaded="focusField"
+            v-if="showSearch"
+            col="1"
+            colSpan="5"
+            :hint="'ser' | L"
+            @textChange="updateList($event.value)"
+          />
+          <Label
+            v-if="selectMode"
+            class="title"
+            :text="`${selection.length} ${$options.filters.L('sltd')}`"
+            col="1"
+          />
+          <Button
+            v-if="recipes.length && !selectMode && !showSearch"
+            class="ico"
+            :text="selectMode ? icon.export : icon.sear"
+            col="2"
+            @tap="selectMode ? exportSelection() : openSearch()"
+          />
+          <Button
+            v-if="recipes.length && !showSearch && !selectMode"
+            class="ico"
+            :text="icon.sort"
+            col="3"
+            @tap="openSort"
+          />
+          <Button
+            v-if="recipes.length && !showSearch && !selectMode"
+            class="ico"
+            :text="icon.sort"
+            col="4"
+            @tap="openFilters"
+          />
+          <Button
+            v-if="!showSearch && !selectMode"
+            class="ico fab"
+            :text="icon.plus"
+            col="5"
+            @tap="addRecipe()"
+          />
+          <Button
+            v-if="selectMode"
+            class="ico"
+            :text="icon.del"
+            col="5"
+            @tap="deleteSelection"
+          />
+        </GridLayout>
       </GridLayout>
-    </AbsoluteLayout>
-  </Page>
+    </Page>
+  </Frame>
 </template>
+
 <script>
 import {
   ApplicationSettings,
   AndroidApplication,
+  Application,
   Utils,
   Observable,
   Device,
   Screen,
+  Color,
 } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
-import { time } from "tns-core-modules/profiling";
 import {
   startAccelerometerUpdates,
   stopAccelerometerUpdates,
-} from "nativescript-accelerometer";
-import { Vibrate } from "nativescript-vibrate";
-let vibrator = new Vibrate();
+} from "@triniwiz/nativescript-accelerometer";
 import { mapActions, mapState } from "vuex";
-import EditRecipe from "./EditRecipe.vue";
-import ViewRecipe from "./ViewRecipe.vue";
+import ViewRecipe from "./ViewRecipe";
+import EditRecipe from "./EditRecipe";
+import MealPlanner from "./MealPlanner";
+import GroceryList from "./GroceryList";
+import Settings from "./Settings";
 import ActionDialog from "./modal/ActionDialog.vue";
 import ConfirmDialog from "./modal/ConfirmDialog.vue";
+import Filters from "./modal/Filters.vue";
 import * as utils from "~/shared/utils.js";
 let lastTime = 0;
 let lastShake = 0;
 let lastForce = 0;
 let shakeCount = 0;
 let typingTimer;
+let filterTimer;
 export default {
-  props: [
-    "filterFavourites",
-    "filterTrylater",
-    "closeDrawer",
-    "showDrawer",
-    "selectedCategory",
-    "selectedCuisine",
-    "selectedTag",
-    "hijackGlobalBackEvent",
-    "releaseGlobalBackEvent",
-  ],
-  components: {
-    EditRecipe,
-    ViewRecipe,
-  },
   data() {
     return {
       searchQuery: "",
       showSearch: false,
-      rightAction: false,
       deletionDialogActive: false,
-      showFAB: false,
-      filterDone: true,
       selection: [],
       selectMode: false,
-      recipeList: [],
-      // listView: null,
-      layout: 1,
+      listview: null,
+      appbar: null,
+      scrollPos: 1,
+      filterFavourites: false,
+      filterTrylater: false,
+      MealPlanner: MealPlanner,
+      GroceryList: GroceryList,
+      Settings: Settings,
+      topmenu: [
+        {
+          title: "EnRecipes",
+          component: "EnRecipes",
+          icon: "home",
+        },
+        {
+          title: "trylater",
+          component: "Try Later",
+          icon: "try",
+        },
+        {
+          title: "favourites",
+          component: "Favourites",
+          icon: "fav",
+        },
+      ],
+      showTools: false,
     };
+  },
+  components: {
+    ViewRecipe,
+    EditRecipe,
+    MealPlanner,
+    GroceryList,
+    Settings,
   },
   computed: {
     ...mapState([
-      "sortType",
       "icon",
+      "sortType",
       "recipes",
-      "currentComponent",
+      "cuisines",
+      "categories",
+      "yieldUnits",
+      "mealPlans",
       "shakeEnabled",
+      "currentComponent",
+      "layout",
+      "selectedCuisine",
+      "selectedCategory",
+      "selectedTag",
+      "appTheme",
     ]),
     filteredRecipes() {
-      let ingredients = this.recipes
-        .map((e) => e.ingredients.map((f) => f.item.toLowerCase()).join())
-        .join();
-
       let vm = this;
-
       function getIngredients(e) {
         return e.ingredients
           .map((f) => f.item.toLowerCase())
           .join()
           .includes(vm.searchQuery);
       }
-      // if ( this.filterDone ) {
       if (this.filterFavourites) {
         return this.recipes
           .filter(
@@ -449,9 +502,9 @@ export default {
           )
           .sort(this.sortFunction);
       }
-      // } else {
-      //   return 0;
-      // }
+    },
+    getList() {
+      return [{}, {}].concat(this.filteredRecipes);
     },
     noResultFor() {
       if (this.filterFavourites) return "noRecsInFavs";
@@ -459,21 +512,57 @@ export default {
       if (this.selectedCuisine) return "noRecsInFtr";
       return "noRecs";
     },
-    screenWidth() {
-      return Screen.mainScreen.widthDIPs;
-    },
     imgWidth() {
-      return Screen.mainScreen.widthDIPs / 2 - 20;
+      return Screen.mainScreen.widthDIPs / 2 - 24;
     },
   },
   methods: {
     ...mapActions([
-      "setCurrentComponentAction",
+      "setComponent",
+      "setSortTypeAction",
+      "initListItems",
+      "initRecipes",
+      "initMealPlans",
+      "setShakeAction",
+      "setLayout",
       "setSortTypeAction",
       "deleteRecipeAction",
       "deleteRecipesAction",
-      "setShakeAction",
+      "clearFilter",
+      "setTheme",
     ]),
+    onFrameLoad() {
+      const View = android.view.View;
+      const window = Application.android.startActivity.getWindow();
+      const decorView = window.getDecorView();
+      let sdkv = Device.sdkVersion;
+      function setColors(color) {
+        window.setStatusBarColor(new Color(color).android);
+        sdkv >= 27 && window.setNavigationBarColor(new Color(color).android);
+      }
+      switch (this.appTheme) {
+        case "Light":
+          setColors("#f1f3f5");
+          break;
+        case "Dark":
+          setColors("#212529");
+          break;
+        default:
+          setColors("#000000");
+          break;
+      }
+      sdkv >= 23 && this.appTheme == "Light"
+        ? decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+        : decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_DARK_STATUS_BAR);
+
+      sdkv >= 27 && this.appTheme == "Light"
+        ? decorView.setSystemUiVisibility(
+            View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+          )
+        : decorView.setSystemUiVisibility(
+            View.SYSTEM_UI_FLAG_DARK_NAVIGATION_BAR
+          );
+    },
     onPageLoad(args) {
       const page = args.object;
       page.bindingContext = new Observable();
@@ -484,67 +573,284 @@ export default {
         : this.selectedCuisine
         ? this.setComponent("Filtered recipes")
         : this.setComponent("EnRecipes");
-      if (!this.selectMode) this.showFAB = true;
       if (this.shakeEnabled) {
         if (utils.hasAccelerometer())
           startAccelerometerUpdates((data) => this.onSensorData(data));
         else this.setShakeAction(false);
       }
-      if (this.showSearch || this.selectMode) this.hijackLocalBackEvent();
-      this.showDrawer();
-      this.closeDrawer();
+      this.hijackBackEvent();
+      setTimeout(() => {
+        if (this.listview) this.listview.refresh();
+      }, 1000);
+      this.showTools = false;
     },
     onPageUnload() {
       if (this.shakeEnabled) stopAccelerometerUpdates();
-      this.releaseGlobalBackEvent();
-      this.releaseLocalBackEvent();
     },
-    listViewLoad(args) {
-      let e = args.object.android;
-      e.setSelector(new android.graphics.drawable.StateListDrawable());
-      e.setDivider(null);
-      e.setDividerHeight(1);
-    },
-    switchLayout() {
-      if (this.layout == 3) this.layout = 1;
-      else this.layout++;
-      this.$refs.listview.refresh();
-    },
-    getLayout() {
-      switch (this.layout) {
-        case 1:
-          return "one";
-        case 2:
-          return "two";
-        case 3:
-          return "three";
-      }
+    onAppBarLoad({ object }) {
+      this.appbar = object;
     },
 
-    // HELPERS
+    // COLLECTIONVIEW
+    onListLoad({ object }) {
+      const View = android.view.View;
+      object.android.setOverScrollMode(View.OVER_SCROLL_NEVER);
+      this.listview = object;
+    },
+    onScroll(args) {
+      this.showTools = false;
+      let scrollUp;
+      let y = args.object.scrollOffset;
+      if (y) {
+        scrollUp = y < this.scrollPos;
+        this.scrollPos = Math.abs(y);
+        let ab = this.appbar.translateY;
+        if (!scrollUp && ab == 0) {
+          this.animateInOut(
+            250,
+            false,
+            (val) => (this.appbar.translateY = val * 64)
+          );
+        } else if (scrollUp && ab == 64) {
+          this.animateInOut(
+            250,
+            true,
+            (val) => (this.appbar.translateY = val * 64)
+          );
+        }
+      }
+    },
+    getSpanSize(index) {
+      return this.layout == "grid" && (index == 0 || index == 1) ? 2 : 1;
+    },
+    getLayout(args, index, items) {
+      return index == 0 ? "header" : index == 1 ? "lists" : this.layout;
+    },
+
+    // SEARCH
     openSearch() {
+      this.showTools = false;
       this.showSearch = true;
-      this.showFAB = false;
-      this.hijackLocalBackEvent();
     },
     closeSearch() {
       this.searchQuery = "";
       Utils.ad.dismissSoftInput();
       this.showSearch = false;
-      this.showFAB = true;
-      this.releaseLocalBackEvent();
     },
-    setComponent(comp) {
-      this.setCurrentComponentAction(comp);
-      this.hijackGlobalBackEvent();
+
+    //SORT
+    openSort() {
+      this.showTools = false;
+      this.releaseBackEvent();
+      this.$showModal(ActionDialog, {
+        props: {
+          title: "srt",
+          list: [
+            "Title",
+            "Rating",
+            "Quickest first",
+            "Slowest first",
+            "Difficulty level",
+            "Last updated",
+            "Newest first",
+            "Oldest first",
+          ],
+        },
+      }).then((action) => {
+        if (action && action !== "Cancel" && this.sortType !== action) {
+          this.setSortTypeAction(action);
+          ApplicationSettings.setString("sortType", action);
+          this.updateSort();
+        }
+        this.hijackBackEvent();
+      });
     },
-    clearSearch() {
-      this.searchQuery = "";
+
+    //FILTER
+    openFilters() {
+      this.showTools = false;
+      this.releaseBackEvent();
+      this.$showModal(Filters).then(() => this.hijackBackEvent());
+    },
+
+    // TOOLS
+    toggleTools() {
+      this.showTools = !this.showTools;
+    },
+
+    // LIST HANDLERS
+    addToSelection(id) {
+      this.showTools = false;
+      this.selectMode = true;
+      this.appbar.translateY = 0;
+      this.selection.includes(id)
+        ? this.selection.splice(this.selection.indexOf(id), 1)
+        : this.selection.push(id);
+      this.selection.length ? this.listview.refresh() : this.clearSelection();
+    },
+    clearSelection() {
+      this.selectMode = false;
+      this.selection = [];
+      this.listview.refresh();
+    },
+    deleteSelection() {
+      this.selection.length === 1
+        ? this.deleteRecipe(this.selection[0])
+        : this.deleteRecipes(this.selection);
+    },
+    exportSelection() {},
+    deleteRecipe(id) {
+      this.deletionDialogActive = true;
+      let index = this.recipes.findIndex((e) => e.id === id);
+      this.$showModal(ConfirmDialog, {
+        props: {
+          title: localize("conf"),
+          description: `${localize("delRecInfo")} "${
+            this.recipes[index].title
+          }"`,
+          cancelButtonText: "cBtn",
+          okButtonText: "dBtn",
+        },
+      }).then((action) => {
+        if (action) {
+          this.deleteRecipeAction({
+            index,
+            id,
+          });
+          if (!this.filteredRecipes.length) this.goToHome();
+          this.clearSelection();
+        }
+        this.deletionDialogActive = false;
+      });
+    },
+    deleteRecipes(idsArr) {
+      this.deletionDialogActive = true;
+      this.$showModal(ConfirmDialog, {
+        props: {
+          title: localize("conf"),
+          description: `${localize("delRecsInfo")} ${
+            this.selection.length
+          } ${localize("recs")}`,
+          cancelButtonText: "cBtn",
+          okButtonText: "dBtn",
+        },
+      }).then((action) => {
+        if (action) {
+          this.deleteRecipesAction(idsArr);
+          if (!this.filteredRecipes.length) this.goToHome();
+          this.clearSelection();
+        }
+        this.deletionDialogActive = false;
+      });
+    },
+
+    // SHAKE DETECTOR
+    onSensorData({ x, y, z }) {
+      x = x.toFixed(2);
+      y = y.toFixed(2);
+      z = z.toFixed(2);
+      const FORCE_THRESHOLD = 1;
+      const TIME_THRESHOLD = 150;
+      const SHAKE_TIMEOUT = 600;
+      const SHAKE_THROTTLE = 600;
+      const SHAKE_COUNT = 3;
+      const now = Date.now();
+      if (now - lastForce > SHAKE_TIMEOUT) {
+        shakeCount = 0;
+      }
+      let timeDelta = now - lastTime;
+      if (timeDelta > TIME_THRESHOLD) {
+        let forceVector = Math.abs(
+          Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2)) - 1
+        );
+        if (forceVector > FORCE_THRESHOLD) {
+          shakeCount++;
+          if (shakeCount >= SHAKE_COUNT && now - lastShake > SHAKE_THROTTLE) {
+            lastShake = now;
+            shakeCount = 0;
+            if (this.filteredRecipes.length) {
+              utils.vibrate(100);
+              this.viewRandomRecipe();
+            }
+          }
+          lastForce = now;
+        }
+        lastTime = now;
+      }
+    },
+
+    // HELPERS
+    getRecipeCount(arg) {
+      let count = 0;
+      let a = this.selectedCuisine;
+      let b = this.selectedCategory;
+      let c = this.selectedTag;
+      let cuisine = a && a != "allCuis";
+      let category = b && b != "allCats";
+      let tag = c && c != "allTs";
+      let allCuisines = a && a == "allCuis";
+      let allCategories = b && b == "allCats";
+      let allTags = c && c == "allTs";
+      switch (arg) {
+        case "EnRecipes":
+          count = this.recipes.length;
+          break;
+        case "trylater":
+          count = this.recipes.filter((e) => !e.tried).length;
+          break;
+        case "favourites":
+          count = this.recipes.filter((e) => e.isFavorite).length;
+          break;
+        default:
+          count = this.recipes.filter((e) => {
+            let cui = e.cuisine === a;
+            let cat = e.category === b;
+            let t = e.tags.includes(c);
+            return allCuisines
+              ? allCategories
+                ? tag
+                  ? t
+                  : true
+                : category
+                ? allTags
+                  ? cat
+                  : tag
+                  ? cat && t
+                  : cat
+                : true
+              : cuisine
+              ? allCategories
+                ? allTags
+                  ? cui
+                  : tag
+                  ? cui && t
+                  : cui
+                : category
+                ? allTags
+                  ? cui && cat
+                  : tag
+                  ? cui && cat && t
+                  : cui && cat
+                : cui
+              : false;
+          }).length;
+          break;
+      }
+      return count;
+    },
+    centerLabel(args) {
+      args.object.android.setGravity(17);
+    },
+    focusField(args) {
+      setTimeout((e) => {
+        args.object.focus();
+        setTimeout((e) => Utils.ad.showSoftInput(args.object.android), 100);
+      }, 100);
     },
     updateList(value) {
       clearTimeout(typingTimer);
       typingTimer = setTimeout((e) => {
-        this.searchQuery = value;
+        this.searchQuery = value.toLowerCase();
       }, 750);
     },
     formattedTotalTime(prepTime, cookTime) {
@@ -582,9 +888,6 @@ export default {
         : this.selectedCategory && !allCategories
         ? cuisine && categoryMatched
         : cuisine;
-    },
-    searchAll() {
-      this.$emit("backToHome");
     },
     sortFunction(a, b) {
       const titleOrder = a.title
@@ -640,233 +943,152 @@ export default {
           break;
       }
     },
-    isFirstItem(id) {
+    getItemPos(id) {
       let length = this.filteredRecipes.length;
-      return id == this.filteredRecipes[0].id
-        ? "firstItem"
-        : id == this.filteredRecipes[length - 1].id
-        ? "lastItem"
-        : "";
+      let l2 = this.layout == "grid";
+      let oddOrEven = this.oddOrEven(id);
+      let itemPos =
+        id == this.filteredRecipes[0].id ||
+        (length > 1 && l2 && id == this.filteredRecipes[1].id)
+          ? "firstItem"
+          : id == this.filteredRecipes[length - 1].id ||
+            (length > 1 &&
+              l2 &&
+              oddOrEven == " odd" &&
+              id == this.filteredRecipes[length - 2].id)
+          ? "lastItem"
+          : "";
+      let selection = this.selection.includes(id) ? "selected" : "unselected";
+      let classes = itemPos + " " + selection;
+      return l2 ? classes + oddOrEven : classes;
     },
-    isLastItem(id) {
-      let length = this.filteredRecipes.length;
-      // let lastIsOdd = ( length - 1 ) % 2 == 0
-      // if ( this.filteredRecipes.length > 1 ) {
-      //   if ( id == this.filteredRecipes[ length - 2 ].id ) {
-      //     if ( !lastIsOdd ) return 'lastItem'
-      //   }
-      // }
-      if (id == this.filteredRecipes[length - 1].id) return "lastItem";
+    oddOrEven(id) {
+      return this.filteredRecipes.map((e) => e.id).indexOf(id) % 2 === 0
+        ? " odd"
+        : " even";
+    },
+    getTags(tags) {
+      return tags.join(" · ");
     },
 
     // NAVIGATION HANDLERS
-    hijackLocalBackEvent() {
-      this.releaseGlobalBackEvent();
+    barsVisibility(bool) {
+      this.showTools = bool;
+    },
+    hijackBackEvent() {
       AndroidApplication.on(
         AndroidApplication.activityBackPressedEvent,
-        this.localBackEvent
+        this.backEvent
       );
     },
-    releaseLocalBackEvent() {
+    releaseBackEvent() {
       AndroidApplication.off(
         AndroidApplication.activityBackPressedEvent,
-        this.localBackEvent
+        this.backEvent
       );
-      this.hijackGlobalBackEvent();
     },
-    localBackEvent(args) {
-      args.cancel = true;
-      if (this.selectMode) this.clearSelection();
-      this.closeDrawer();
-      this.closeSearch();
+    backEvent(args) {
+      if (this.showSearch) {
+        args.cancel = true;
+        this.closeSearch();
+      } else if (this.selectMode) {
+        args.cancel = true;
+        this.clearSelection();
+      } else if (
+        ["Favourites", "Try Later", "Filtered recipes"].includes(
+          this.currentComponent
+        )
+      ) {
+        args.cancel = true;
+        this.goToHome();
+      }
+    },
+    goToHome() {
+      this.setComponent("EnRecipes");
+      this.filterFavourites = this.filterTrylater = null;
+      this.clearFilter();
+    },
+    navigateTo(to, title, page) {
+      this.showTools = false;
+      if (page) {
+        this.$navigateTo(to, {
+          transition: {
+            name: "fade",
+            duration: 250,
+            curve: "easeOut",
+          },
+        });
+      } else if (title !== this.currentComponent) {
+        this.setComponent(to);
+        this.filterFavourites = to == "Favourites";
+        this.filterTrylater = to == "Try Later";
+        this.clearFilter();
+      }
     },
     addRecipe() {
-      this.showFAB = false;
-      this.releaseGlobalBackEvent();
+      this.barsVisibility(false);
       this.$navigateTo(EditRecipe, {
         props: {
-          selectedCuisine: this.selectedCuisine,
-          selectedCategory: this.selectedCategory,
-          selectedTag: this.selectedTag,
           filterFavourites: this.filterFavourites,
           filterTrylater: this.filterTrylater,
+        },
+        transition: {
+          name: "fade",
+          duration: 250,
+          curve: "easeOut",
         },
       });
     },
     viewRecipe(recipeID) {
-      this.showFAB = false;
+      this.barsVisibility(false);
       this.$navigateTo(ViewRecipe, {
         props: {
           filterTrylater: this.filterTrylater,
           recipeID,
         },
-        backstackVisible: false,
+        transition: {
+          name: "fade",
+          duration: 250,
+          curve: "easeOut",
+        },
+        // backstackVisible: false,
       });
     },
     viewRandomRecipe() {
-      this.showFAB = false;
+      // this.showFAB =
+      this.showTools = false;
       this.$navigateTo(ViewRecipe, {
         props: {
-          filterTrylater: false,
+          filterTrylater: true,
           recipeID: this.randomRecipeID(),
+        },
+        transition: {
+          name: "fade",
+          duration: 250,
+          curve: "easeOut",
         },
         backstackVisible: false,
       });
     },
-
-    // LIST HANDLERS
-    sortDialog() {
-      this.releaseGlobalBackEvent();
-      this.$showModal(ActionDialog, {
-        props: {
-          title: "srt",
-          list: [
-            "Title",
-            "Quickest first",
-            "Slowest first",
-            "Rating",
-            "Difficulty level",
-            "Last updated",
-            "Newest first",
-            "Oldest first",
-          ],
-          stretch: false,
-          helpIcon: "sort",
-          bgColor: "#858585",
-        },
-      }).then((action) => {
-        if (action && action !== "Cancel" && this.sortType !== action) {
-          this.setSortTypeAction(action);
-          ApplicationSettings.setString("sortType", action);
-          this.updateSort();
-        }
-        this.hijackGlobalBackEvent();
-      });
+    touchSelector({ object, action }, comp) {
+      let selected = this.currentComponent == comp;
+      object.className = action.match(/down|move/)
+        ? `segment ${selected ? "select" : "fade"}`
+        : `segment ${selected && "select"}`;
+      if (action == "up") this.navigateTo(comp, comp);
     },
-
-    // DATA HANDLERS
-    addToSelection(args, id) {
-      // console.log(args, id);
-      this.showFAB = false;
-      if (!this.selectMode) this.hijackLocalBackEvent();
-      this.selectMode = true;
-      this.$emit("selectModeOn", false);
-      let item = args.object;
-      console.log(item.className);
-      let classes = item.className;
-      if (classes.includes("selected")) {
-        item.className = classes.replace(/selected/g, "");
-        this.selection.splice(this.selection.indexOf(id), 1);
-        this.recipeList.splice(this.selection.indexOf(id), 1);
-      } else {
-        item.className = classes + " selected";
-        this.selection.push(id);
-        this.recipeList.push(item);
-      }
-      if (!this.selection.length) this.clearSelection();
-    },
-    clearSelection() {
-      this.selectMode = false;
-      this.$emit("selectModeOn", true);
-      this.selection = [];
-      this.recipeList.forEach((e) => {
-        e.className = e.className.replace(/selected/g, "");
-      });
-      this.releaseLocalBackEvent();
-      this.showFAB = true;
-    },
-    deleteSelection() {
-      this.selection.length === 1
-        ? this.deleteRecipe(this.selection[0])
-        : this.deleteRecipes(this.selection);
-    },
-    exportSelection() {},
-    deleteRecipe(id) {
-      this.deletionDialogActive = true;
-      let index = this.recipes.findIndex((e) => e.id === id);
-      this.$showModal(ConfirmDialog, {
-        props: {
-          title: localize("conf"),
-          description: `${localize("delRecInfo")} "${
-            this.recipes[index].title
-          }"`,
-          cancelButtonText: "cBtn",
-          okButtonText: "dBtn",
-          helpIcon: "del",
-          bgColor: "#c92a2a",
-        },
-      }).then((action) => {
-        if (action) {
-          this.deleteRecipeAction({
-            index,
-            id,
-          });
-          if (!this.filteredRecipes.length) this.$emit("backToHome");
-          this.clearSelection();
-        }
-        this.deletionDialogActive = false;
-      });
-    },
-    deleteRecipes(idsArr) {
-      this.deletionDialogActive = true;
-      this.$showModal(ConfirmDialog, {
-        props: {
-          title: localize("conf"),
-          description: `${localize("delRecsInfo")} ${
-            this.selection.length
-          } ${localize("recs")}`,
-          cancelButtonText: "cBtn",
-          okButtonText: "dBtn",
-          helpIcon: "del",
-          bgColor: "#c92a2a",
-        },
-      }).then((action) => {
-        if (action) {
-          this.deleteRecipesAction(idsArr);
-          if (!this.filteredRecipes.length) this.$emit("backToHome");
-          this.clearSelection();
-        }
-        this.deletionDialogActive = false;
-      });
-    },
-
-    // SHAKE DETECTOR
-    onSensorData({ x, y, z }) {
-      x = x.toFixed(2);
-      y = y.toFixed(2);
-      z = z.toFixed(2);
-      const FORCE_THRESHOLD = 1;
-      const TIME_THRESHOLD = 150;
-      const SHAKE_TIMEOUT = 600;
-      const SHAKE_THROTTLE = 600;
-      const SHAKE_COUNT = 3;
-      const now = time();
-      if (now - lastForce > SHAKE_TIMEOUT) {
-        shakeCount = 0;
-      }
-      let timeDelta = now - lastTime;
-      if (timeDelta > TIME_THRESHOLD) {
-        let forceVector = Math.abs(
-          Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2)) - 1
-        );
-        if (forceVector > FORCE_THRESHOLD) {
-          shakeCount++;
-          if (shakeCount >= SHAKE_COUNT && now - lastShake > SHAKE_THROTTLE) {
-            lastShake = now;
-            shakeCount = 0;
-            if (this.filteredRecipes.length) {
-              vibrator.vibrate(100);
-              this.viewRandomRecipe();
-            }
-          }
-          lastForce = now;
-        }
-        lastTime = now;
-      }
+    touchTool({ object, action }, comp, value) {
+      object.className = action.match(/down|move/) ? `tool fade` : `tool`;
+      if (action == "up") this.navigateTo(comp, value, true);
     },
   },
-  mounted() {
-    this.showFAB = true;
+  created() {
+    this.setTheme(ApplicationSettings.getString("appTheme", "Light"));
+    this.setLayout(ApplicationSettings.getString("layout", "detailed"));
+    if (!this.recipes.length) this.initRecipes();
+    this.initListItems();
+    if (!this.mealPlans.length) this.initMealPlans();
+    this.setShakeAction(ApplicationSettings.getBoolean("shakeEnabled", true));
   },
 };
 </script>

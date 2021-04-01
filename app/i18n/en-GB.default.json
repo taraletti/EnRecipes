@@ -126,7 +126,7 @@
   "aNoBtn": "ADD NOTE",
   "it": "Item",
   "stp": "Step",
-  "srt": "Sort by",
+  "srt": "Sort",
   "cBtn": "CANCEL",
   "rBtn": "REMOVE",
   "rmCuiInfo": "You are about to remove the cuisine:",
@@ -149,7 +149,6 @@
   "SET": "SET",
   "appRst": "App restart required",
   "rst": "RESTART",
-  "nThmInfo": "Restart EnRecipes to use the new theme",
   "nLangInfo": "Restart EnRecipes to use the new language",
   "grant": "Grant access",
   "reqAcc": "EnRecipes requires storage permission in order to set recipe photo, export and import data",
@@ -180,7 +179,7 @@
   "nwCat": "New category",
   "req": "Required",
   "recPic": "Recipe photo",
-  "repBtn": "REPLACE PHOTO",
+  "repBtn": "REPLACE",
   "cPic": "Crop photo",
   "breakfast": "Breakfast",
   "lunch": "lunch",
@@ -306,5 +305,9 @@
   "listVM": "List view mode",
   "detailed": "Detailed",
   "simple": "Simple",
-  "grid": "Grid"
+  "grid": "Grid",
+  "minimal": "Minimal",
+  "apply": "APPLY",
+  "fltr": "Filter",
+  "yld": "Yield"
 }
