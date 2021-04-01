@@ -50,7 +50,7 @@ import {
 } from "@nativescript/core";
 import * as Permissions from "@nativescript-community/perms";
 import { Zip } from "@nativescript/zip";
-import * as Filepicker from "nativescript-plugin-filepicker";
+// import * as Filepicker from "nativescript-plugin-filepicker";
 import { localize } from "@nativescript/localize";
 import ConfirmDialog from "../modal/ConfirmDialog.vue";
 import { mapState, mapActions } from "vuex";
@@ -215,16 +215,16 @@ export default {
       );
     },
     openFilePicker() {
-      Filepicker.create({
-        mode: "single",
-        extensions: ["zip"],
-      })
-        .present()
-        .then((selection) => {
-          // Toast.makeText(localize("vrfy") + "...").show();
-          let zipPath = selection[0];
-          this.validateZipContent(zipPath);
-        });
+      // Filepicker.create({
+      //   mode: "single",
+      //   extensions: ["zip"],
+      // })
+      //   .present()
+      //   .then((selection) => {
+      //     // Toast.makeText(localize("vrfy") + "...").show();
+      //     let zipPath = selection[0];
+      //     this.validateZipContent(zipPath);
+      //   });
     },
     importDataToDB(data, db, zipPath) {
       switch (db) {

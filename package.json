@@ -1,5 +1,6 @@
 {
   "name": "enrecipes",
+  "main": "./app/main.js",
   "version": "1.0.0",
   "description": "A native application built with NativeScript-Vue",
   "homepage": "https://enrecipes.vercel.app/",
@@ -12,7 +13,10 @@
   },
   "license": "GPL",
   "author": "Vishnu Raghav <apps@vishnuraghav.com>",
-  "main": "app/main.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": "true",
   "dependencies": {
     "@nativescript-community/perms": "^2.1.5",
     "@nativescript-community/ui-collectionview": "^4.0.29",
@@ -24,7 +28,6 @@
     "@triniwiz/nativescript-couchbase": "^1.2.2",
     "nativescript-imagecropper": "^4.0.1",
     "nativescript-intl": "^4.0.2",
-    "nativescript-plugin-filepicker": "^1.0.0",
     "nativescript-vue": "^2.8.4",
     "vuex": "^3.6.2"
   },
@@ -35,7 +38,6 @@
     "@nativescript/webpack": "5.0.0-beta.0",
     "babel-loader": "~8.0.0",
     "nativescript-vue-template-compiler": "^2.8.4",
-    "sass": "^1.32.8",
-    "vue-loader": "~15.9.6"
+    "sass": "^1.32.8"
   }
 }

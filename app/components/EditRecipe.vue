@@ -301,7 +301,7 @@ import {
   Observable,
 } from "@nativescript/core";
 import * as Permissions from "@nativescript-community/perms";
-import * as Filepicker from "nativescript-plugin-filepicker";
+// import * as Filepicker from "nativescript-plugin-filepicker";
 import { ImageCropper } from "nativescript-imagecropper";
 import { localize } from "@nativescript/localize";
 import { mapState, mapActions } from "vuex";
@@ -831,42 +831,42 @@ export default {
     },
     imagePicker() {
       ApplicationSettings.setBoolean("storagePermissionAsked", true);
-      Filepicker.create({
-        mode: "single",
-        extensions: ["png", "jpeg", "jpg"],
-      })
-        .present()
-        .then((selection) => {
-          this.cacheImagePath = path.join(
-            knownFolders.temp().path,
-            `${this.getRandomID()}.jpg`
-          );
-          let imgPath = selection[0];
-          ImageSource.fromFile(imgPath).then((image) => {
-            ImageCropper.prototype
-              .show(
-                image,
-                {
-                  width: 1080,
-                  height: 1080,
-                },
-                {
-                  hideBottomControls: true,
-                  toolbarTitle: localize("cPic"),
-                  statusBarColor: "#ff5200",
-                  toolbarTextColor:
-                    this.appTheme == "light" ? "#1A1A1A" : "#e9ecef",
-                  toolbarColor:
-                    this.appTheme == "light" ? "#e9ecef" : "#1A1A1A",
-                  cropFrameColor: "#ff5200",
-                }
-              )
-              .then((cropped) => {
-                cropped.image.saveToFile(this.cacheImagePath, "jpg", 75);
-                this.recipeContent.imageSrc = this.cacheImagePath;
-              });
-          });
-        });
+      // Filepicker.create({
+      //   mode: "single",
+      //   extensions: ["png", "jpeg", "jpg"],
+      // })
+      //   .present()
+      //   .then((selection) => {
+      //     this.cacheImagePath = path.join(
+      //       knownFolders.temp().path,
+      //       `${this.getRandomID()}.jpg`
+      //     );
+      //     let imgPath = selection[0];
+      //     ImageSource.fromFile(imgPath).then((image) => {
+      //       ImageCropper.prototype
+      //         .show(
+      //           image,
+      //           {
+      //             width: 1080,
+      //             height: 1080,
+      //           },
+      //           {
+      //             hideBottomControls: true,
+      //             toolbarTitle: localize("cPic"),
+      //             statusBarColor: "#ff5200",
+      //             toolbarTextColor:
+      //               this.appTheme == "light" ? "#1A1A1A" : "#e9ecef",
+      //             toolbarColor:
+      //               this.appTheme == "light" ? "#e9ecef" : "#1A1A1A",
+      //             cropFrameColor: "#ff5200",
+      //           }
+      //         )
+      //         .then((cropped) => {
+      //           cropped.image.saveToFile(this.cacheImagePath, "jpg", 75);
+      //           this.recipeContent.imageSrc = this.cacheImagePath;
+      //         });
+      //     });
+      //   });
     },
     // INPUT FIELD HANDLERS
     splitTags() {
