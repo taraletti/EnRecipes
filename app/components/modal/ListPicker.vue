@@ -1,11 +1,9 @@
 <template>
-  <Page @loaded="onPageLoad" backgroundColor="transparent">
-    <StackLayout class="dialogContainer" :class="appTheme">
-      <StackLayout class="dialogHeader" orientation="horizontal">
-        <Label class="er dialogIcon" :text="icon.time" />
-        <Label class="dialogTitle " :text="`${title}` | L" />
-      </StackLayout>
+  <Page @loaded="onPageLoad" backgroundColor="transparent" :class="appTheme">
+    <GridLayout rows="auto, auto, auto" class="modal">
+      <Label class="title" :text="title | L" />
       <StackLayout
+        row="1"
         class="dialogListPicker"
         orientation="horizontal"
         horizontalAlignment="center"
@@ -23,23 +21,21 @@
           @selectedIndexChange="setMins"
         ></ListPicker>
       </StackLayout>
-      <GridLayout rows="auto" columns="*, auto, auto" class="actionsContainer">
-        <MDButton
-          variant="text"
+      <GridLayout row="2" columns="*, auto, auto" class="actions">
+        <Button
           col="1"
-          class="action tb"
+          class="text sm"
           :text="'cBtn' | L"
           @tap="$modal.close(false)"
         />
-        <MDButton
-          variant="text"
+        <Button
           col="2"
-          class="action tb"
-          :text="`${action}` | L"
+          class="text sm"
+          :text="action | L"
           @tap="$modal.close(selectedTime)"
         />
       </GridLayout>
-    </StackLayout>
+    </GridLayout>
   </Page>
 </template>
 
@@ -58,7 +54,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon"]),
+    ...mapState(["icon", "appTheme"]),
     hrsList() {
       let h = [...Array(24).keys()];
       this.hrs = h;
@@ -79,9 +75,6 @@ export default {
     },
     minIndex() {
       return this.mins.indexOf(parseInt(this.selectedMin));
-    },
-    appTheme() {
-      return Application.systemAppearance();
     },
     selectedTime() {
       return this.selectedHrs + ":" + this.selectedMins;

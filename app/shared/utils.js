@@ -1,17 +1,17 @@
 import { Application, Utils } from '@nativescript/core'
 export const restartApp = () => {
-  const mStartActivity = new android.content.Intent(
+  let mStartActivity = new android.content.Intent(
     Application.android.context,
     Application.android.startActivity.getClass()
   )
-  const mPendingIntentId = parseInt(Math.random() * 100000, 10)
-  const mPendingIntent = android.app.PendingIntent.getActivity(
+  let mPendingIntentId = Math.random() * 100000
+  let mPendingIntent = android.app.PendingIntent.getActivity(
     Application.android.context,
     mPendingIntentId,
     mStartActivity,
     android.app.PendingIntent.FLAG_CANCEL_CURRENT
   )
-  const mgr = Application.android.context.getSystemService(
+  let mgr = Application.android.context.getSystemService(
     android.content.Context.ALARM_SERVICE
   )
   mgr.set(
@@ -22,7 +22,7 @@ export const restartApp = () => {
   android.os.Process.killProcess(android.os.Process.myPid())
 }
 export const openAppSettingsPage = () => {
-  const intent = new android.content.Intent(
+  let intent = new android.content.Intent(
     android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
   )
   intent.addCategory(android.content.Intent.CATEGORY_DEFAULT)
@@ -41,4 +41,10 @@ export const hasAccelerometer = () => {
   return sensorManager.getDefaultSensor(
     android.hardware.Sensor.TYPE_ACCELEROMETER
   )
+}
+export const vibrate = (duration) => {
+  let vibratorService = Application.android.context.getSystemService(
+    android.content.Context.VIBRATOR_SERVICE
+  )
+  if (vibratorService.hasVibrator()) vibratorService.vibrate(duration)
 }

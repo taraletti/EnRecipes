@@ -1,36 +1,41 @@
 <template>
-  <Page @loaded="onPageLoad">
-    <ActionBar flat="true">
-      <GridLayout rows="*" columns="auto, *">
-        <MDButton
-          class="er left"
-          variant="text"
-          :text="icon.back"
-          automationText="Back"
-          @tap="$navigateBack()"
-          col="0"
-        />
-        <Label class="title tb" :text="'Settings' | L" col="1" />
-      </GridLayout>
-    </ActionBar>
-    <GridLayout rows="*" columns="*" class="main-container">
-      <ListView @loaded="listViewLoad" for="item in items">
+  <Page @loaded="onPageLoad" actionBarHidden="true">
+    <GridLayout rows="*, auto" columns="auto, *">
+      <ListView
+        colSpan="2"
+        rowSpan="2"
+        class="options-list"
+        @loaded="listViewLoad"
+        for="item in items"
+      >
+        <v-template if="$index == 0">
+          <Label class="pageTitle" :text="'Settings' | L" />
+        </v-template>
+        <v-template if="$index == 7">
+          <StackLayout class="listSpace"> </StackLayout>
+        </v-template>
         <v-template>
           <GridLayout
             columns="auto, *"
-            class="option mdr"
-            @tap="navigateTo(item.view)"
+            class="option"
+            @touch="touch($event, item.view)"
           >
             <Label
-              col="0"
               verticalAlignment="center"
-              class="er"
+              class="ico"
               :text="icon[item.icon]"
             />
             <Label verticalAlignment="center" col="1" :text="item.title | L" />
           </GridLayout>
         </v-template>
       </ListView>
+      <GridLayout row="1" class="appbar" rows="*" columns="auto, *">
+        <Button
+          class="ico"
+          :text="icon.back"
+          @tap="$navigateBack()"
+        />
+      </GridLayout>
     </GridLayout>
   </Page>
 </template>
@@ -48,6 +53,7 @@ export default {
   data() {
     return {
       items: [
+        {},
         {
           icon: "theme",
           title: "intf",
@@ -78,6 +84,7 @@ export default {
           title: "About",
           view: About,
         },
+        {},
       ],
     };
   },
@@ -85,21 +92,25 @@ export default {
     ...mapState(["icon"]),
   },
   methods: {
-    ...mapActions(["setCurrentComponentAction"]),
+    ...mapActions(["setComponent"]),
     onPageLoad(args) {
       const page = args.object;
       page.bindingContext = new Observable();
-      this.setCurrentComponentAction("Settings");
-    },
-    listViewLoad(args) {
-      let e = args.object.android;
-      e.setSelector(new android.graphics.drawable.StateListDrawable());
-      e.setDivider(null);
-      e.setDividerHeight(0);
+      this.setComponent("Settings");
     },
     // HELPERS
     navigateTo(view) {
-      this.$navigateTo(view);
+      this.$navigateTo(view, {
+        transition: {
+          name: "slide",
+          duration: 200,
+          curve: "easeOut",
+        },
+      });
+    },
+    touch({ object, action }, view) {
+      object.className = action.match(/down|move/) ? "option fade" : "option";
+      if (action == "up") this.navigateTo(view);
     },
   },
 };

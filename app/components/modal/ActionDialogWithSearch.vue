@@ -1,73 +1,49 @@
 <template>
-  <Page @loaded="onPageLoad" backgroundColor="transparent">
-    <GridLayout
-      columns="*"
-      rows="auto, auto, auto, *, auto"
-      class="dialogContainer"
-      :class="appTheme"
-    >
-      <StackLayout row="0" class="dialogHeader" orientation="horizontal">
-        <Label class="er dialogIcon" :text="icon[helpIcon]" />
-        <Label
-          class="dialogTitle"
-          :text="`${title}` | L"
-          textWrap="true"
+  <Page @loaded="onPageLoad" backgroundColor="transparent" :class="appTheme">
+    <GridLayout columns="*" rows="auto, auto, *, auto" class="modal">
+      <Label class="title" :text="title | L" />
+      <StackLayout
+        row="1"
+        v-if="filteredRecipes.length || searchQuery"
+        class="input"
+      >
+        <TextField
+          class="modalInput"
+          :hint="'Search' | L"
+          v-model="searchQuery"
         />
       </StackLayout>
-      <StackLayout
-        row="2"
-        v-if="filteredRecipes.length || searchQuery"
-        padding="0 24 8"
-      >
-        <TextField :hint="'Search' | L" v-model="searchQuery" />
-      </StackLayout>
-      <ScrollView row="3" width="100%" :height="height ? height : ''">
-        <StackLayout>
-          <MDButton
-            v-for="(recipe, index) in filteredRecipes"
-            :key="index"
-            class="actionItem"
-            variant="text"
+      <ListView row="2" for="recipe in filteredRecipes" @loaded="listViewLoad">
+        <v-template>
+          <Label
+            class="listItem"
             :text="recipe.title"
-            @loaded="centerLabel"
-            @tap="tapAction(recipe)"
+            @touch="touch($event, recipe)"
           />
-          <Label
-            padding="24"
-            lineHeight="6"
-            v-if="!filteredRecipes.length && !searchQuery"
-            :text="'recListEmp' | L"
-            textAlignment="center"
-            textWrap="true"
-          />
-          <Label
-            padding="24"
-            lineHeight="6"
-            v-if="!filteredRecipes.length && searchQuery"
-            :text="'noRecs' | L"
-            textAlignment="center"
-            textWrap="true"
-          />
-        </StackLayout>
-      </ScrollView>
-      <GridLayout
-        row="4"
-        rows="auto"
-        columns="auto, *, auto"
-        class="actionsContainer"
-      >
-        <MDButton
-          variant="text"
+        </v-template>
+      </ListView>
+      <Label
+        row="2"
+        class="noResInfo"
+        v-if="!filteredRecipes.length && !searchQuery"
+        :text="'recListEmp' | L"
+      />
+      <Label
+        row="2"
+        class="noResInfo"
+        v-if="!filteredRecipes.length && searchQuery"
+        :text="'noRecs' | L"
+      />
+      <GridLayout row="3" columns="auto, *, auto" class="actions">
+        <Button
           v-if="action"
-          col="0"
-          class="action tb pull-left"
-          :text="`${action}` | L"
+          class="text sm"
+          :text="action | L"
           @tap="$modal.close(action)"
         />
-        <MDButton
-          variant="text"
+        <Button
           col="2"
-          class="action tb pull-right"
+          class="text sm"
           :text="'CANCEL' | L"
           @tap="$modal.close(false)"
         />
@@ -77,20 +53,16 @@
 </template>
 
 <script>
-import { Application } from "@nativescript/core";
 import { mapState } from "vuex";
 export default {
-  props: ["title", "recipes", "height", "action", "helpIcon"],
+  props: ["title", "recipes", "height", "action"],
   data() {
     return {
       searchQuery: "",
     };
   },
   computed: {
-    ...mapState(["icon"]),
-    appTheme() {
-      return Application.systemAppearance();
-    },
+    ...mapState(["icon", "appTheme"]),
     filteredRecipes() {
       return this.recipes
         .map((e, i) => {
@@ -132,6 +104,12 @@ export default {
         e.tags.includes(searchQuery) ||
         e.ingredients.includes(searchQuery)
       );
+    },
+    touch({ object, action }, recipe) {
+      object.className = action.match(/down|move/)
+        ? "listItem fade"
+        : "listItem";
+      if (action == "up") this.tapAction(recipe);
     },
   },
 };

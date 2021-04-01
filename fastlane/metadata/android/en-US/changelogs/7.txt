@@ -1,10 +1,8 @@
+- New: Redesigned user interface
 - New: Recipe list view modes
+- New: Black theme
 - Fixed: Crash on app start with blocked sensors #30
-- Improvement: Better search & filtering
-- Improvement: Tap to strike off completed instructions
-- Deprecated: Swipe to delete recipe
-- Deprecated: Search recipe with tag
-- Refreshed: Meal Planner calendar, Dialog boxes and UI icons
+- Improvement: Faster app start and navigation
 - Added app languages: French, Italian, Norwegian Bokmål
 - Updated translations
-- Several UI improvements and bug fixes
+- Several bug fixes

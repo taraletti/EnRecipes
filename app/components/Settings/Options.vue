@@ -1,39 +1,44 @@
 <template>
-  <Page @loaded="onPageLoad">
-    <ActionBar flat="true">
-      <GridLayout rows="*" columns="auto, *">
-        <MDButton
-          class="er left"
-          variant="text"
+  <Page @loaded="onPageLoad" actionBarHidden="true">
+    <GridLayout rows="*, auto" columns="auto, *">
+      <ListView
+        colSpan="2"
+        rowSpan="2"
+        class="options-list"
+        @loaded="listViewLoad"
+        for="item in items"
+      >
+        <v-template if="$index == 0">
+          <Label class="pageTitle" :text="'opts' | L" />
+        </v-template>
+        <v-template if="item.type == 'switch'">
+          <GridLayout columns="auto, *, auto" class="option">
+            <Label class="ico" :text="icon[item.icon]" />
+            <StackLayout col="1">
+              <Label :text="item.title | L" class="info" />
+              <Label :text="item.subTitle | L" class="sub" />
+            </StackLayout>
+            <Switch
+              :color="item.subAction ? '#ff5200' : '#858585'"
+              verticalAlignment="center"
+              col="2"
+              :checked="item.subAction"
+              @checkedChange="item.action"
+            />
+          </GridLayout>
+        </v-template>
+        <v-template>
+          <StackLayout class="listSpace"> </StackLayout>
+        </v-template>
+      </ListView>
+      <GridLayout row="1" class="appbar" rows="*" columns="auto, *">
+        <Button
+          class="ico"
           :text="icon.back"
-          automationText="Back"
           @tap="$navigateBack()"
-          col="0"
-        />
-        <Label class="title tb" :text="'opts' | L" col="1" />
-      </GridLayout>
-    </ActionBar>
-    <StackLayout class="main-container">
-      <GridLayout rows="auto" columns="auto, *, auto" class="option mdr">
-        <Label
-          col="0"
-          verticalAlignment="center"
-          class="er"
-          :text="icon.shuf"
-        />
-        <StackLayout col="1">
-          <Label :text="'sVw' | L" textWrap="true" />
-          <Label :text="`sVwInfo` | L" class="info" textWrap="true" />
-        </StackLayout>
-        <Switch
-          :color="shakeEnabled ? '#ff5200' : '#858585'"
-          verticalAlignment="center"
-          col="2"
-          :checked="shakeEnabled"
-          @checkedChange="toggleShake"
         />
       </GridLayout>
-    </StackLayout>
+    </GridLayout>
   </Page>
 </template>
 
@@ -47,6 +52,20 @@ import * as utils from "~/shared/utils";
 export default {
   computed: {
     ...mapState(["icon", "shakeEnabled"]),
+    items() {
+      return [
+        {},
+        {
+          type: "switch",
+          icon: "shuf",
+          title: "sVw",
+          subTitle: "sVwInfo",
+          action: this.toggleShake,
+          subAction: this.shakeEnabled,
+        },
+        {},
+      ];
+    },
   },
   methods: {
     ...mapActions(["setShakeAction"]),

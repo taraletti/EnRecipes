@@ -1,48 +1,50 @@
 <template>
-  <Page @loaded="onPageLoad">
-    <ActionBar flat="true">
-      <GridLayout rows="*" columns="auto, *">
-        <MDButton
-          class="er left"
-          variant="text"
-          :text="icon.back"
-          automationText="Back"
-          @tap="$navigateBack()"
-          col="0"
-        />
-        <Label class="title tb" :text="'About' | L" col="1" />
-      </GridLayout>
-    </ActionBar>
-    <GridLayout rows="auto, *" columns="*" class="main-container">
-      <StackLayout row="0" class="app-info-container">
-        <Image
-          class="app-icon"
-          src="res://ic_launcher_foreground"
-          stretch="none"
-        />
-        <Label class="app-name tb" :text="'EnRecipes' | L" textWrap="true" />
-        <Label :text="getVersion" class="app-version tb" textWrap="true" />
+  <Page @loaded="onPageLoad" actionBarHidden="true">
+    <GridLayout rows="*, auto" columns="auto, *">
+      <ListView
+        rowSpan="2"
+        colSpan="2"
+        class="options-list"
+        for="item in items"
+        @loaded="listViewLoad"
+      >
+        <v-template if="$index == 0">
+          <Label class="pageTitle" :text="'About' | L" />
+        </v-template>
+        <v-template if="$index == 1">
+          <StackLayout class="app-info">
+            <Image
+              class="icon"
+              src="res://ic_launcher_foreground"
+              stretch="none"
+            />
+            <Label class="name tb tac" :text="'EnRecipes' | L" />
+            <Label :text="getVersion" class="version tb tac" />
 
-        <Label class="app-info" :text="'appInfo' | L" textWrap="true" />
-      </StackLayout>
-
-      <ListView row="1" for="item in items" @loaded="listViewLoad">
+            <Label class="info tac tw" :text="'appInfo' | L" />
+          </StackLayout>
+        </v-template>
+        <v-template if="$index == 6">
+          <StackLayout class="listSpace"> </StackLayout>
+        </v-template>
         <v-template>
           <GridLayout
             columns="auto, *"
-            class="option mdr"
-            @tap="openURL(item.url)"
+            class="option"
+            @touch="touch($event, item.url)"
           >
-            <Label
-              col="0"
-              verticalAlignment="center"
-              class="er"
-              :text="icon[item.icon]"
-            />
+            <Label class="ico" :text="icon[item.icon]" />
             <Label col="1" :text="item.title | L" />
           </GridLayout>
         </v-template>
       </ListView>
+      <GridLayout row="1" class="appbar" rows="*" columns="auto, *">
+        <Button
+          class="ico"
+          :text="icon.back"
+          @tap="$navigateBack()"
+        />
+      </GridLayout>
     </GridLayout>
   </Page>
 </template>
@@ -56,10 +58,18 @@ export default {
     ...mapState(["icon"]),
     items() {
       return [
+        {},
+        {},
         {
           icon: "gh",
           title: "gh",
           url: "https://github.com/vishnuraghavb/EnRecipes",
+        },
+        {
+          icon: "priv",
+          title: "priv",
+          url:
+            "https://github.com/vishnuraghavb/EnRecipes/blob/main/PRIVACY.md",
         },
         {
           icon: "don",
@@ -71,6 +81,7 @@ export default {
           title: "trnsl",
           url: "https://hosted.weblate.org/projects/enrecipes/app-translations",
         },
+        {},
       ];
     },
     getVersion() {
@@ -87,15 +98,13 @@ export default {
       const page = args.object;
       page.bindingContext = new Observable();
     },
-    listViewLoad(args) {
-      let e = args.object.android;
-      e.setSelector(new android.graphics.drawable.StateListDrawable());
-      e.setDivider(null);
-      e.setDividerHeight(0);
-    },
     // HELPERS
     openURL(url) {
       Utils.openUrl(url);
+    },
+    touch({ object, action }, url) {
+      object.className = action.match(/down|move/) ? "option fade" : "option";
+      if (action == "up") this.openURL(url);
     },
   },
 };

@@ -1,459 +1,263 @@
 <template>
-  <Page @loaded="onPageLoad" @unloaded="onPageUnload">
-    <ActionBar flat="true">
-      <GridLayout rows="48" columns="auto, *, auto">
-        <MDButton
-          variant="text"
-          row="0"
-          col="0"
-          class="er"
-          :text="icon.back"
-          automationText="Back"
-          @tap="$navigateBack()"
-        />
-        <FlexboxLayout row="0" col="2" alignItems="center">
-          <MDButton
-            v-if="!filterTrylater"
-            variant="text"
-            class="er"
-            :text="recipe.tried ? icon.try : icon.tried"
-            @tap="toggleTrylater"
-          />
-          <MDButton
-            v-else
-            variant="text"
-            class="er"
-            :text="icon.done"
-            @tap="recipeTried"
-          />
-          <MDButton
-            variant="text"
-            class="er"
-            :text="recipe.isFavorite ? icon.faved : icon.fav"
-            @tap="toggleFavourite"
-          />
-          <!-- <MDButton variant="text" class="er" :text="recipe.inBag ? icon.bagged : icon.bag" @tap="toggleCart" /> -->
-          <MDButton
-            variant="text"
-            v-if="!busy"
-            class="er"
-            :text="icon.edit"
-            @tap="editRecipe"
-          />
-          <MDActivityIndicator v-else :busy="busy" />
-        </FlexboxLayout>
-      </GridLayout>
-    </ActionBar>
-    <AbsoluteLayout>
-      <Tabs
-        width="100%"
-        height="100%"
-        :selectedIndex="selectedTabIndex"
-        @selectedIndexChange="selectedIndexChange"
-        class="viewRecipe"
-        elevation="0"
-      >
-        <TabStrip flat="true">
-          <TabStripItem>
-            <Label :text="'ovw' | L"></Label>
-          </TabStripItem>
-          <TabStripItem>
-            <Label :text="'ings' | L"></Label>
-          </TabStripItem>
-          <TabStripItem>
-            <Label :text="'Instructions' | L"></Label>
-          </TabStripItem>
-          <TabStripItem>
-            <Label :text="'nos' | L"></Label>
-          </TabStripItem>
-          <TabStripItem>
-            <Label :text="'cmbs' | L"></Label>
-          </TabStripItem>
-        </TabStrip>
-        <TabContentItem>
-          <ScrollView @loaded="overviewLoaded">
-            <StackLayout>
-              <StackLayout
-                width="100%"
-                :height="screenWidth"
-                verticalAlignment="center"
-                class="imageHolder"
-              >
-                <Image
-                  v-if="recipe.imageSrc"
-                  :src="recipe.imageSrc"
-                  stretch="aspectFill"
-                  width="100%"
-                  :height="screenWidth"
-                />
-                <Label
-                  v-else
-                  horizontalAlignment="center"
-                  class="er"
-                  fontSize="160"
-                  :text="icon.img"
-                />
-              </StackLayout>
-              <StackLayout margin="16 4 80">
-                <Label
-                  class="category"
-                  :text="`${$options.filters.L(
-                    recipe.cuisine
-                  )} • ${$options.filters.L(recipe.category)}`"
-                />
-                <Label
-                  class="title tb"
-                  :text="recipe.title"
-                  textWrap="true"
-                />
-                <FlexboxLayout class="ratingContainer">
-                  <Label
-                    class="rate er"
-                    :class="{ rated: recipe.rating >= n }"
-                    v-for="n in 5"
-                    :key="n"
-                    :text="recipe.rating < n ? icon.star : icon.starred"
-                    @tap="
-                      recipe.rating == 1 && n == 1 ? setRating(0) : setRating(n)
-                    "
-                    @longPress="setRating(n)"
-                  />
-                </FlexboxLayout>
-                <Label
-                  class="attr"
-                  :text="`${$options.filters.L(
-                    'Difficulty level'
-                  )}: ${$options.filters.L(recipe.difficulty)}`"
-                  textWrap="true"
-                />
-                <Label
-                  class="attr"
-                  :text="`${$options.filters.L(
-                    'Preparation time'
-                  )}: ${formattedTime(recipe.prepTime)}`"
-                  textWrap="true"
-                />
-                <Label
-                  class="attr"
-                  :text="`${$options.filters.L(
-                    'Cooking time'
-                  )}: ${formattedTime(recipe.cookTime)}`"
-                  textWrap="true"
-                />
-                <FlexboxLayout
-                  v-if="recipe.tags.length"
-                  class="tagsContainer"
-                  flexWrap="wrap"
-                >
-                  <Label
-                    class="tagsTitle"
-                    :text="`${$options.filters.L('ts')}: `"
-                  />
-                  <Label
-                    v-for="(tag, index) in recipe.tags"
-                    :key="index"
-                    :text="tag"
-                    class="tag"
-                    textWrap="false"
-                  />
-                </FlexboxLayout>
-                <GridLayout
-                  rows="auto, auto"
-                  columns="*, *"
-                  class="overviewContainer"
-                >
-                  <GridLayout
-                    class="overviewItem mdr"
-                    row="0"
-                    col="0"
-                    rows="auto, auto"
-                    columns="*"
-                    @tap="selectedTabIndex = 1"
-                  >
-                    <Label row="0" class="er" :text="icon.items" />
-                    <Label
-                      row="1"
-                      class="itemCount"
-                      :text="`${recipe.ingredients.length} ${
-                        recipe.ingredients.length == 1
-                          ? $options.filters.L('ing')
-                          : $options.filters.L('ings')
-                      }`"
-                      textWrap="true"
-                    />
-                  </GridLayout>
-                  <GridLayout
-                    class="overviewItem mdr"
-                    row="0"
-                    col="1"
-                    rows="auto, auto"
-                    columns="*"
-                    @tap="selectedTabIndex = 2"
-                  >
-                    <Label row="0" class="er" :text="icon.steps" />
-                    <Label
-                      row="1"
-                      class="itemCount"
-                      :text="`${recipe.instructions.length} ${
-                        recipe.instructions.length == 1
-                          ? $options.filters.L('Instruction')
-                          : $options.filters.L('Instructions')
-                      }`"
-                      textWrap="true"
-                    />
-                  </GridLayout>
-                  <GridLayout
-                    class="overviewItem mdr"
-                    row="1"
-                    col="0"
-                    rows="auto, auto"
-                    columns="*"
-                    @tap="selectedTabIndex = 3"
-                  >
-                    <Label row="0" class="er" :text="icon.notes" />
-                    <Label
-                      row="1"
-                      class="itemCount"
-                      :text="`${recipe.notes.length} ${
-                        recipe.notes.length == 1
-                          ? $options.filters.L('no')
-                          : $options.filters.L('nos')
-                      }`"
-                      textWrap="true"
-                    />
-                  </GridLayout>
-                  <GridLayout
-                    class="overviewItem mdr"
-                    row="1"
-                    col="1"
-                    rows="auto, auto"
-                    columns="*"
-                    @tap="selectedTabIndex = 4"
-                  >
-                    <Label row="0" class="er" :text="icon.comb" />
-                    <Label
-                      row="1"
-                      class="itemCount"
-                      :text="`${recipe.combinations.length} ${
-                        recipe.combinations.length == 1
-                          ? $options.filters.L('cmb')
-                          : $options.filters.L('cmbs')
-                      }`"
-                      textWrap="true"
-                    />
-                  </GridLayout>
-                </GridLayout>
-                <Label
-                  class="attr small"
-                  :text="`${$options.filters.L(
-                    'Last updated'
-                  )}: ${formattedDate(recipe.lastModified)}`"
-                  textWrap="true"
-                />
-                <Label
-                  class="attr small"
-                  :text="`${$options.filters.L('Created')}: ${formattedDate(
-                    recipe.created
-                  )}`"
-                  textWrap="true"
-                />
-              </StackLayout>
+  <Page @loaded="onPageLoad" @unloaded="onPageUnload" actionBarHidden="true">
+    <GridLayout rows="*, auto" columns="*">
+      <DockLayout stretchLastChild="true" rowSpan="2">
+        <GridLayout
+          dock="top"
+          rows="auto,auto"
+          columns="*, auto"
+          paddingBottom="8"
+          :class="{ topPlate: scrolled }"
+        >
+          <StackLayout>
+            <Label class="pageTitle" paddingBottom="8" :text="recipe.title" />
+            <StackLayout marginLeft="12" orientation="horizontal">
+              <Button
+                class="ico rate"
+                :class="{ rated: recipe.rating >= n }"
+                v-for="n in 5"
+                :key="n"
+                :text="recipe.rating < n ? icon.star : icon.starred"
+                @tap="
+                  recipe.rating == 1 && n == 1 ? setRating(0) : setRating(n)
+                "
+                @longPress="setRating(n)"
+              />
             </StackLayout>
-          </ScrollView>
-        </TabContentItem>
-        <TabContentItem>
-          <ScrollView>
+          </StackLayout>
+          <Image
+            col="1"
+            v-if="recipe.imageSrc"
+            :src="recipe.imageSrc"
+            stretch="aspectFit"
+            class="photo"
+            decodeWidth="96"
+            decodeHeight="96"
+          />
+          <StackLayout row="1" colSpan="2" orientation="horizontal" margin="16">
             <GridLayout
-              v-if="!recipe.ingredients.length"
-              rows="*, auto, *, 88"
-              columns="*"
-              class="emptyStateContainer"
+              rows="48"
+              columns="auto, auto"
+              class="segment"
+              v-for="(item, index) in topmenu"
+              :key="index"
+              :class="{ select: selectedIndex == index }"
+              @touch="touchSelector($event, index, item.icon)"
             >
-              <StackLayout col="0" row="1" class="emptyState">
-                <Label class="er icon" :text="icon.items" textWrap="true" />
-                <Label class="title tb" :text="'pAIng' | L" textWrap="true" />
-              </StackLayout>
+              <Label class="ico" :text="icon[item.icon]" />
+              <Label class="value" :text="item.count" col="1" />
             </GridLayout>
-            <StackLayout v-else padding="24 16 72">
-              <StackLayout class="inputField">
-                <Label
-                  class="fieldLabel"
-                  :text="`${$options.filters.L('req')} ${$options.filters.L(
-                    recipe.yield.unit
-                  )}`"
-                />
-                <TextField
-                  width="50%"
-                  v-model="yieldMultiplier"
-                  keyboardType="number"
-                />
+          </StackLayout>
+        </GridLayout>
+        <ScrollView
+          dock="bottom"
+          @loaded="onScrollLoad"
+          @scroll="!toast && onScroll($event)"
+        >
+          <StackLayout>
+            <StackLayout>
+              <GridLayout rows="auto" columns="*, *">
+                <StackLayout class="attribute">
+                  <Label class="title" :text="'cui' | L" />
+                  <Label class="value" :text="recipe.cuisine | L" />
+                </StackLayout>
+                <StackLayout class="attribute" col="1">
+                  <Label class="title" :text="'cat' | L" />
+                  <Label class="value" :text="recipe.category | L" />
+                </StackLayout>
+              </GridLayout>
+              <StackLayout v-if="recipe.tags.length" class="attribute">
+                <Label class="title" :text="'ts' | L" />
+                <Label class="value" :text="getTags(recipe.tags)" />
+              </StackLayout>
+              <GridLayout rows="auto" columns="*, *">
+                <StackLayout class="attribute" v-if="hasTime(recipe.prepTime)">
+                  <Label class="title" :text="'prepT' | L" />
+                  <Label class="value" :text="formattedTime(recipe.prepTime)" />
+                </StackLayout>
+                <StackLayout
+                  :col="hasTime(recipe.prepTime) ? 1 : 0"
+                  class="attribute"
+                  v-if="hasTime(recipe.cookTime)"
+                >
+                  <Label class="title" :text="'cookT' | L" />
+                  <Label class="value" :text="formattedTime(recipe.cookTime)" />
+                </StackLayout>
+              </GridLayout>
+              <GridLayout rows="auto" columns="*, *">
+                <StackLayout class="attribute">
+                  <Label class="title" :text="'yld' | L" />
+                  <Label
+                    @touch="touchYield"
+                    class="value clickable"
+                    :text="`${positiveYieldMultiplier} ${$options.filters.L(
+                      recipe.yield.unit
+                    )}`"
+                  />
+                </StackLayout>
+                <StackLayout class="attribute" col="1">
+                  <Label class="title" :text="'Difficulty level' | L" />
+                  <Label class="value" :text="recipe.difficulty | L" />
+                </StackLayout>
+              </GridLayout>
+            </StackLayout>
+            <StackLayout>
+              <Label
+                id="items"
+                padding="0 16"
+                class="sectionTitle"
+                v-show="recipe.ingredients.length"
+                :text="'ings' | L"
+              />
+              <StackLayout @loaded="onIngsLoad">
+                <GridLayout
+                  rows="auto"
+                  columns="auto, *"
+                  v-for="(item, index) in recipe.ingredients"
+                  :key="index + 'ing'"
+                  class="ingredient"
+                  @touch="touchIngredient($event, index)"
+                >
+                  <Button class="ico min" :text="icon.done" />
+                  <Label
+                    class="value tw"
+                    col="1"
+                    :text="`${
+                      roundedQuantity(item.quantity)
+                        ? roundedQuantity(item.quantity) + ' '
+                        : ''
+                    }${
+                      roundedQuantity(item.quantity)
+                        ? $options.filters.L(item.unit) + ' '
+                        : ''
+                    }${item.item}`"
+                  />
+                </GridLayout>
               </StackLayout>
               <Label
-                padding="16 0 8"
-                class="title tb"
-                :text="`${$options.filters.L(
-                  'ings'
-                )} (${positiveYieldMultiplier} ${$options.filters.L(
-                  recipe.yield.unit
-                )})`"
-                textWrap="true"
+                id="steps"
+                padding="0 16"
+                v-show="recipe.instructions.length"
+                class="sectionTitle"
+                :text="'ins' | L"
               />
-              <check-box
-                v-for="(item, index) in recipe.ingredients"
-                :key="index"
-                class="ingredient"
-                :color="isLightMode ? '#1A1A1A' : '#e0e0e0'"
-                style="font-family: 'Inter-Medium'"
-                :checkPadding="checkPadding"
-                marginLeft="4"
-                @checkedChange="checkChange"
-                :text="`${
-                  roundedQuantity(item.quantity)
-                    ? roundedQuantity(item.quantity) + ' '
-                    : ''
-                }${
-                  roundedQuantity(item.quantity)
-                    ? $options.filters.L(item.unit) + ' '
-                    : ''
-                }${item.item}`"
-              />
-            </StackLayout>
-          </ScrollView>
-        </TabContentItem>
-        <TabContentItem>
-          <ScrollView>
-            <GridLayout
-              v-if="!recipe.instructions.length"
-              rows="*, auto, *, 88"
-              columns="*"
-              class="emptyStateContainer"
-            >
-              <StackLayout col="0" row="1" class="emptyState">
-                <Label class="er icon" :text="icon.steps" textWrap="true" />
-                <Label class="title tb" :text="'pAIns' | L" textWrap="true" />
-              </StackLayout>
-            </GridLayout>
-            <StackLayout v-else padding="28 16 62">
-              <GridLayout
-                @tap="stepDone"
-                columns="auto ,*"
-                v-for="(instruction, index) in recipe.instructions"
-                :key="index"
-              >
-                <Label
-                  col="0"
-                  colSpan="2"
+              <StackLayout @loaded="onInsLoad">
+                <GridLayout
+                  @touch="touchInstruction"
+                  columns="auto ,*"
+                  v-for="(instruction, index) in recipe.instructions"
+                  :key="index + 'ins'"
                   class="instruction"
-                  :class="{
-                    noBorder: index === recipe.instructions.length - 1,
-                  }"
-                  :text="instruction"
-                  textWrap="true"
-                />
-                <Label
-                  @loaded="centerLabel"
-                  class="count tb"
-                  col="0"
-                  :text="index + 1"
-                />
-              </GridLayout>
-            </StackLayout>
-          </ScrollView>
-        </TabContentItem>
-        <TabContentItem>
-          <ScrollView>
-            <GridLayout
-              v-if="!recipe.notes.length"
-              rows="*, auto, *, 88"
-              columns="*"
-              class="emptyStateContainer"
-            >
-              <StackLayout col="0" row="1" class="emptyState">
-                <Label class="er icon" :text="icon.notes" textWrap="true" />
-                <Label class="title tb" :text="'pANo' | L" textWrap="true" />
+                >
+                  <Button class="count ico min" :text="index + 1" />
+                  <Label col="1" class="value tw" :text="instruction" />
+                </GridLayout>
               </StackLayout>
-            </GridLayout>
-            <StackLayout v-else padding="16 16 62" @loaded="createNotes">
-            </StackLayout>
-          </ScrollView>
-        </TabContentItem>
-        <TabContentItem>
-          <ScrollView>
-            <GridLayout
-              v-if="!recipe.combinations.length"
-              rows="*, auto, *, 88"
-              columns="*"
-              class="emptyStateContainer"
-            >
-              <StackLayout col="0" row="1" class="emptyState">
-                <Label class="er icon" :text="icon.comb" textWrap="true" />
-                <Label class="title tb" :text="'pACmb' | L" textWrap="true" />
-              </StackLayout>
-            </GridLayout>
-            <StackLayout v-else padding="16 0 80">
-              <GridLayout
-                columns="*"
+              <Label
+                id="comb"
+                padding="0 16"
+                v-show="recipe.combinations.length"
+                class="sectionTitle"
+                :text="'cmbs' | L"
+              />
+              <Button
                 v-for="(combination, index) in recipe.combinations"
-                :key="index"
-                elevation="1"
-                class="combination mdr"
+                :key="index + 'comb'"
+                class="combination"
+                :text="getCombinationTitle(combination)"
                 @tap="viewCombination(combination)"
-              >
-                <Label
-                  verticalAlignment="center"
-                  class="combinationTitle"
-                  :text="getCombinationTitle(combination)"
-                  textWrap="true"
-                />
-              </GridLayout>
+              />
+              <Label
+                id="notes"
+                padding="0 16"
+                v-show="recipe.notes.length"
+                class="sectionTitle"
+                :text="'nos' | L"
+              />
+              <StackLayout @loaded="onNosLoad" padding="0 16 72"> </StackLayout>
             </StackLayout>
-          </ScrollView>
-        </TabContentItem>
-      </Tabs>
-      <GridLayout id="btnFabContainer" rows="*, auto" columns="*, auto">
-        <!-- <transition name="bounce" appear>
-          <MDFloatingActionButton
-            row="1"
-            col="1"
-            src="res://share"
-            @tap="shareHandler"
-            v-if="showFab"
-          />
-        </transition> -->
+          </StackLayout>
+        </ScrollView>
+      </DockLayout>
+
+      <GridLayout
+        row="1"
+        @loaded="onAppBarLoad"
+        class="appbar"
+        v-show="!toast"
+        columns="auto, *, auto, auto, auto, auto"
+      >
+        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
+        <Button
+          col="2"
+          v-if="!filterTrylater"
+          class="ico"
+          :text="recipe.tried ? icon.try : icon.tried"
+          @tap="toggleTrylater"
+        />
+        <Button
+          col="2"
+          v-else
+          class="ico"
+          :text="icon.done"
+          @tap="recipeTried"
+        />
+        <Button
+          col="3"
+          class="ico"
+          :text="recipe.isFavorite ? icon.faved : icon.fav"
+          @tap="toggleFavourite"
+        />
+        <Button
+          col="4"
+          v-if="!busy"
+          class="ico"
+          :text="icon.edit"
+          @tap="editRecipe"
+        />
+        <ActivityIndicator col="4" v-else :busy="busy" />
+        <Button
+          class="ico fab"
+          :text="icon.share"
+          col="5"
+          @tap="shareHandler"
+        />
       </GridLayout>
-    </AbsoluteLayout>
+      <GridLayout
+        v-show="toast"
+        row="1"
+        class="appbar"
+        :class="hlMsg && 'hlMsg'"
+        columns="*"
+        @tap="toast = null"
+      >
+        <FlexboxLayout minHeight="48" alignItems="center">
+          <Label class="title msg" :text="toast" />
+        </FlexboxLayout>
+      </GridLayout>
+    </GridLayout>
   </Page>
 </template>
 
 <script>
 import {
   Application,
-  Color,
   ImageSource,
-  Screen,
   Utils,
   Span,
   FormattedString,
   Label,
-  GridLayout,
-  ItemSpec,
   Observable,
-  GestureTypes,
+  Screen,
 } from "@nativescript/core";
-import {
-  Feedback,
-  FeedbackType,
-  FeedbackPosition,
-} from "nativescript-feedback";
-import * as Toast from "nativescript-toast";
 import * as SocialShare from "@nativescript/social-share";
 import { localize } from "@nativescript/localize";
 const intl = require("nativescript-intl");
 import { mapActions, mapState } from "vuex";
 import EditRecipe from "./EditRecipe.vue";
-import ViewRecipe from "./ViewRecipe.vue";
-import ShareChooser from "./modal/ShareChooser.vue";
-let feedback = new Feedback();
+import ActionDialog from "./modal/ActionDialog.vue";
+import PromptDialog from "./modal/PromptDialog.vue";
+let toastTimer, scrollTimer;
 export default {
   props: ["filterTrylater", "recipeID"],
   data() {
@@ -461,37 +265,53 @@ export default {
       busy: false,
       yieldMultiplier: 1,
       recipe: null,
-      showFab: false,
-      selectedTabIndex: 0,
       currentRecipeID: this.recipeID,
-      hideActionBar: false,
-      overviewTab: null,
+      scrollview: null,
+      appbar: null,
+      ingcon: null,
+      inscon: null,
+      notescon: null,
       checks: [],
-      checkboxes: [],
       steps: [],
+      toast: null,
+      hlMsg: false,
+      selectedIndex: 0,
+      scrollingToId: false,
+      scrolled: false,
     };
   },
   computed: {
     ...mapState(["icon", "recipes"]),
-    screenWidth() {
-      return Screen.mainScreen.widthDIPs;
-    },
     positiveYieldMultiplier() {
       return Math.abs(this.yieldMultiplier) > 0
         ? Math.abs(parseFloat(this.yieldMultiplier))
         : 1;
     },
-    isLightMode() {
-      return Application.systemAppearance() === "light";
-    },
-    checkPadding() {
-      return `${Math.round(20 * Utils.layout.getDisplayDensity())},0,0,0`;
+    topmenu() {
+      return [
+        {
+          icon: "items",
+          count: this.recipe.ingredients.length,
+        },
+        {
+          icon: "steps",
+          count: this.recipe.instructions.length,
+        },
+        {
+          icon: "comb",
+          count: this.recipe.combinations.length,
+        },
+        {
+          icon: "notes",
+          count: this.recipe.notes.length,
+        },
+      ].filter((e) => e.count);
     },
   },
   methods: {
     ...mapActions([
       "toggleStateAction",
-      "setCurrentComponentAction",
+      "setComponent",
       "overwriteRecipeAction",
       "setRecipeAsTriedAction",
       "setRatingAction",
@@ -502,9 +322,8 @@ export default {
       page.bindingContext = new Observable();
       this.busy = false;
       setTimeout((e) => {
-        this.setCurrentComponentAction("ViewRecipe");
+        this.setComponent("ViewRecipe");
       }, 500);
-      this.showFab = true;
       if (this.yieldMultiplier == this.recipe.yield.quantity)
         this.yieldMultiplier = this.recipe.yield.quantity;
       this.keepScreenOn(true);
@@ -512,13 +331,76 @@ export default {
     },
     onPageUnload() {
       this.keepScreenOn(false);
-      feedback.hide();
     },
-    overviewLoaded(args) {
-      this.overviewTab = args;
+    onAppBarLoad({ object }) {
+      this.appbar = object;
+    },
+    onIngsLoad({ object }) {
+      this.ingcon = object;
+    },
+    onInsLoad({ object }) {
+      this.inscon = object;
+    },
+    onNosLoad({ object }) {
+      this.notescon = object;
+      this.createNotes();
     },
 
+    onScrollLoad(args) {
+      this.scrollview = args.object;
+    },
+    onScroll(args) {
+      if (!this.scrollingToId) {
+        let vm = this;
+        let h = Screen.mainScreen.heightDIPs;
+        function getPos(id) {
+          return vm.scrollview.getViewById(id).getLocationOnScreen().y + 144;
+        }
+        let items = getPos("items") <= h;
+        let steps = getPos("steps") <= h;
+        let comb = getPos("comb") <= h;
+        let notes = getPos("notes") <= h;
+        if (items) this.selectedIndex = 0;
+        if (steps) this.selectedIndex = 1;
+        if (comb) this.selectedIndex = 2;
+        if (notes) this.selectedIndex = 3;
+      }
+      this.scrolled = this.scrollview.verticalOffset != 0;
+      let scrollUp;
+      let y = args.scrollY;
+      if (y) {
+        scrollUp = y < this.scrollPos;
+        this.scrollPos = Math.abs(y);
+        let ab = this.appbar.translateY;
+        if (!scrollUp && ab == 0)
+          this.animateInOut(
+            250,
+            false,
+            (val) => (this.appbar.translateY = val * 64)
+          );
+        else if (scrollUp && ab == 64)
+          this.animateInOut(
+            250,
+            true,
+            (val) => (this.appbar.translateY = val * 64)
+          );
+      }
+    },
     // HELPERS
+    changeYield() {
+      this.$showModal(PromptDialog, {
+        props: {
+          title: `${localize("req")} ${localize(this.recipe.yield.unit)}`,
+          placeholder: Math.abs(parseFloat(this.yieldMultiplier)),
+          action: "SET",
+        },
+      }).then((item) => {
+        if (item) this.yieldMultiplier = item;
+      });
+    },
+    hasTime(time) {
+      return time != "00:00";
+    },
     niceDate(time) {
       let lastTried = new Date(time).getTime();
       let now = new Date().getTime();
@@ -539,17 +421,12 @@ export default {
         (dayDiff > 365 && duration("ltAgo"))
       );
     },
-    selectedIndexChange(args) {
-      this.selectedTabIndex = args.object.selectedIndex;
-    },
     showLastTried() {
-      feedback.show({
-        title: `${localize("triedInfo")} ${this.niceDate(
-          this.recipe.lastTried
-        )}`,
-        titleColor: new Color(`${this.isLightMode ? "#fff" : "#1A1A1A"}`),
-        backgroundColor: new Color("#ff5200"),
-      });
+      this.showToast(
+        `${localize("triedInfo")} ${this.niceDate(this.recipe.lastTried)}`,
+        5,
+        true
+      );
     },
     roundedQuantity(quantity) {
       return Math.abs(
@@ -565,14 +442,8 @@ export default {
         Application.android.foregroundActivity ||
         Application.android.startActivity;
       let window = activity.getWindow();
-      if (boolean)
-        window.addFlags(
-          android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-        );
-      else
-        window.clearFlags(
-          android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-        );
+      let flag = android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+      boolean ? window.addFlags(flag) : window.clearFlags(flag);
     },
     formattedTime(time) {
       let t = time.split(":");
@@ -614,36 +485,44 @@ export default {
         recipe: this.recipe,
       });
     },
-    checkChange(args, index) {
-      let check = args.object;
-      this.checkboxes.push(check);
+    checkChange(obj, index) {
       this.checks[index] = !this.checks[index];
+      obj.getChildAt(0).text = this.checks[index]
+        ? this.icon.succ
+        : this.icon.done;
     },
-    stepDone(args) {
-      let a = args.object;
-      this.steps.push(a);
-      if (a.className !== "done") a.className = "done";
-      else a.className = "";
-    },
-    centerLabel(args) {
-      args.object.android.setGravity(17);
+    touchIngredient({ object, action }, index) {
+      object.className = action.match(/down|move/)
+        ? "ingredient fade"
+        : "ingredient";
+      if (action == "up") this.checkChange(object, index);
     },
     clearChecks() {
-      this.checkboxes.forEach((e) => {
-        if (e.checked) e.checked = false;
-      });
-      this.checkboxes = [];
+      for (let i = 0; i < this.ingcon.getChildrenCount(); i++) {
+        this.ingcon.getChildAt(i).getChildAt(0).text = this.icon.done;
+      }
+    },
+    stepDone(object) {
+      let a = object;
+      a.className = a.className.includes("done")
+        ? "instruction"
+        : "instruction done";
+    },
+    touchInstruction({ object, action }) {
+      let hasDone = object.className.includes("done");
+      object.className = action.match(/down|move/)
+        ? `instruction fade ${hasDone ? "done" : ""}`
+        : `instruction ${hasDone ? "done" : ""}`;
+      if (action == "up") this.stepDone(object);
     },
     clearSteps() {
-      this.steps.forEach((e) => {
-        if (e.className === "done") e.className = "";
-      });
-      this.steps = [];
+      for (let i = 0; i < this.inscon.getChildrenCount(); i++) {
+        this.inscon.getChildAt(i).className = "instruction";
+      }
     },
 
     // NAVIGATION HANDLERS
     editRecipe() {
-      this.showFab = false;
       this.busy = true;
       this.$navigateTo(EditRecipe, {
         props: {
@@ -651,41 +530,37 @@ export default {
           filterTrylater: this.filterTrylater,
           recipeID: this.currentRecipeID,
         },
-        backstackVisible: false,
+        // backstackVisible: false,
       });
     },
     viewCombination(combination) {
+      this.scrollview.scrollToVerticalOffset(0, true);
       this.recipe = this.recipes.filter((e) => e.id === combination)[0];
       this.recipe.ingredients.forEach((e) => this.checks.push(false));
-      this.clearChecks();
       this.clearSteps();
+      this.clearChecks();
       this.currentRecipeID = combination;
       this.syncCombinations();
-      this.selectedTabIndex = 0;
-      this.overviewTab.object.scrollToVerticalOffset(0, true);
-      setTimeout(
-        (e) =>
-          this.recipe.tried && this.recipe.lastTried && this.showLastTried(),
-        500
-      );
+      this.createNotes();
+      this.recipe.tried && this.recipe.lastTried && this.showLastTried();
     },
 
     // SHARE ACTION
     shareHandler() {
       if (this.recipe.imageSrc) {
-        this.$showModal(ShareChooser, {
+        this.$showModal(ActionDialog, {
           props: {
             title: "shr",
-            helpIcon: "share",
+            list: ["pht", "rec"],
           },
         }).then((result) => {
           switch (result) {
-            case "photo":
+            case "pht":
               ImageSource.fromFile(this.recipe.imageSrc).then((res) => {
                 SocialShare.shareImage(res, "Share recipe photo using");
               });
               break;
-            case "recipe":
+            case "rec":
               this.shareRecipe();
               break;
             default:
@@ -754,6 +629,18 @@ export default {
     },
 
     // DATA HANDLERS
+    showToast(msg, dur, hl) {
+      clearInterval(toastTimer);
+      this.hlMsg = hl;
+      this.toast = msg;
+      toastTimer = setInterval(() => {
+        dur--;
+        if (dur == 0) {
+          this.toast = null;
+          clearInterval(toastTimer);
+        }
+      }, 1000);
+    },
     toggle(key, setDate) {
       this.toggleStateAction({
         id: this.currentRecipeID,
@@ -764,14 +651,14 @@ export default {
     },
     toggleFavourite() {
       this.recipe.isFavorite
-        ? Toast.makeText(localize("unfavd")).show()
-        : Toast.makeText(localize("favd")).show();
+        ? this.showToast(localize("unfavd"), 3)
+        : this.showToast(localize("favd"), 3);
       this.toggle("isFavorite");
     },
     toggleTrylater() {
       this.recipe.tried
-        ? Toast.makeText(localize("aTry")).show()
-        : Toast.makeText(localize("rmTry")).show();
+        ? this.showToast(localize("aTry"), 3)
+        : this.showToast(localize("rmTry"), 3);
       this.toggle("tried");
     },
     recipeTried() {
@@ -803,16 +690,13 @@ export default {
     },
 
     // NOTES
-    createNote(note, i) {
-      const vm = this;
+    createNote(note) {
       let regex = /(https?:\/\/[^\s]+)/g;
-      const grid = new GridLayout();
-      const firstCol = new ItemSpec(1, "star");
-      const label = new Label();
-      label.class = "note";
-      label.textWrap = true;
-      let formattedString = new FormattedString();
-      let textArray = note.split(regex);
+      const lbl = new Label();
+      lbl.class = "note";
+      lbl.textWrap = true;
+      let fString = new FormattedString();
+      let arr = note.split(regex);
 
       function createSpan(text, isUrl) {
         let span = new Span();
@@ -820,27 +704,57 @@ export default {
         span.fontSize = 14;
         if (isUrl) {
           span.textDecoration = "underline";
-          span.color = "#ff5200";
           span.on("linkTap", () => Utils.openUrl(text));
         }
-        formattedString.spans.push(span);
+        fString.spans.push(span);
       }
-      textArray.forEach((text) => {
+      arr.forEach((text) => {
         createSpan(text, regex.test(text));
       });
-      label.formattedText = formattedString;
-      grid.addChild(label);
-      GridLayout.setColumn(label, 0);
-      grid.addColumn(firstCol);
-      return grid;
+      lbl.formattedText = fString;
+      return lbl;
     },
-    createNotes(args) {
-      const stack = args.object;
-      if (!stack.getChildrenCount()) {
-        this.recipe.notes.forEach((note, i) => {
-          stack.addChild(this.createNote(note, i));
-        });
-      }
+    createNotes() {
+      const stack = this.notescon;
+      stack.removeChildren();
+      this.recipe.notes.forEach((note) =>
+        stack.addChild(this.createNote(note))
+      );
+    },
+    getTags(tags) {
+      return tags.join(" · ");
+    },
+
+    //HELPERS
+    touchSelector({ object, action }, index, id) {
+      let selected = this.selectedIndex == index;
+      object.className = action.match(/down|move/)
+        ? `segment ${selected ? "select" : "fade"}`
+        : `segment ${selected && "select"}`;
+      if (action == "up") this.scrollToId(index, id);
+    },
+    scrollToId(index, id) {
+      this.scrollingToId = true;
+      if (index != this.selectedIndex)
+        this.scrollview.scrollToVerticalOffset(
+          this.scrollview.getViewById(id).getLocationRelativeTo(this.scrollview)
+            .y + this.scrollview.verticalOffset,
+          true
+        );
+      clearInterval(scrollTimer);
+      scrollTimer = setInterval(() => {
+        if (this.selectedIndex == index) {
+          this.scrollingToId = false;
+          clearInterval(scrollTimer);
+        }
+      }, 1000);
+      this.selectedIndex = index;
+    },
+    touchYield({ object, action }) {
+      object.className = action.match(/down|move/)
+        ? "value clickable fade"
+        : "value clickable";
+      if (action == "up") this.changeYield();
     },
   },
   created() {
@@ -848,12 +762,8 @@ export default {
     this.recipe.ingredients.forEach((e) => this.checks.push(false));
   },
   mounted() {
-    this.showFab = true;
     this.yieldMultiplier = this.recipe.yield.quantity;
-    setTimeout(
-      (e) => this.recipe.tried && this.recipe.lastTried && this.showLastTried(),
-      500
-    );
+    this.recipe.tried && this.recipe.lastTried && this.showLastTried();
   },
 };
 </script>

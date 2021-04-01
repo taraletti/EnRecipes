@@ -1,53 +1,40 @@
 <template>
-  <Page @loaded="onPageLoad" backgroundColor="transparent">
+  <Page @loaded="onPageLoad" backgroundColor="transparent" :class="appTheme">
     <GridLayout
       columns="*"
       :rows="`auto, auto, ${stretch ? '*' : 'auto'}, auto`"
-      class="dialogContainer"
-      :class="appTheme"
+      class="modal"
     >
-      <StackLayout row="0" class="dialogHeader" orientation="horizontal">
-        <Label class="er dialogIcon" :text="icon[helpIcon]" />
-        <Label class="dialogTitle" :text="`${title}` | L" />
-      </StackLayout>
+      <Label class="title" :text="title | L" />
       <ListView
         rowHeight="48"
         row="2"
         @loaded="listViewLoad"
         for="item in newList"
-        :height="stretch ? '100%' : itemInView"
+        :height="stretch ? '100%' : listHeight"
       >
         <v-template>
-          <StackLayout margin="0" padding="0">
-            <Label
-              class="actionItem mdr"
-              :class="{ tb: title === 'srt' && sortType === item }"
-              :color="title === 'srt' && sortType === item ? '#ff5200' : ''"
-              :text="`${localized(item)}`"
-              @tap="tapAction(item)"
-              @longPress="removeItem(item)"
-            />
-          </StackLayout>
+          <Label
+            class="listItem"
+            :class="{ tb: title === 'srt' && sortType === item }"
+            :color="title === 'srt' && sortType === item ? '#ff5200' : ''"
+            :text="`${localized(item)}`"
+            @touch="touch"
+            @tap="tapAction(item)"
+            @longPress="removeItem(item)"
+          />
         </v-template>
       </ListView>
-      <GridLayout
-        row="3"
-        rows="auto"
-        columns="auto, *, auto"
-        class="actionsContainer"
-      >
-        <MDButton
-          variant="text"
+      <GridLayout row="3" columns="auto, *, auto" class="actions">
+        <Button
           v-if="action"
-          col="0"
-          class="action tb pull-left"
-          :text="`${action}` | L"
+          class="text sm"
+          :text="action | L"
           @tap="$modal.close(action)"
         />
-        <MDButton
-          variant="text"
+        <Button
           col="2"
-          class="action tb pull-right"
+          class="text sm"
           :text="'cBtn' | L"
           @tap="$modal.close(false)"
         />
@@ -57,28 +44,22 @@
 </template>
 
 <script>
-import { Application } from "@nativescript/core";
-import * as Toast from "nativescript-toast";
+import { Screen } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
 import { mapState, mapActions } from "vuex";
 import ConfirmDialog from "./ConfirmDialog.vue";
 
 export default {
-  props: ["title", "list", "stretch", "action", "helpIcon", "count"],
+  props: ["title", "list", "action"],
   data() {
     return {
       newList: this.list,
-      rowHeight: null,
+      stretch: false,
+      listHeight: 0,
     };
   },
   computed: {
-    ...mapState(["sortType", "icon"]),
-    appTheme() {
-      return Application.systemAppearance();
-    },
-    itemInView() {
-      return this.rowHeight * this.count;
-    },
+    ...mapState(["sortType", "icon", "appTheme"]),
   },
   methods: {
     ...mapActions(["removeListItemAction"]),
@@ -92,13 +73,6 @@ export default {
           )
         );
     },
-    listViewLoad(args) {
-      this.rowHeight = args.object.rowHeight;
-      let e = args.object.android;
-      e.setSelector(new android.graphics.drawable.StateListDrawable());
-      e.setDivider(null);
-      e.setDividerHeight(0);
-    },
     localized(item) {
       if (this.title !== "lang") return localize(item);
       else return item;
@@ -106,9 +80,6 @@ export default {
     tapAction(item) {
       this.$modal.close(item);
     },
-    // centerLabel(args) {
-    //   args.object.android.setGravity(16);
-    // },
     deletionConfirmation(type, description) {
       return this.$showModal(ConfirmDialog, {
         props: {
@@ -116,13 +87,10 @@ export default {
           description,
           cancelButtonText: "cBtn",
           okButtonText: "rBtn",
-          helpIcon: "err",
-          iconColor: "#c92a2a",
         },
       });
     },
     removeItem(item) {
-      // let item = this.newList[index];
       let vm = this;
 
       function removeListItem(type, listName, desc) {
@@ -153,6 +121,23 @@ export default {
         default:
       }
     },
+    touch({ object, action }) {
+      object.className = action.match(/down|move/)
+        ? "listItem fade"
+        : "listItem";
+    },
+  },
+  created() {
+    let screenHeight = Screen.mainScreen.heightDIPs;
+    let usableHeight = screenHeight - 144 - 24; // margin and statusbar
+    let count = this.newList.length;
+    let listHeight = 48 * count;
+    let modalHeight = 104 + listHeight; // header + actions height = 104
+    if (modalHeight < usableHeight) {
+      this.listHeight = listHeight;
+    } else {
+      this.stretch = true;
+    }
   },
 };
 </script>

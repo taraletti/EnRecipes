@@ -1,57 +1,41 @@
 <template>
-  <Page @loaded="onPageLoad">
-    <ActionBar flat="true">
-      <GridLayout rows="*" columns="auto, *">
-        <MDButton
-          class="er left"
-          variant="text"
-          :text="icon.back"
-          automationText="Back"
-          @tap="$navigateBack()"
-          col="0"
-        />
-        <Label class="title tb" :text="'db' | L" col="1" />
-      </GridLayout>
-    </ActionBar>
-    <StackLayout class="main-container">
-      <GridLayout
-        rows="auto"
-        columns="auto, *"
-        class="option mdr"
-        @tap="exportCheck"
+  <Page @loaded="onPageLoad" actionBarHidden="true">
+    <GridLayout rows="*, auto" columns="auto, *">
+      <ListView
+        colSpan="2"
+        rowSpan="2"
+        class="options-list"
+        @loaded="listViewLoad"
+        for="item in items"
       >
-        <Label col="0" class="er" :text="icon.exp" />
-        <StackLayout col="1">
-          <Label :text="'expBu' | L" textWrap="true" />
-          <Label
-            v-if="!backupInProgress"
-            :text="'buInfo' | L"
-            class="info"
-            textWrap="true"
-          />
-          <GridLayout class="progressContainer" v-else columns="*, 64">
-            <MDProgress
-              col="0"
-              :value="backupProgress"
-              maxValue="100"
-            ></MDProgress>
-            <Label col="1" :text="`  ${backupProgress}%`" />
+        <v-template if="$index == 0">
+          <Label class="pageTitle" :text="'db' | L" />
+        </v-template>
+        <v-template if="$index == 3">
+          <StackLayout class="listSpace"> </StackLayout>
+        </v-template>
+        <v-template>
+          <GridLayout
+            columns="auto, *"
+            class="option"
+            @touch="touch($event, item.action)"
+          >
+            <Label class="ico" :text="icon[item.icon]" />
+            <StackLayout col="1">
+              <Label :text="item.title | L" class="info" />
+              <Label :text="item.subTitle | L" class="sub" />
+            </StackLayout>
           </GridLayout>
-        </StackLayout>
+        </v-template>
+      </ListView>
+      <GridLayout row="1" class="appbar" rows="*" columns="auto, *">
+        <Button
+          class="ico"
+          :text="icon.back"
+          @tap="$navigateBack()"
+        />
       </GridLayout>
-      <GridLayout
-        rows="auto"
-        columns="auto, *"
-        class="option mdr"
-        @tap="importCheck"
-      >
-        <Label col="0" class="er" :text="icon.imp" />
-        <StackLayout col="1">
-          <Label :text="'impBu' | L" textWrap="true" />
-          <Label :text="'impInfo' | L" class="info" textWrap="true" />
-        </StackLayout>
-      </GridLayout>
-    </StackLayout>
+    </GridLayout>
   </Page>
 </template>
 
@@ -92,6 +76,24 @@ export default {
       "mealPlans",
       "importSummary",
     ]),
+    items() {
+      return [
+        {},
+        {
+          icon: "exp",
+          title: "expBu",
+          subTitle: "buInfo",
+          action: this.exportCheck,
+        },
+        {
+          icon: "imp",
+          title: "impBu",
+          subTitle: "impInfo",
+          action: this.importCheck,
+        },
+        {},
+      ];
+    },
   },
   methods: {
     ...mapActions([
@@ -310,8 +312,6 @@ export default {
           title: "impFail",
           description,
           okButtonText: "OK",
-          helpIcon: "alert",
-          iconColor: "#c92a2a",
         },
       });
     },
@@ -399,8 +399,6 @@ export default {
             "recF"
           )}${importedNote}${existsNote}${updatedNote}`,
           okButtonText: "OK",
-          helpIcon: "succ",
-          iconColor: "#69db7c",
         },
       });
     },
@@ -436,10 +434,13 @@ export default {
           description,
           cancelButtonText: "nNBtn",
           okButtonText: "conBtn",
-          helpIcon: "folder",
-          bgColor: "#ff5200",
         },
       });
+    },
+    // HELPERS
+    touch({ object, action }, method) {
+      object.className = action.match(/down|move/) ? "option fade" : "option";
+      if (action == "up") method();
     },
   },
 };

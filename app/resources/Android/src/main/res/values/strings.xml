@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="yld">"Yield"</string>
+  <string name="fltr">"Filter"</string>
+  <string name="apply">"APPLY"</string>
+  <string name="minimal">"Minimal"</string>
   <string name="grid">"Grid"</string>
   <string name="simple">"Simple"</string>
   <string name="detailed">"Detailed"</string>
@@ -126,7 +130,7 @@
   <string name="lunch">"lunch"</string>
   <string name="breakfast">"Breakfast"</string>
   <string name="cPic">"Crop photo"</string>
-  <string name="repBtn">"REPLACE PHOTO"</string>
+  <string name="repBtn">"REPLACE"</string>
   <string name="recPic">"Recipe photo"</string>
   <string name="req">"Required"</string>
   <string name="nwCat">"New category"</string>
@@ -157,7 +161,6 @@
   <string name="reqAcc">"EnRecipes requires storage permission in order to set recipe photo, export and import data"</string>
   <string name="grant">"Grant access"</string>
   <string name="nLangInfo">"Restart EnRecipes to use the new language"</string>
-  <string name="nThmInfo">"Restart EnRecipes to use the new theme"</string>
   <string name="rst">"RESTART"</string>
   <string name="appRst">"App restart required"</string>
   <string name="SET">"SET"</string>
@@ -180,7 +183,7 @@
   <string name="rmCuiInfo">"You are about to remove the cuisine:"</string>
   <string name="rBtn">"REMOVE"</string>
   <string name="cBtn">"CANCEL"</string>
-  <string name="srt">"Sort by"</string>
+  <string name="srt">"Sort"</string>
   <string name="stp">"Step"</string>
   <string name="it">"Item"</string>
   <string name="aNoBtn">"ADD NOTE"</string>
@@ -310,4 +313,5 @@
   <string name="_app_name_1k3Sbz">"EnRecipes"</string>
   <string name="app_name">"EnRecipes"</string>
   <string name="title_activity_kimera">"EnRecipes"</string>
+  <string name="nThmInfo">"nThmInfo"</string>
 </resources>

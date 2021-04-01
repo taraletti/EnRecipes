@@ -2,32 +2,30 @@
   "name": "enrecipes",
   "version": "1.0.0",
   "description": "A native application built with NativeScript-Vue",
-  "author": "Vishnu Raghav <apps@vishnuraghav.com>",
+  "homepage": "https://enrecipes.vercel.app/",
+  "bugs": {
+    "url": "https://github.com/vishnuraghavb/EnRecipes/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vishnuraghavb/EnRecipes.git"
+  },
   "license": "GPL",
+  "author": "Vishnu Raghav <apps@vishnuraghav.com>",
+  "main": "main",
   "dependencies": {
-    "@nativescript-community/gesturehandler": "^0.1.39",
     "@nativescript-community/perms": "^2.1.5",
     "@nativescript-community/ui-collectionview": "^4.0.29",
-    "@nativescript-community/ui-drawer": "^0.0.24",
-    "@nativescript-community/ui-material-activityindicator": "^5.2.10",
-    "@nativescript-community/ui-material-button": "^5.2.10",
-    "@nativescript-community/ui-material-floatingactionbutton": "^5.2.10",
-    "@nativescript-community/ui-material-progress": "^5.2.10",
-    "@nativescript-community/ui-material-snackbar": "^5.2.10",
     "@nativescript/core": "7.3.0",
     "@nativescript/localize": "^5.0.4",
     "@nativescript/social-share": "^2.0.4",
-    "@nativescript/theme": "^3.0.1",
     "@nativescript/zip": "^5.0.0",
-    "@nstudio/nativescript-checkbox": "^2.0.4",
     "@triniwiz/nativescript-accelerometer": "^4.0.3",
     "@triniwiz/nativescript-couchbase": "^1.2.2",
-    "nativescript-feedback": "^2.0.0",
     "nativescript-imagecropper": "^4.0.1",
     "nativescript-intl": "^4.0.2",
     "nativescript-plugin-filepicker": "^1.0.0",
     "nativescript-toast": "^2.0.0",
-    "nativescript-vibrate": "^4.0.1",
     "nativescript-vue": "^2.8.4",
     "vuex": "^3.6.2"
   },
@@ -35,20 +33,11 @@
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@nativescript/android": "7.0.1",
-    "@nativescript/webpack": "^3.0.8",
+    "@nativescript/webpack": "4.1.0",
     "@types/node": "^14.14.20",
     "babel-loader": "^8.2.2",
     "nativescript-vue-template-compiler": "^2.8.3",
     "node-sass": "^4.14.1",
     "vue-loader": "^15.9.6"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vishnuraghavb/EnRecipes.git"
-  },
-  "bugs": {
-    "url": "https://github.com/vishnuraghavb/EnRecipes/issues"
-  },
-  "homepage": "https://enrecipes.vercel.app/",
-  "main": "main"
+  }
 }

@@ -1,47 +1,36 @@
 <template>
-  <Page @loaded="onPageLoad">
-    <ActionBar flat="true">
-      <GridLayout rows="*" columns="auto, *">
-        <MDButton
-          class="er left"
-          variant="text"
-          :text="icon.back"
-          automationText="Back"
-          @tap="$navigateBack()"
-          col="0"
-        />
-        <Label class="title tb" :text="'rest' | L" col="1" />
-      </GridLayout>
-    </ActionBar>
-    <GridLayout rows="auto, *" columns="*" class="main-container">
-      <Label
-        row="0"
-        class="group-info"
-        :text="'restInfo' | L"
-        textWrap="true"
-      />
-      <ListView row="1" for="item in items" @loaded="listViewLoad">
+  <Page @loaded="onPageLoad" actionBarHidden="true">
+    <GridLayout rows="*, auto" columns="auto, *">
+      <ListView
+        colSpan="2"
+        rowSpan="2"
+        class="options-list"
+        @loaded="listViewLoad"
+        for="item in items"
+      >
+        <v-template if="$index == 0">
+          <Label class="pageTitle" :text="'rest' | L" />
+        </v-template>
+        <v-template if="$index == 5">
+          <Label class="group-info sub tw" :text="'restInfo' | L" />
+        </v-template>
+        <v-template if="$index == 6">
+          <StackLayout class="listSpace"> </StackLayout>
+        </v-template>
         <v-template>
           <GridLayout
             columns="auto, *"
-            class="option mdr"
-            @tap="resetListItems(item.type)"
+            class="option"
+            @touch="touch($event, item.type)"
           >
-            <Label
-              col="0"
-              verticalAlignment="center"
-              class="er"
-              :text="icon.reset"
-            />
-            <Label
-              col="1"
-              verticalAlignment="center"
-              :text="item.title | L"
-              textWrap="true"
-            />
+            <Label class="ico" :text="icon.reset" />
+            <Label col="1" :text="item.title | L" class="info" />
           </GridLayout>
         </v-template>
       </ListView>
+      <GridLayout row="1" class="appbar" rows="*" columns="auto, *">
+        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
+      </GridLayout>
     </GridLayout>
   </Page>
 </template>
@@ -57,6 +46,7 @@ export default {
     ...mapState(["icon"]),
     items() {
       return [
+        {},
         {
           type: "cuisines",
           title: "restCuiL",
@@ -73,6 +63,8 @@ export default {
           type: "units",
           title: "restUL",
         },
+        {},
+        {},
       ];
     },
   },
@@ -82,16 +74,14 @@ export default {
       const page = args.object;
       page.bindingContext = new Observable();
     },
-    listViewLoad(args) {
-      let e = args.object.android;
-      e.setSelector(new android.graphics.drawable.StateListDrawable());
-      e.setDivider(null);
-      e.setDividerHeight(0);
-    },
     // RESET
     resetListItems(listName) {
       this.resetListItemsAction(listName);
       Toast.makeText(localize("restDone")).show();
+    },
+    touch({ object, action }, type) {
+      object.className = action.match(/down|move/) ? "option fade" : "option";
+      if (action == "up") this.resetListItems(type);
     },
   },
 };

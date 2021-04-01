@@ -1,59 +1,67 @@
 <template>
-  <Page @loaded="onPageLoad">
-    <ActionBar flat="true">
-      <GridLayout rows="*" columns="auto, *">
-        <MDButton
-          class="er left"
-          variant="text"
-          :text="icon.back"
-          automationText="Back"
-          @tap="$navigateBack()"
-          col="0"
-        />
-        <Label class="title tb" :text="'intf' | L" col="1" />
-      </GridLayout>
-    </ActionBar>
-    <GridLayout rows="*" columns="*" class="main-container">
-      <ListView for="item in items" @loaded="listViewLoad">
+  <Page @loaded="onPageLoad" actionBarHidden="true">
+    <GridLayout rows="*, auto" columns="auto, *">
+      <ListView
+        colSpan="2"
+        rowSpan="2"
+        class="options-list"
+        @loaded="listViewLoad"
+        for="item in items"
+      >
+        <v-template if="$index == 0">
+          <Label class="pageTitle" :text="'intf' | L" />
+        </v-template>
+        <v-template if="$index == 4">
+          <StackLayout class="listSpace"> </StackLayout>
+        </v-template>
         <v-template>
-          <GridLayout columns="auto, *" class="option mdr" @tap="item.action">
-            <Label
-              col="0"
-              verticalAlignment="center"
-              class="er"
-              :text="icon[item.icon]"
-            />
+          <GridLayout
+            columns="auto, *"
+            class="option"
+            @touch="touch($event, item.action)"
+          >
+            <Label class="ico" :text="icon[item.icon]" />
             <StackLayout col="1">
-              <Label :text="item.title | L" />
-              <Label :text="item.subTitle" class="info" />
+              <Label :text="item.title | L" class="info" />
+              <Label :text="item.subTitle" class="sub" />
             </StackLayout>
           </GridLayout>
         </v-template>
       </ListView>
+      <GridLayout row="1" class="appbar" rows="*" columns="auto, *">
+        <Button
+          class="ico"
+          :text="icon.back"
+          @tap="$navigateBack()"
+        />
+      </GridLayout>
     </GridLayout>
   </Page>
 </template>
 
 <script>
-import { ApplicationSettings, Observable, Device } from "@nativescript/core";
+import {
+  ApplicationSettings,
+  Observable,
+  Device,
+  Frame,
+} from "@nativescript/core";
 import { localize, overrideLocale } from "@nativescript/localize";
 import ActionDialog from "../modal/ActionDialog.vue";
 import ConfirmDialog from "../modal/ConfirmDialog.vue";
 import { mapState, mapActions } from "vuex";
 
-import * as utils from "~/shared/utils";
-
 export default {
   data() {
     return {
       appLanguage: "English",
-      appTheme: "Light",
     };
   },
   computed: {
-    ...mapState(["icon", "language", "layout"]),
+    ...mapState(["icon", "language", "appTheme", "layout"]),
     items() {
       return [
+        {},
         {
           icon: "lang",
           title: "lang",
@@ -67,25 +75,20 @@ export default {
           action: this.selectThemes,
         },
         {
-          icon: "theme",
+          icon: "l1",
           title: "listVM",
           subTitle: localize(this.layout),
           action: this.setLayoutMode,
         },
+        {},
       ];
     },
   },
   methods: {
-    ...mapActions(["setLayout"]),
+    ...mapActions(["setTheme", "setLayout"]),
     onPageLoad(args) {
       const page = args.object;
       page.bindingContext = new Observable();
-    },
-    listViewLoad(args) {
-      let e = args.object.android;
-      e.setSelector(new android.graphics.drawable.StateListDrawable());
-      e.setDivider(null);
-      e.setDividerHeight(0);
     },
     // LANGUAGE SELECTION
     selectAppLanguage() {
@@ -94,8 +97,6 @@ export default {
         props: {
           title: "lang",
           list: [...languages],
-          stretch: true,
-          helpIcon: "lang",
         },
       }).then((action) => {
         if (action && action !== "Cancel" && this.appLanguage !== action) {
@@ -109,8 +110,6 @@ export default {
                 description: localize("nLangInfo"),
                 cancelButtonText: "cBtn",
                 okButtonText: "rst",
-                helpIcon: "res",
-                iconColor: "#ff5200",
               },
             }).then((result) => {
               if (result) {
@@ -129,29 +128,12 @@ export default {
       this.$showModal(ActionDialog, {
         props: {
           title: "Theme",
-          list: ["Light", "Dark"],
-          stretch: false,
-          helpIcon: "theme",
-          count: 2,
+          list: ["Light", "Dark", "Black"],
         },
       }).then((action) => {
         if (action && action !== "Cancel" && this.appTheme !== action) {
-          this.$showModal(ConfirmDialog, {
-            props: {
-              title: "appRst",
-              description: localize("nThmInfo"),
-              cancelButtonText: "cBtn",
-              okButtonText: "rst",
-              helpIcon: "res",
-              iconColor: "#ff5200",
-            },
-          }).then((result) => {
-            if (result) {
-              this.appTheme = action;
-              ApplicationSettings.setString("appTheme", action);
-              setTimeout(utils.restartApp, 250);
-            }
-          });
+          this.setTheme(action);
+          Frame.reloadPage();
         }
       });
     },
@@ -160,10 +142,7 @@ export default {
       this.$showModal(ActionDialog, {
         props: {
           title: "List view mode",
-          list: ["Detailed", "Simple", "Grid"],
-          stretch: false,
-          helpIcon: "theme",
-          count: 3,
+          list: ["Detailed", "Grid", "Simple", "Minimal"],
         },
       }).then((action) => {
         if (action && action !== "Cancel" && this.layoutMode !== action) {
@@ -173,9 +152,13 @@ export default {
         }
       });
     },
+    // HELPERS
+    touch({ object, action }, method) {
+      object.className = action.match(/down|move/) ? "option fade" : "option";
+      if (action == "up") method();
+    },
   },
   mounted() {
-    this.appTheme = ApplicationSettings.getString("appTheme", "Light");
     this.appLanguage = ApplicationSettings.getString(
       "appLanguage",
       localize("sysDef")

@@ -2,7 +2,12 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
 import { CouchBase } from '@triniwiz/nativescript-couchbase'
-import { getFileAccess, File, ApplicationSettings } from '@nativescript/core'
+import {
+  Application,
+  getFileAccess,
+  File,
+  ApplicationSettings,
+} from '@nativescript/core'
 const EnRecipesDB = new CouchBase('EnRecipes')
 const userCuisinesDB = new CouchBase('userCuisines')
 const userCategoriesDB = new CouchBase('userCategories')
@@ -145,6 +150,7 @@ const listItems = {
     defaultItems: defaultUnits,
   },
 }
+
 export default new Vuex.Store({
   state: {
     recipes: [],
@@ -288,15 +294,26 @@ export default new Vuex.Store({
       updated: 0,
     },
     layout: 'detailed',
+    selectedCuisine: null,
+    selectedCategory: null,
+    selectedTag: null,
+    appTheme: 'Light',
   },
   mutations: {
+    setTheme(state, theme) {
+      ApplicationSettings.setString('appTheme', theme)
+      state.appTheme = theme
+    },
+    clearFilter(state) {
+      state.selectedCuisine = state.selectedCategory = state.selectedTag = null
+    },
     setLayout(state, type) {
       state.layout = type
     },
     setSortType(state, sortType) {
       state.sortType = sortType
     },
-    initializeRecipes(state) {
+    initRecipes(state) {
       EnRecipesDB.query({ select: [] }).forEach((r) => {
         if (r.timeRequired) {
           r.prepTime = '00:00'
@@ -418,7 +435,7 @@ export default new Vuex.Store({
         })
       })
     },
-    initializeListItems(state) {
+    initListItems(state) {
       function initialize(listName) {
         let userItems
         let db = listItems[listName].db
@@ -490,7 +507,7 @@ export default new Vuex.Store({
         state[stateName].sort()
       }
     },
-    initializeMealPlans(state) {
+    initMealPlans(state) {
       let isMealPlansDBStored = mealPlansDB.query({ select: [] }).length
       if (isMealPlansDBStored) {
         let plans = mealPlansDB.getDocument('mealPlans').mealPlans
@@ -641,7 +658,7 @@ export default new Vuex.Store({
       state.recipes[index].lastTried = new Date()
       EnRecipesDB.updateDocument(state.recipes[index].id, state.recipes[index])
     },
-    setCurrentComponent(state, comp) {
+    setComponent(state, comp) {
       state.currentComponent = comp
     },
     unSyncCombinations(state, { id, combinations }) {
@@ -678,16 +695,31 @@ export default new Vuex.Store({
         }
       })
     },
+    setCuisine(state, value) {
+      state.selectedCuisine = value
+    },
+    setCategory(state, value) {
+      state.selectedCategory = value
+    },
+    setTag(state, value) {
+      state.selectedTag = value
+    },
   },
   actions: {
+    setTheme({ commit }, theme) {
+      commit('setTheme', theme)
+    },
+    clearFilter({ commit }) {
+      commit('clearFilter')
+    },
     setLayout({ commit }, type) {
       commit('setLayout', type)
     },
     setSortTypeAction({ commit }, sortType) {
       commit('setSortType', sortType)
     },
-    initializeRecipes({ commit }) {
-      commit('initializeRecipes')
+    initRecipes({ commit }) {
+      commit('initRecipes')
     },
     importRecipesAction({ commit }, recipes) {
       commit('importRecipes', recipes)
@@ -704,8 +736,8 @@ export default new Vuex.Store({
     deleteRecipesAction({ commit }, ids) {
       commit('deleteRecipes', ids)
     },
-    initializeListItems({ commit }) {
-      commit('initializeListItems')
+    initListItems({ commit }) {
+      commit('initListItems')
     },
     importListItemsAction({ commit }, data) {
       commit('importListItems', data)
@@ -719,8 +751,8 @@ export default new Vuex.Store({
     resetListItemsAction({ commit }, listName) {
       commit('resetListItems', listName)
     },
-    initializeMealPlans({ commit }) {
-      commit('initializeMealPlans')
+    initMealPlans({ commit }) {
+      commit('initMealPlans')
     },
     importMealPlansAction({ commit }, mealPlans) {
       commit('importMealPlans', mealPlans)
@@ -740,8 +772,8 @@ export default new Vuex.Store({
     setLastTriedDateAction({ commit }, index) {
       commit('setLastTriedDate', index)
     },
-    setCurrentComponentAction({ commit }, comp) {
-      commit('setCurrentComponent', comp)
+    setComponent({ commit }, comp) {
+      commit('setComponent', comp)
     },
     unSyncCombinationsAction({ commit }, combinations) {
       commit('unSyncCombinations', combinations)
@@ -757,6 +789,15 @@ export default new Vuex.Store({
     },
     unlinkBrokenImages({ commit }) {
       commit('unlinkBrokenImages')
+    },
+    setCuisine({ commit }, value) {
+      commit('setCuisine', value)
+    },
+    setCategory({ commit }, value) {
+      commit('setCategory', value)
+    },
+    setTag({ commit }, value) {
+      commit('setTag', value)
     },
   },
 })

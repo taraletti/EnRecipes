@@ -1,36 +1,37 @@
 <template>
-  <Page @loaded="onPageLoad">
-    <ActionBar flat="true">
-      <GridLayout rows="*" columns="auto, *">
-        <MDButton
-          class="er left"
-          variant="text"
-          :text="icon.back"
-          automationText="Back"
-          @tap="$navigateBack()"
-          col="0"
-        />
-        <Label class="title tb" :text="'help' | L" col="1" />
-      </GridLayout>
-    </ActionBar>
-    <GridLayout rows="*" columns="*" class="main-container">
-      <ListView for="item in items" @loaded="listViewLoad">
+  <Page @loaded="onPageLoad" actionBarHidden="true">
+    <GridLayout rows="*, auto" columns="auto, *">
+      <ListView
+        colSpan="2"
+        rowSpan="2"
+        class="options-list"
+        for="item in items"
+        @loaded="listViewLoad"
+      >
+        <v-template if="$index == 0">
+          <Label class="pageTitle" :text="'help' | L" />
+        </v-template>
+        <v-template if="$index == 3">
+          <StackLayout class="listSpace"> </StackLayout>
+        </v-template>
         <v-template>
           <GridLayout
             columns="auto, *"
-            class="option mdr"
-            @tap="openURL(item.url)"
+            class="option"
+            @touch="touch($event, item.url)"
           >
-            <Label
-              col="0"
-              verticalAlignment="center"
-              class="er"
-              :text="icon[item.icon]"
-            />
-            <Label col="1" :text="item.title | L" />
+            <Label class="ico" :text="icon[item.icon]" />
+            <Label col="1" :text="item.title | L" class="info" />
           </GridLayout>
         </v-template>
       </ListView>
+      <GridLayout row="1" class="appbar" rows="*" columns="auto, *">
+        <Button
+          class="ico"
+          :text="icon.back"
+          @tap="$navigateBack()"
+        />
+      </GridLayout>
     </GridLayout>
   </Page>
 </template>
@@ -44,6 +45,7 @@ export default {
     ...mapState(["icon"]),
     items() {
       return [
+        {},
         {
           icon: "tg",
           title: "joinTG",
@@ -54,12 +56,7 @@ export default {
           title: "guide",
           url: "https://github.com/vishnuraghavb/EnRecipes/wiki/User-Guide",
         },
-        {
-          icon: "priv",
-          title: "priv",
-          url:
-            "https://github.com/vishnuraghavb/EnRecipes/blob/main/PRIVACY.md",
-        },
+        {},
       ];
     },
   },
@@ -68,15 +65,13 @@ export default {
       const page = args.object;
       page.bindingContext = new Observable();
     },
-    listViewLoad(args) {
-      let e = args.object.android;
-      e.setSelector(new android.graphics.drawable.StateListDrawable());
-      e.setDivider(null);
-      e.setDividerHeight(0);
-    },
     // HELPERS
     openURL(url) {
       Utils.openUrl(url);
+    },
+    touch({ object, action }, url) {
+      object.className = action.match(/down|move/) ? "option fade" : "option";
+      if (action == "up") this.openURL(url);
     },
   },
 };

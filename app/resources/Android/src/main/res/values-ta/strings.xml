@@ -305,6 +305,10 @@
   <string name="_app_name_1k3Sbz">"என்ரெசிபீஸ்"</string>
   <string name="app_name">"என்ரெசிபீஸ்"</string>
   <string name="title_activity_kimera">"என்ரெசிபீஸ்"</string>
+  <string name="yld">"Yield"</string>
+  <string name="fltr">"Filter"</string>
+  <string name="apply">"APPLY"</string>
+  <string name="minimal">"Minimal"</string>
   <string name="grid">"Grid"</string>
   <string name="simple">"Simple"</string>
   <string name="detailed">"Detailed"</string>
