@@ -126,7 +126,7 @@
     "aNoBtn": "NOTIZ HINZUFÜGEN",
     "it": "Element",
     "stp": "Schritt",
-    "srt": "Sortieren nach",
+    "srt": "Sortieren",
     "cBtn": "ABBRECHEN",
     "rBtn": "ENTFERNEN",
     "rmCuiInfo": "Du bist dabei, die Küche zu entfernen:",
@@ -180,7 +180,7 @@
     "nwCat": "Neue Kategorie",
     "req": "Erforderlich",
     "recPic": "Rezeptfoto",
-    "repBtn": "FOTO ERSETZEN",
+    "repBtn": "ERSETZEN",
     "cPic": "Foto zuschneiden",
     "breakfast": "Frühstück",
     "lunch": "Mittagessen",
@@ -306,5 +306,9 @@
     "grid": "Raster",
     "simple": "Einfach",
     "detailed": "Detailliert",
-    "listVM": "Art der Listenansicht"
+    "listVM": "Art der Listenansicht",
+    "yld": "Ergebnis",
+    "fltr": "Filter",
+    "apply": "ANWENDEN",
+    "minimal": "Minimal"
 }
