@@ -126,7 +126,7 @@
     "aNoBtn": "AÑADIR NOTA",
     "it": "Artículo",
     "stp": "Paso",
-    "srt": "Ordenar por",
+    "srt": "Ordenar",
     "cBtn": "CANCELAR",
     "rBtn": "ELIMINAR",
     "rmCuiInfo": "Vas a eliminar el plato:",
@@ -180,7 +180,7 @@
     "nwCat": "Nueva categoría",
     "req": "Requerido",
     "recPic": "Receta foto",
-    "repBtn": "REEMPLAZAR FOTO",
+    "repBtn": "REEMPLAZAR",
     "cPic": "Cortar foto",
     "breakfast": "Desayuno",
     "lunch": "almuerzo",
@@ -306,5 +306,8 @@
     "grid": "Cuadrícula",
     "simple": "Simple",
     "detailed": "Detallado",
-    "listVM": "Modo vista en lista"
+    "listVM": "Modo vista en lista",
+    "fltr": "Filtro",
+    "apply": "APLICAR",
+    "minimal": "Mínimo"
 }
