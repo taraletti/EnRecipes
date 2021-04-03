@@ -126,7 +126,7 @@
     "aNoBtn": "AGGIUNGI UNA NOTA",
     "it": "Voce",
     "stp": "Passo",
-    "srt": "Ordina per",
+    "srt": "Ordina",
     "cBtn": "ANNULLA",
     "rBtn": "RIMUOVI",
     "rmCuiInfo": "Stai per rimuovere la cucina:",
@@ -180,7 +180,7 @@
     "nwCat": "Nuova categoria",
     "req": "Desiderate",
     "recPic": "Foto ricetta",
-    "repBtn": "SOSTITUISCI LA FOTO",
+    "repBtn": "SOSTITUISCI",
     "cPic": "Ritaglia la foto",
     "breakfast": "Colazione",
     "lunch": "pranzo",
@@ -306,5 +306,9 @@
     "grid": "Griglia",
     "simple": "Semplice",
     "detailed": "Dettagliata",
-    "listVM": "Modalità visualizzazione lista"
+    "listVM": "Modalità visualizzazione lista",
+    "yld": "Resa",
+    "fltr": "Filtro",
+    "apply": "APPLICA",
+    "minimal": "Minima"
 }
