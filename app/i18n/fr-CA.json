@@ -126,7 +126,7 @@
     "aNoBtn": "AJOUTER UNE NOTE",
     "it": "Élément",
     "stp": "Étape",
-    "srt": "Trier par",
+    "srt": "Trier",
     "cBtn": "ANNULER",
     "rBtn": "RETIRER",
     "rmCuiInfo": "Vous êtes sur le point de supprimer la cuisine :",
@@ -180,7 +180,7 @@
     "nwCat": "Nouvelle catégorie",
     "req": "Obligatoire",
     "recPic": "Photo de recette",
-    "repBtn": "REMPLACER LA PHOTO",
+    "repBtn": "REMPLACER",
     "cPic": "Recadrer la photo",
     "breakfast": "Déjeuner",
     "lunch": "dîner",
@@ -306,5 +306,9 @@
     "grid": "Grille",
     "simple": "Simple",
     "detailed": "Détaillée",
-    "listVM": "Type de vue en liste"
+    "listVM": "Type de vue en liste",
+    "yld": "Rendement",
+    "fltr": "Filtre",
+    "apply": "APPLIQUER",
+    "minimal": "Minimale"
 }
