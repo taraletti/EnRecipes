@@ -5,13 +5,12 @@
         colSpan="2"
         rowSpan="2"
         class="options-list"
-        @loaded="listViewLoad"
         for="item in items"
       >
         <v-template if="$index == 0">
           <Label class="pageTitle" :text="'db' | L" />
         </v-template>
-        <v-template if="$index == 3">
+        <v-template if="$index == 4">
           <StackLayout class="listSpace"> </StackLayout>
         </v-template>
         <v-template>
@@ -21,19 +20,42 @@
             @touch="touch($event, item.action)"
           >
             <Label class="ico" :text="icon[item.icon]" />
-            <StackLayout col="1">
+            <StackLayout col="1" verticalAlignment="center">
               <Label :text="item.title | L" class="info" />
-              <Label :text="item.subTitle | L" class="sub" />
+              <Label v-if="item.subTitle" :text="item.subTitle" class="sub" />
             </StackLayout>
           </GridLayout>
         </v-template>
       </ListView>
-      <GridLayout row="1" class="appbar" rows="*" columns="auto, *">
-        <Button
-          class="ico"
-          :text="icon.back"
-          @tap="$navigateBack()"
-        />
+      <GridLayout
+        v-show="!toast && !backupProgress"
+        row="1"
+        class="appbar"
+        rows="*"
+        columns="auto, *"
+      >
+        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
+      </GridLayout>
+      <GridLayout
+        v-show="toast"
+        row="1"
+        colSpan="2"
+        class="appbar snackBar"
+        columns="*"
+        @tap="toast = null"
+      >
+        <FlexboxLayout minHeight="48" alignItems="center">
+          <Label class="title msg" :text="toast" />
+        </FlexboxLayout>
+      </GridLayout>
+      <GridLayout
+        v-show="backupProgress"
+        row="1"
+        colSpan="2"
+        class="appbar snackBar"
+        columns="*"
+      >
+        <Progress :value="backupProgress" maxValue="100" />
       </GridLayout>
     </GridLayout>
   </Page>
@@ -47,10 +69,11 @@ import {
   File,
   Folder,
   Observable,
+  Application,
 } from "@nativescript/core";
 import * as Permissions from "@nativescript-community/perms";
 import { Zip } from "@nativescript/zip";
-// import * as Filepicker from "nativescript-plugin-filepicker";
+import { openFilePicker } from "@nativescript-community/ui-document-picker";
 import { localize } from "@nativescript/localize";
 import ConfirmDialog from "../modal/ConfirmDialog.vue";
 import { mapState, mapActions } from "vuex";
@@ -60,8 +83,9 @@ import * as utils from "~/shared/utils";
 export default {
   data() {
     return {
+      backupFolder: null,
       backupProgress: 0,
-      backupInProgress: false,
+      toast: null,
     };
   },
   computed: {
@@ -79,16 +103,23 @@ export default {
       return [
         {},
         {
+          icon: "folder",
+          title: "Backup folder",
+          subTitle: this.backupFolder,
+          action: this.setBackupFolder,
+        },
+        {
           icon: "exp",
           title: "expBu",
-          subTitle: "buInfo",
+          subTitle: localize("buInfo"),
           action: this.exportCheck,
         },
         {
           icon: "imp",
           title: "impBu",
-          subTitle: "impInfo",
-          action: this.importCheck,
+          subTitle: localize("impInfo"),
+          // action: this.importCheck,
+          action: this.openZipFile,
         },
         {},
       ];
@@ -104,11 +135,30 @@ export default {
     onPageLoad(args) {
       const page = args.object;
       page.bindingContext = new Observable();
+      const downloadsFolder = Folder.fromPath(
+        android.os.Environment.getExternalStorageDirectory().getAbsolutePath()
+      ).getFolder("Download").path;
+      this.backupFolder = ApplicationSettings.getString(
+        "backupFolder",
+        downloadsFolder
+      );
+    },
+    // BACKUP FOLDER PICKER
+    setBackupFolder() {
+      utils.pickFolder().then((res) => {
+        if (res != null) {
+          this.backupFolder = res;
+          ApplicationSettings.setString("backupFolder", this.backupFolder);
+        }
+      });
     },
     // EXPORT HANDLERS
     exportCheck() {
       if (!this.recipes.length) {
-        // Toast.makeText(localize("aFBu")).show();
+        this.toast = localize("aFBu");
+        utils.timer(5, (val) => {
+          if (!val) this.toast = val;
+        });
       } else {
         this.permissionCheck(
           this.permissionConfirmation,
@@ -130,28 +180,19 @@ export default {
         ("0" + date.getHours()).slice(-2) +
         ("0" + date.getMinutes()).slice(-2) +
         ("0" + date.getSeconds()).slice(-2);
-      const sdDownloadPath = Folder.fromPath(
-        android.os.Environment.getExternalStorageDirectory().getAbsolutePath()
-      ).getFolder("Download").path;
+
+      let filename = `EnRecipes_${formattedDate}.zip`;
       let fromPath = path.join(knownFolders.documents().path, "EnRecipes");
-      let destPath = path.join(
-        sdDownloadPath,
-        `EnRecipes-Backup_${formattedDate}.zip`
-      );
-      this.backupInProgress = true;
+      let sdcard = android.os.Environment.isExternalStorageManager();
+      let destPath = path.join(this.backupFolder, filename);
+      console.log(sdcard);
       Zip.zip({
         directory: fromPath,
         archive: destPath,
-        onProgress: (progress) => {
-          this.backupProgress = progress;
-        },
-      }).then((success) => {
-        // Toast.makeText(
-        //   "Backup file successfully saved to Download folder",
-        //   "long"
-        // ).show();
+        onProgress: (progress) => (this.backupProgress = progress),
+      }).then(() => {
+        this.showExportSummary(filename);
         this.exportFiles("delete");
-        setTimeout((e) => (this.backupInProgress = false), 3000);
       });
     },
     exportFiles(option) {
@@ -211,20 +252,63 @@ export default {
       this.permissionCheck(
         this.permissionConfirmation,
         localize("reqAcc"),
-        this.openFilePicker
+        this.openZipFile
       );
     },
-    openFilePicker() {
-      // Filepicker.create({
-      //   mode: "single",
+    openZipFile() {
+      const ContentResolver = Application.android.nativeApp.getContentResolver();
+
+      utils.getBackupFile().then((uri) => {
+        console.log(uri);
+        const inputStream = ContentResolver.openInputStream(uri);
+        console.log(inputStream);
+        let newFile = knownFolders.temp().getFile("test.zip");
+        console.log(newFile);
+        try {
+          const input = new java.io.BufferedInputStream(inputStream);
+          console.log(input);
+          const outputStream = new java.io.BufferedOutputStream(
+            new java.io.FileOutputStream(newFile.path)
+          );
+          console.log(outputStream);
+          let size = inputStream.available();
+          console.log(size);
+          let buffer = Array.create("byte", size);
+          input.read(buffer);
+          do {
+            outputStream.write(buffer);
+          } while (input.read(buffer) != -1);
+        } catch (e) {
+          console.log(e);
+        } finally {
+          outputStream.flush();
+          outputStream.close();
+          input.close();
+        }
+
+        // console.log(zipInputStream);
+
+        // console.log(zipInputStream);
+        // let extractedFile = new java.io.File(
+        //   knownFolders.temp().path + "/tmp.zip"
+        // );
+        // if (!extractedFile.exists()) {
+        //   extractedFile.mkdirs();
+        // }
+        // console.log(extractedFile);
+        // let outputStream = new java.io.OutputStream(extractedFile);
+
+        // android.os.FileUtils.copy(inputStream, outputStream);
+        // let outputStream = new java.io.FileOutputStream(extractedFile);
+        // console.log(outputStream);
+        // while ((readLen = zipInputStream.read(readBuffer)) != -1) {
+        //   outputStream.write(readBuffer, 0, readLen);
+        // }
+        // console.log(outputStream, 2);
+      });
+      // openFilePicker({
       //   extensions: ["zip"],
-      // })
-      //   .present()
-      //   .then((selection) => {
-      //     // Toast.makeText(localize("vrfy") + "...").show();
-      //     let zipPath = selection[0];
-      //     this.validateZipContent(zipPath);
-      //   });
+      // }).then((res) => this.validateZipContent(res.files[0]));
     },
     importDataToDB(data, db, zipPath) {
       switch (db) {
@@ -315,9 +399,11 @@ export default {
       });
     },
     validateZipContent(zipPath) {
+      console.log(zipPath);
       Zip.unzip({
         archive: zipPath,
         overwrite: true,
+        onProgress: (progress) => (this.backupProgress = progress),
       }).then((extractedFolderPath) => {
         let cacheFolderPath = extractedFolderPath + "/EnRecipes";
         const EnRecipesFilePath = cacheFolderPath + "/recipes.json";
@@ -380,6 +466,7 @@ export default {
         archive: sourcePath,
         directory: dest,
         overwrite: true,
+        onProgress: (progress) => (this.backupProgress = progress),
       }).then((res) => {
         this.showImportSummary();
         this.unlinkBrokenImages();
@@ -399,7 +486,16 @@ export default {
           )}${importedNote}${existsNote}${updatedNote}`,
           okButtonText: "OK",
         },
-      });
+      }).then(() => (this.backupProgress = 0));
+    },
+    showExportSummary(filename) {
+      this.$showModal(ConfirmDialog, {
+        props: {
+          title: "expSuc",
+          description: `Backed up to ${filename}`,
+          okButtonText: "OK",
+        },
+      }).then(() => (this.backupProgress = 0));
     },
     // PERMISSIONS HANDLER
     permissionCheck(confirmation, description, action) {
@@ -411,7 +507,6 @@ export default {
               if (status === "authorized") action();
               if (status !== "denied")
                 ApplicationSettings.setBoolean("storagePermissionAsked", true);
-              // else Toast.makeText(localize("dend")).show();
             });
           }
         });
