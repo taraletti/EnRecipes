@@ -309,5 +309,8 @@
     "listVM": "Modo vista en lista",
     "fltr": "Filtro",
     "apply": "APLICAR",
-    "minimal": "Mínimo"
+    "minimal": "Mínimo",
+    "photogrid": "Cuadrícula de fotos",
+    "expSuc": "Exportación satisfactoria",
+    "Black": "Negro"
 }
