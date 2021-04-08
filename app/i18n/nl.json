@@ -310,5 +310,9 @@
     "yld": "Hoeveelheid",
     "fltr": "Filteren",
     "apply": "TOEPASSEN",
-    "minimal": "Minimaal"
+    "minimal": "Minimaal",
+    "swm": "Week begint op maandag",
+    "photogrid": "Fotorooster",
+    "expSuc": "Exporteren voltooid",
+    "Black": "Zwart"
 }
