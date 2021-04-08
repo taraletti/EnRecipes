@@ -310,5 +310,9 @@
     "yld": "Ergebnis",
     "fltr": "Filter",
     "apply": "ANWENDEN",
-    "minimal": "Minimal"
+    "minimal": "Minimal",
+    "swm": "Wochenbeginn am Montag",
+    "photogrid": "Foto-Raster",
+    "expSuc": "Export erfolgreich",
+    "Black": "Schwarz"
 }
