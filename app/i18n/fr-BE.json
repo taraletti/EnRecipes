@@ -310,5 +310,9 @@
     "yld": "Rendement",
     "fltr": "Filtre",
     "apply": "APPLIQUER",
-    "minimal": "Minimale"
+    "minimal": "Minimale",
+    "swm": "Début de la semaine le lundi",
+    "photogrid": "Grille de photos",
+    "expSuc": "Exportation réussie",
+    "Black": "Noir"
 }
