@@ -309,5 +309,7 @@
   "yld": "Yield",
   "swm": "Start week on Monday",
   "expip": "Export in progress",
-  "impip": "Import in progress"
+  "impip": "Import in progress",
+  "srpu": "Share recipe photo using...",
+  "sru": "Share recipe using..."
 }

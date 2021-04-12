@@ -250,7 +250,6 @@ import {
   Screen,
   CoreTypes,
 } from "@nativescript/core";
-import * as SocialShare from "@nativescript/social-share";
 import { localize } from "@nativescript/localize";
 const intl = require("nativescript-intl");
 import { mapActions, mapState } from "vuex";
@@ -547,9 +546,9 @@ export default {
         }).then((result) => {
           switch (result) {
             case "pht":
-              ImageSource.fromFile(this.recipe.imageSrc).then((res) => {
-                SocialShare.shareImage(res, "Share recipe photo using");
-              });
+              ImageSource.fromFile(this.recipe.imageSrc).then((res) =>
+                utils.shareImage(res, localize("srpu"))
+              );
               break;
             case "rec":
               this.shareRecipe();
@@ -614,8 +613,7 @@ export default {
       }
       let sharenote = "\n" + localize("appCrd");
       shareContent += sharenote;
-      // SocialShare.shareText(shareContent, "Share recipe using");
-      utils.shareText(shareContent, "Share recipe using");
+      utils.shareText(shareContent, localize("sru"));
     },
 
     // DATA HANDLERS
