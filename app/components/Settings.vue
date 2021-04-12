@@ -5,13 +5,12 @@
         colSpan="2"
         rowSpan="2"
         class="options-list"
-        @loaded="listViewLoad"
         for="item in items"
       >
         <v-template if="$index == 0">
           <Label class="pageTitle" :text="'Settings' | L" />
         </v-template>
-        <v-template if="$index == 7">
+        <v-template if="$index == 6">
           <StackLayout class="listSpace"> </StackLayout>
         </v-template>
         <v-template>
@@ -30,11 +29,7 @@
         </v-template>
       </ListView>
       <GridLayout row="1" class="appbar" rows="*" columns="auto, *">
-        <Button
-          class="ico"
-          :text="icon.back"
-          @tap="$navigateBack()"
-        />
+        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
     </GridLayout>
   </Page>
@@ -55,17 +50,17 @@ export default {
       items: [
         {},
         {
-          icon: "theme",
+          icon: "interface",
           title: "intf",
           view: Interface,
         },
         {
-          icon: "cog",
+          icon: "opts",
           title: "opts",
           view: Options,
         },
         {
-          icon: "exp",
+          icon: "db",
           title: "db",
           view: Database,
         },
@@ -73,11 +68,6 @@ export default {
           icon: "reset",
           title: "rest",
           view: Reset,
-        },
-        {
-          icon: "help",
-          title: "help",
-          view: Help,
         },
         {
           icon: "info",

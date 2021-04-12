@@ -271,7 +271,6 @@
   "buInc": "Malformed or corrupt backup file",
   "buEmp": "The backup file is empty",
   "buMod": "The backup file was modified elsewhere",
-  "buSuc": "Backup saved successfully to the Download folder",
   "invFile": "Invalid file",
   "donate": "Donate",
   "appInfo": "EnRecipes is an open source, privacy-friendly digital cookbook that lets you create, manage and share your recipes",
@@ -308,5 +307,7 @@
   "apply": "APPLY",
   "fltr": "Filter",
   "yld": "Yield",
-  "swm": "Start week on Monday"
+  "swm": "Start week on Monday",
+  "expip": "Export in progress",
+  "impip": "Import in progress"
 }

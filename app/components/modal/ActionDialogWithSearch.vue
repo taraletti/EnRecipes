@@ -1,5 +1,9 @@
 <template>
-  <Page @loaded="onPageLoad" backgroundColor="transparent" :class="appTheme">
+  <Page
+    @loaded="transparentPage"
+    backgroundColor="transparent"
+    :class="appTheme"
+  >
     <GridLayout columns="*" rows="auto, auto, *, auto" class="modal">
       <Label class="title" :text="title | L" />
       <StackLayout
@@ -9,11 +13,11 @@
       >
         <TextField
           class="modalInput"
-          :hint="'Search' | L"
+          :hint="'ser' | L"
           v-model="searchQuery"
         />
       </StackLayout>
-      <ListView row="2" for="recipe in filteredRecipes" @loaded="listViewLoad">
+      <ListView row="2" for="recipe in filteredRecipes">
         <v-template>
           <Label
             class="listItem"
@@ -79,16 +83,6 @@ export default {
     },
   },
   methods: {
-    onPageLoad(args) {
-      args.object._dialogFragment
-        .getDialog()
-        .getWindow()
-        .setBackgroundDrawable(
-          new android.graphics.drawable.ColorDrawable(
-            android.graphics.Color.TRANSPARENT
-          )
-        );
-    },
     tapAction(recipe) {
       this.$modal.close(recipe.id);
     },

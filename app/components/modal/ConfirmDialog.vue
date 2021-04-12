@@ -1,5 +1,5 @@
 <template>
-  <Page @loaded="onPageLoad" backgroundColor="transparent" :class="appTheme">
+  <Page @loaded="transparentPage" backgroundColor="transparent" :class="appTheme">
     <GridLayout rows="auto, auto, auto" class="modal">
       <Label class="title" :text="title | L" />
       <Label
@@ -46,18 +46,6 @@ export default {
   ],
   computed: {
     ...mapState(["icon", "appTheme"]),
-  },
-  methods: {
-    onPageLoad(args) {
-      args.object._dialogFragment
-        .getDialog()
-        .getWindow()
-        .setBackgroundDrawable(
-          new android.graphics.drawable.ColorDrawable(
-            android.graphics.Color.TRANSPARENT
-          )
-        );
-    },
   },
 };
 </script>

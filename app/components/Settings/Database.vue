@@ -28,7 +28,7 @@
         </v-template>
       </ListView>
       <GridLayout
-        v-show="!toast && !backupProgress"
+        v-show="!toast && !progress"
         row="1"
         class="appbar"
         rows="*"
@@ -49,13 +49,14 @@
         </FlexboxLayout>
       </GridLayout>
       <GridLayout
-        v-show="backupProgress"
+        v-show="progress"
         row="1"
         colSpan="2"
         class="appbar snackBar"
-        columns="*"
+        columns="auto, *"
       >
-        <Progress :value="backupProgress" maxValue="100" />
+        <ActivityIndicator :busy="progress ? true : false" />
+        <Label col="1" class="title" :text="progress" textWrap="true" />
       </GridLayout>
     </GridLayout>
   </Page>
@@ -71,9 +72,6 @@ import {
   Observable,
   Application,
 } from "@nativescript/core";
-import * as Permissions from "@nativescript-community/perms";
-import { Zip } from "@nativescript/zip";
-import { openFilePicker } from "@nativescript-community/ui-document-picker";
 import { localize } from "@nativescript/localize";
 import ConfirmDialog from "../modal/ConfirmDialog.vue";
 import { mapState, mapActions } from "vuex";
@@ -84,7 +82,7 @@ export default {
   data() {
     return {
       backupFolder: null,
-      backupProgress: 0,
+      progress: null,
       toast: null,
     };
   },
@@ -118,7 +116,6 @@ export default {
           icon: "imp",
           title: "impBu",
           subTitle: localize("impInfo"),
-          // action: this.importCheck,
           action: this.openZipFile,
         },
         {},
@@ -131,43 +128,63 @@ export default {
       "importRecipesAction",
       "importMealPlansAction",
       "unlinkBrokenImages",
+      "clearImportSummary",
     ]),
     onPageLoad(args) {
       const page = args.object;
       page.bindingContext = new Observable();
-      const downloadsFolder = Folder.fromPath(
-        android.os.Environment.getExternalStorageDirectory().getAbsolutePath()
-      ).getFolder("Download").path;
-      this.backupFolder = ApplicationSettings.getString(
-        "backupFolder",
-        downloadsFolder
-      );
+      const ContentResolver = Application.android.nativeApp.getContentResolver();
+      this.backupFolder = ApplicationSettings.getString("backupFolder");
+      if (
+        !this.backupFolder ||
+        ContentResolver.getPersistedUriPermissions().isEmpty()
+      ) {
+        this.backupFolder = null;
+      }
     },
     // BACKUP FOLDER PICKER
-    setBackupFolder() {
-      utils.pickFolder().then((res) => {
-        if (res != null) {
-          this.backupFolder = res;
+    setBackupFolder(startExport) {
+      const ContentResolver = Application.android.nativeApp.getContentResolver();
+      const FLAGS =
+        android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION |
+        android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+      utils.getBackupFolder().then((uri) => {
+        if (uri != null) {
+          if (this.backupFolder)
+            ContentResolver.releasePersistableUriPermission(
+              new android.net.Uri.parse(this.backupFolder),
+              FLAGS
+            );
+          this.backupFolder = uri.toString();
           ApplicationSettings.setString("backupFolder", this.backupFolder);
+          // PERSIST PERMISSIONS
+          ContentResolver.takePersistableUriPermission(uri, FLAGS);
+          if (startExport && this.backupFolder) {
+            this.exportBackup();
+          }
         }
       });
     },
+
     // EXPORT HANDLERS
     exportCheck() {
+      const ContentResolver = Application.android.nativeApp.getContentResolver();
       if (!this.recipes.length) {
         this.toast = localize("aFBu");
         utils.timer(5, (val) => {
           if (!val) this.toast = val;
         });
       } else {
-        this.permissionCheck(
-          this.permissionConfirmation,
-          localize("reqAcc"),
-          this.exportBackup
-        );
+        if (
+          !this.backupFolder ||
+          ContentResolver.getPersistedUriPermissions().isEmpty()
+        ) {
+          this.setBackupFolder(true);
+        } else this.exportBackup();
       }
     },
     exportBackup() {
+      this.progress = localize("expip");
       this.exportFiles("create");
       let date = new Date();
       let formattedDate =
@@ -183,17 +200,11 @@ export default {
 
       let filename = `EnRecipes_${formattedDate}.zip`;
       let fromPath = path.join(knownFolders.documents().path, "EnRecipes");
-      let sdcard = android.os.Environment.isExternalStorageManager();
-      let destPath = path.join(this.backupFolder, filename);
-      console.log(sdcard);
-      Zip.zip({
-        directory: fromPath,
-        archive: destPath,
-        onProgress: (progress) => (this.backupProgress = progress),
-      }).then(() => {
-        this.showExportSummary(filename);
-        this.exportFiles("delete");
-      });
+      utils.Zip.zip(fromPath, this.backupFolder, filename)
+        .then((res) => {
+          if (res) this.showExportSummary(filename);
+        })
+        .catch((err) => console.log("Backup error: ", err));
     },
     exportFiles(option) {
       const folder = path.join(knownFolders.documents().path, "EnRecipes");
@@ -240,80 +251,140 @@ export default {
           this.units.length && userUnitsFile.remove();
           this.mealPlans.length && mealPlansFile.remove();
           break;
-        default:
-          break;
       }
     },
     writeDataToFile(file, data) {
       file.writeText(JSON.stringify(data));
     },
-    // IMPORT HANDLERS
-    importCheck() {
-      this.permissionCheck(
-        this.permissionConfirmation,
-        localize("reqAcc"),
-        this.openZipFile
-      );
-    },
-    openZipFile() {
-      const ContentResolver = Application.android.nativeApp.getContentResolver();
-
-      utils.getBackupFile().then((uri) => {
-        console.log(uri);
-        const inputStream = ContentResolver.openInputStream(uri);
-        console.log(inputStream);
-        let newFile = knownFolders.temp().getFile("test.zip");
-        console.log(newFile);
-        try {
-          const input = new java.io.BufferedInputStream(inputStream);
-          console.log(input);
-          const outputStream = new java.io.BufferedOutputStream(
-            new java.io.FileOutputStream(newFile.path)
-          );
-          console.log(outputStream);
-          let size = inputStream.available();
-          console.log(size);
-          let buffer = Array.create("byte", size);
-          input.read(buffer);
-          do {
-            outputStream.write(buffer);
-          } while (input.read(buffer) != -1);
-        } catch (e) {
-          console.log(e);
-        } finally {
-          outputStream.flush();
-          outputStream.close();
-          input.close();
-        }
-
-        // console.log(zipInputStream);
-
-        // console.log(zipInputStream);
-        // let extractedFile = new java.io.File(
-        //   knownFolders.temp().path + "/tmp.zip"
-        // );
-        // if (!extractedFile.exists()) {
-        //   extractedFile.mkdirs();
-        // }
-        // console.log(extractedFile);
-        // let outputStream = new java.io.OutputStream(extractedFile);
-
-        // android.os.FileUtils.copy(inputStream, outputStream);
-        // let outputStream = new java.io.FileOutputStream(extractedFile);
-        // console.log(outputStream);
-        // while ((readLen = zipInputStream.read(readBuffer)) != -1) {
-        //   outputStream.write(readBuffer, 0, readLen);
-        // }
-        // console.log(outputStream, 2);
+    showExportSummary(filename) {
+      this.progress = null;
+      this.$showModal(ConfirmDialog, {
+        props: {
+          title: "expSuc",
+          description: `Backed up to ${filename}`,
+          okButtonText: "OK",
+        },
       });
-      // openFilePicker({
-      //   extensions: ["zip"],
-      // }).then((res) => this.validateZipContent(res.files[0]));
     },
-    importDataToDB(data, db, zipPath) {
+
+    // IMPORT HANDLERS
+    openZipFile() {
+      utils.getBackupFile().then((uri) => {
+        let dest = path.join(knownFolders.temp().path, "tempUnZip");
+        utils.Zip.unzip(uri, dest)
+          .then((res) => {
+            if (res) this.validateZipContent(res, uri);
+          })
+          .catch(() => this.failedImport(localize("buInc")));
+      });
+    },
+    validateZipContent(extractedFolderPath, uri) {
+      this.progress = localize("impip");
+      let cacheFolderPath = extractedFolderPath + "/EnRecipes";
+      const EnRecipesFilePath = cacheFolderPath + "/recipes.json";
+      const ImagesFolderPath = cacheFolderPath + "/Images";
+      const userCuisinesFilePath = cacheFolderPath + "/userCuisines.json";
+      const userCategoriesFilePath = cacheFolderPath + "/userCategories.json";
+      const userYieldUnitsFilePath = cacheFolderPath + "/userYieldUnits.json";
+      const userUnitsFilePath = cacheFolderPath + "/userUnits.json";
+      const mealPlansFilePath = cacheFolderPath + "/mealPlans.json";
+      if (Folder.exists(cacheFolderPath)) {
+        this.isFileDataValid([
+          {
+            path: EnRecipesFilePath,
+            db: "EnRecipesDB",
+            file: "recipes.json",
+          },
+          {
+            path: userCuisinesFilePath,
+            db: "userCuisinesDB",
+            file: "userCuisines.json",
+          },
+          {
+            path: userCategoriesFilePath,
+            db: "userCategoriesDB",
+            file: "userCategories.json",
+          },
+          {
+            path: userYieldUnitsFilePath,
+            db: "userYieldUnitsDB",
+            file: "userYieldUnits.json",
+          },
+          {
+            path: userUnitsFilePath,
+            db: "userUnitsDB",
+            file: "userUnits.json",
+          },
+          {
+            path: mealPlansFilePath,
+            db: "mealPlansDB",
+            file: "mealPlans.json",
+          },
+        ]);
+      } else {
+        Folder.fromPath(extractedFolderPath).remove();
+        this.progress = null;
+        this.failedImport(localize("buInc"));
+      }
+      if (Folder.exists(ImagesFolderPath)) {
+        const timer = setInterval(() => {
+          if (this.importSummary.found) {
+            this.importImages(uri, extractedFolderPath);
+            clearInterval(timer);
+          }
+        }, 100);
+      }
+    },
+    isFileDataValid(file) {
+      const files = file.filter((e) => File.exists(e.path));
+      if (files.length) {
+        let isValid = files.map((e) => false);
+        files.forEach((file, i) => {
+          File.fromPath(file.path)
+            .readText()
+            .then((data) => {
+              isValid[i] = this.hasValidJSON(data);
+              if (!isValid[i]) {
+                this.failedImport(
+                  `${localize("buMod")}\n\n${localize("invFile")}: ${file.file}`
+                );
+                return 0;
+              }
+              if (isValid.every((e) => e === true)) {
+                files.forEach((file) => {
+                  File.fromPath(file.path)
+                    .readText()
+                    .then((data) => {
+                      this.importDataToDB(JSON.parse(data), file.db);
+                    });
+                });
+              }
+            });
+        });
+      } else {
+        this.failedImport(localize("buEmp"));
+      }
+    },
+    failedImport(description) {
+      this.$showModal(ConfirmDialog, {
+        props: {
+          title: "impFail",
+          description,
+          okButtonText: "OK",
+        },
+      });
+    },
+    hasValidJSON(data) {
+      try {
+        JSON.parse(data) && Array.isArray(JSON.parse(data));
+      } catch (e) {
+        return false;
+      }
+      return true;
+    },
+    importDataToDB(data, db) {
       switch (db) {
         case "EnRecipesDB":
-          this.importImages(zipPath);
           this.importRecipesAction(data);
           break;
         case "userCuisinesDB":
@@ -343,133 +414,18 @@ export default {
         case "mealPlansDB":
           this.importMealPlansAction(data);
           break;
-        default:
-          break;
       }
     },
-    hasValidJSON(data) {
-      try {
-        JSON.parse(data) && Array.isArray(JSON.parse(data));
-      } catch (e) {
-        return false;
-      }
-      return true;
-    },
-    isFileDataValid(file) {
-      const files = file.filter((e) => File.exists(e.path));
-      if (files.length) {
-        let isValid = files.map((e) => false);
-        files.forEach((file, i) => {
-          File.fromPath(file.path)
-            .readText()
-            .then((data) => {
-              isValid[i] = this.hasValidJSON(data);
-              if (!isValid[i]) {
-                this.failedImport(
-                  `${localize("buMod")}\n\n${localize("invFile")}: ${file.file}`
-                );
-                return 0;
-              }
-              if (isValid.every((e) => e === true)) {
-                files.forEach((file, i) => {
-                  File.fromPath(file.path)
-                    .readText()
-                    .then((data) => {
-                      this.importDataToDB(
-                        JSON.parse(data),
-                        file.db,
-                        file.zipPath
-                      );
-                    });
-                });
-              }
-            });
-        });
-      } else {
-        this.failedImport(localize("buEmp"));
-      }
-    },
-    failedImport(description) {
-      this.$showModal(ConfirmDialog, {
-        props: {
-          title: "impFail",
-          description,
-          okButtonText: "OK",
-        },
-      });
-    },
-    validateZipContent(zipPath) {
-      console.log(zipPath);
-      Zip.unzip({
-        archive: zipPath,
-        overwrite: true,
-        onProgress: (progress) => (this.backupProgress = progress),
-      }).then((extractedFolderPath) => {
-        let cacheFolderPath = extractedFolderPath + "/EnRecipes";
-        const EnRecipesFilePath = cacheFolderPath + "/recipes.json";
-        const userCuisinesFilePath = cacheFolderPath + "/userCuisines.json";
-        const userCategoriesFilePath = cacheFolderPath + "/userCategories.json";
-        const userYieldUnitsFilePath = cacheFolderPath + "/userYieldUnits.json";
-        const userUnitsFilePath = cacheFolderPath + "/userUnits.json";
-        const mealPlansFilePath = cacheFolderPath + "/mealPlans.json";
-        if (Folder.exists(cacheFolderPath)) {
-          this.isFileDataValid([
-            {
-              zipPath,
-              path: EnRecipesFilePath,
-              db: "EnRecipesDB",
-              file: "recipes.json",
-            },
-            {
-              zipPath,
-              path: userCuisinesFilePath,
-              db: "userCuisinesDB",
-              file: "userCuisines.json",
-            },
-            {
-              zipPath,
-              path: userCategoriesFilePath,
-              db: "userCategoriesDB",
-              file: "userCategories.json",
-            },
-            {
-              zipPath,
-              path: userYieldUnitsFilePath,
-              db: "userYieldUnitsDB",
-              file: "userYieldUnits.json",
-            },
-            {
-              zipPath,
-              path: userUnitsFilePath,
-              db: "userUnitsDB",
-              file: "userUnits.json",
-            },
-            {
-              zipPath,
-              path: mealPlansFilePath,
-              db: "mealPlansDB",
-              file: "mealPlans.json",
-            },
-          ]);
-        } else {
+    importImages(uri, extractedFolderPath) {
+      let destPath = knownFolders.documents().path;
+      Folder.fromPath(destPath);
+      utils.Zip.unzip(uri, destPath).then((res) => {
+        if (res) {
+          this.showImportSummary();
+          this.unlinkBrokenImages();
+          this.exportFiles("delete");
           Folder.fromPath(extractedFolderPath).remove();
-          this.failedImport(localize("buInc"));
         }
-        if (Folder.exists(cacheFolderPath + "/Images")) {
-          this.importImages(cacheFolderPath + "/Images");
-        }
-      });
-    },
-    importImages(sourcePath) {
-      let dest = knownFolders.documents().path;
-      Zip.unzip({
-        archive: sourcePath,
-        directory: dest,
-        overwrite: true,
-        onProgress: (progress) => (this.backupProgress = progress),
-      }).then((res) => {
-        this.showImportSummary();
-        this.unlinkBrokenImages();
       });
     },
     showImportSummary() {
@@ -478,6 +434,7 @@ export default {
       let importedNote = `\n${imported} ${localize("recI")}`;
       let existsNote = `\n${exists} ${localize("recE")}`;
       let updatedNote = `\n${updated} ${localize("recU")}`;
+      this.progress = null;
       this.$showModal(ConfirmDialog, {
         props: {
           title: "impSuc",
@@ -486,51 +443,9 @@ export default {
           )}${importedNote}${existsNote}${updatedNote}`,
           okButtonText: "OK",
         },
-      }).then(() => (this.backupProgress = 0));
+      }).then(() => this.clearImportSummary());
     },
-    showExportSummary(filename) {
-      this.$showModal(ConfirmDialog, {
-        props: {
-          title: "expSuc",
-          description: `Backed up to ${filename}`,
-          okButtonText: "OK",
-        },
-      }).then(() => (this.backupProgress = 0));
-    },
-    // PERMISSIONS HANDLER
-    permissionCheck(confirmation, description, action) {
-      if (!ApplicationSettings.getBoolean("storagePermissionAsked", false)) {
-        confirmation(description).then((e) => {
-          if (e) {
-            Permissions.request("photo").then((res) => {
-              let status = res[Object.keys(res)[0]];
-              if (status === "authorized") action();
-              if (status !== "denied")
-                ApplicationSettings.setBoolean("storagePermissionAsked", true);
-            });
-          }
-        });
-      } else {
-        Permissions.check("photo").then((res) => {
-          let status = res[Object.keys(res)[0]];
-          if (status !== "authorized") {
-            confirmation(description).then((e) => {
-              e && utils.openAppSettingsPage();
-            });
-          } else action();
-        });
-      }
-    },
-    permissionConfirmation(description) {
-      return this.$showModal(ConfirmDialog, {
-        props: {
-          title: "grant",
-          description,
-          cancelButtonText: "nNBtn",
-          okButtonText: "conBtn",
-        },
-      });
-    },
+
     // HELPERS
     touch({ object, action }, method) {
       object.className = action.match(/down|move/) ? "option fade" : "option";

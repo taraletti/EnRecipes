@@ -30,7 +30,7 @@
               class="dayName"
               row="1"
               :col="i"
-              v-for="(d, i) in dNames"
+              v-for="(d, i) in getDayNames"
               :key="d"
               :text="d | L"
             />
@@ -94,14 +94,14 @@
         row="1"
         @loaded="onAppBarLoad"
         class="appbar"
-        v-show="!showUndo"
+        :hidden="showUndo"
         columns="auto, *, auto, auto"
       >
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
         <Button
           class="ico"
           :text="icon.tod"
-          v-if="!isExactlyToday"
+          :hidden="isExactlyToday"
           @tap="goToToday"
           col="2"
         />
@@ -115,19 +115,19 @@
       <GridLayout
         row="1"
         class="appbar snackBar"
-        v-show="showUndo"
+        :hidden="!showUndo"
         columns="auto, *, auto"
       >
-        <Button :text="countdown" class="countdown tb" />
+        <Button :text="countdown" class="ico countdown tb" />
         <Label class="title" col="1" :text="snackMsg | L" />
-        <Button class="ico fab" :text="icon.alert" @tap="undoDel" col="3" />
+        <Button class="ico fab" :text="icon.undo" @tap="undoDel" col="3" />
       </GridLayout>
     </GridLayout>
   </Page>
 </template>
 
 <script>
-import { ApplicationSettings, Observable } from "@nativescript/core";
+import { ApplicationSettings, Observable, CoreTypes } from "@nativescript/core";
 import { mapState, mapActions } from "vuex";
 import ViewRecipe from "./ViewRecipe.vue";
 import ActionDialogWithSearch from "./modal/ActionDialogWithSearch.vue";
@@ -138,7 +138,7 @@ export default {
     return {
       appTheme: "Light",
       mealTimes: ["breakfast", "lunch", "dinner", "snacks"],
-      dNames: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
+      dNames: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
       year: 2021,
       mNames: [
         "January",
@@ -166,7 +166,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon", "recipes", "mealPlans"]),
+    ...mapState(["icon", "recipes", "mealPlans", "mondayFirst"]),
     todaysTime() {
       return new Date(this.year, this.month, this.today, 0).getTime();
     },
@@ -180,13 +180,16 @@ export default {
         }, {});
       } else return 0;
     },
+    getDayNames() {
+      if (!this.mondayFirst) this.dNames.unshift(this.dNames.pop());
+      return this.dNames;
+    },
     getCal() {
       let y = this.year;
       let m = this.month;
-      let t = this.today;
-      let d = new Date(y, m, t);
       let ds = new Date(y, m + 1, 0).getDate();
       let fd = new Date(y, m, 1).getDay();
+      if (this.mondayFirst) fd -= 1;
       let days = new Array(fd).fill(0);
       for (let i = 1; i <= ds; i++) {
         days.push(i);
@@ -230,17 +233,17 @@ export default {
         this.scrollPos = Math.abs(y);
         let ab = this.appbar.translateY;
         if (!scrollUp && ab == 0) {
-          this.animateInOut(
-            250,
-            false,
-            (val) => (this.appbar.translateY = val * 64)
-          );
+          this.appbar.animate({
+            translate: { x: 0, y: 64 },
+            duration: 250,
+            curve: CoreTypes.AnimationCurve.ease,
+          });
         } else if (scrollUp && ab == 64) {
-          this.animateInOut(
-            250,
-            true,
-            (val) => (this.appbar.translateY = val * 64)
-          );
+          this.appbar.animate({
+            translate: { x: 0, y: 0 },
+            duration: 250,
+            curve: CoreTypes.AnimationCurve.ease,
+          });
         }
       }
     },
@@ -275,7 +278,6 @@ export default {
             duration: 250,
             curve: "easeOut",
           },
-          // backstackVisible: false,
         });
       }
     },
@@ -362,11 +364,11 @@ export default {
     },
     showUndoBar(message) {
       return new Promise((resolve, reject) => {
+        clearTimeout(undoTimer);
         this.showUndo = true;
         this.snackMsg = message;
         this.countdown = 5;
         let a = 5;
-        clearTimeout(undoTimer);
         undoTimer = setInterval(() => {
           if (this.undo) {
             this.showUndo = this.undo = false;

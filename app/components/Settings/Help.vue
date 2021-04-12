@@ -6,7 +6,6 @@
         rowSpan="2"
         class="options-list"
         for="item in items"
-        @loaded="listViewLoad"
       >
         <v-template if="$index == 0">
           <Label class="pageTitle" :text="'help' | L" />

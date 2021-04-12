@@ -62,8 +62,7 @@ export const timer = (dur, callback) => {
   }, 1000)
 }
 
-// FOLDER PICKER
-function callIntent(context, intent, pickerType) {
+function callIntent(context, intent, msg, pickerType) {
   return new Promise((resolve, reject) => {
     const onEvent = function(e) {
       if (e.requestCode === pickerType) {
@@ -72,215 +71,63 @@ function callIntent(context, intent, pickerType) {
       }
     }
     Application.android.once(AndroidApplication.activityResultEvent, onEvent)
-    context.startActivityForResult(intent, pickerType)
+    context.startActivityForResult(
+      android.content.Intent.createChooser(intent, msg),
+      pickerType
+    )
+  })
+}
+// IMAGE PICKER
+export const getRecipePhoto = () => {
+  const context =
+    Application.android.foregroundActivity || Application.android.startActivity
+  const DIR_CODE = Math.round(Math.random() * 10000)
+  const intent = new android.content.Intent(
+    android.content.Intent.ACTION_GET_CONTENT
+  )
+  intent.setType('image/*')
+  return callIntent(context, intent, 'Select photo', DIR_CODE).then((res) => {
+    if (res.resultCode === android.app.Activity.RESULT_OK)
+      if (res.intent != null && res.intent.getData())
+        return res.intent.getData()
+  })
+}
+export const copyPhotoToCache = (uri, filepath) => {
+  const ContentResolver = Application.android.nativeApp.getContentResolver()
+  return new Promise((resolve) => {
+    const inputStream = ContentResolver.openInputStream(uri)
+    const input = new java.io.BufferedInputStream(inputStream)
+    let size = input.available()
+    let buffer = Array.create('byte', size)
+    const output = new java.io.BufferedOutputStream(
+      new java.io.FileOutputStream(filepath)
+    )
+    input.read(buffer)
+    do {
+      output.write(buffer)
+    } while (input.read(buffer) != -1)
+    input.close()
+    output.close()
+    resolve(filepath)
   })
 }
 
-//SOURCE: https://github.com/NativeScript/nativescript-imagepicker/blob/bc9209dd7d773eb437ff812f07873c72c789d572/src/imagepicker.android.ts
-
-function getDataColumn(uri, selection, selectionArgs, isDownload) {
-  const ContentResolver = Application.android.nativeApp.getContentResolver()
-  let cursor = null
-  let filePath
-  if (isDownload) {
-    let columns = ['_display_name']
-    try {
-      cursor = ContentResolver.query(
-        uri,
-        columns,
-        selection,
-        selectionArgs,
-        null
-      )
-      if (cursor != null && cursor.moveToFirst()) {
-        let column_index = cursor.getColumnIndexOrThrow(columns[0])
-        filePath = cursor.getString(column_index)
-        if (filePath) {
-          const dl = android.os.Environment.getExternalStoragePublicDirectory(
-            android.os.Environment.DIRECTORY_DOWNLOADS
-          )
-          filePath = `${dl}/${filePath}`
-          return filePath
-        }
-      }
-    } catch (e) {
-      console.log(e)
-    } finally {
-      if (cursor) {
-        cursor.close()
-      }
-    }
-  } else {
-    let columns = [android.provider.MediaStore.MediaColumns.DATA]
-    let filePath
-
-    try {
-      cursor = ContentResolver.query(
-        uri,
-        columns,
-        selection,
-        selectionArgs,
-        null
-      )
-      if (cursor != null && cursor.moveToFirst()) {
-        let column_index = cursor.getColumnIndexOrThrow(columns[0])
-        filePath = cursor.getString(column_index)
-        if (filePath) {
-          return filePath
-        }
-      }
-    } catch (e) {
-      console.log(e)
-    } finally {
-      if (cursor) {
-        cursor.close()
-      }
-    }
-  }
-  return undefined
-}
-function getTreeUri(uri) {
-  const DocumentsContract = android.provider.DocumentsContract
-  const ContentResolver = Application.android.nativeApp.getContentResolver()
-  if (DocumentsContract.isTreeUri(uri)) {
-    let docId, id, type
-    let contentUri = null
-    if ('com.android.externalstorage.documents' === uri.getAuthority()) {
-      docId = DocumentsContract.getTreeDocumentId(uri).split(':')
-      type = docId[0]
-      id = docId[1]
-
-      if ('primary' === type.toLowerCase())
-        return android.os.Environment.getExternalStorageDirectory() + '/' + id
-      else {
-        ContentResolver.takePersistableUriPermission(
-          uri,
-          android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION |
-            android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-        )
-        const externalMediaDirs = Application.android.context.getExternalMediaDirs()
-        if (externalMediaDirs.length > 1) {
-          let filePath = externalMediaDirs[1].getAbsolutePath()
-          filePath = filePath.substring(0, filePath.indexOf('Android')) + id
-          return filePath
-        }
-      }
-    }
-    // DownloadsProvider
-    else if (
-      'com.android.providers.downloads.documents' === uri.getAuthority()
-    ) {
-      return getDataColumn(uri, null, null, true)
-    }
-    // MediaProvider
-    else if ('com.android.providers.media.documents' === uri.getAuthority()) {
-      docId = DocumentsContract.getTreeDocumentId(uri).split(':')
-      type = docId[0]
-      id = docId[1]
-
-      if ('image' === type)
-        contentUri =
-          android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-      else if ('video' === type)
-        contentUri =
-          android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-      else if ('audio' === type)
-        contentUri =
-          android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-
-      let selection = '_id=?'
-      let selectionArgs = [id]
-
-      return getDataColumn(contentUri, selection, selectionArgs, false)
-    }
-  }
-  return undefined
-}
-function getFileUri(uri) {
-  const DocumentsContract = android.provider.DocumentsContract
-  const ContentResolver = Application.android.nativeApp.getContentResolver()
-  if (DocumentsContract.isDocumentUri(Application.android.context, uri)) {
-    let docId, id, type
-    let contentUri = null
-    if ('com.android.externalstorage.documents' === uri.getAuthority()) {
-      docId = DocumentsContract.getDocumentId(uri).split(':')
-      type = docId[0]
-      id = docId[1]
-
-      if ('primary' === type.toLowerCase())
-        return android.os.Environment.getExternalStorageDirectory() + '/' + id
-      else {
-        ContentResolver.takePersistableUriPermission(
-          uri,
-          android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION |
-            android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-        )
-        const externalMediaDirs = Application.android.context.getExternalMediaDirs()
-        if (externalMediaDirs.length > 1) {
-          let filePath = externalMediaDirs[1].getAbsolutePath()
-          filePath = filePath.substring(0, filePath.indexOf('Android')) + id
-          return filePath
-        }
-      }
-    }
-    // DownloadsProvider
-    else if (
-      'com.android.providers.downloads.documents' === uri.getAuthority()
-    ) {
-      return getDataColumn(uri, null, null, true)
-    }
-    // MediaProvider
-    else if ('com.android.providers.media.documents' === uri.getAuthority()) {
-      docId = DocumentsContract.getDocumentId(uri).split(':')
-      type = docId[0]
-      id = docId[1]
-
-      if ('image' === type)
-        contentUri =
-          android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-      else if ('video' === type)
-        contentUri =
-          android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-      else if ('audio' === type)
-        contentUri =
-          android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-
-      let selection = '_id=?'
-      let selectionArgs = [id]
-
-      return getDataColumn(contentUri, selection, selectionArgs, false)
-    }
-  }
-  return undefined
-}
-
-export const pickFolder = () => {
+// BACKUP FOLDER PICKER
+export const getBackupFolder = () => {
   const context =
     Application.android.foregroundActivity || Application.android.startActivity
   const DIR_CODE = Math.round(Math.random() * 10000)
   const intent = new android.content.Intent(
     android.content.Intent.ACTION_OPEN_DOCUMENT_TREE
   )
-  intent.addCategory(android.content.Intent.CATEGORY_DEFAULT)
-  return callIntent(context, intent, DIR_CODE).then((res) => {
+  return callIntent(context, intent, 'Select folder', DIR_CODE).then((res) => {
     if (res.resultCode === android.app.Activity.RESULT_OK)
       if (res.intent != null && res.intent.getData())
-        return getTreeUri(res.intent.getData())
+        return res.intent.getData()
   })
 }
 
-function callBackupIntent(context, intent, pickerType) {
-  return new Promise((resolve, reject) => {
-    const onEvent = function(e) {
-      if (e.requestCode === pickerType) {
-        resolve(e)
-        Application.android.off(AndroidApplication.activityResultEvent, onEvent)
-      }
-    }
-    Application.android.once(AndroidApplication.activityResultEvent, onEvent)
-    context.startActivityForResult(intent, pickerType)
-  })
-}
+// BACKUP FILE PICKER
 export const getBackupFile = () => {
   const context =
     Application.android.foregroundActivity || Application.android.startActivity
@@ -290,13 +137,118 @@ export const getBackupFile = () => {
   )
   intent.addCategory(android.content.Intent.CATEGORY_OPENABLE)
   intent.setType('application/zip')
-  // intent.setFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
-  return callBackupIntent(context, intent, DIR_CODE).then((res) => {
-    if (res.resultCode === android.app.Activity.RESULT_OK) {
-      if (res.intent != null && res.intent.getData()) {
-        // return getFileUri(res.intent.getData())
-        return res.intent.getData()
+  return callIntent(context, intent, 'Select file to import', DIR_CODE).then(
+    (res) => {
+      if (res.resultCode === android.app.Activity.RESULT_OK) {
+        if (res.intent != null && res.intent.getData())
+          return res.intent.getData()
       }
     }
-  })
+  )
+}
+
+// ZIP OPERATIONS
+export class Zip {
+  static getSubFiles(src, isRootFolder) {
+    const fileList = new java.util.ArrayList()
+    const sourceFile = new java.io.File(src)
+    let tempList = sourceFile.listFiles()
+    for (let i = 0; i < tempList.length; i++) {
+      if (tempList[i].isFile()) {
+        fileList.add(tempList[i])
+      }
+      if (tempList[i].isDirectory()) {
+        if (isRootFolder) {
+          fileList.add(tempList[i])
+        }
+        fileList.addAll(Zip.getSubFiles(tempList[i].getAbsolutePath()))
+      }
+    }
+    return fileList
+  }
+  static zip(src, destUri, filename) {
+    const ContentResolver = Application.android.nativeApp.getContentResolver()
+    const parsedUri = new android.net.Uri.parse(destUri)
+    const uri = new androidx.documentfile.provider.DocumentFile.fromTreeUri(
+      Application.android.context,
+      parsedUri
+    )
+      .createFile('application/zip', filename)
+      .getUri()
+    const outputStream = ContentResolver.openOutputStream(uri)
+    const zipOutputStream = new java.util.zip.ZipOutputStream(outputStream)
+
+    return new Promise((resolve) => {
+      const sourceFiles = Zip.getSubFiles(src, true)
+      for (let i = 0; i < sourceFiles.size(); i++) {
+        let len
+        let buffer = Array.create('byte', 4096)
+        let file = sourceFiles.get(i)
+        let entry = new java.util.zip.ZipEntry(
+          'EnRecipes/' +
+            new java.io.File(src)
+              .toURI()
+              .relativize(file.toURI())
+              .getPath()
+        )
+        zipOutputStream.putNextEntry(entry)
+        if (!file.isDirectory()) {
+          let inputStream = new java.io.FileInputStream(file)
+          while ((len = inputStream.read(buffer)) != -1) {
+            zipOutputStream.write(buffer, 0, len)
+          }
+          inputStream.close()
+        }
+        zipOutputStream.closeEntry()
+      }
+      zipOutputStream.close()
+      resolve(uri)
+    })
+  }
+  static unzip(uri, dest) {
+    const ContentResolver = Application.android.nativeApp.getContentResolver()
+    return new Promise((resolve) => {
+      const inputStream = ContentResolver.openInputStream(uri)
+      const zipInputStream = new java.util.zip.ZipInputStream(inputStream)
+      let len, filepath
+      let buffer = Array.create('byte', 4096)
+      let entry = zipInputStream.getNextEntry()
+      filepath = dest + '/' + entry.getName()
+      while (entry != null) {
+        filepath = dest + '/' + entry.getName()
+        if (!entry.isDirectory()) {
+          const output = new java.io.BufferedOutputStream(
+            new java.io.FileOutputStream(filepath)
+          )
+          while ((len = zipInputStream.read(buffer)) != -1) {
+            output.write(buffer, 0, len)
+          }
+          output.close()
+        } else {
+          let dir = new java.io.File(filepath)
+          dir.mkdirs()
+        }
+        zipInputStream.closeEntry()
+        entry = zipInputStream.getNextEntry()
+      }
+      zipInputStream.close()
+      resolve(dest)
+    })
+  }
+}
+
+// SHARE OPERATIONS
+
+function share(intent, subject) {
+  const context = Application.android.context
+  const shareIntent = android.content.Intent.createChooser(intent, subject)
+  shareIntent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+  context.startActivity(shareIntent)
+}
+
+export const shareText = (text, subject) => {
+  const intent = new android.context.Intent(android.content.Intent.ACTION_SEND)
+  intent.setType('text/plain')
+  intent.putExtra(android.context.Intent.EXTRA_TEXT, text)
+  share(intent, subject)
 }

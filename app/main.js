@@ -15,10 +15,15 @@ import store from './store'
 import CollectionView from '@nativescript-community/ui-collectionview/vue'
 Vue.use(CollectionView)
 
+Vue.registerElement(
+  'ImageZoom',
+  () => require('@triniwiz/nativescript-image-zoom').ImageZoom
+)
+
 import { lvMixin } from './shared/mixins.js'
 Vue.mixin(lvMixin)
 
-Vue.config.silent = TNS_ENV === 'production'
+Vue.config.silent = false
 
 Vue.filter('L', localize)
 

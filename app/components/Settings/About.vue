@@ -6,7 +6,6 @@
         colSpan="2"
         class="options-list"
         for="item in items"
-        @loaded="listViewLoad"
       >
         <v-template if="$index == 0">
           <Label class="pageTitle" :text="'About' | L" />
@@ -24,7 +23,7 @@
             <Label class="info tac tw" :text="'appInfo' | L" />
           </StackLayout>
         </v-template>
-        <v-template if="$index == 6">
+        <v-template if="$index == 8">
           <StackLayout class="listSpace"> </StackLayout>
         </v-template>
         <v-template>
@@ -39,11 +38,7 @@
         </v-template>
       </ListView>
       <GridLayout row="1" class="appbar" rows="*" columns="auto, *">
-        <Button
-          class="ico"
-          :text="icon.back"
-          @tap="$navigateBack()"
-        />
+        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
     </GridLayout>
   </Page>
@@ -64,6 +59,16 @@ export default {
           icon: "gh",
           title: "gh",
           url: "https://github.com/vishnuraghavb/EnRecipes",
+        },
+        {
+          icon: "tg",
+          title: "joinTG",
+          url: "https://t.me/enrecipes",
+        },
+        {
+          icon: "help",
+          title: "guide",
+          url: "https://github.com/vishnuraghavb/EnRecipes/wiki/User-Guide",
         },
         {
           icon: "priv",
