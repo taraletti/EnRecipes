@@ -314,5 +314,11 @@
     "swm": "Week begint op maandag",
     "photogrid": "Fotorooster",
     "expSuc": "Exporteren voltooid",
-    "Black": "Zwart"
+    "Black": "Zwart",
+    "rp": "Foto verwijderen",
+    "aap": "Foto bijvoegen",
+    "sru": "Recept delen via…",
+    "srpu": "Receptfoto delen via…",
+    "impip": "Bezig met importeren",
+    "expip": "Bezig met exporteren"
 }
