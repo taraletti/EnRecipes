@@ -5,4 +5,5 @@
 - Improvement: Faster app start and navigation
 - Added app languages: French, Italian, Norwegian Bokmål
 - Updated translations
+- Dropped support for Android Lollipop
 - Several bug fixes

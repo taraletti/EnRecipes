@@ -160,72 +160,61 @@ export default new Vuex.Store({
     units: [],
     mealPlans: [],
     icon: {
-      alert: '\ue900',
-      back: '\ue901',
-      bag: '\ue902',
-      bagged: '\ue903',
-      cal: '\ue904',
-      cam: '\ue905',
-      category: '\ue906',
-      cog: '\ue907',
-      comb: '\ue908',
-      cuisine: '\ue909',
-      del: '\ue90a',
-      diff: '\ue90b',
-      don: '\ue90c',
-      done: '\ue90d',
-      edit: '\ue90e',
-      exp: '\ue910',
-      fav: '\ue911',
-      faved: '\ue912',
-      folder: '\ue913',
-      gh: '\ue914',
-      help: '\ue915',
-      home: '\ue916',
-      img: '\ue917',
-      imp: '\ue918',
-      info: '\ue919',
-      items: '\ue91a',
-      l1: '\ue91b',
-      l2: '\ue91c',
-      l3: '\ue91d',
-      lang: '\ue91e',
-      left: '\ue91f',
-      menu: '\ue920',
-      noresult: '\ue921',
-      notes: '\ue922',
-      plus: '\ue923',
-      plusc: '\ue924',
-      price: '\ue925',
-      priv: '\ue926',
-      err: '\ue90f',
-      res: '\ue927',
-      reset: '\ue928',
-      right: '\ue929',
-      save: '\ue92a',
-      sear: '\ue92b',
-      selall: '\ue92c',
-      share: '\ue92d',
-      shuf: '\ue92e',
-      sort: '\ue92f',
-      star: '\ue930',
-      starred: '\ue931',
-      steps: '\ue932',
-      succ: '\ue933',
-      tag: '\ue934',
-      text: '\ue935',
-      tg: '\ue936',
-      theme: '\ue937',
-      time: '\ue938',
-      timer: '\ue939',
-      tod: '\ue93a',
-      trans: '\ue93b',
-      tried: '\ue93c',
-      try: '\ue93d',
-      unit: '\ue93e',
-      x: '\ue93f',
-      yield: '\ue940',
-      zip: '\ue941',
+      back: '\ue900',
+      bag: '\ue901',
+      bagged: '\ue902',
+      cal: '\ue903',
+      category: '\ue904',
+      check: '\ue905',
+      cog: '\ue906',
+      cuisine: '\ue907',
+      db: '\ue908',
+      del: '\ue909',
+      diff: '\ue90a',
+      don: '\ue90b',
+      done: '\ue90c',
+      edit: '\ue90d',
+      exp: '\ue90e',
+      fav: '\ue90f',
+      faved: '\ue910',
+      filter: '\ue911',
+      folder: '\ue912',
+      gh: '\ue913',
+      help: '\ue914',
+      home: '\ue915',
+      img: '\ue916',
+      imp: '\ue917',
+      info: '\ue918',
+      interface: '\ue919',
+      lang: '\ue91a',
+      layout: '\ue91b',
+      left: '\ue91c',
+      menu: '\ue91d',
+      opts: '\ue91e',
+      plus: '\ue91f',
+      price: '\ue920',
+      priv: '\ue921',
+      reset: '\ue922',
+      right: '\ue923',
+      save: '\ue924',
+      sear: '\ue925',
+      share: '\ue926',
+      shuf: '\ue927',
+      sort: '\ue928',
+      star: '\ue929',
+      starred: '\ue92a',
+      tag: '\ue92b',
+      tg: '\ue92c',
+      theme: '\ue92d',
+      time: '\ue92e',
+      tod: '\ue92f',
+      trans: '\ue930',
+      tried: '\ue931',
+      try: '\ue932',
+      uncheck: '\ue933',
+      undo: '\ue934',
+      week: '\ue935',
+      x: '\ue936',
     },
     currentComponent: 'EnRecipes',
     sortType: 'Oldest first',
@@ -298,11 +287,19 @@ export default new Vuex.Store({
     selectedCategory: null,
     selectedTag: null,
     appTheme: 'Light',
+    mondayFirst: false,
   },
   mutations: {
+    clearImportSummary(state) {
+      for (const key in state.importSummary) state.importSummary[key] = 0
+    },
+    setFirstDay(state, bool) {
+      state.mondayFirst = bool
+      ApplicationSettings.setBoolean('mondayFirst', bool)
+    },
     setTheme(state, theme) {
-      ApplicationSettings.setString('appTheme', theme)
       state.appTheme = theme
+      ApplicationSettings.setString('appTheme', theme)
     },
     clearFilter(state) {
       state.selectedCuisine = state.selectedCategory = state.selectedTag = null
@@ -671,6 +668,7 @@ export default new Vuex.Store({
     },
     setShake(state, shake) {
       state.shakeEnabled = shake
+      ApplicationSettings.setBoolean('shakeEnabled', shake)
     },
     setRating(state, { id, recipe, rating }) {
       let index = state.recipes.indexOf(
@@ -706,6 +704,12 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    clearImportSummary({ commit }) {
+      commit('clearImportSummary')
+    },
+    setFirstDay({ commit }, bool) {
+      commit('setFirstDay', bool)
+    },
     setTheme({ commit }, theme) {
       commit('setTheme', theme)
     },
@@ -715,7 +719,7 @@ export default new Vuex.Store({
     setLayout({ commit }, type) {
       commit('setLayout', type)
     },
-    setSortTypeAction({ commit }, sortType) {
+    setSortType({ commit }, sortType) {
       commit('setSortType', sortType)
     },
     initRecipes({ commit }) {
@@ -778,7 +782,7 @@ export default new Vuex.Store({
     unSyncCombinationsAction({ commit }, combinations) {
       commit('unSyncCombinations', combinations)
     },
-    setShakeAction({ commit }, shake) {
+    setShake({ commit }, shake) {
       commit('setShake', shake)
     },
     setRatingAction({ commit }, rating) {

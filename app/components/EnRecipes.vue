@@ -8,7 +8,7 @@
           for="recipe in getList"
           @loaded="onListLoad"
           :itemTemplateSelector="getLayout"
-          :colWidth="layout == 'grid' ? '50%' : '100%'"
+          :colWidth="layout == 'grid' || layout == 'photogrid' ? '50%' : '100%'"
           @scroll="!selectMode && onScroll($event)"
         >
           <v-template name="header">
@@ -31,20 +31,20 @@
                 v-for="(item, index) in topmenu"
                 :key="index"
                 :class="{
-                  select: currentComponent === item.component,
+                  select: currentComponent === item.title,
                 }"
-                @touch="touchSelector($event, item.component)"
+                @touch="touchSelector($event, item.title, item.title)"
               >
                 <Label class="ico" :text="icon[item.icon]" />
                 <Label
                   class="value"
-                  v-if="getRecipeCount(item.title)"
+                  :hidden="!getRecipeCount(item.title)"
                   :text="getRecipeCount(item.title)"
                   col="1"
                 />
               </GridLayout>
               <GridLayout
-                v-if="currentComponent === 'Filtered recipes'"
+                :hidden="currentComponent !== 'Filtered recipes'"
                 rows="48"
                 columns="auto, auto"
                 class="segment"
@@ -52,7 +52,7 @@
                   select: currentComponent === 'Filtered recipes',
                 }"
               >
-                <Label class="ico" :text="icon.sort" />
+                <Label class="ico" :text="icon.filter" />
                 <Label
                   class="value"
                   :text="getRecipeCount('filtered')"
@@ -65,7 +65,7 @@
             <GridLayout
               class="recipeItem"
               :class="getItemPos(recipe.id)"
-              rows="96"
+              rows="auto"
               columns="96, *"
               ref="recipe"
               @longPress="
@@ -77,9 +77,10 @@
             >
               <Image
                 class="imgHolder"
+                verticalAlignment="top"
                 v-if="recipe.imageSrc"
                 :src="recipe.imageSrc"
-                stretch="aspectFit"
+                stretch="none"
                 decodeWidth="96"
                 decodeHeight="96"
                 loadMode="async"
@@ -87,6 +88,7 @@
               <Label
                 v-else
                 class="ico imgHolder"
+                verticalAlignment="top"
                 @loaded="centerLabel"
                 width="96"
                 height="96"
@@ -94,15 +96,15 @@
                 :text="icon.img"
               />
               <StackLayout class="recipeInfo" col="1">
-                <Label :text="recipe.title" class="tb title" />
-                <StackLayout class="attributes" orientation="horizontal">
-                  <Label class="ico sm" :text="icon.cuisine" />
+                <Label :text="recipe.title" class="tb title tw" />
+                <StackLayout class="attributes" orientation="horizontal"
+                  ><Label class="ico sm" :text="icon.cuisine" />
                   <Label class="attr" :text="recipe.cuisine | L" />
                   <Label class="ico sm" :text="icon.category" />
                   <Label class="attr" :text="recipe.category | L" />
                 </StackLayout>
                 <StackLayout
-                  v-if="recipe.tags.length"
+                  :hidden="!recipe.tags.length"
                   class="attributes"
                   orientation="horizontal"
                 >
@@ -158,7 +160,7 @@
                 :text="icon.img"
               />
               <StackLayout class="recipeInfo" row="1">
-                <Label :text="recipe.title" class="tb title" />
+                <Label :text="recipe.title" class="tb title tw" />
                 <StackLayout class="attributes" orientation="horizontal">
                   <Label class="ico sm" :text="icon.cuisine" />
                   <Label class="attr" :text="recipe.cuisine | L" />
@@ -168,13 +170,50 @@
                   <Label class="attr" :text="recipe.category | L" />
                 </StackLayout>
                 <StackLayout
-                  v-if="recipe.tags.length"
+                  :hidden="!recipe.tags.length"
                   class="attributes"
                   orientation="horizontal"
                 >
                   <Label class="ico sm" :text="icon.tag" />
                   <Label class="attr" :text="getTags(recipe.tags)" />
                 </StackLayout>
+              </StackLayout>
+            </GridLayout>
+          </v-template>
+          <v-template name="photogrid">
+            <GridLayout
+              class="recipeItem grid"
+              :class="getItemPos(recipe.id)"
+              rows="auto, auto"
+              columns="*"
+              ref="recipe"
+              @longPress="
+                selectMode ? viewRecipe(recipe.id) : addToSelection(recipe.id)
+              "
+              @tap="
+                selectMode ? addToSelection(recipe.id) : viewRecipe(recipe.id)
+              "
+            >
+              <Image
+                class="imgHolder"
+                v-if="recipe.imageSrc"
+                :src="recipe.imageSrc"
+                stretch="aspectFit"
+                :decodeWidth="imgWidth"
+                :decodeHeight="imgWidth"
+                loadMode="async"
+              />
+              <Label
+                v-else
+                width="100%"
+                :height="imgWidth"
+                @loaded="centerLabel"
+                class="ico imgHolder"
+                :fontSize="imgWidth / 2"
+                :text="icon.img"
+              />
+              <StackLayout class="recipeInfo" row="1">
+                <Label :text="recipe.title" class="tb title tw" />
               </StackLayout>
             </GridLayout>
           </v-template>
@@ -192,7 +231,7 @@
               "
             >
               <StackLayout class="recipeInfo">
-                <Label :text="recipe.title" class="tb title" />
+                <Label :text="recipe.title" class="tb title tw" />
                 <StackLayout class="attributes" orientation="horizontal">
                   <Label class="ico sm" :text="icon.cuisine" />
                   <Label class="attr" :text="recipe.cuisine | L" />
@@ -200,7 +239,7 @@
                   <Label class="attr" :text="recipe.category | L" />
                 </StackLayout>
                 <StackLayout
-                  v-if="recipe.tags.length"
+                  :hidden="!recipe.tags.length"
                   class="attributes"
                   orientation="horizontal"
                 >
@@ -224,7 +263,7 @@
               "
             >
               <StackLayout class="recipeInfo">
-                <Label :text="recipe.title" class="tb title" />
+                <Label :text="recipe.title" class="tb title tw" />
               </StackLayout>
             </GridLayout>
           </v-template>
@@ -273,7 +312,7 @@
           rows="auto"
           columns="auto"
           class="appbar toolbar"
-          v-if="showTools"
+          :hidden="!showTools"
         >
           <GridLayout
             row="1"
@@ -319,41 +358,34 @@
             @textChange="updateList($event.value)"
           />
           <Label
-            v-if="selectMode"
+            :hidden="!selectMode"
             class="title"
             :text="`${selection.length} ${$options.filters.L('sltd')}`"
             col="1"
           />
-          <Button
-            v-if="recipes.length && !selectMode && !showSearch"
-            class="ico"
-            :text="selectMode ? icon.export : icon.sear"
+          <StackLayout
             col="2"
-            @tap="selectMode ? exportSelection() : openSearch()"
-          />
+            colSpan="3"
+            orientation="horizontal"
+            :hidden="!recipes.length || selectMode || showSearch"
+          >
+            <Button
+              class="ico"
+              :text="selectMode ? icon.exp : icon.sear"
+              @tap="selectMode ? exportSelection() : openSearch()"
+            />
+            <Button class="ico" :text="icon.sort" @tap="openSort" />
+            <Button class="ico" :text="icon.filter" @tap="openFilters" />
+          </StackLayout>
           <Button
-            v-if="recipes.length && !showSearch && !selectMode"
-            class="ico"
-            :text="icon.sort"
-            col="3"
-            @tap="openSort"
-          />
-          <Button
-            v-if="recipes.length && !showSearch && !selectMode"
-            class="ico"
-            :text="icon.sort"
-            col="4"
-            @tap="openFilters"
-          />
-          <Button
-            v-if="!showSearch && !selectMode"
+            :hidden="showSearch || selectMode"
             class="ico fab"
             :text="icon.plus"
             col="5"
-            @tap="addRecipe()"
+            @tap="addRecipe"
           />
           <Button
-            v-if="selectMode"
+            :hidden="!selectMode"
             class="ico"
             :text="icon.del"
             col="5"
@@ -375,6 +407,7 @@ import {
   Device,
   Screen,
   Color,
+  CoreTypes,
 } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
 import {
@@ -390,7 +423,7 @@ import Settings from "./Settings";
 import ActionDialog from "./modal/ActionDialog.vue";
 import ConfirmDialog from "./modal/ConfirmDialog.vue";
 import Filters from "./modal/Filters.vue";
-import * as utils from "~/shared/utils.js";
+import * as utils from "~/shared/utils";
 let lastTime = 0;
 let lastShake = 0;
 let lastForce = 0;
@@ -416,17 +449,14 @@ export default {
       topmenu: [
         {
           title: "EnRecipes",
-          component: "EnRecipes",
           icon: "home",
         },
         {
           title: "trylater",
-          component: "Try Later",
           icon: "try",
         },
         {
           title: "favourites",
-          component: "Favourites",
           icon: "fav",
         },
       ],
@@ -519,13 +549,13 @@ export default {
   methods: {
     ...mapActions([
       "setComponent",
-      "setSortTypeAction",
       "initListItems",
       "initRecipes",
       "initMealPlans",
-      "setShakeAction",
+      "setShake",
+      "setFirstDay",
       "setLayout",
-      "setSortTypeAction",
+      "setSortType",
       "deleteRecipeAction",
       "deleteRecipesAction",
       "clearFilter",
@@ -536,6 +566,9 @@ export default {
       const window = Application.android.startActivity.getWindow();
       const decorView = window.getDecorView();
       let sdkv = Device.sdkVersion;
+      this.appTheme == "Light"
+        ? decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+        : decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_DARK_STATUS_BAR);
       function setColors(color) {
         window.setStatusBarColor(new Color(color).android);
         sdkv >= 27 && window.setNavigationBarColor(new Color(color).android);
@@ -551,32 +584,29 @@ export default {
           setColors("#000000");
           break;
       }
-      sdkv >= 23 && this.appTheme == "Light"
-        ? decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
-        : decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_DARK_STATUS_BAR);
-
-      sdkv >= 27 && this.appTheme == "Light"
-        ? decorView.setSystemUiVisibility(
-            View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-          )
-        : decorView.setSystemUiVisibility(
-            View.SYSTEM_UI_FLAG_DARK_NAVIGATION_BAR
-          );
+      if (sdkv >= 27)
+        this.appTheme == "Light"
+          ? decorView.setSystemUiVisibility(
+              View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+            )
+          : decorView.setSystemUiVisibility(
+              View.SYSTEM_UI_FLAG_DARK_NAVIGATION_BAR
+            );
     },
     onPageLoad(args) {
       const page = args.object;
       page.bindingContext = new Observable();
       this.filterFavourites
-        ? this.setComponent("Favourites")
+        ? this.setComponent("favourites")
         : this.filterTrylater
-        ? this.setComponent("Try Later")
+        ? this.setComponent("trylater")
         : this.selectedCuisine
         ? this.setComponent("Filtered recipes")
         : this.setComponent("EnRecipes");
       if (this.shakeEnabled) {
         if (utils.hasAccelerometer())
           startAccelerometerUpdates((data) => this.onSensorData(data));
-        else this.setShakeAction(false);
+        else this.setShake(false);
       }
       this.hijackBackEvent();
       setTimeout(() => {
@@ -606,22 +636,25 @@ export default {
         this.scrollPos = Math.abs(y);
         let ab = this.appbar.translateY;
         if (!scrollUp && ab == 0) {
-          this.animateInOut(
-            250,
-            false,
-            (val) => (this.appbar.translateY = val * 64)
-          );
+          this.appbar.animate({
+            translate: { x: 0, y: 64 },
+            duration: 250,
+            curve: CoreTypes.AnimationCurve.ease,
+          });
         } else if (scrollUp && ab == 64) {
-          this.animateInOut(
-            250,
-            true,
-            (val) => (this.appbar.translateY = val * 64)
-          );
+          this.appbar.animate({
+            translate: { x: 0, y: 0 },
+            duration: 250,
+            curve: CoreTypes.AnimationCurve.ease,
+          });
         }
       }
     },
     getSpanSize(index) {
-      return this.layout == "grid" && (index == 0 || index == 1) ? 2 : 1;
+      return (this.layout == "grid" || this.layout == "photogrid") &&
+        (index == 0 || index == 1)
+        ? 2
+        : 1;
     },
     getLayout(args, index, items) {
       return index == 0 ? "header" : index == 1 ? "lists" : this.layout;
@@ -646,7 +679,7 @@ export default {
         props: {
           title: "srt",
           list: [
-            "Title",
+            "title",
             "Rating",
             "Quickest first",
             "Slowest first",
@@ -658,7 +691,7 @@ export default {
         },
       }).then((action) => {
         if (action && action !== "Cancel" && this.sortType !== action) {
-          this.setSortTypeAction(action);
+          this.setSortType(action);
           ApplicationSettings.setString("sortType", action);
           this.updateSort();
         }
@@ -668,6 +701,8 @@ export default {
 
     //FILTER
     openFilters() {
+      this.setComponent("EnRecipes");
+      this.filterFavourites = this.filterTrylater = false;
       this.showTools = false;
       this.releaseBackEvent();
       this.$showModal(Filters).then(() => this.hijackBackEvent());
@@ -917,35 +952,27 @@ export default {
       let dl1 = difficultyLevel(a.difficulty);
       let dl2 = difficultyLevel(b.difficulty);
       switch (this.sortType) {
-        case "Title":
+        case "title":
           return titleOrder > 0 ? 1 : titleOrder < 0 ? -1 : 0;
-          break;
         case "Quickest first":
           return d1 > d2 ? 1 : d1 < d2 ? -1 : 0;
-          break;
         case "Slowest first":
           return d1 > d2 ? -1 : d1 < d2 ? 1 : 0;
-          break;
         case "Rating":
           return r1 > r2 ? -1 : r1 < r2 ? 1 : 0;
-          break;
         case "Difficulty level":
           return dl1 > dl2 ? 1 : dl1 < dl2 ? -1 : 0;
-          break;
         case "Last updated":
           return ld1 < ld2 ? 1 : ld1 > ld2 ? -1 : 0;
-          break;
         case "Newest first":
           return cd1 < cd2 ? 1 : cd1 > cd2 ? -1 : 0;
-          break;
         case "Oldest first":
           return cd1 < cd2 ? -1 : cd1 > cd2 ? 1 : 0;
-          break;
       }
     },
     getItemPos(id) {
       let length = this.filteredRecipes.length;
-      let l2 = this.layout == "grid";
+      let l2 = this.layout == "grid" || this.layout == "photogrid";
       let oddOrEven = this.oddOrEven(id);
       let itemPos =
         id == this.filteredRecipes[0].id ||
@@ -995,7 +1022,7 @@ export default {
         args.cancel = true;
         this.clearSelection();
       } else if (
-        ["Favourites", "Try Later", "Filtered recipes"].includes(
+        ["favourites", "trylater", "Filtered recipes"].includes(
           this.currentComponent
         )
       ) {
@@ -1019,9 +1046,9 @@ export default {
           },
         });
       } else if (title !== this.currentComponent) {
-        this.setComponent(to);
-        this.filterFavourites = to == "Favourites";
-        this.filterTrylater = to == "Try Later";
+        this.setComponent(title);
+        this.filterFavourites = to == "favourites";
+        this.filterTrylater = to == "trylater";
         this.clearFilter();
       }
     },
@@ -1051,11 +1078,9 @@ export default {
           duration: 250,
           curve: "easeOut",
         },
-        // backstackVisible: false,
       });
     },
     viewRandomRecipe() {
-      // this.showFAB =
       this.showTools = false;
       this.$navigateTo(ViewRecipe, {
         props: {
@@ -1067,15 +1092,14 @@ export default {
           duration: 250,
           curve: "easeOut",
         },
-        backstackVisible: false,
       });
     },
-    touchSelector({ object, action }, comp) {
+    touchSelector({ object, action }, comp, title) {
       let selected = this.currentComponent == comp;
       object.className = action.match(/down|move/)
         ? `segment ${selected ? "select" : "fade"}`
         : `segment ${selected && "select"}`;
-      if (action == "up") this.navigateTo(comp, comp);
+      if (action == "up") this.navigateTo(comp, title);
     },
     touchTool({ object, action }, comp, value) {
       object.className = action.match(/down|move/) ? `tool fade` : `tool`;
@@ -1088,7 +1112,8 @@ export default {
     if (!this.recipes.length) this.initRecipes();
     this.initListItems();
     if (!this.mealPlans.length) this.initMealPlans();
-    this.setShakeAction(ApplicationSettings.getBoolean("shakeEnabled", true));
+    this.setShake(ApplicationSettings.getBoolean("shakeEnabled", true));
+    this.setFirstDay(ApplicationSettings.getBoolean("mondayFirst", false));
   },
 };
 </script>

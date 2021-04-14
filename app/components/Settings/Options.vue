@@ -5,7 +5,6 @@
         colSpan="2"
         rowSpan="2"
         class="options-list"
-        @loaded="listViewLoad"
         for="item in items"
       >
         <v-template if="$index == 0">
@@ -14,15 +13,18 @@
         <v-template if="item.type == 'switch'">
           <GridLayout columns="auto, *, auto" class="option">
             <Label class="ico" :text="icon[item.icon]" />
-            <StackLayout col="1">
+            <StackLayout col="1" verticalAlignment="center">
               <Label :text="item.title | L" class="info" />
-              <Label :text="item.subTitle | L" class="sub" />
+              <Label
+                v-if="item.subTitle"
+                :text="item.subTitle | L"
+                class="sub"
+              />
             </StackLayout>
             <Switch
-              :color="item.subAction ? '#ff5200' : '#858585'"
-              verticalAlignment="center"
+              :color="item.checked ? '#ff5200' : '#adb5bd'"
               col="2"
-              :checked="item.subAction"
+              :checked="item.checked"
               @checkedChange="item.action"
             />
           </GridLayout>
@@ -31,12 +33,26 @@
           <StackLayout class="listSpace"> </StackLayout>
         </v-template>
       </ListView>
-      <GridLayout row="1" class="appbar" rows="*" columns="auto, *">
-        <Button
-          class="ico"
-          :text="icon.back"
-          @tap="$navigateBack()"
-        />
+      <GridLayout
+        v-show="!toast"
+        row="1"
+        class="appbar"
+        rows="*"
+        columns="auto, *"
+      >
+        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
+      </GridLayout>
+      <GridLayout
+        v-show="toast"
+        row="1"
+        colSpan="2"
+        class="appbar snackBar"
+        columns="*"
+        @tap="toast = null"
+      >
+        <FlexboxLayout minHeight="48" alignItems="center">
+          <Label class="title msg" :text="toast" />
+        </FlexboxLayout>
       </GridLayout>
     </GridLayout>
   </Page>
@@ -44,13 +60,17 @@
 
 <script>
 import { ApplicationSettings, Observable } from "@nativescript/core";
-import { localize } from "@nativescript/localize";
 import { mapState, mapActions } from "vuex";
 import * as utils from "~/shared/utils";
 
 export default {
+  data() {
+    return {
+      toast: null,
+    };
+  },
   computed: {
-    ...mapState(["icon", "shakeEnabled"]),
+    ...mapState(["icon", "shakeEnabled", "mondayFirst"]),
     items() {
       return [
         {},
@@ -59,29 +79,39 @@ export default {
           icon: "shuf",
           title: "sVw",
           subTitle: "sVwInfo",
+          checked: this.shakeEnabled,
           action: this.toggleShake,
-          subAction: this.shakeEnabled,
+        },
+        {
+          type: "switch",
+          icon: "week",
+          title: "swm",
+          checked: this.mondayFirst,
+          action: this.toggleFirstDay,
         },
         {},
       ];
     },
   },
   methods: {
-    ...mapActions(["setShakeAction"]),
+    ...mapActions(["setShake", "setFirstDay"]),
     onPageLoad(args) {
       const page = args.object;
       page.bindingContext = new Observable();
     },
+    toggleFirstDay({ object }) {
+      this.setFirstDay(object.checked);
+    },
     // SHAKE VIEW RANDOM RECIPE
-    toggleShake(args) {
-      let checked = args.object.checked;
+    toggleShake({ object }) {
+      let checked = object.checked;
       if (checked && !utils.hasAccelerometer()) {
-        args.object.checked = false;
-        // Toast.makeText(localize("noAccSensor"), "long").show();
-      } else {
-        ApplicationSettings.setBoolean("shakeEnabled", checked);
-        this.setShakeAction(checked);
-      }
+        checked = false;
+        this.toast = localize("noAccSensor");
+        utils.timer(5, (val) => {
+          if (!val) this.toast = val;
+        });
+      } else this.setShake(checked);
     },
   },
 };

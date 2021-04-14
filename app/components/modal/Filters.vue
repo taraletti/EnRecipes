@@ -20,12 +20,7 @@
           </GridLayout>
         </StackLayout>
       </ScrollView>
-      <ListView
-        row="2"
-        class="options-list"
-        @loaded="listViewLoad"
-        for="item in filterList"
-      >
+      <ListView row="2" class="options-list" for="item in filterList">
         <v-template>
           <Label
             class="listItem"
@@ -98,10 +93,8 @@ export default {
       switch (this.filterType) {
         case "cuisine":
           return arr.slice(0, -2);
-          break;
         case "category":
           return arr.slice(0, -1);
-          break;
       }
       return arr;
     },
@@ -109,13 +102,10 @@ export default {
       switch (this.filterType) {
         case "cuisine":
           return this.cuisineList;
-          break;
         case "category":
           return this.categoryList;
-          break;
         case "tag":
           return this.tagList;
-          break;
       }
     },
     cuisineList() {
@@ -181,19 +171,12 @@ export default {
       "clearFilter",
     ]),
     onPageLoad(args) {
-      args.object._dialogFragment
-        .getDialog()
-        .getWindow()
-        .setBackgroundDrawable(
-          new android.graphics.drawable.ColorDrawable(
-            android.graphics.Color.TRANSPARENT
-          )
-        );
+      this.transparentPage(args);
       this.localCuisine = this.selectedCuisine;
       this.localCategory = this.selectedCategory;
       this.localTag = this.selectedTag;
       if (this.localCuisine) this.filterType = "category";
-      if (this.localCategory || this.localTag) this.filterType = "tag";
+      if (this.localCategory && this.localTag) this.filterType = "tag";
       this.scrollToRight();
     },
     onScrollLoad(args) {
@@ -208,8 +191,6 @@ export default {
           break;
         case "category":
           this.localTag = null;
-          break;
-        default:
           break;
       }
     },

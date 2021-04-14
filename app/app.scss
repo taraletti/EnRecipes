@@ -15,16 +15,17 @@ Page {
   font-family: "Inter-Medium";
   font-size: 14;
 }
-.tb {
-  font-family: "Inter-Bold";
-}
 .ico {
   font-family: "enrecipes";
   font-size: 24;
   vertical-alignment: center;
   &.sm {
     font-size: 16;
+    opacity: 0.5;
   }
+}
+.tb {
+  font-family: "Inter-Bold";
 }
 .tac {
   text-align: center;
@@ -42,7 +43,8 @@ Page {
   color: $gray9;
   background: $gray1;
   Page,
-  .filters {
+  .filters,
+  .sticky {
     background: $gray1;
   }
   TextField,
@@ -54,8 +56,7 @@ Page {
     border-color: $gray2;
   }
   .appbar,
-  .modal,
-  .topPlate {
+  .modal {
     background: $gray0;
   }
   .fieldLabel,
@@ -71,19 +72,16 @@ Page {
     color: $gray1;
     background: $gray9;
   }
-  Progress {
-    progress-background-color: $gray4;
-  }
-  .fab,
-  .hlMsg {
-    color: $gray1;
+  .fab {
+    color: #fff;
   }
 }
 .Dark {
   color: $gray1;
   background: $gray9;
   Page,
-  .filters {
+  .filters,
+  .sticky {
     background: $gray9;
   }
   TextField,
@@ -95,8 +93,7 @@ Page {
     border-color: $gray7;
   }
   .appbar,
-  .modal,
-  .topPlate {
+  .modal {
     color: $gray0;
     background: $gray8;
   }
@@ -113,18 +110,16 @@ Page {
     color: $gray9;
     background: $gray1;
   }
-  Progress {
-    progress-background-color: $gray5;
-  }
-  .fab,
-  .hlMsg {
+  .fab {
     color: $gray9;
   }
 }
 .Black {
   color: $gray2;
   background: $gray10;
-  Page {
+  Page,
+  .filters,
+  .sticky {
     background: $gray10;
   }
   TextField,
@@ -136,8 +131,7 @@ Page {
     border-color: $gray8;
   }
   .appbar,
-  .modal,
-  .topPlate {
+  .modal {
     color: $gray1;
     background: $gray9;
   }
@@ -154,11 +148,7 @@ Page {
     color: $gray10;
     background: $gray2;
   }
-  Progress {
-    progress-background-color: $gray5;
-  }
-  .fab,
-  .hlMsg {
+  .fab {
     color: $gray10;
   }
 }
@@ -191,7 +181,8 @@ TextView {
   width: 100%;
 }
 Progress {
-  progress-color: $orange;
+  margin: 16;
+  background-color: $gray5;
 }
 Switch {
   background-color: $orange;
@@ -200,7 +191,7 @@ Switch {
 // -----------------------------
 // Side Drawer
 .segment {
-  border-radius: 8;
+  border-radius: 12;
   margin: 0 4 0 0;
   padding: 0 12;
   .value {
@@ -216,7 +207,7 @@ Button {
   background-color: transparent;
   z-index: 0;
   padding: 8;
-  border-radius: 8;
+  border-radius: 12;
   min-width: 0;
   min-height: 0;
   &:active {
@@ -276,7 +267,7 @@ Button {
   padding: 8 16;
   .recipeInfo {
     vertical-alignment: top;
-    padding: 4 0 4 8;
+    padding: 2 0 2 8;
   }
   .title {
     padding: 0 0 4;
@@ -318,7 +309,7 @@ Button {
   background-color: transparent;
 }
 .imgHolder {
-  border-radius: 8;
+  border-radius: 12;
 }
 // -----------------------------
 // SETTINGS
@@ -328,6 +319,7 @@ Button {
 }
 .options-list {
   .option {
+    vertical-align: center;
     padding: 14 8;
     margin: 0 16;
     .ico {
@@ -353,7 +345,7 @@ Button {
   .icon {
     margin: 16;
     background: $orange;
-    border-radius: 99;
+    border-radius: 16;
     horizontal-alignment: center;
   }
   .name {
@@ -367,16 +359,21 @@ Button {
 // -----------------------------
 // VIEW RECIPE
 .photo {
-  border-radius: 8;
+  border-radius: 12;
   margin: 24 16 0 0;
   vertical-align: top;
+}
+.photoviewer {
+  width: 96;
+  height: 96;
+  opacity: 0;
+  background: #000;
 }
 .attribute {
   margin: 8 16;
   .title {
     margin-right: 8;
     font-size: 12;
-    color: $gray6;
   }
   .value {
     @extend .tb;
@@ -425,18 +422,19 @@ Button {
   line-height: 4;
   padding: 16 0;
 }
+.dateInfo {
+  padding: 32 16 16;
+  font-size: 12;
+  line-height: 4;
+}
 // -----------------------------
 // APPBAR
 .appbar {
-  z-index: 99;
+  z-index: 32;
   min-height: 56;
   margin: 8;
   padding: 4;
-  border-radius: 10;
-  elevation: 16;
-  &.hlMsg {
-    background: $orange;
-  }
+  border-radius: 16;
   .title {
     @extend .tb;
     @extend .tw;
@@ -451,7 +449,7 @@ Button {
   }
 }
 .toolbar {
-  z-index: 98;
+  z-index: 24;
   padding: 4;
   margin-bottom: 0;
   horizontal-alignment: left;
@@ -469,7 +467,7 @@ Button {
   width: 48;
   height: 48;
   margin: 0 4 0 0;
-  border-radius: 8;
+  border-radius: 12;
   background: $orange;
 }
 // -----------------------------
@@ -481,11 +479,12 @@ Button {
   padding: 0;
   margin: 32 0 16;
 }
+.sticky {
+  width: 100%;
+  padding: 0 16 16;
+  margin: 0;
+}
 .countdown {
-  background-color: transparent;
-  width: 48;
-  height: 48;
-  z-index: 0;
   font-size: 17;
   color: $orange;
 }
@@ -507,7 +506,7 @@ Button {
     text-align: center;
   }
   .day {
-    border-radius: 8;
+    border-radius: 12;
   }
   .hasPlans {
     color: $orange;
@@ -536,7 +535,7 @@ Button {
 .modal {
   max-width: 320;
   width: 100%;
-  border-radius: 10;
+  border-radius: 12;
   margin: 72 0;
   .title {
     @extend .tb;
@@ -566,7 +565,7 @@ Button {
     background: transparent;
   }
   .shareItem {
-    border-radius: 8;
+    border-radius: 12;
     margin: 0 8 8;
     text-align: center;
     .ico {
@@ -624,6 +623,7 @@ ActivityIndicator {
 }
 @keyframes fade {
   0% {
+    opacity: 1;
   }
   100% {
     opacity: 0.5;

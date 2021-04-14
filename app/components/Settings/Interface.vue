@@ -5,7 +5,6 @@
         colSpan="2"
         rowSpan="2"
         class="options-list"
-        @loaded="listViewLoad"
         for="item in items"
       >
         <v-template if="$index == 0">
@@ -29,11 +28,7 @@
         </v-template>
       </ListView>
       <GridLayout row="1" class="appbar" rows="*" columns="auto, *">
-        <Button
-          class="ico"
-          :text="icon.back"
-          @tap="$navigateBack()"
-        />
+        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
     </GridLayout>
   </Page>
@@ -50,6 +45,7 @@ import { localize, overrideLocale } from "@nativescript/localize";
 import ActionDialog from "../modal/ActionDialog.vue";
 import ConfirmDialog from "../modal/ConfirmDialog.vue";
 import { mapState, mapActions } from "vuex";
+import * as utils from "~/shared/utils";
 
 export default {
   data() {
@@ -75,7 +71,7 @@ export default {
           action: this.selectThemes,
         },
         {
-          icon: "l1",
+          icon: "layout",
           title: "listVM",
           subTitle: localize(this.layout),
           action: this.setLayoutMode,
@@ -142,7 +138,7 @@ export default {
       this.$showModal(ActionDialog, {
         props: {
           title: "List view mode",
-          list: ["Detailed", "Grid", "Simple", "Minimal"],
+          list: ["detailed", "grid", "photogrid", "simple", "minimal"],
         },
       }).then((action) => {
         if (action && action !== "Cancel" && this.layoutMode !== action) {

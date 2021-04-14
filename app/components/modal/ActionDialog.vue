@@ -1,5 +1,9 @@
 <template>
-  <Page @loaded="onPageLoad" backgroundColor="transparent" :class="appTheme">
+  <Page
+    @loaded="transparentPage"
+    backgroundColor="transparent"
+    :class="appTheme"
+  >
     <GridLayout
       columns="*"
       :rows="`auto, auto, ${stretch ? '*' : 'auto'}, auto`"
@@ -9,7 +13,6 @@
       <ListView
         rowHeight="48"
         row="2"
-        @loaded="listViewLoad"
         for="item in newList"
         :height="stretch ? '100%' : listHeight"
       >
@@ -63,16 +66,6 @@ export default {
   },
   methods: {
     ...mapActions(["removeListItemAction"]),
-    onPageLoad(args) {
-      args.object._dialogFragment
-        .getDialog()
-        .getWindow()
-        .setBackgroundDrawable(
-          new android.graphics.drawable.ColorDrawable(
-            android.graphics.Color.TRANSPARENT
-          )
-        );
-    },
     localized(item) {
       if (this.title !== "lang") return localize(item);
       else return item;
@@ -118,7 +111,6 @@ export default {
         case "Unit":
           removeListItem("unit", "units", "rmUInfo");
           break;
-        default:
       }
     },
     touch({ object, action }) {

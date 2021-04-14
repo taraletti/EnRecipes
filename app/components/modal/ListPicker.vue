@@ -1,5 +1,9 @@
 <template>
-  <Page @loaded="onPageLoad" backgroundColor="transparent" :class="appTheme">
+  <Page
+    @loaded="transparentPage"
+    backgroundColor="transparent"
+    :class="appTheme"
+  >
     <GridLayout rows="auto, auto, auto" class="modal">
       <Label class="title" :text="title | L" />
       <StackLayout
@@ -9,12 +13,14 @@
         horizontalAlignment="center"
       >
         <ListPicker
+          @loaded="onLPLoad"
           ref="hrPicker"
           :items="hrsList"
           :selectedIndex="hrIndex"
           @selectedIndexChange="setHrs"
         ></ListPicker>
         <ListPicker
+          @loaded="onLPLoad"
           ref="minPicker"
           :items="minsList"
           :selectedIndex="minIndex"
@@ -40,7 +46,6 @@
 </template>
 
 <script>
-import { Application } from "@nativescript/core";
 import { mapState } from "vuex";
 import { localize } from "@nativescript/localize";
 export default {
@@ -81,15 +86,8 @@ export default {
     },
   },
   methods: {
-    onPageLoad(args) {
-      args.object._dialogFragment
-        .getDialog()
-        .getWindow()
-        .setBackgroundDrawable(
-          new android.graphics.drawable.ColorDrawable(
-            android.graphics.Color.TRANSPARENT
-          )
-        );
+    onLPLoad({ object }) {
+      object.android.setWrapSelectorWheel(true);
     },
     setHrs(args) {
       let hr = "0" + this.hrs[args.object.selectedIndex];
