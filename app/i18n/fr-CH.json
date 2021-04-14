@@ -314,5 +314,11 @@
     "swm": "Début de la semaine le lundi",
     "photogrid": "Grille de photos",
     "expSuc": "Exportation réussie",
-    "Black": "Noir"
+    "Black": "Noir",
+    "rp": "Retirer la photo",
+    "aap": "Joindre une photo",
+    "sru": "Partager la recette en utilisant…",
+    "srpu": "Partager une photo de recette en utilisant…",
+    "impip": "Importation en cours",
+    "expip": "Exportation en cours"
 }
