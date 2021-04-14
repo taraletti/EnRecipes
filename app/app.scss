@@ -43,7 +43,8 @@ Page {
   color: $gray9;
   background: $gray1;
   Page,
-  .filters {
+  .filters,
+  .sticky {
     background: $gray1;
   }
   TextField,
@@ -72,14 +73,15 @@ Page {
     background: $gray9;
   }
   .fab {
-    color: $gray1;
+    color: #fff;
   }
 }
 .Dark {
   color: $gray1;
   background: $gray9;
   Page,
-  .filters {
+  .filters,
+  .sticky {
     background: $gray9;
   }
   TextField,
@@ -116,7 +118,8 @@ Page {
   color: $gray2;
   background: $gray10;
   Page,
-  .filters {
+  .filters,
+  .sticky {
     background: $gray10;
   }
   TextField,
@@ -475,6 +478,11 @@ Button {
   font-size: 21;
   padding: 0;
   margin: 32 0 16;
+}
+.sticky {
+  width: 100%;
+  padding: 0 16 16;
+  margin: 0;
 }
 .countdown {
   font-size: 17;

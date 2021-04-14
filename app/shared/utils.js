@@ -35,8 +35,8 @@ export const openAppSettingsPage = () => {
   Application.android.foregroundActivity.startActivity(intent)
 }
 export const hasAccelerometer = () => {
-  let context = Utils.ad.getApplicationContext()
-  let sensorManager = context.getSystemService(
+  let ctx = Utils.ad.getApplicationContext()
+  let sensorManager = ctx.getSystemService(
     android.content.Context.SENSOR_SERVICE
   )
   return sensorManager.getDefaultSensor(
@@ -62,8 +62,8 @@ export const timer = (dur, callback) => {
   }, 1000)
 }
 
-function callIntent(context, intent, msg, pickerType) {
-  return new Promise((resolve, reject) => {
+function callIntent(ctx, intent, msg, pickerType) {
+  return new Promise((resolve) => {
     const onEvent = function(e) {
       if (e.requestCode === pickerType) {
         resolve(e)
@@ -71,7 +71,7 @@ function callIntent(context, intent, msg, pickerType) {
       }
     }
     Application.android.once(AndroidApplication.activityResultEvent, onEvent)
-    context.startActivityForResult(
+    ctx.startActivityForResult(
       android.content.Intent.createChooser(intent, msg),
       pickerType
     )
@@ -79,14 +79,14 @@ function callIntent(context, intent, msg, pickerType) {
 }
 // IMAGE PICKER
 export const getRecipePhoto = () => {
-  const context =
+  const ctx =
     Application.android.foregroundActivity || Application.android.startActivity
   const DIR_CODE = Math.round(Math.random() * 10000)
   const intent = new android.content.Intent(
     android.content.Intent.ACTION_GET_CONTENT
   )
   intent.setType('image/*')
-  return callIntent(context, intent, 'Select photo', DIR_CODE).then((res) => {
+  return callIntent(ctx, intent, 'Select photo', DIR_CODE).then((res) => {
     if (res.resultCode === android.app.Activity.RESULT_OK)
       if (res.intent != null && res.intent.getData())
         return res.intent.getData()
@@ -114,13 +114,13 @@ export const copyPhotoToCache = (uri, filepath) => {
 
 // BACKUP FOLDER PICKER
 export const getBackupFolder = () => {
-  const context =
+  const ctx =
     Application.android.foregroundActivity || Application.android.startActivity
   const DIR_CODE = Math.round(Math.random() * 10000)
   const intent = new android.content.Intent(
     android.content.Intent.ACTION_OPEN_DOCUMENT_TREE
   )
-  return callIntent(context, intent, 'Select folder', DIR_CODE).then((res) => {
+  return callIntent(ctx, intent, 'Select folder', DIR_CODE).then((res) => {
     if (res.resultCode === android.app.Activity.RESULT_OK)
       if (res.intent != null && res.intent.getData())
         return res.intent.getData()
@@ -129,7 +129,7 @@ export const getBackupFolder = () => {
 
 // BACKUP FILE PICKER
 export const getBackupFile = () => {
-  const context =
+  const ctx =
     Application.android.foregroundActivity || Application.android.startActivity
   const DIR_CODE = Math.round(Math.random() * 10000)
   const intent = new android.content.Intent(
@@ -137,7 +137,7 @@ export const getBackupFile = () => {
   )
   intent.addCategory(android.content.Intent.CATEGORY_OPENABLE)
   intent.setType('application/zip')
-  return callIntent(context, intent, 'Select file to import', DIR_CODE).then(
+  return callIntent(ctx, intent, 'Select file to import', DIR_CODE).then(
     (res) => {
       if (res.resultCode === android.app.Activity.RESULT_OK) {
         if (res.intent != null && res.intent.getData())
@@ -240,15 +240,34 @@ export class Zip {
 // SHARE OPERATIONS
 
 function share(intent, subject) {
-  const context = Application.android.context
+  const ctx = Application.android.context
   const shareIntent = android.content.Intent.createChooser(intent, subject)
   shareIntent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
-  context.startActivity(shareIntent)
+  ctx.startActivity(shareIntent)
 }
-
+function getSendIntent(type) {
+  const intent = new android.content.Intent(android.content.Intent.ACTION_SEND)
+  intent.setType(type)
+  return intent
+}
 export const shareText = (text, subject) => {
-  const intent = new android.context.Intent(android.content.Intent.ACTION_SEND)
-  intent.setType('text/plain')
-  intent.putExtra(android.context.Intent.EXTRA_TEXT, text)
+  const intent = getSendIntent('text/plain')
+  intent.putExtra(android.content.Intent.EXTRA_TEXT, text)
+  share(intent, subject)
+}
+export const shareImage = (image, subject) => {
+  let ctx = Application.android.context
+  const intent = getSendIntent('image/jpeg')
+  const baos = new java.io.ByteArrayOutputStream()
+  image.android.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, baos)
+  const tmpFile = new java.io.File(ctx.getExternalCacheDir(), 'EnRecipes.jpg')
+  const fos = new java.io.FileOutputStream(tmpFile)
+  fos.write(baos.toByteArray())
+  fos.flush()
+  fos.close()
+  intent.putExtra(
+    android.content.Intent.EXTRA_STREAM,
+    android.net.Uri.fromFile(tmpFile)
+  )
   share(intent, subject)
 }

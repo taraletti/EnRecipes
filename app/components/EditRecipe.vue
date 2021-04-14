@@ -419,17 +419,21 @@ export default {
       this.clearEmptyFields(true);
       if (this.recipe.imageSrc) {
         this.modalOpen = true;
-        this.$showModal(ConfirmDialog, {
+        this.$showModal(ActionDialog, {
           props: {
             title: "recPic",
-            secondButtonText: "rBtn",
-            cancelButtonText: "cBtn",
-            okButtonText: "repBtn",
+            list: ["aap", "rp"],
           },
         }).then((action) => {
           this.modalOpen = false;
-          if (action > 0) this.imagePicker();
-          else if (action < 0) this.recipe.imageSrc = null;
+          switch (action) {
+            case "aap":
+              this.imagePicker();
+              break;
+            case "rp":
+              this.recipe.imageSrc = null;
+              break;
+          }
         });
       } else this.imagePicker();
     },

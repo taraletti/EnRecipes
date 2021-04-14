@@ -176,7 +176,7 @@ export default {
       this.localCategory = this.selectedCategory;
       this.localTag = this.selectedTag;
       if (this.localCuisine) this.filterType = "category";
-      if (this.localCategory || this.localTag) this.filterType = "tag";
+      if (this.localCategory && this.localTag) this.filterType = "tag";
       this.scrollToRight();
     },
     onScrollLoad(args) {

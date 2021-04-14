@@ -270,12 +270,15 @@ export default {
     // IMPORT HANDLERS
     openZipFile() {
       utils.getBackupFile().then((uri) => {
-        let dest = path.join(knownFolders.temp().path, "tempUnZip");
-        utils.Zip.unzip(uri, dest)
-          .then((res) => {
-            if (res) this.validateZipContent(res, uri);
-          })
-          .catch(() => this.failedImport(localize("buInc")));
+        console.log(uri);
+        if (uri) {
+          let dest = path.join(knownFolders.temp().path, "tempUnZip");
+          utils.Zip.unzip(uri, dest)
+            .then((res) => {
+              if (res) this.validateZipContent(res, uri);
+            })
+            .catch(() => this.failedImport(localize("buInc")));
+        }
       });
     },
     validateZipContent(extractedFolderPath, uri) {

@@ -42,7 +42,6 @@ import Interface from "./Settings/Interface.vue";
 import Options from "./Settings/Options.vue";
 import Database from "./Settings/Database.vue";
 import Reset from "./Settings/Reset.vue";
-import Help from "./Settings/Help.vue";
 import About from "./Settings/About.vue";
 export default {
   data() {

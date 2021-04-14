@@ -175,7 +175,6 @@
   "nwCat": "New category",
   "req": "Required",
   "recPic": "Recipe photo",
-  "repBtn": "REPLACE",
   "cPic": "Crop photo",
   "breakfast": "Breakfast",
   "lunch": "lunch",
@@ -311,5 +310,7 @@
   "expip": "Export in progress",
   "impip": "Import in progress",
   "srpu": "Share recipe photo using...",
-  "sru": "Share recipe using..."
+  "sru": "Share recipe using...",
+  "aap": "Attach a photo",
+  "rp": "Remove photo"
 }
