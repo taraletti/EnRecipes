@@ -46,15 +46,34 @@
   </Page>
 </template>
 
-<script>
+<script lang="ts">
 import { Screen } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
 import { mapState, mapActions } from "vuex";
 import ConfirmDialog from "./ConfirmDialog.vue";
 
+interface IData {
+  newList: unknown[];
+  stretch: boolean;
+  listHeight: number;
+}
+
 export default {
-  props: ["title", "list", "action"],
-  data() {
+  props: {
+    title: {
+      type: String,
+      required: true,
+    },
+    list: {
+      type: Array,
+      required: true,
+    },
+    action: {
+      type: String,
+      required: false,
+    },
+  },
+  data(): IData {
     return {
       newList: this.list,
       stretch: false,
@@ -66,14 +85,13 @@ export default {
   },
   methods: {
     ...mapActions(["removeListItemAction"]),
-    localized(item) {
-      if (this.title !== "lang") return localize(item);
-      else return item;
+    localized(item: string): string {
+      return this.title !== "lang" ? localize(item) : item;
     },
-    tapAction(item) {
+    tapAction(item: string): void {
       this.$modal.close(item);
     },
-    deletionConfirmation(type, description) {
+    deletionConfirmation(description: string): void {
       return this.$showModal(ConfirmDialog, {
         props: {
           title: "conf",
@@ -83,14 +101,12 @@ export default {
         },
       });
     },
-    removeItem(item) {
+    removeItem(item: string): void {
       let vm = this;
-
-      function removeListItem(type, listName, desc) {
+      function removeListItem(listName: string, desc: string): void {
         vm.deletionConfirmation(
-          type,
           `${localize(desc)} "${localize(item)}"\n\n${localize("rmLIInfo")}`
-        ).then((action) => {
+        ).then((action: boolean) => {
           if (action != null && action)
             vm.removeListItemAction({
               item,
@@ -100,20 +116,20 @@ export default {
       }
       switch (this.title) {
         case "cui":
-          removeListItem("cuisine", "cuisines", "rmCuiInfo");
+          removeListItem("cuisines", "rmCuiInfo");
           break;
         case "cat":
-          removeListItem("category", "categories", "rmCatInfo");
+          removeListItem("categories", "rmCatInfo");
           break;
         case "yieldU":
-          removeListItem("yield unit", "yieldUnits", "rmYUInfo");
+          removeListItem("yieldUnits", "rmYUInfo");
           break;
         case "Unit":
-          removeListItem("unit", "units", "rmUInfo");
+          removeListItem("units", "rmUInfo");
           break;
       }
     },
-    touch({ object, action }) {
+    touch({ object, action }): void {
       object.className = action.match(/down|move/)
         ? "listItem fade"
         : "listItem";

@@ -1,13 +1,8 @@
-import Vue from 'vue'
+import Vue from 'nativescript-vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
 import { CouchBase } from '@triniwiz/nativescript-couchbase'
-import {
-  Application,
-  getFileAccess,
-  File,
-  ApplicationSettings,
-} from '@nativescript/core'
+import { getFileAccess, File, ApplicationSettings } from '@nativescript/core'
 const EnRecipesDB = new CouchBase('EnRecipes')
 const userCuisinesDB = new CouchBase('userCuisines')
 const userCategoriesDB = new CouchBase('userCategories')

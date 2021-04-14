@@ -31,10 +31,27 @@
   </Page>
 </template>
 
-<script>
+<script lang="ts">
 import { mapState } from "vuex";
 export default {
-  props: ["title", "description", "cancelButtonText", "okButtonText"],
+  props: {
+    title: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    cancelButtonText: {
+      type: String,
+      required: true,
+    },
+    okButtonText: {
+      type: String,
+      required: true,
+    },
+  },
   computed: {
     ...mapState(["icon", "appTheme"]),
   },
