@@ -9,7 +9,7 @@ on(launchEvent, (args) => {
   }
 })
 import Vue from 'nativescript-vue'
-import EnRecipes from './components/EnRecipes'
+import EnRecipes from './components/EnRecipes.vue'
 import store from './store'
 
 import CollectionView from '@nativescript-community/ui-collectionview/vue'
