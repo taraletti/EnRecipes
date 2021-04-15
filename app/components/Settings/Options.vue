@@ -59,8 +59,9 @@
 </template>
 
 <script>
-import { ApplicationSettings, Observable } from "@nativescript/core";
+import { Observable } from "@nativescript/core";
 import { mapState, mapActions } from "vuex";
+import { localize } from "@nativescript/localize";
 import * as utils from "~/shared/utils";
 
 export default {
@@ -106,7 +107,7 @@ export default {
     toggleShake({ object }) {
       let checked = object.checked;
       if (checked && !utils.hasAccelerometer()) {
-        checked = false;
+        object.checked = false;
         this.toast = localize("noAccSensor");
         utils.timer(5, (val) => {
           if (!val) this.toast = val;
