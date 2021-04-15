@@ -129,7 +129,7 @@
     "srt": "Trier",
     "cBtn": "ANNULER",
     "rBtn": "RETIRER",
-    "rmCuiInfo": "Vous êtes sur le point de supprimer la cuisine :",
+    "rmCuiInfo": "Vous êtes sur le point de supprimer %s de la liste des cuisines",
     "rmCatInfo": "Vous êtes sur le point de retirer la catégorie :",
     "rmYUInfo": "Vous êtes sur le point de supprimer l'unité de rendement :",
     "rmUInfo": "Vous êtes sur le point de retirer l’unité :",
