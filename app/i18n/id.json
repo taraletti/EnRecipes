@@ -301,5 +301,10 @@
     "FRI": "JUM",
     "SAT": "SAB",
     "trnsl": "Terjemah",
-    "undo": "Undo"
+    "undo": "Undo",
+    "grid": "Kisi",
+    "simple": "Sederhana",
+    "detailed": "Detail",
+    "listVM": "Mode tampilan daftar",
+    "noAccSensor": "Sensor akselerometer nonaktif atau tidak berfungsi"
 }
