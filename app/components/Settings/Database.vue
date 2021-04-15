@@ -102,7 +102,7 @@ export default {
         {},
         {
           icon: "folder",
-          title: "Backup folder",
+          title: "buFol",
           subTitle: this.backupFolder,
           action: this.setBackupFolder,
         },
@@ -434,16 +434,16 @@ export default {
     showImportSummary() {
       let { found, imported, updated } = this.importSummary;
       let exists = Math.abs(found - imported - updated) + updated;
-      let importedNote = `\n${imported} ${localize("recI")}`;
-      let existsNote = `\n${exists} ${localize("recE")}`;
-      let updatedNote = `\n${updated} ${localize("recU")}`;
+      let importedNote = `\n${localize("recI")} ${imported}`;
+      let existsNote = `\n${localize("recE")} ${exists}`;
+      let updatedNote = `\n${localize("recU")} ${updated}`;
       this.progress = null;
       this.$showModal(ConfirmDialog, {
         props: {
           title: "impSuc",
           description: `${found} ${localize(
             "recF"
-          )}${importedNote}${existsNote}${updatedNote}`,
+          )}\n${importedNote}${existsNote}${updatedNote}`,
           okButtonText: "OK",
         },
       }).then(() => this.clearImportSummary());
