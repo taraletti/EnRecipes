@@ -305,13 +305,23 @@
   <string name="_app_name_1k3Sbz">"EnRecipes"</string>
   <string name="app_name">"EnRecipes"</string>
   <string name="title_activity_kimera">"EnRecipes"</string>
+  <string name="rp">"Remove photo"</string>
+  <string name="aap">"Attach a photo"</string>
+  <string name="sru">"Share recipe using..."</string>
+  <string name="srpu">"Share recipe photo using..."</string>
+  <string name="impip">"Import in progress"</string>
+  <string name="expip">"Export in progress"</string>
+  <string name="swm">"Start week on Monday"</string>
   <string name="yld">"Yield"</string>
   <string name="fltr">"Filter"</string>
   <string name="apply">"APPLY"</string>
   <string name="minimal">"Minimal"</string>
-  <string name="grid">"Grid"</string>
   <string name="simple">"Simple"</string>
+  <string name="photogrid">"Photo Grid"</string>
+  <string name="grid">"Grid"</string>
   <string name="detailed">"Detailed"</string>
   <string name="listVM">"List view mode"</string>
   <string name="noAccSensor">"Accelerometer sensor is either disabled or is not working"</string>
+  <string name="expSuc">"Export success"</string>
+  <string name="Black">"Black"</string>
 </resources>

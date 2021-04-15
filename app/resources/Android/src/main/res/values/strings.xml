@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="rp">"Remove photo"</string>
+  <string name="aap">"Attach a photo"</string>
+  <string name="sru">"Share recipe using..."</string>
+  <string name="srpu">"Share recipe photo using..."</string>
+  <string name="impip">"Import in progress"</string>
+  <string name="expip">"Export in progress"</string>
+  <string name="swm">"Start week on Monday"</string>
   <string name="yld">"Yield"</string>
   <string name="fltr">"Filter"</string>
   <string name="apply">"APPLY"</string>
   <string name="minimal">"Minimal"</string>
-  <string name="grid">"Grid"</string>
   <string name="simple">"Simple"</string>
+  <string name="photogrid">"Photo Grid"</string>
+  <string name="grid">"Grid"</string>
   <string name="detailed">"Detailed"</string>
   <string name="listVM">"List view mode"</string>
   <string name="noAccSensor">"Accelerometer sensor is either disabled or is not working"</string>
@@ -35,7 +43,6 @@
   <string name="appInfo">"EnRecipes is an open source, privacy-friendly digital cookbook that lets you create, manage and share your recipes"</string>
   <string name="donate">"Donate"</string>
   <string name="invFile">"Invalid file"</string>
-  <string name="buSuc">"Backup saved successfully to the Download folder"</string>
   <string name="buMod">"The backup file was modified elsewhere"</string>
   <string name="buEmp">"The backup file is empty"</string>
   <string name="buInc">"Malformed or corrupt backup file"</string>
@@ -50,6 +57,7 @@
   <string name="recE">"recipes already exists"</string>
   <string name="recI">"recipes imported"</string>
   <string name="recF">"recipes found"</string>
+  <string name="expSuc">"Export success"</string>
   <string name="impSuc">"Import success"</string>
   <string name="tsInfo">"separate with spaces"</string>
   <string name="ts">"Tags"</string>
@@ -130,7 +138,6 @@
   <string name="lunch">"lunch"</string>
   <string name="breakfast">"Breakfast"</string>
   <string name="cPic">"Crop photo"</string>
-  <string name="repBtn">"REPLACE"</string>
   <string name="recPic">"Recipe photo"</string>
   <string name="req">"Required"</string>
   <string name="nwCat">"New category"</string>
@@ -206,7 +213,6 @@
   <string name="title">"Title"</string>
   <string name="editRec">"Edit recipe"</string>
   <string name="newRec">"New recipe"</string>
-  <string name="tgInfo">"For reporting issues, suggestions and feedback"</string>
   <string name="joinTG">"Join the Telegram group"</string>
   <string name="ver">"Version"</string>
   <string name="impInfo">"Supports full backups exported by this app"</string>
@@ -214,6 +220,7 @@
   <string name="buInfo">"Generates a ZIP file containing all your data that can be imported back"</string>
   <string name="expBu">"Export full backup"</string>
   <string name="db">"Database"</string>
+  <string name="Black">"Black"</string>
   <string name="Dark">"Dark"</string>
   <string name="Light">"Light"</string>
   <string name="Theme">"Theme"</string>
@@ -228,10 +235,6 @@
   <string name="noFavs">"No favourites yet"</string>
   <string name="tLInfo">"Recipes you want to try later are listed here"</string>
   <string name="aD">"All done!"</string>
-  <string name="pANo">"Use the pencil button to add notes"</string>
-  <string name="pACmb">"Use the pencil button to add combinations"</string>
-  <string name="pAIns">"Use the pencil button to add instructions"</string>
-  <string name="pAIng">"Use the pencil button to add ingredients"</string>
   <string name="plsAdd">"Use the plus button to add one"</string>
   <string name="strAdd">"Start adding your recipes!"</string>
   <string name="large">"large"</string>
@@ -313,5 +316,12 @@
   <string name="_app_name_1k3Sbz">"EnRecipes"</string>
   <string name="app_name">"EnRecipes"</string>
   <string name="title_activity_kimera">"EnRecipes"</string>
+  <string name="buSuc">"buSuc"</string>
+  <string name="repBtn">"repBtn"</string>
   <string name="nThmInfo">"nThmInfo"</string>
+  <string name="tgInfo">"tgInfo"</string>
+  <string name="pANo">"pANo"</string>
+  <string name="pACmb">"pACmb"</string>
+  <string name="pAIns">"pAIns"</string>
+  <string name="pAIng">"pAIng"</string>
 </resources>

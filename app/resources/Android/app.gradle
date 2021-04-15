@@ -30,4 +30,14 @@ android {
   aaptOptions {
     additionalParameters "--no-version-vectors"
   }
+  // buildTypes {
+  //   release {
+  //     minifyEnabled true
+  //     shrinkResources false
+  //     debuggable false
+  //     jniDebuggable false
+  //     renderscriptDebuggable false
+  //   }
+  // }
+
 }

@@ -1,1 +1,1 @@
-A simple, offline recipe manager.
+A Simple, Offline Recipe Manager
