@@ -465,9 +465,7 @@ export default {
       );
     },
     showLastTried() {
-      this.toast = `${localize("triedInfo")} ${this.niceDate(
-        this.recipe.lastTried
-      )}`;
+      this.toast = localize("triedInfo", this.niceDate(this.recipe.lastTried));
       utils.timer(5, (val) => {
         if (!val) this.toast = val;
       });

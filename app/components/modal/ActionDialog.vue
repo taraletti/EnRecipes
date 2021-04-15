@@ -103,16 +103,17 @@ export default {
     },
     removeItem(item: string): void {
       let vm = this;
+      let localizedItem = `"${localize(item)}"`;
       function removeListItem(listName: string, desc: string): void {
-        vm.deletionConfirmation(
-          `${localize(desc)} "${localize(item)}"\n\n${localize("rmLIInfo")}`
-        ).then((action: boolean) => {
-          if (action != null && action)
-            vm.removeListItemAction({
-              item,
-              listName,
-            });
-        });
+        vm.deletionConfirmation(`${localize(desc, localizedItem)}`).then(
+          (action: boolean) => {
+            if (action != null && action)
+              vm.removeListItemAction({
+                item,
+                listName,
+              });
+          }
+        );
       }
       switch (this.title) {
         case "cui":
