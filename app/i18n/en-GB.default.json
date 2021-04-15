@@ -236,10 +236,10 @@
   "tsInfo": "separate with spaces",
   "impSuc": "Import success",
   "expSuc": "Export success",
-  "recF": "%s recipes found",
-  "recI": "%s recipes imported",
-  "recE": "%s recipes already exists",
-  "recU": "%s recipes updated",
+  "recF": "recipes found",
+  "recI": "recipes imported",
+  "recE": "recipes already exists",
+  "recU": "recipes updated",
   "OK": "OK",
   "Filtered recipes": "Filtered recipes",
   "Created": "Created",
@@ -291,5 +291,6 @@
   "srpu": "Share recipe photo using...",
   "sru": "Share recipe using...",
   "aap": "Attach a photo",
-  "rp": "Remove photo"
+  "rp": "Remove photo",
+  "buFol": "Backup folder"
 }
