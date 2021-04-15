@@ -137,7 +137,7 @@ export default {
     setLayoutMode() {
       this.$showModal(ActionDialog, {
         props: {
-          title: "List view mode",
+          title: "listVM",
           list: ["detailed", "grid", "photogrid", "simple", "minimal"],
         },
       }).then((action) => {
