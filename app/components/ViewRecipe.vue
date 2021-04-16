@@ -433,7 +433,7 @@ export default {
     changeYield() {
       this.$showModal(PromptDialog, {
         props: {
-          title: `${localize("req")} ${localize(this.recipe.yield.unit)}`,
+          title: `${localize("req", localize(this.recipe.yield.unit))}`,
           placeholder: Math.abs(parseFloat(this.yieldMultiplier)),
           action: "SET",
         },
