@@ -94,7 +94,6 @@
   "buInfo": "Generates a ZIP file containing all your data that can be imported back",
   "impBu": "Import data",
   "impInfo": "Supports full backups exported by this app",
-  "ver": "Version",
   "joinTG": "Join the Telegram group",
   "newRec": "New recipe",
   "editRec": "Edit recipe",
