@@ -77,138 +77,138 @@
     "medium": "médio",
     "large": "grande",
     "strAdd": "Comece a adicionar as suas receitas!",
-    "plsAdd": "",
-    "pAIng": "",
-    "pAIns": "",
-    "pACmb": "",
-    "pANo": "",
-    "aD": "",
-    "tLInfo": "",
-    "noFavs": "",
-    "fsList": "",
-    "noRecs": "",
-    "noRecsInTL": "",
-    "noRecsInFavs": "",
-    "noRecsInFtr": "",
-    "intf": "",
-    "lang": "",
-    "sysDef": "",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     "Theme": "Tema",
     "Light": "Claro",
     "Dark": "Escuro",
-    "db": "",
-    "expBu": "",
-    "buInfo": "",
-    "impBu": "",
-    "impInfo": "",
-    "ver": "",
-    "joinTG": "",
-    "tgInfo": "",
-    "newRec": "",
-    "editRec": "",
-    "title": "",
-    "cat": "",
-    "prepT": "",
-    "cookT": "",
-    "yieldQ": "",
-    "yieldU": "",
-    "ing": "",
-    "ings": "",
-    "aIngBtn": "",
-    "ins": "",
-    "inss": "",
-    "aStpBtn": "",
-    "cmb": "",
-    "cmbs": "",
-    "addCmbBtn": "",
-    "no": "",
-    "nos": "",
-    "aNoBtn": "",
-    "it": "",
-    "stp": "",
-    "srt": "",
-    "cBtn": "",
-    "rBtn": "",
-    "rmCuiInfo": "",
-    "rmCatInfo": "",
-    "rmYUInfo": "",
-    "rmUInfo": "",
-    "rmLIInfo": "",
-    "aBtn": "",
-    "selRec": "",
-    "recListEmp": "",
-    "recTitle": "",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     "hr": "hr",
     "min": "min",
-    "shr": "",
-    "pht": "",
-    "rec": "",
-    "fil": "",
-    "ovw": "",
-    "aNBtn": "",
+
+
+
+
+
+
     "SET": "SET",
-    "appRst": "",
-    "rst": "",
-    "nThmInfo": "",
-    "nLangInfo": "",
-    "grant": "",
-    "reqAcc": "",
-    "nNBtn": "",
-    "conBtn": "",
-    "dend": "",
-    "aFBu": "",
-    "favd": "",
-    "unfavd": "",
-    "aTry": "",
-    "rmTry": "",
-    "conf": "",
-    "delRecInfo": "",
-    "delRecsInfo": "",
-    "recs": "",
-    "sltd": "",
-    "dBtn": "",
-    "ser": "",
-    "unsaved": "",
-    "disc": "",
-    "disBtn": "",
-    "kEdit": "",
-    "rmIng": "",
-    "rmIns": "",
-    "rmN": "",
-    "rmCmb": "",
-    "nwYiU": "",
-    "nwCat": "",
-    "req": "",
-    "recPic": "",
-    "repBtn": "",
-    "cPic": "",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     "breakfast": "café da manhã",
     "lunch": "almoço",
     "dinner": "jantar",
     "snacks": "lanches",
-    "triedInfo": "",
+
     "today": "hoje",
     "yesterday": "ontem",
-    "dAgo": "",
-    "wAgo": "",
-    "mAgo": "",
-    "ltAgo": "",
-    "vrfy": "",
-    "appCrd": "",
-    "gh": "",
-    "priv": "",
-    "guide": "",
-    "opts": "",
-    "sVw": "",
-    "sVwInfo": "",
-    "rest": "",
-    "restCuiL": "",
-    "restCatL": "",
-    "restYUL": "",
-    "restUL": "",
-    "restInfo": "",
-    "restDone": "",
-    "resNF": "",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     "Quickest first": "Mais rápidas primeiro",
     "Slowest first": "Mais lentas primeiro",
     "Rating": "Avaliação",
@@ -219,12 +219,12 @@
     "Easy": "Fácil",
     "Moderate": "Moderada",
     "Challenging": "Desafiadora",
-    "newCui": "",
-    "newUnit": "",
+
+
     "Unit": "Unidade",
-    "cui": "",
-    "cuis": "",
-    "allCuis": "",
+
+
+
     "American": "Americana",
     "Brazilian": "Brasileira",
     "British": "Britânica",
@@ -255,71 +255,71 @@
     "Thai": "Tailandesa",
     "Turkish": "Turca",
     "Vietnamese": "Vietnamita",
-    "allCats": "",
-    "allTs": "",
-    "noTs": "",
-    "ts": "",
-    "tsInfo": "",
-    "impSuc": "",
-    "recF": "",
-    "recI": "",
-    "recE": "",
-    "recU": "",
+
+
+
+
+
+
+
+
+
+
     "OK": "OK",
-    "Filtered recipes": "",
+
     "Created": "Criado",
-    "stars": "",
-    "untRec": "",
-    "recRm": "",
-    "impFail": "",
-    "buInc": "",
-    "buEmp": "",
-    "buMod": "",
-    "buSuc": "",
-    "invFile": "",
-    "donate": "",
-    "appInfo": "",
-    "help": "",
-    "trySer": "",
-    "January": "",
-    "February": "",
-    "March": "",
-    "April": "",
-    "May": "",
-    "June": "",
-    "July": "",
-    "August": "",
-    "September": "",
-    "October": "",
-    "November": "",
-    "December": "",
-    "SUN": "",
-    "MON": "",
-    "TUE": "",
-    "WED": "",
-    "THU": "",
-    "FRI": "",
-    "SAT": "",
-    "trnsl": "",
-    "undo": "",
-    "fltr": "",
-    "simple": "",
-    "impip": "",
-    "minimal": "",
-    "grid": "",
-    "buFol": "",
-    "swm": "",
-    "rp": "",
-    "Black": "",
-    "yld": "",
-    "expSuc": "",
-    "apply": "",
-    "expip": "",
-    "srpu": "",
-    "listVM": "",
-    "sru": "",
-    "noAccSensor": "",
-    "detailed": "",
-    "photogrid": "",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     "aap": ""
 }

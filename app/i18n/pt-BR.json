@@ -157,169 +157,169 @@
     "conBtn": "continuar",
     "dend": "Acesso negado",
     "aFBu": "Adicione um receita para realizar um backup",
-    "favd": "",
-    "unfavd": "",
-    "aTry": "",
-    "rmTry": "",
+
+
+
+
     "conf": "Confirmar",
-    "delRecInfo": "",
-    "delRecsInfo": "",
-    "recs": "",
+
+
+
     "sltd": "Selecionar",
     "dBtn": "Deletar",
     "ser": "Procurar",
-    "unsaved": "",
-    "disc": "",
-    "disBtn": "",
-    "kEdit": "",
-    "rmIng": "",
-    "rmIns": "",
-    "rmN": "",
-    "rmCmb": "",
-    "nwYiU": "",
-    "nwCat": "",
-    "req": "",
-    "recPic": "",
-    "repBtn": "",
-    "cPic": "",
-    "breakfast": "",
-    "lunch": "",
-    "dinner": "",
-    "snacks": "",
-    "triedInfo": "",
-    "today": "",
-    "yesterday": "",
-    "dAgo": "",
-    "wAgo": "",
-    "mAgo": "",
-    "ltAgo": "",
-    "vrfy": "",
-    "appCrd": "",
-    "gh": "",
-    "priv": "",
-    "guide": "",
-    "opts": "",
-    "sVw": "",
-    "sVwInfo": "",
-    "rest": "",
-    "restCuiL": "",
-    "restCatL": "",
-    "restYUL": "",
-    "restUL": "",
-    "restInfo": "",
-    "restDone": "",
-    "resNF": "",
-    "Quickest first": "",
-    "Slowest first": "",
-    "Rating": "",
-    "Difficulty level": "",
-    "Last updated": "",
-    "Newest first": "",
-    "Oldest first": "",
-    "Easy": "",
-    "Moderate": "",
-    "Challenging": "",
-    "newCui": "",
-    "newUnit": "",
-    "Unit": "",
-    "cui": "",
-    "cuis": "",
-    "allCuis": "",
-    "American": "",
-    "Brazilian": "",
-    "British": "",
-    "Chinese": "",
-    "Danish": "",
-    "Egyptian": "",
-    "English": "",
-    "Filipino": "",
-    "French": "",
-    "German": "",
-    "Greek": "",
-    "Indian": "",
-    "Irish": "",
-    "Italian": "",
-    "Jamaican": "",
-    "Japanese": "",
-    "Jewish": "",
-    "Kenyan": "",
-    "Korean": "",
-    "Mexican": "",
-    "Nigerian": "",
-    "Portuguese": "",
-    "Russian": "",
-    "Scottish": "",
-    "Spanish": "",
-    "Sri Lankan": "",
-    "Swedish": "",
-    "Thai": "",
-    "Turkish": "",
-    "Vietnamese": "",
-    "allCats": "",
-    "allTs": "",
-    "noTs": "",
-    "ts": "",
-    "tsInfo": "",
-    "impSuc": "",
-    "recF": "",
-    "recI": "",
-    "recE": "",
-    "recU": "",
-    "OK": "",
-    "Filtered recipes": "",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     "Created": "Criar",
-    "stars": "",
-    "untRec": "",
-    "recRm": "",
-    "impFail": "",
-    "buInc": "",
-    "buEmp": "",
-    "buMod": "",
-    "buSuc": "",
-    "invFile": "",
-    "donate": "",
-    "appInfo": "",
-    "help": "",
-    "trySer": "",
-    "January": "",
-    "February": "",
-    "March": "",
-    "April": "",
-    "May": "",
-    "June": "",
-    "July": "",
-    "August": "",
-    "September": "",
-    "October": "",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     "November": "Novembro",
-    "December": "",
-    "SUN": "",
-    "MON": "",
-    "TUE": "",
-    "WED": "",
-    "THU": "",
-    "FRI": "",
-    "SAT": "",
-    "trnsl": "",
-    "undo": "",
-    "rp": "",
-    "expSuc": "",
-    "detailed": "",
-    "minimal": "",
-    "srpu": "",
-    "yld": "",
-    "expip": "",
-    "Black": "",
-    "photogrid": "",
-    "simple": "",
-    "apply": "",
-    "grid": "",
-    "aap": "",
-    "swm": "",
-    "noAccSensor": "",
-    "sru": "",
-    "fltr": "",
-    "buFol": "",
-    "impip": "",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     "listVM": ""
 }
