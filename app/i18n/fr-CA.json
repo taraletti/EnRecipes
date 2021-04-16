@@ -178,7 +178,7 @@
     "rmCmb": "Combinaison retirée",
     "nwYiU": "Nouvelle unité de rendement",
     "nwCat": "Nouvelle catégorie",
-    "req": "Obligatoire",
+    "req": "%s requise",
     "recPic": "Photo de recette",
     "repBtn": "REMPLACER",
     "cPic": "Recadrer la photo",
