@@ -321,5 +321,6 @@
     "srpu": "Partager une photo de recette en utilisant…",
     "impip": "Importation en cours",
     "expip": "Exportation en cours",
-    "buFol": "Dossier de sauvegarde"
+    "buFol": "Dossier de sauvegarde",
+    "noRecsInL": "Aucune des recettes ici ne correspond à votre recherche"
 }

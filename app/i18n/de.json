@@ -321,5 +321,6 @@
     "srpu": "Rezeptfoto teilen mit …",
     "impip": "Import wird durchgeführt",
     "expip": "Export wird durchgeführt",
-    "buFol": "Sicherungsordner"
+    "buFol": "Sicherungsordner",
+    "noRecsInL": "Keines der hier aufgeführten Rezepte entspricht Ihrer Suche"
 }

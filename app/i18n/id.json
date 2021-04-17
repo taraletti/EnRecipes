@@ -321,5 +321,6 @@
     "minimal": "Minimal",
     "photogrid": "Photo Grid",
     "expSuc": "Ekspor berhasil",
-    "Black": "Hitam"
+    "Black": "Hitam",
+    "noRecsInL": "Tidak ada resep di sini yang cocok dengan pencarian Anda"
 }
