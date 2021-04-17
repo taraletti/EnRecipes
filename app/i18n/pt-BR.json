@@ -1,325 +1,143 @@
 {
-    "app.name": "EnRecipes",
-    "EnRecipes": "EnRecipes",
-    "trylater": "Experimentar depois",
-    "favourites": "Favoritos",
-    "planner": "Planejador de refeições",
-    "grocery": "Lista de compra",
-    "Settings": "Ajustes",
-    "About": "Sobre",
-    "Appetizers": "Aperitivos",
-    "Barbecue": "Churrasco",
-    "Beverages": "Bebidas",
-    "Breads": "Pães",
-    "Breakfast": "Café da manhã",
-    "Desserts": "Sobremesas",
-    "Dinner": "Jantar",
-    "Drinks": "Bebidas alcoólicas",
-    "Healthy": "Saudável",
-    "Lunch": "Almoço",
-    "Main dishes": "Pratos principais",
-    "Meat": "Carnes",
-    "Noodles": "Macarrão fita",
-    "Pasta": "Macarrão",
-    "Poultry": "Carne de aves",
-    "Rice": "Arroz",
-    "Salads": "Saladas",
-    "Sauces": "Molhos",
-    "Seafood": "Frutos do mar",
-    "Side dishes": "Acompanhamentos",
-    "Snacks": "Lanches",
-    "Soups": "Sopas",
-    "Undefined": "Indefinido",
-    "Vegan": "Vegano",
-    "Vegetarian": "Vegetariano",
-    "Serving": "Porção",
-    "Piece": "Pedaço",
-    "Teaspoon": "Colher de chá",
-    "Tablespoon": "Colher de sopa",
-    "Fluid Ounce": "Onça Fluída (Oz.)",
-    "Ounce": "Onça",
-    "Pound": "Libra",
-    "Gram": "Grama",
-    "Kilogram": "Quilograma",
-    "Cup": "Copo",
-    "Gallon": "Galão",
-    "Millilitre": "Mililitro",
-    "Litre": "Litro",
-    "Roll": "Lista",
-    "Patty": "Empada",
-    "Loaf": "Pão",
-    "unit": "Unidade",
-    "tsp": "cc",
-    "dsp": "cds",
-    "tbsp": "cds",
-    "fl oz": "onça fluída",
-    "cup": "copo",
-    "pt": "pt",
-    "qt": "qt",
-    "gal": "gal",
-    "ml": "ml",
-    "l": "litro",
-    "oz": "onça",
-    "lb": "libra",
-    "mg": "Miligrama",
-    "g": "grama",
-    "kg": "Kilo",
-    "cm": "Centimetro",
-    "in": "Entrar",
-    "leaf": "folha",
-    "clove": "dente de alho",
-    "piece": "peça",
-    "pinch": "pitada",
-    "drop": "solta",
-    "dozen": "dúzia",
-    "stick": "bastão",
-    "small": "pequeno",
-    "medium": "médio",
-    "large": "grande",
-    "strAdd": "Comece a adicionar suas receitas!",
-    "plsAdd": "Use o botão de adição para adicionar um",
-    "pAIng": "Use o botão de lápis para adicionar ingredientes",
-    "pAIns": "Use o botão de lápis para adicionar instruções",
-    "pACmb": "Use o botão de lápis para adicionar combinações",
-    "pANo": "Use o botão de lápis para adicionar notas",
-    "aD": "Tudo feito!",
-    "tLInfo": "As receitas que você deseja experimentar mais tarde estão listadas aqui",
-    "noFavs": "Ainda não há favoritos",
-    "fsList": "Suas receitas favoritas estão listadas aqui",
-    "noRecs": "Nenhuma receita corresponde à sua pesquisa",
-    "noRecsInTL": "Nenhuma receita corresponde à sua pesquisa na lista. Tente mais tarde",
-    "noRecsInFavs": "Nenhuma receita corresponde à sua pesquisa na lista de favoritos",
-    "noRecsInFtr": "Nenhuma receita corresponde à sua pesquisa nas Receitas Filtradas",
-    "intf": "Interface",
-    "lang": "Idioma",
-    "sysDef": "Padrão do sistema",
-    "Theme": "Tema",
-    "Light": "Claro",
-    "Dark": "Escuro",
-    "db": "Base de dados",
-    "expBu": "Exportar backup completo",
-    "buInfo": "Gera um arquivo ZIP contendo todos os seus dados que podem ser importados de volta",
-    "impBu": "Importar dados",
-    "impInfo": "Suporta backups completos exportados por este aplicativo",
-    "ver": "Versão",
-    "joinTG": "Junte-se ao grupo Telegram",
-    "tgInfo": "Para relatar problemas, sugestões e feedback",
-    "newRec": "Nova receita",
-    "editRec": "Editar receita",
-    "title": "Título",
-    "cat": "Categoria",
-    "prepT": "Tempo de preparação",
-    "cookT": "Tempo de cozimento",
-    "yieldQ": "Quantidade de rendimento",
-    "yieldU": "Unidade de rendimento",
-    "ing": "Ingrediente",
-    "ings": "Ingredientes",
-    "aIngBtn": "ADICIONE INGREDIENTE",
-    "ins": "Instrução",
-    "inss": "Instruções",
-    "aStpBtn": "ADICIONE ETAPA",
-    "cmb": "Combinação",
-    "cmbs": "Combinação",
-    "addCmbBtn": "ADICIONE COMBINAÇÃO",
-    "no": "Nota",
-    "nos": "Notas",
-    "aNoBtn": "ADICIONAR NOTA",
-    "it": "Item",
-    "stp": "Etapa",
-    "srt": "Ordenar por",
-    "cBtn": "CANCELAR",
-    "rBtn": "REMOVER",
-    "rmCuiInfo": "Você está prestes a remover a cozinha:",
-    "rmCatInfo": "Você está prestes a remover a categoria:",
-    "rmYUInfo": "Você está prestes a remover a unidade de rendimento:",
-    "rmUInfo": "Você está prestes a remover a unidade:",
-    "rmLIInfo": "As receitas existentes não serão afetadas",
-    "aBtn": "ADICIONAR",
-    "selRec": "Selecione a receita",
-    "recListEmp": "Nada aqui! Adicione algumas receitas e tente novamente",
-    "recTitle": "Minha Receita Saudável",
-    "hr": "h",
-    "min": "min",
-    "shr": "compartilhar",
-    "pht": "Foto da receita",
-    "rec": "Texto da receita",
-    "fil": "Arquivo de receita",
-    "ovw": "Resumo",
-    "aNBtn": "adicionar novo",
-    "SET": "definir",
-    "appRst": "É necessário reiniciar o aplicativo",
-    "rst": "REINICIAR",
-    "nThmInfo": "Reinicie o EnRecipes para usar o novo tema",
-    "nLangInfo": "Reinicie o EnRecipes para usar o novo idioma",
-    "grant": "Garantir acesso",
-    "reqAcc": "O EnRecipes requer permissão de armazenamento para definir a foto da receita, exportar e importar dados",
-    "nNBtn": "AGORA NÃO",
-    "conBtn": "continuar",
-    "dend": "Acesso negado",
-    "aFBu": "Adicione um receita para realizar um backup",
-
-
-
-
-    "conf": "Confirmar",
-
-
-
-    "sltd": "Selecionar",
-    "dBtn": "Deletar",
-    "ser": "Procurar",
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    "Created": "Criar",
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    "November": "Novembro",
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    "listVM": ""
+  "About": "Sobre",
+  "aBtn": "ADICIONAR",
+  "aD": "Tudo feito!",
+  "addCmbBtn": "ADICIONE COMBINAÇÃO",
+  "aFBu": "Adicione um receita para realizar um backup",
+  "aIngBtn": "ADICIONE INGREDIENTE",
+  "aNBtn": "adicionar novo",
+  "aNoBtn": "ADICIONAR NOTA",
+  "app.name": "EnRecipes",
+  "Appetizers": "Aperitivos",
+  "appRst": "É necessário reiniciar o aplicativo",
+  "aStpBtn": "ADICIONE ETAPA",
+  "Barbecue": "Churrasco",
+  "Beverages": "Bebidas",
+  "Breads": "Pães",
+  "buInfo": "Gera um arquivo ZIP contendo todos os seus dados que podem ser importados de volta",
+  "cat": "Categoria",
+  "cBtn": "CANCELAR",
+  "clove": "dente de alho",
+  "cm": "Centimetro",
+  "cmbs": "Combinação",
+  "conBtn": "continuar",
+  "conf": "Confirmar",
+  "cookT": "Tempo de cozimento",
+  "Created": "Criar",
+  "cup": "copo",
+  "Cup": "Copo",
+  "Dark": "Escuro",
+  "db": "Base de dados",
+  "dBtn": "Deletar",
+  "Desserts": "Sobremesas",
+  "dozen": "dúzia",
+  "drop": "solta",
+  "dsp": "cds",
+  "editRec": "Editar receita",
+  "EnRecipes": "EnRecipes",
+  "expBu": "Exportar backup completo",
+  "favourites": "Favoritos",
+  "fl oz": "onça fluída",
+  "Fluid Ounce": "Onça Fluída (Oz.)",
+  "fsList": "Suas receitas favoritas estão listadas aqui",
+  "g": "grama",
+  "gal": "gal",
+  "Gallon": "Galão",
+  "Gram": "Grama",
+  "grocery": "Lista de compra",
+  "Healthy": "Saudável",
+  "hr": "h",
+  "impBu": "Importar dados",
+  "impInfo": "Suporta backups completos exportados por este aplicativo",
+  "in": "Entrar",
+  "ings": "Ingredientes",
+  "inss": "Instruções",
+  "intf": "Interface",
+  "it": "Item",
+  "joinTG": "Junte-se ao grupo Telegram",
+  "kg": "Kilo",
+  "Kilogram": "Quilograma",
+  "l": "litro",
+  "lang": "Idioma",
+  "large": "grande",
+  "lb": "libra",
+  "leaf": "folha",
+  "Light": "Claro",
+  "listVM": "",
+  "Litre": "Litro",
+  "Loaf": "Pão",
+  "Main dishes": "Pratos principais",
+  "Meat": "Carnes",
+  "medium": "médio",
+  "mg": "Miligrama",
+  "Millilitre": "Mililitro",
+  "min": "min",
+  "ml": "ml",
+  "newRec": "Nova receita",
+  "nLangInfo": "Reinicie o EnRecipes para usar o novo idioma",
+  "nNBtn": "AGORA NÃO",
+  "no": "Nota",
+  "noFavs": "Ainda não há favoritos",
+  "Noodles": "Macarrão fita",
+  "noRecs": "Nenhuma receita corresponde à sua pesquisa",
+  "nos": "Notas",
+  "November": "Novembro",
+  "Ounce": "Onça",
+  "oz": "onça",
+  "Pasta": "Macarrão",
+  "Patty": "Empada",
+  "pht": "Foto da receita",
+  "piece": "peça",
+  "Piece": "Pedaço",
+  "pinch": "pitada",
+  "planner": "Planejador de refeições",
+  "plsAdd": "Use o botão de adição para adicionar um",
+  "Poultry": "Carne de aves",
+  "Pound": "Libra",
+  "prepT": "Tempo de preparação",
+  "pt": "pt",
+  "qt": "qt",
+  "rBtn": "REMOVER",
+  "rec": "Texto da receita",
+  "recListEmp": "Nada aqui! Adicione algumas receitas e tente novamente",
+  "recTitle": "Minha Receita Saudável",
+  "Rice": "Arroz",
+  "rmCatInfo": "Você está prestes a remover a categoria:",
+  "rmCuiInfo": "Você está prestes a remover a cozinha:",
+  "rmUInfo": "Você está prestes a remover a unidade:",
+  "rmYUInfo": "Você está prestes a remover a unidade de rendimento:",
+  "Roll": "Lista",
+  "rst": "REINICIAR",
+  "Salads": "Saladas",
+  "Sauces": "Molhos",
+  "Seafood": "Frutos do mar",
+  "selRec": "Selecione a receita",
+  "ser": "Procurar",
+  "Serving": "Porção",
+  "SET": "definir",
+  "Settings": "Ajustes",
+  "shr": "compartilhar",
+  "Side dishes": "Acompanhamentos",
+  "sltd": "Selecionar",
+  "small": "pequeno",
+  "Soups": "Sopas",
+  "srt": "Ordenar por",
+  "stick": "bastão",
+  "stp": "Etapa",
+  "strAdd": "Comece a adicionar suas receitas!",
+  "sysDef": "Padrão do sistema",
+  "Tablespoon": "Colher de sopa",
+  "tbsp": "cds",
+  "Teaspoon": "Colher de chá",
+  "Theme": "Tema",
+  "title": "Título",
+  "tLInfo": "As receitas que você deseja experimentar mais tarde estão listadas aqui",
+  "trylater": "Experimentar depois",
+  "tsp": "cc",
+  "Undefined": "Indefinido",
+  "unit": "Unidade",
+  "Vegan": "Vegano",
+  "Vegetarian": "Vegetariano",
+  "yieldQ": "Quantidade de rendimento",
+  "yieldU": "Unidade de rendimento"
 }

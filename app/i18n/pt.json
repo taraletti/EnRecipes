@@ -1,325 +1,131 @@
 {
-    "app.name": "EnRecipes",
-    "EnRecipes": "EnRecipes",
-    "trylater": "Tente Mais Tarde",
-    "favourites": "Favoritos",
-    "planner": "Plano Refeições",
-    "grocery": "Lista Supermercado",
-    "Settings": "Definições",
-    "About": "Sobre",
-    "Appetizers": "Aperitivos",
-    "Barbecue": "Churrasco",
-    "Beverages": "Bebidas",
-    "Breads": "Pães",
-    "Breakfast": "Café da manhã",
-    "Desserts": "Sobremesas",
-    "Dinner": "Jantar",
-    "Drinks": "Bebidas",
-    "Healthy": "Saudável",
-    "Lunch": "Almoço",
-    "Main dishes": "Pratos principais",
-    "Meat": "Carne",
-    "Noodles": "Macarrão",
-    "Pasta": "Massa",
-    "Poultry": "Aves",
-    "Rice": "Arroz",
-    "Salads": "Saladas",
-    "Sauces": "Molhos",
-    "Seafood": "Marisco",
-    "Side dishes": "Acompanhamentos",
-    "Snacks": "Lanches",
-    "Soups": "Sopas",
-    "Undefined": "Indefinido",
-    "Vegan": "Vegan",
-    "Vegetarian": "Vegetariano",
-    "Serving": "Porção",
-    "Piece": "Peça",
-    "Teaspoon": "Colher de chá",
-    "Tablespoon": "Colher de sopa",
-    "Fluid Ounce": "Fluid Ounce",
-    "Ounce": "Ounce",
-    "Pound": "Pound",
-    "Gram": "Grama",
-    "Kilogram": "Quilograma",
-    "Cup": "Copo",
-    "Gallon": "Gallon",
-    "Millilitre": "Mililitro",
-    "Litre": "Litro",
-    "Roll": "Rolo",
-    "Patty": "Empada",
-    "Loaf": "Loaf",
-    "unit": "unidade",
-    "tsp": "colher de chá",
-    "dsp": "colher de sobremesa",
-    "tbsp": "colher de sopa",
-    "fl oz": "fl oz",
-    "cup": "copo",
-    "pt": "pt",
-    "qt": "qt",
-    "gal": "gal",
-    "ml": "ml",
-    "l": "l",
-    "oz": "oz",
-    "lb": "lb",
-    "mg": "mg",
-    "g": "g",
-    "kg": "kg",
-    "cm": "cm",
-    "in": "in",
-    "leaf": "folha",
-    "clove": "bulbo",
-    "piece": "peça",
-    "pinch": "pitada",
-    "drop": "solta",
-    "dozen": "dúzia",
-    "stick": "galho",
-    "small": "pequeno",
-    "medium": "médio",
-    "large": "grande",
-    "strAdd": "Comece a adicionar as suas receitas!",
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    "Theme": "Tema",
-    "Light": "Claro",
-    "Dark": "Escuro",
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    "hr": "hr",
-    "min": "min",
-
-
-
-
-
-
-    "SET": "SET",
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    "breakfast": "café da manhã",
-    "lunch": "almoço",
-    "dinner": "jantar",
-    "snacks": "lanches",
-
-    "today": "hoje",
-    "yesterday": "ontem",
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    "Quickest first": "Mais rápidas primeiro",
-    "Slowest first": "Mais lentas primeiro",
-    "Rating": "Avaliação",
-    "Difficulty level": "Nível de dificuldade",
-    "Last updated": "Ultima atualização",
-    "Newest first": "Mais recente primeiro",
-    "Oldest first": "Mais antiga primeiro",
-    "Easy": "Fácil",
-    "Moderate": "Moderada",
-    "Challenging": "Desafiadora",
-
-
-    "Unit": "Unidade",
-
-
-
-    "American": "Americana",
-    "Brazilian": "Brasileira",
-    "British": "Britânica",
-    "Chinese": "Chinesa",
-    "Danish": "Dinamarquêsa",
-    "Egyptian": "Egípcia",
-    "English": "Inglêsa",
-    "Filipino": "Filipina",
-    "French": "Francesa",
-    "German": "Alemã",
-    "Greek": "Grega",
-    "Indian": "Indiana",
-    "Irish": "Irlândesa",
-    "Italian": "Italiana",
-    "Jamaican": "Jamaicana",
-    "Japanese": "Japonêsa",
-    "Jewish": "Judaica",
-    "Kenyan": "Queniana",
-    "Korean": "Coreana",
-    "Mexican": "Mexicana",
-    "Nigerian": "Nigeriana",
-    "Portuguese": "Portuguesa",
-    "Russian": "Russa",
-    "Scottish": "Escocêsa",
-    "Spanish": "Espanhola",
-    "Sri Lankan": "Cingalês",
-    "Swedish": "Sueca",
-    "Thai": "Tailandesa",
-    "Turkish": "Turca",
-    "Vietnamese": "Vietnamita",
-
-
-
-
-
-
-
-
-
-
-    "OK": "OK",
-
-    "Created": "Criado",
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    "aap": ""
+  "aap": "",
+  "About": "Sobre",
+  "American": "Americana",
+  "app.name": "EnRecipes",
+  "Appetizers": "Aperitivos",
+  "Barbecue": "Churrasco",
+  "Beverages": "Bebidas",
+  "Brazilian": "Brasileira",
+  "Breads": "Pães",
+  "breakfast": "café da manhã",
+  "British": "Britânica",
+  "Challenging": "Desafiadora",
+  "Chinese": "Chinesa",
+  "clove": "bulbo",
+  "cm": "cm",
+  "Created": "Criado",
+  "cup": "copo",
+  "Cup": "Copo",
+  "Danish": "Dinamarquêsa",
+  "Dark": "Escuro",
+  "Desserts": "Sobremesas",
+  "Difficulty level": "Nível de dificuldade",
+  "dinner": "jantar",
+  "dozen": "dúzia",
+  "drop": "solta",
+  "dsp": "colher de sobremesa",
+  "Easy": "Fácil",
+  "Egyptian": "Egípcia",
+  "English": "Inglêsa",
+  "EnRecipes": "EnRecipes",
+  "favourites": "Favoritos",
+  "Filipino": "Filipina",
+  "fl oz": "fl oz",
+  "Fluid Ounce": "Fluid Ounce",
+  "French": "Francesa",
+  "g": "g",
+  "gal": "gal",
+  "Gallon": "Gallon",
+  "German": "Alemã",
+  "Gram": "Grama",
+  "Greek": "Grega",
+  "grocery": "Lista Supermercado",
+  "Healthy": "Saudável",
+  "hr": "hr",
+  "in": "in",
+  "Indian": "Indiana",
+  "Irish": "Irlândesa",
+  "Italian": "Italiana",
+  "Jamaican": "Jamaicana",
+  "Japanese": "Japonêsa",
+  "Jewish": "Judaica",
+  "Kenyan": "Queniana",
+  "kg": "kg",
+  "Kilogram": "Quilograma",
+  "Korean": "Coreana",
+  "l": "l",
+  "large": "grande",
+  "Last updated": "Ultima atualização",
+  "lb": "lb",
+  "leaf": "folha",
+  "Light": "Claro",
+  "Litre": "Litro",
+  "Loaf": "Loaf",
+  "lunch": "almoço",
+  "Main dishes": "Pratos principais",
+  "Meat": "Carne",
+  "medium": "médio",
+  "Mexican": "Mexicana",
+  "mg": "mg",
+  "Millilitre": "Mililitro",
+  "min": "min",
+  "ml": "ml",
+  "Moderate": "Moderada",
+  "Newest first": "Mais recente primeiro",
+  "Nigerian": "Nigeriana",
+  "Noodles": "Macarrão",
+  "OK": "OK",
+  "Oldest first": "Mais antiga primeiro",
+  "Ounce": "Ounce",
+  "oz": "oz",
+  "Pasta": "Massa",
+  "Patty": "Empada",
+  "piece": "peça",
+  "Piece": "Peça",
+  "pinch": "pitada",
+  "planner": "Plano Refeições",
+  "Portuguese": "Portuguesa",
+  "Poultry": "Aves",
+  "Pound": "Pound",
+  "pt": "pt",
+  "qt": "qt",
+  "Quickest first": "Mais rápidas primeiro",
+  "Rating": "Avaliação",
+  "Rice": "Arroz",
+  "Roll": "Rolo",
+  "Russian": "Russa",
+  "Salads": "Saladas",
+  "Sauces": "Molhos",
+  "Scottish": "Escocêsa",
+  "Seafood": "Marisco",
+  "Serving": "Porção",
+  "SET": "SET",
+  "Settings": "Definições",
+  "Side dishes": "Acompanhamentos",
+  "Slowest first": "Mais lentas primeiro",
+  "small": "pequeno",
+  "snacks": "lanches",
+  "Soups": "Sopas",
+  "Spanish": "Espanhola",
+  "Sri Lankan": "Cingalês",
+  "stick": "galho",
+  "strAdd": "Comece a adicionar as suas receitas!",
+  "Swedish": "Sueca",
+  "Tablespoon": "Colher de sopa",
+  "tbsp": "colher de sopa",
+  "Teaspoon": "Colher de chá",
+  "Thai": "Tailandesa",
+  "Theme": "Tema",
+  "today": "hoje",
+  "trylater": "Tente Mais Tarde",
+  "tsp": "colher de chá",
+  "Turkish": "Turca",
+  "Undefined": "Indefinido",
+  "unit": "unidade",
+  "Unit": "Unidade",
+  "Vegan": "Vegan",
+  "Vegetarian": "Vegetariano",
+  "Vietnamese": "Vietnamita",
+  "yesterday": "ontem"
 }
