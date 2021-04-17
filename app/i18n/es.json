@@ -321,5 +321,6 @@
     "impip": "Importación en curso",
     "expip": "Exportación en curso",
     "swm": "Comienza la semana el lunes",
-    "yld": "Producir"
+    "yld": "Producir",
+    "noRecsInL": "Ninguna de las recetas aquí coincide con su búsqueda"
 }
