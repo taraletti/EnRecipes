@@ -214,10 +214,10 @@ export default new Vuex.Store({
     currentComponent: 'EnRecipes',
     sortType: 'Oldest first',
     language: [
-      {
-        locale: 'da',
-        title: 'Dansk',
-      },
+      // {
+      //   locale: 'da',
+      //   title: 'Dansk',
+      // },
       {
         locale: 'de',
         title: 'Deutsch',
@@ -247,6 +247,18 @@ export default new Vuex.Store({
         title: 'Français (CH)',
       },
       {
+        locale: 'hi',
+        title: 'हिंदी',
+      },
+      {
+        locale: 'ml',
+        title: 'മലയാളം',
+      },
+      {
+        locale: 'id',
+        title: 'Indonesia',
+      },
+      {
         locale: 'it',
         title: 'Italiano',
       },
@@ -258,10 +270,10 @@ export default new Vuex.Store({
         locale: 'nl',
         title: 'Nederlands',
       },
-      {
-        locale: 'pt',
-        title: 'Português',
-      },
+      // {
+      //   locale: 'pt',
+      //   title: 'Português',
+      // },
       {
         locale: 'ru',
         title: 'Русский',
@@ -269,6 +281,10 @@ export default new Vuex.Store({
       {
         locale: 'ta',
         title: 'தமிழ்',
+      },
+      {
+        locale: 'te',
+        title: 'తెలుగు',
       },
     ],
     shakeEnabled: true,

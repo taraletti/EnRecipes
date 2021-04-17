@@ -452,21 +452,21 @@ export default {
       let dayDiff = Math.ceil(diff / 86400);
       if (isNaN(dayDiff) || dayDiff < 0) return "";
 
-      function duration(value) {
-        return localize(value);
+      function duration(value, number) {
+        return number ? localize(value, number) : localize(value);
       }
       return (
         (diff < 86400 && lastTried > midnight && duration("today")) ||
         (dayDiff == 1 && "yesterday") ||
-        (dayDiff < 7 && dayDiff + " " + duration("dAgo")) ||
-        (dayDiff < 31 && Math.round(dayDiff / 7) + " " + duration("wAgo")) ||
-        (dayDiff < 366 && Math.round(dayDiff / 30) + " " + duration("mAgo")) ||
+        (dayDiff < 7 && duration("dAgo", dayDiff)) ||
+        (dayDiff < 31 && duration("wAgo", Math.round(dayDiff / 7))) ||
+        (dayDiff < 366 && duration("mAgo", Math.round(dayDiff / 30))) ||
         (dayDiff > 365 && duration("ltAgo"))
       );
     },
     showLastTried() {
       this.toast = localize("triedInfo", this.niceDate(this.recipe.lastTried));
-      utils.timer(5, (val) => {
+      utils.timer(10, (val) => {
         if (!val) this.toast = val;
       });
     },

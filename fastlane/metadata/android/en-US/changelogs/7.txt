@@ -1,14 +1,14 @@
 - [New] Redesigned user interface
 - [New] Recipe list view modes
 - [New] Black theme
-- [New] Dedicated filters panel
+- [New] Dedicated filter panel
+- [New] Set Backup folder location
+- [New] Set Meal Planner's first day of the week to Monday
 - [Fixed] Crash on app start with blocked sensors #30
 - [Fixed] No app name in launcher #29
+- [Improvement] Change theme without restarting the app
 - [Removed] Storage permission
-- Change theme without restarting the app
-- Set Backup folder location
-- Set Meal Planner's first day of the week to Monday
-- Added app languages: French, Italian, Norwegian Bokmål
-- Updated translations
-- Several bug fixes
+- [Added App Languages] Hindi, Indonedian, Italian, Malayalam, Spanish and Telugu
+- [Updated] Translations
 - Dropped support for Android Lollipop
+- Several bug fixes

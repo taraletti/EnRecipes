@@ -537,9 +537,8 @@ export default {
       return [{}, {}].concat(this.filteredRecipes);
     },
     noResultFor() {
-      if (this.filterFavourites) return "noRecsInFavs";
-      if (this.filterTrylater) return "noRecsInTL";
-      if (this.selectedCuisine) return "noRecsInFtr";
+      if (this.filterFavourites || this.filterTrylater || this.selectedCuisine)
+        return "noRecsInL";
       return "noRecs";
     },
     imgWidth() {
@@ -737,12 +736,11 @@ export default {
     deleteRecipe(id) {
       this.deletionDialogActive = true;
       let index = this.recipes.findIndex((e) => e.id === id);
+      let recipeTitle = `"${this.recipes[index].title}"`;
       this.$showModal(ConfirmDialog, {
         props: {
           title: localize("conf"),
-          description: `${localize("delRecInfo")} "${
-            this.recipes[index].title
-          }"`,
+          description: `${localize("delRecInfo", recipeTitle)}`,
           cancelButtonText: "cBtn",
           okButtonText: "dBtn",
         },
@@ -760,12 +758,11 @@ export default {
     },
     deleteRecipes(idsArr) {
       this.deletionDialogActive = true;
+      let selectionCount = `${this.selection.length} ${localize("recs")}`;
       this.$showModal(ConfirmDialog, {
         props: {
           title: localize("conf"),
-          description: `${localize("delRecsInfo")} ${
-            this.selection.length
-          } ${localize("recs")}`,
+          description: `${localize("delRecsInfo", selectionCount)}`,
           cancelButtonText: "cBtn",
           okButtonText: "dBtn",
         },
