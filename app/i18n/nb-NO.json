@@ -321,5 +321,6 @@
     "rp": "Fjern bilde",
     "apply": "Bruk",
     "photogrid": "Bilderutenett",
-    "Black": "Svart"
+    "Black": "Svart",
+    "noRecsInL": "Ingen av oppskriftene her samsvarer med søket"
 }
