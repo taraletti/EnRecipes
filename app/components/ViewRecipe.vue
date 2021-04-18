@@ -324,7 +324,7 @@ export default {
     onPageLoad(args) {
       const page = args.object;
       page.bindingContext = new Observable();
-      this.busy = false;
+      this.busy = this.photoOpen = false;
       this.setComponent("ViewRecipe");
       if (this.yieldMultiplier == this.recipe.yield.quantity)
         this.yieldMultiplier = this.recipe.yield.quantity;
@@ -622,21 +622,28 @@ export default {
       }
     },
     shareRecipe() {
-      let overview = `${this.recipe.title}\n\n${localize("stars")}: ${
-        this.recipe.rating
-      }\n${localize("cui")}: ${localize(this.recipe.cuisine)}\n${localize(
-        "cat"
-      )}: ${localize(this.recipe.category)}\n${localize(
-        "ts"
-      )}: ${this.recipe.tags.join(", ")}\n${localize(
-        "prepT"
-      )}: ${this.formattedTime(this.recipe.prepTime)}\n${localize(
-        "cookT"
-      )}: ${this.formattedTime(this.recipe.cookTime)}\n${localize("yld")}: ${
-        this.tempYieldQuantity
-      } ${localize(this.recipe.yield.unit)}\n${localize(
-        "Difficulty level"
-      )}: ${localize(this.recipe.difficulty)}\n`;
+      let overview = `${this.recipe.title}\n\n`;
+      if (this.recipe.rating)
+        overview += `${localize("stars")}: ${this.recipe.rating}\n`;
+      overview += `${localize("cui")}: ${localize(
+        this.recipe.cuisine
+      )}\n${localize("cat")}: ${localize(this.recipe.category)}\n`;
+      if (this.recipe.tags.length)
+        overview += `${localize("ts")}: ${this.recipe.tags.join(", ")}\n`;
+      if (this.recipe.prepTime != "00:00")
+        overview += `${localize("prepT")}: ${this.formattedTime(
+          this.recipe.prepTime
+        )}\n`;
+      if (this.recipe.cookTime != "00:00")
+        overview += `${localize("cookT")}: ${this.formattedTime(
+          this.recipe.cookTime
+        )}\n`;
+      overview += `${localize("yld")}: ${this.tempYieldQuantity} ${localize(
+        this.recipe.yield.unit
+      )}\n${localize("Difficulty level")}: ${localize(
+        this.recipe.difficulty
+      )}\n`;
+
       let shareContent = overview;
       if (this.recipe.ingredients.length) {
         let ingredients = `\n\n${localize("ings")}:\n\n`;
@@ -791,7 +798,7 @@ export default {
         )
         .then(() =>
           pv.animate({
-            height: sh,
+            height: sh + 8,
             translate: { x: -sw + 112, y: -((sh - sw) / 6) },
             duration: 250,
             curve: CoreTypes.AnimationCurve.ease,

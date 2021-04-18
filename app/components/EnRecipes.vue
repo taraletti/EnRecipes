@@ -1038,13 +1038,7 @@ export default {
     navigateTo(to, title, page) {
       this.showTools = false;
       if (page) {
-        this.$navigateTo(to, {
-          transition: {
-            name: "fade",
-            duration: 250,
-            curve: "easeOut",
-          },
-        });
+        this.$navigateTo(to);
       } else if (title !== this.currentComponent) {
         this.setComponent(title);
         this.filterFavourites = to == "favourites";
@@ -1059,11 +1053,6 @@ export default {
           filterFavourites: this.filterFavourites,
           filterTrylater: this.filterTrylater,
         },
-        transition: {
-          name: "fade",
-          duration: 250,
-          curve: "easeOut",
-        },
       });
     },
     viewRecipe(recipeID) {
@@ -1073,11 +1062,6 @@ export default {
           filterTrylater: this.filterTrylater,
           recipeID,
         },
-        transition: {
-          name: "fade",
-          duration: 250,
-          curve: "easeOut",
-        },
       });
     },
     viewRandomRecipe() {
@@ -1086,11 +1070,6 @@ export default {
         props: {
           filterTrylater: true,
           recipeID: this.randomRecipeID(),
-        },
-        transition: {
-          name: "fade",
-          duration: 250,
-          curve: "easeOut",
         },
       });
     },

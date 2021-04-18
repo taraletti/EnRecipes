@@ -264,9 +264,11 @@ export const shareImage = (image, subject) => {
   fos.write(baos.toByteArray())
   fos.flush()
   fos.close()
-  intent.putExtra(
-    android.content.Intent.EXTRA_STREAM,
-    android.net.Uri.fromFile(tmpFile)
+  let shareUri = global.androidx.core.content.FileProvider.getUriForFile(
+    ctx,
+    Application.android.nativeApp.getPackageName() + '.provider',
+    tmpFile
   )
+  intent.putExtra(android.content.Intent.EXTRA_STREAM, shareUri)
   share(intent, subject)
 }
