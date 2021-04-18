@@ -287,5 +287,6 @@
     "yesterday": "gisteren",
     "yieldQ": "Hoeveelheid",
     "yieldU": "Eenheid",
-    "yld": "Hoeveelheid"
+    "yld": "Hoeveelheid",
+    "buto": "Gebackupt naar %s"
 }
