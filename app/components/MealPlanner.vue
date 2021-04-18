@@ -273,11 +273,6 @@ export default {
             filterTrylater: true,
             recipeID,
           },
-          transition: {
-            name: "fade",
-            duration: 250,
-            curve: "easeOut",
-          },
         });
       }
     },

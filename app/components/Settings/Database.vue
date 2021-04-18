@@ -201,9 +201,7 @@ export default {
       let filename = `${localize("EnRecipes")}_${formattedDate}.zip`;
       let fromPath = path.join(knownFolders.documents().path, "EnRecipes");
       utils.Zip.zip(fromPath, this.backupFolder, filename)
-        .then((res) => {
-          if (res) this.showExportSummary(filename);
-        })
+        .then((res) => res && this.showExportSummary(filename))
         .catch((err) => {
           console.log("Backup error: ", err);
           this.progress = null;
@@ -278,9 +276,7 @@ export default {
         if (uri) {
           let dest = knownFolders.temp().path;
           utils.Zip.unzip(uri, dest)
-            .then((res) => {
-              if (res) this.validateZipContent(res, uri);
-            })
+            .then((res) => res && this.validateZipContent(res, uri))
             .catch(() => this.failedImport(localize("buInc")));
         }
       });
@@ -328,20 +324,15 @@ export default {
             file: "mealPlans.json",
           },
         ]);
-      } else {
-        knownFolders.temp().clear();
-        this.progress = null;
-        this.failedImport(localize("buInc"));
-      }
-      if (Folder.exists(ImagesFolderPath)) {
         const timer = setInterval(() => {
-          if (this.importSummary.found) {
-            knownFolders.temp().clear();
-            this.importImages(uri);
-            clearInterval(timer);
+          if (!this.progress) clearInterval(timer);
+          if (this.progress && this.importSummary.found) {
+            Folder.exists(ImagesFolderPath)
+              ? this.importImages(uri)
+              : this.showImportSummary();
           }
         }, 100);
-      }
+      } else this.failedImport(localize("buInc"));
     },
     isFileDataValid(file) {
       const files = file.filter((e) => File.exists(e.path));
@@ -369,11 +360,11 @@ export default {
               }
             });
         });
-      } else {
-        this.failedImport(localize("buEmp"));
-      }
+      } else this.failedImport(localize("buEmp"));
     },
     failedImport(description) {
+      this.progress = null;
+      knownFolders.temp().clear();
       this.$showModal(ConfirmDialog, {
         props: {
           title: "impFail",
@@ -431,17 +422,18 @@ export default {
         if (res) {
           this.showImportSummary();
           this.unlinkBrokenImages();
-          this.exportFiles("delete");
         }
       });
     },
     showImportSummary() {
+      this.progress = null;
+      knownFolders.temp().clear();
+      this.exportFiles("delete");
       let { found, imported, updated } = this.importSummary;
       let exists = Math.abs(found - imported - updated) + updated;
       let importedNote = `\n${localize("recI")} ${imported}`;
       let existsNote = `\n${localize("recE")} ${exists}`;
       let updatedNote = `\n${localize("recU")} ${updated}`;
-      this.progress = null;
       this.$showModal(ConfirmDialog, {
         props: {
           title: "impSuc",

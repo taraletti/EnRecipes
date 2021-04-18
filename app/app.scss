@@ -430,7 +430,7 @@ Button {
 // -----------------------------
 // APPBAR
 .appbar {
-  z-index: 32;
+  z-index: 4;
   min-height: 56;
   margin: 8;
   padding: 4;
@@ -449,7 +449,7 @@ Button {
   }
 }
 .toolbar {
-  z-index: 24;
+  z-index: 4;
   padding: 4;
   margin-bottom: 0;
   horizontal-alignment: left;
@@ -526,7 +526,7 @@ Button {
   .recipeTitle {
     @extend .tw;
     text-align: left;
-    padding: 16 0;
+    padding: 16 8;
     line-height: 4;
   }
 }
