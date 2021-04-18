@@ -791,7 +791,7 @@ export default {
         )
         .then(() =>
           pv.animate({
-            height: sh,
+            height: sh + 8,
             translate: { x: -sw + 112, y: -((sh - sw) / 6) },
             duration: 250,
             curve: CoreTypes.AnimationCurve.ease,
