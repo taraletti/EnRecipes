@@ -287,5 +287,6 @@
   "yesterday": "yesterday",
   "yieldQ": "Yield quantity",
   "yieldU": "Yield unit",
-  "yld": "Yield"
+  "yld": "Yield",
+  "buto": "Backed up to %s"
 }

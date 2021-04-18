@@ -761,7 +761,7 @@ export default {
         let binarySource = File.fromPath(this.cacheImagePath).readSync();
         File.fromPath(recipeImage).writeSync(binarySource);
         this.recipe.imageSrc = recipeImage;
-        knownFolders.temp().clear();
+        knownFolders.temp().clear()
       }
       if (this.recipe.imageSrc) {
         if (

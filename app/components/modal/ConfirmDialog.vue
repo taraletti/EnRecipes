@@ -45,7 +45,7 @@ export default {
     },
     cancelButtonText: {
       type: String,
-      required: true,
+      required: false,
     },
     okButtonText: {
       type: String,

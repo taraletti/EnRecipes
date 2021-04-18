@@ -603,17 +603,17 @@ export default {
         this.$showModal(ActionDialog, {
           props: {
             title: "shr",
-            list: ["pht", "rec"],
+            list: ["rec", "pht"],
           },
         }).then((result) => {
           switch (result) {
+            case "rec":
+              this.shareRecipe();
+              break;
             case "pht":
               ImageSource.fromFile(this.recipe.imageSrc).then((res) =>
                 utils.shareImage(res, localize("srpu"))
               );
-              break;
-            case "rec":
-              this.shareRecipe();
               break;
           }
         });

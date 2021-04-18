@@ -565,9 +565,6 @@ export default {
       const window = Application.android.startActivity.getWindow();
       const decorView = window.getDecorView();
       let sdkv = Device.sdkVersion;
-      this.appTheme == "Light"
-        ? decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
-        : decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_DARK_STATUS_BAR);
       function setColors(color) {
         window.setStatusBarColor(new Color(color).android);
         sdkv >= 27 && window.setNavigationBarColor(new Color(color).android);
@@ -584,13 +581,19 @@ export default {
           break;
       }
       if (sdkv >= 27)
-        this.appTheme == "Light"
-          ? decorView.setSystemUiVisibility(
-              View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-            )
-          : decorView.setSystemUiVisibility(
-              View.SYSTEM_UI_FLAG_DARK_NAVIGATION_BAR
-            );
+        decorView.setSystemUiVisibility(
+          this.appTheme == "Light"
+            ? View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR |
+                View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+            : View.SYSTEM_UI_FLAG_DARK_STATUS_BAR |
+                View.SYSTEM_UI_FLAG_DARK_NAVIGATION_BAR
+        );
+      else
+        decorView.setSystemUiVisibility(
+          this.appTheme == "Light"
+            ? View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            : View.SYSTEM_UI_FLAG_DARK_STATUS_BAR
+        );
     },
     onPageLoad(args) {
       const page = args.object;
