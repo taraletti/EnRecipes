@@ -262,7 +262,7 @@ export default {
     },
     showExportSummary(filename) {
       this.progress = null;
-      let description = localize("buto", filename);
+      let description = localize("buto", `"${filename}"`);
       this.$showModal(ConfirmDialog, {
         props: {
           title: "expSuc",
