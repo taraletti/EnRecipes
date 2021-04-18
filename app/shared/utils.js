@@ -173,36 +173,38 @@ export class Zip {
       Application.android.context,
       parsedUri
     )
-      .createFile('application/zip', filename)
-      .getUri()
-    const outputStream = ContentResolver.openOutputStream(uri)
-    const zipOutputStream = new java.util.zip.ZipOutputStream(outputStream)
-
-    return new Promise((resolve) => {
-      const sourceFiles = Zip.getSubFiles(src, true)
-      for (let i = 0; i < sourceFiles.size(); i++) {
-        let len
-        let buffer = Array.create('byte', 4096)
-        let file = sourceFiles.get(i)
-        let entry = new java.util.zip.ZipEntry(
-          'EnRecipes/' +
-            new java.io.File(src)
-              .toURI()
-              .relativize(file.toURI())
-              .getPath()
-        )
-        zipOutputStream.putNextEntry(entry)
-        if (!file.isDirectory()) {
-          let inputStream = new java.io.FileInputStream(file)
-          while ((len = inputStream.read(buffer)) != -1) {
-            zipOutputStream.write(buffer, 0, len)
+    return new Promise((resolve, reject) => {
+      if (uri.exists()) {
+        let destFile = uri.createFile('application/zip', filename).getUri()
+        const outputStream = ContentResolver.openOutputStream(destFile)
+        const zipOutputStream = new java.util.zip.ZipOutputStream(outputStream)
+        const sourceFiles = Zip.getSubFiles(src, true)
+        for (let i = 0; i < sourceFiles.size(); i++) {
+          let len
+          let buffer = Array.create('byte', 4096)
+          let file = sourceFiles.get(i)
+          let entry = new java.util.zip.ZipEntry(
+            'EnRecipes/' +
+              new java.io.File(src)
+                .toURI()
+                .relativize(file.toURI())
+                .getPath()
+          )
+          zipOutputStream.putNextEntry(entry)
+          if (!file.isDirectory()) {
+            let inputStream = new java.io.FileInputStream(file)
+            while ((len = inputStream.read(buffer)) != -1) {
+              zipOutputStream.write(buffer, 0, len)
+            }
+            inputStream.close()
           }
-          inputStream.close()
+          zipOutputStream.closeEntry()
         }
-        zipOutputStream.closeEntry()
+        zipOutputStream.close()
+        resolve(destFile)
+      } else {
+        reject('Destination file cannot be created: Path does not exist')
       }
-      zipOutputStream.close()
-      resolve(uri)
     })
   }
   static unzip(uri, dest) {
@@ -210,26 +212,23 @@ export class Zip {
     return new Promise((resolve) => {
       const inputStream = ContentResolver.openInputStream(uri)
       const zipInputStream = new java.util.zip.ZipInputStream(inputStream)
-      let len, filepath
-      let buffer = Array.create('byte', 4096)
-      let entry = zipInputStream.getNextEntry()
-      filepath = dest + '/' + entry.getName()
-      while (entry != null) {
+      let len, filepath, entry
+      while ((entry = zipInputStream.getNextEntry()) != null) {
         filepath = dest + '/' + entry.getName()
-        if (!entry.isDirectory()) {
-          const output = new java.io.BufferedOutputStream(
-            new java.io.FileOutputStream(filepath)
-          )
-          while ((len = zipInputStream.read(buffer)) != -1) {
-            output.write(buffer, 0, len)
-          }
-          output.close()
-        } else {
-          let dir = new java.io.File(filepath)
-          dir.mkdirs()
+        let output = new java.io.File(filepath)
+        if (entry.isDirectory()) {
+          output.mkdirs()
+          continue
         }
+        if (!output.getParentFile().exists()) output.getParentFile().mkdirs()
+        const outputStream = new java.io.BufferedOutputStream(
+          new java.io.FileOutputStream(output)
+        )
+        let buffer = Array.create('byte', 4096)
+        while ((len = zipInputStream.read(buffer)) != -1)
+          outputStream.write(buffer, 0, len)
+        outputStream.close()
         zipInputStream.closeEntry()
-        entry = zipInputStream.getNextEntry()
       }
       zipInputStream.close()
       resolve(dest)

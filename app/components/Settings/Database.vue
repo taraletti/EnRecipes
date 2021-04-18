@@ -198,13 +198,17 @@ export default {
         ("0" + date.getMinutes()).slice(-2) +
         ("0" + date.getSeconds()).slice(-2);
 
-      let filename = `EnRecipes_${formattedDate}.zip`;
+      let filename = `${localize("EnRecipes")}_${formattedDate}.zip`;
       let fromPath = path.join(knownFolders.documents().path, "EnRecipes");
       utils.Zip.zip(fromPath, this.backupFolder, filename)
         .then((res) => {
           if (res) this.showExportSummary(filename);
         })
-        .catch((err) => console.log("Backup error: ", err));
+        .catch((err) => {
+          console.log("Backup error: ", err);
+          this.progress = null;
+          this.setBackupFolder(true);
+        });
     },
     exportFiles(option) {
       const folder = path.join(knownFolders.documents().path, "EnRecipes");
@@ -258,10 +262,11 @@ export default {
     },
     showExportSummary(filename) {
       this.progress = null;
+      let description = localize("buto", filename);
       this.$showModal(ConfirmDialog, {
         props: {
           title: "expSuc",
-          description: `Backed up to ${filename}`,
+          description,
           okButtonText: "OK",
         },
       });
@@ -270,9 +275,8 @@ export default {
     // IMPORT HANDLERS
     openZipFile() {
       utils.getBackupFile().then((uri) => {
-        console.log(uri);
         if (uri) {
-          let dest = path.join(knownFolders.temp().path, "tempUnZip");
+          let dest = knownFolders.temp().path;
           utils.Zip.unzip(uri, dest)
             .then((res) => {
               if (res) this.validateZipContent(res, uri);
@@ -325,14 +329,15 @@ export default {
           },
         ]);
       } else {
-        Folder.fromPath(extractedFolderPath).remove();
+        knownFolders.temp().clear();
         this.progress = null;
         this.failedImport(localize("buInc"));
       }
       if (Folder.exists(ImagesFolderPath)) {
         const timer = setInterval(() => {
           if (this.importSummary.found) {
-            this.importImages(uri, extractedFolderPath);
+            knownFolders.temp().clear();
+            this.importImages(uri);
             clearInterval(timer);
           }
         }, 100);
@@ -419,7 +424,7 @@ export default {
           break;
       }
     },
-    importImages(uri, extractedFolderPath) {
+    importImages(uri) {
       let destPath = knownFolders.documents().path;
       Folder.fromPath(destPath);
       utils.Zip.unzip(uri, destPath).then((res) => {
@@ -427,7 +432,6 @@ export default {
           this.showImportSummary();
           this.unlinkBrokenImages();
           this.exportFiles("delete");
-          Folder.fromPath(extractedFolderPath).remove();
         }
       });
     },
