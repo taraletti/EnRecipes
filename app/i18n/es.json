@@ -171,7 +171,7 @@
     "opts": "Opciones",
     "Ounce": "Onza",
     "oz": "onz",
-    "Pasta": "Pasta",
+    "Pasta": "Pastas alimenticias",
     "Patty": "Empanada",
     "photogrid": "Cuadrícula de fotos",
     "pht": "Foto de la receta",
@@ -235,7 +235,7 @@
     "Settings": "Ajustes",
     "shr": "Compartir",
     "Side dishes": "Platos de acompañamiento",
-    "simple": "Simple",
+    "simple": "Sencillo",
     "Slowest first": "La más lenta primero",
     "sltd": "seleccionada",
     "small": "pequeño",
@@ -287,5 +287,6 @@
     "yesterday": "ayer",
     "yieldQ": "Cantidad de rendimiento",
     "yieldU": "Unidad de medida",
-    "yld": "Producir"
+    "yld": "Producir",
+    "buto": "Respaldado por %s"
 }
