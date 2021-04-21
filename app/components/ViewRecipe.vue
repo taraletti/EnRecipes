@@ -37,10 +37,11 @@
         </GridLayout>
         <AbsoluteLayout dock="bottom">
           <ScrollView
+            dock="bottom"
             width="100%"
             height="100%"
             @loaded="onScrollLoad"
-            @scroll="!toast && onScroll($event)"
+            @scroll="onScroll($event)"
           >
             <StackLayout>
               <GridLayout rows="auto" columns="*, *">
@@ -170,24 +171,10 @@
             </StackLayout>
           </ScrollView>
           <Label
+            @loaded="onStickyLoad"
             class="sectionTitle sticky"
-            :hidden="!showTitleArr[0]"
-            :text="getTitleCount('ings', 'ingredients')"
-          />
-          <Label
-            class="sectionTitle sticky"
-            :hidden="!showTitleArr[1]"
-            :text="getTitleCount('inss', 'instructions')"
-          />
-          <Label
-            class="sectionTitle sticky"
-            :hidden="!showTitleArr[2]"
-            :text="getTitleCount('cmbs', 'combinations')"
-          />
-          <Label
-            class="sectionTitle sticky"
-            :hidden="!showTitleArr[3]"
-            :text="getTitleCount('nos', 'notes')"
+            :hidden="!stickyTitle"
+            :text="stickyTitle"
           />
         </AbsoluteLayout>
       </DockLayout>
@@ -250,17 +237,20 @@
         </FlexboxLayout>
       </GridLayout>
       <AbsoluteLayout rowSpan="2">
-        <ImageZoom
-          @loaded="onImgZoomLoad"
+        <Image
+          @tap="({ object }) => (object.cancel = true)"
+          backgroundColor="black"
+          stretch="aspectFit"
+          @loaded="onImgViewLoad"
           :src="recipe.imageSrc"
           class="photoviewer"
-        ></ImageZoom>
+        />
       </AbsoluteLayout>
     </GridLayout>
   </Page>
 </template>
 
-<script>
+<script lang="ts">
 import {
   Application,
   AndroidApplication,
@@ -295,13 +285,14 @@ export default {
       cmbcon: null,
       notescon: null,
       notesT: null,
-      imgZoom: null,
+      imgView: null,
       checks: [],
       checked: 0,
       stepsDid: 0,
       toast: null,
       photoOpen: false,
       showTitleArr: [false, false, false, false],
+      sticky: null,
     };
   },
   computed: {
@@ -310,6 +301,24 @@ export default {
       return Math.abs(this.yieldMultiplier) > 0
         ? Math.abs(parseFloat(this.yieldMultiplier))
         : 1;
+    },
+    stickyTitle() {
+      let val = null;
+      switch (this.showTitleArr.lastIndexOf(true)) {
+        case 0:
+          val = this.getTitleCount("ings", "ingredients");
+          break;
+        case 1:
+          val = this.getTitleCount("inss", "instructions");
+          break;
+        case 2:
+          val = this.getTitleCount("cmbs", "combinations");
+          break;
+        case 3:
+          val = this.getTitleCount("nos", "notes");
+          break;
+      }
+      return val;
     },
   },
   methods: {
@@ -356,63 +365,90 @@ export default {
     onScrollLoad(args) {
       this.scrollview = args.object;
     },
-    onImgZoomLoad({ object }) {
-      this.imgZoom = object;
-      this.imgZoom.visibility = "collapsed";
-      this.imgZoom.top = 24;
-      this.imgZoom.left = Screen.mainScreen.widthDIPs - 112;
+    onImgViewLoad({ object }) {
+      this.imgView = object;
+      this.imgView.visibility = "collapsed";
+      this.imgView.top = 24;
+      this.imgView.left = Screen.mainScreen.widthDIPs - 112;
+    },
+    onStickyLoad({ object }) {
+      this.sticky = object;
     },
     // FIX: scroll not smooth
-    stickyTitle({ object }) {
-      // let vm = this;
-      // function isTop(label) {
-      //   let pos = label.getLocationRelativeTo(object).y;
-      //   return label === vm.cmbcon || label === vm.notesT
-      //     ? pos < 0
-      //     : pos + 32 < 0;
-      // }
-      // const isAllFalse = (e) => e == false;
-      // if (this.recipe.notes.length && isTop(this.notesT)) {
-      //   this.showTitleArr = [false, false, false, true];
-      // } else if (this.recipe.combinations.length && isTop(this.cmbcon)) {
-      //   this.showTitleArr = [false, false, true, false];
-      // } else if (this.recipe.instructions.length && isTop(this.inscon)) {
-      //   this.showTitleArr = [false, true, false, false];
-      // } else if (this.recipe.ingredients.length && isTop(this.ingcon)) {
-      //   this.showTitleArr = [true, false, false, false];
-      // } else {
-      //   this.showTitleArr = [false, false, false, false];
-      // }
-      // if (
-      //   this.recipe.ingredients.length &&
-      //   !this.showTitleArr[0] &&
-      //   isTop(this.ingcon)
-      // ) {
-      //   this.showTitleArr = [true, false, false, false];
-      // } else if (!this.showTitleArr.every(isAllFalse) && !isTop(this.ingcon)) {
-      //   this.showTitleArr = [false, false, false, false];
-      // }
+    fixTitle({ object }, swipeUp: boolean): void {
+      let ingL = this.recipe.ingredients.length;
+      let insL = this.recipe.instructions.length;
+      let cmbL = this.recipe.combinations.length;
+      let notL = this.recipe.notes.length;
+
+      const isTop = (label): boolean => {
+        let pos = label.getLocationRelativeTo(object).y;
+        return label === this.cmbcon || label === this.notesT
+          ? pos < 0
+          : pos + 32 < 0;
+      };
+
+      const setVisibleTitle = (n: number): void => {
+        let arr = [ingL, insL, cmbL, notL];
+        this.showTitleArr = Array.from(
+          { length: 4 },
+          (v, i) => (v = arr[i] ? i < n : false)
+        );
+        this.sticky
+          .animate({
+            opacity: 0.5,
+            duration: 0,
+          })
+          .then(() => {
+            this.sticky.animate({
+              opacity: 1,
+              duration: 250,
+            });
+          });
+      };
+
+      if (swipeUp) {
+        if (ingL && !this.showTitleArr[0] && isTop(this.ingcon))
+          setVisibleTitle(1);
+        else if (insL && !this.showTitleArr[1] && isTop(this.inscon))
+          setVisibleTitle(2);
+        else if (cmbL && !this.showTitleArr[2] && isTop(this.cmbcon))
+          setVisibleTitle(3);
+        else if (notL && !this.showTitleArr[3] && isTop(this.notesT))
+          setVisibleTitle(4);
+      } else {
+        if (notL && this.showTitleArr[3] && !isTop(this.notesT))
+          setVisibleTitle(3);
+        else if (cmbL && this.showTitleArr[2] && !isTop(this.cmbcon))
+          setVisibleTitle(2);
+        else if (insL && this.showTitleArr[1] && !isTop(this.inscon))
+          setVisibleTitle(1);
+        else if (ingL && this.showTitleArr[0] && !isTop(this.ingcon))
+          setVisibleTitle(0);
+      }
     },
     onScroll(args) {
-      let scrollUp;
+      let swipeUp: boolean;
       let y = args.scrollY;
       if (y) {
-        scrollUp = y < this.scrollPos;
+        swipeUp = y > this.scrollPos;
         this.scrollPos = Math.abs(y);
-        let ab = this.appbar.translateY;
-        if (!scrollUp && ab == 0)
-          this.appbar.animate({
-            translate: { x: 0, y: 64 },
-            duration: 250,
-            curve: CoreTypes.AnimationCurve.ease,
-          });
-        else if (scrollUp && ab == 64)
-          this.appbar.animate({
-            translate: { x: 0, y: 0 },
-            duration: 250,
-            curve: CoreTypes.AnimationCurve.ease,
-          });
-        // this.stickyTitle(args);
+        this.fixTitle(args, swipeUp);
+        if (!this.toast) {
+          let ab = this.appbar.translateY;
+          if (swipeUp && ab == 0)
+            this.appbar.animate({
+              translate: { x: 0, y: 64 },
+              duration: 250,
+              curve: CoreTypes.AnimationCurve.ease,
+            });
+          else if (!swipeUp && ab == 64)
+            this.appbar.animate({
+              translate: { x: 0, y: 0 },
+              duration: 250,
+              curve: CoreTypes.AnimationCurve.ease,
+            });
+        }
       }
     },
     // HELPERS
@@ -452,7 +488,7 @@ export default {
       let dayDiff = Math.ceil(diff / 86400);
       if (isNaN(dayDiff) || dayDiff < 0) return "";
 
-      function duration(value, number) {
+      function duration(value, number?) {
         return number ? localize(value, number) : localize(value);
       }
       return (
@@ -470,7 +506,49 @@ export default {
         if (!val) this.toast = val;
       });
     },
-    roundedQuantity(quantity) {
+    // getMeasure(value: number, unit: string) {
+    //   let vm = this;
+    //   function roundedQ(val: number) {
+    //     return Math.abs(
+    //       Math.round(
+    //         (val / vm.recipe.yield.quantity) * vm.tempYieldQuantity * 100
+    //       ) / 100
+    //     );
+    //   }
+    //   if (value) {
+    //     let rounded = Math.abs(
+    //       Math.round(
+    //         (value / this.recipe.yield.quantity) * this.tempYieldQuantity * 100
+    //       ) / 100
+    //     );
+    //     let lUnit = localize(unit);
+
+    //     switch (unit) {
+    //       //IMPERIAL
+    //       case "g":
+    //         return rounded < 1000
+    //           ? `${rounded} ${lUnit} `
+    //           : `${roundedQ(rounded / 1000)} ${localize("kg")} `;
+    //       case "ml":
+    //         return rounded < 1000
+    //           ? `${rounded} ${lUnit} `
+    //           : `${roundedQ(rounded / 1000)} ${localize("l")} `;
+
+    //       //METRIC
+    //       case "tsp":
+    //         return rounded < 3
+    //           ? `${rounded} ${lUnit} `
+    //           : `${roundedQ(rounded / 3)} ${localize("tbsp")} `;
+    //       case "in":
+    //         return rounded < 12
+    //           ? `${rounded} ${lUnit} `
+    //           : `${roundedQ(rounded / 12)} ${localize("ft")} `;
+    //       default:
+    //         return `${rounded} ${lUnit} `;
+    //     }
+    //   } else return "";
+    // },
+    roundedQuantity(quantity: number) {
       return Math.abs(
         Math.round(
           (quantity / this.recipe.yield.quantity) * this.tempYieldQuantity * 100
@@ -587,6 +665,7 @@ export default {
     viewCombination(combination) {
       this.scrollview.scrollToVerticalOffset(0, true);
       this.recipe = this.recipes.filter((e) => e.id === combination)[0];
+      this.showTitleArr = new Array(4).fill(false);
       this.clearChecks();
       this.clearSteps();
       this.recipe.ingredients.forEach(() => this.checks.push(false));
@@ -726,7 +805,7 @@ export default {
     createNote(note) {
       let regex = /(https?:\/\/[^\s]+)/g;
       const lbl = new Label();
-      lbl.class = "note";
+      lbl.className = "note";
       lbl.textWrap = true;
       let fString = new FormattedString();
       let arr = note.split(regex);
@@ -758,13 +837,13 @@ export default {
       return tags.join(" · ");
     },
     hijackBackEvent() {
-      AndroidApplication.on(
+      Application.android.on(
         AndroidApplication.activityBackPressedEvent,
         this.backEvent
       );
     },
     releaseBackEvent() {
-      AndroidApplication.off(
+      Application.android.off(
         AndroidApplication.activityBackPressedEvent,
         this.backEvent
       );
@@ -776,10 +855,10 @@ export default {
       } else this.$navigateBack();
     },
     viewPhoto() {
-      this.imgZoom.initNativeView();
+      // this.imgView.initNativeView();
       this.photoOpen = true;
       this.hijackBackEvent();
-      let pv = this.imgZoom;
+      let pv = this.imgView;
       pv.visibility = "visible";
       let sw = Screen.mainScreen.widthDIPs;
       let sh = Screen.mainScreen.heightDIPs;
@@ -798,7 +877,7 @@ export default {
         )
         .then(() =>
           pv.animate({
-            height: sh + 8,
+            height: sh,
             translate: { x: -sw + 112, y: -((sh - sw) / 6) },
             duration: 250,
             curve: CoreTypes.AnimationCurve.ease,
@@ -806,7 +885,7 @@ export default {
         );
     },
     closePhoto() {
-      let pv = this.imgZoom;
+      let pv = this.imgView;
       let sw = Screen.mainScreen.widthDIPs;
       let sh = Screen.mainScreen.heightDIPs;
       pv.animate({
