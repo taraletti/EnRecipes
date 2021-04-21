@@ -48,7 +48,6 @@ const defaultCategories = [
   'breakfast',
   'Desserts',
   'dinner',
-  'Drinks',
   'Healthy',
   'lunch',
   'Main dishes',
