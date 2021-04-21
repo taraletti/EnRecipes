@@ -1,1 +1,1 @@
-/// <reference path="../node_modules/@nativescript/types/index.d.ts" />
+/// <reference path="../node_modules/@nativescript/types-android/index.d.ts" />
