@@ -129,12 +129,12 @@
             class="sectionTitle"
           />
           <GridLayout
-            columns="auto,8,auto,8,*,8,auto"
+            columns="auto,8,auto,8,*,auto"
             v-for="(ingredient, index) in recipe.ingredients"
             :key="'ing' + index"
           >
             <TextField
-              width="60"
+              width="52"
               @loaded="!recipe.ingredients[index].item && focusField($event)"
               v-model="recipe.ingredients[index].quantity"
               hint="1.00"
@@ -143,7 +143,7 @@
             />
 
             <TextField
-              width="76"
+              width="68"
               col="2"
               :text="`${recipe.ingredients[index].unit}` | L"
               editable="false"
@@ -161,9 +161,8 @@
                 index + 1 == recipe.ingredients.length && addIngredient()
               "
             />
-
             <Button
-              col="6"
+              col="5"
               class="ico x"
               :text="icon.x"
               @tap="removeIngredient(index)"
@@ -180,7 +179,7 @@
             class="sectionTitle"
           />
           <GridLayout
-            columns="*,8,auto"
+            columns="*,auto"
             v-for="(instruction, index) in recipe.instructions"
             :key="'ins' + index"
           >
@@ -190,7 +189,7 @@
               v-model="recipe.instructions[index]"
             />
             <Button
-              col="2"
+              col="1"
               class="ico x"
               :text="icon.x"
               @tap="removeInstruction(index)"
@@ -207,7 +206,7 @@
             class="sectionTitle"
           />
           <GridLayout
-            columns="*,8,auto"
+            columns="*,auto"
             v-for="(combination, index) in recipe.combinations"
             :key="'cmbs' + index"
           >
@@ -217,7 +216,7 @@
               editable="false"
             />
             <Button
-              col="2"
+              col="1"
               class="ico x"
               :text="icon.x"
               @tap="removeCombination(combination)"
@@ -231,7 +230,7 @@
           <!-- NOTES -->
           <Label :text="getTitleCount('nos', 'notes')" class="sectionTitle" />
           <GridLayout
-            columns="*,8,auto"
+            columns="*,auto"
             v-for="(note, index) in recipe.notes"
             :key="'nos' + index"
           >
@@ -241,7 +240,7 @@
               v-model="recipe.notes[index]"
             />
             <Button
-              col="2"
+              col="1"
               class="ico x"
               :text="icon.x"
               @tap="removeNote(index)"
@@ -691,7 +690,7 @@ export default {
       } else {
         this.recipe.ingredients.splice(index, 1);
       }
-      setTimeout((e) => (this.modalOpen = false), 200);
+      setTimeout(() => (this.modalOpen = false), 200);
     },
     addInstruction() {
       this.recipe.instructions.push("");
@@ -761,7 +760,7 @@ export default {
         let binarySource = File.fromPath(this.cacheImagePath).readSync();
         File.fromPath(recipeImage).writeSync(binarySource);
         this.recipe.imageSrc = recipeImage;
-        knownFolders.temp().clear()
+        knownFolders.temp().clear();
       }
       if (this.recipe.imageSrc) {
         if (
@@ -870,7 +869,7 @@ export default {
       if (type) this.setInputTypeText(args, type);
       if (!args.object.text) {
         args.object.focus();
-        setTimeout((e) => Utils.ad.showSoftInput(args.object.android), 100);
+        setTimeout(() => Utils.ad.showSoftInput(args.object.android), 100);
       }
     },
     setInputTypeText(args, type) {
@@ -978,7 +977,7 @@ export default {
     },
   },
   created() {
-    setTimeout((e) => {
+    setTimeout(() => {
       this.setComponent("EditRecipe");
     }, 500);
     this.title = this.recipeID ? "editRec" : "newRec";
