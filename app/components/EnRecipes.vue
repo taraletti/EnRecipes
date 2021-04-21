@@ -77,7 +77,7 @@
             >
               <Image
                 class="imgHolder"
-                verticalAlignment="top"
+                verticalAlignment="center"
                 v-if="recipe.imageSrc"
                 :src="recipe.imageSrc"
                 stretch="none"
@@ -87,8 +87,8 @@
               />
               <Label
                 v-else
+                verticalAlignment="center"
                 class="ico imgHolder"
-                verticalAlignment="top"
                 @loaded="centerLabel"
                 width="96"
                 height="96"
@@ -161,14 +161,16 @@
               />
               <StackLayout class="recipeInfo" row="1">
                 <Label :text="recipe.title" class="tb title tw" />
-                <StackLayout class="attributes" orientation="horizontal">
-                  <Label class="ico sm" :text="icon.cuisine" />
-                  <Label class="attr" :text="recipe.cuisine | L" />
-                </StackLayout>
-                <StackLayout class="attributes" orientation="horizontal">
-                  <Label class="ico sm" :text="icon.category" />
-                  <Label class="attr" :text="recipe.category | L" />
-                </StackLayout>
+                <FlexboxLayout flexWrap="wrap">
+                  <StackLayout class="attributes" orientation="horizontal">
+                    <Label class="ico sm" :text="icon.cuisine" />
+                    <Label class="attr" :text="recipe.cuisine | L" />
+                  </StackLayout>
+                  <StackLayout class="attributes" orientation="horizontal">
+                    <Label class="ico sm" :text="icon.category" />
+                    <Label class="attr" :text="recipe.category | L" />
+                  </StackLayout>
+                </FlexboxLayout>
                 <StackLayout
                   :hidden="!recipe.tags.length"
                   class="attributes"
@@ -182,7 +184,7 @@
           </v-template>
           <v-template name="photogrid">
             <GridLayout
-              class="recipeItem grid"
+              class="recipeItem grid photogrid"
               :class="getItemPos(recipe.id)"
               rows="auto, auto"
               columns="*"
