@@ -54,7 +54,7 @@ export default {
         : (object.autocapitalizationType = "words");
       object.hint = this.hint;
       object.focus();
-      setTimeout(() => Utils.ad.showSoftInput(object.android), 1);
+      setTimeout(() => Utils.ad.showSoftInput(object.android), 100);
     },
   },
   created() {
