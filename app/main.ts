@@ -15,11 +15,6 @@ import store from './store'
 import CollectionView from '@nativescript-community/ui-collectionview/vue'
 Vue.use(CollectionView)
 
-Vue.registerElement(
-  'ImageZoom',
-  () => require('@triniwiz/nativescript-image-zoom').ImageZoom
-)
-
 import { lvMixin } from './shared/mixins.js'
 Vue.mixin(lvMixin)
 
