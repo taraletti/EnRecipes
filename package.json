@@ -23,7 +23,6 @@
     "@nativescript/localize": "^5.0.4",
     "@triniwiz/nativescript-accelerometer": "^4.0.3",
     "@triniwiz/nativescript-couchbase": "^1.2.2",
-    "@triniwiz/nativescript-image-zoom": "^4.0.0",
     "nativescript-imagecropper": "^4.0.1",
     "nativescript-intl": "^4.0.2",
     "nativescript-vue": "~2.9.0",
