@@ -287,5 +287,6 @@
     "yesterday": "ieri",
     "yieldQ": "Quantità di resa",
     "yieldU": "Unità di resa",
-    "yld": "Resa"
+    "yld": "Resa",
+    "buto": "Backup salvato in %s"
 }
