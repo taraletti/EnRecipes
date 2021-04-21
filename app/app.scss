@@ -266,18 +266,15 @@ Button {
 .recipeItem {
   padding: 8 16;
   .recipeInfo {
-    vertical-alignment: top;
-    padding: 2 0 2 8;
+    vertical-alignment: center;
+    padding: 0 0 4 8;
   }
   .title {
     padding: 0 0 4;
   }
-  .attributes {
-    padding-top: 2;
-    .attr {
-      font-size: 10;
-      padding: 0 6 1 2;
-    }
+  .attr {
+    font-size: 10;
+    padding: 0 6 1 2;
   }
 }
 .simple .recipeInfo {
@@ -290,7 +287,7 @@ Button {
 .grid {
   padding: 8;
   .recipeInfo {
-    padding: 8 8 0;
+    padding: 8 0 4;
   }
   &.odd {
     padding: 8 8 8 16;
@@ -298,6 +295,9 @@ Button {
   &.even {
     padding: 8 16 8 8;
   }
+}
+.photogrid .recipeInfo {
+  padding: 8 0 0;
 }
 .lastItem {
   margin-bottom: 128;
