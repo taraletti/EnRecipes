@@ -54,11 +54,11 @@ Please read the [User Guide](https://github.com/vishnuraghavb/EnRecipes/wiki/Use
 | :---------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------: |
 |                               **Home - Light theme**                                |                                **Home - Dark theme**                                |
 | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width=276> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" width=276> |
-|                                   **Home - Black theme**                                   |                                   **Recipe view**                                   |
+|                               **Home - Black theme**                                |                                   **Recipe view**                                   |
 | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" width=276> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" width=276> |
 |                                   **Share menu**                                    |                                **Scale ingredients**                                |
 | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" width=276> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/8.png" width=276> |
-|                                  **Meal planner**                                   |                                    **About**                                     |
+|                                  **Meal planner**                                   |                                      **About**                                      |
 
 ## Contribution
 
