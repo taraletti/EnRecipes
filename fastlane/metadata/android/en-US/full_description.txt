@@ -13,13 +13,14 @@ EnRecipes is an open source, privacy-friendly digital cookbook that lets you cre
 * Shake device to view random recipe
 * Create meal plans
 * Import/Export recipes
+* Light, Dark and Black themes
 
 <b>Highlights:</b>
 
 * 100% free and open-source
 * Private by Design
-* No annoying ads or pop-ups
 * No permissions required
+* No annoying ads or pop-ups
 
 <b>Credits:</b>
 

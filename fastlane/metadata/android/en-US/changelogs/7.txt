@@ -1,4 +1,4 @@
-- [New] Redesigned user interface
+- [New] App icon and Redesigned user interface
 - [New] Recipe list view modes
 - [New] Black theme
 - [New] Dedicated filter panel
@@ -8,7 +8,7 @@
 - [Fixed] No app name in launcher #29
 - [Improvement] Change theme without restarting the app
 - [Removed] Storage permission
-- [Added App Languages] Hindi, Indonedian, Italian, Malayalam, Spanish and Telugu
+- [Added App Languages] Hindi, Indonesian, Italian, Malayalam, Portuguese (BR), Spanish and Telugu
 - [Updated] Translations
 - Dropped support for Android Lollipop
-- Several bug fixes
+- Several bug fixes and improvements including #33

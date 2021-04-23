@@ -394,17 +394,17 @@ export default {
           { length: 4 },
           (v, i) => (v = arr[i] ? i < n : false)
         );
-        this.sticky
-          .animate({
-            opacity: 0.5,
-            duration: 0,
-          })
-          .then(() => {
-            this.sticky.animate({
-              opacity: 1,
-              duration: 250,
-            });
-          });
+        // this.sticky
+        //   .animate({
+        //     opacity: 0.5,
+        //     duration: 0,
+        //   })
+        //   .then(() => {
+        //     this.sticky.animate({
+        //       opacity: 1,
+        //       duration: 250,
+        //     });
+        //   });
       };
 
       if (swipeUp) {

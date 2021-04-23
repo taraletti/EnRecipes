@@ -2,7 +2,7 @@ import Vue from 'nativescript-vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
 import { CouchBase } from '@triniwiz/nativescript-couchbase'
-import { getFileAccess, File, ApplicationSettings } from '@nativescript/core'
+import { getFileAccess, File, ApplicationSettings, Device } from '@nativescript/core'
 const EnRecipesDB = new CouchBase('EnRecipes')
 const userCuisinesDB = new CouchBase('userCuisines')
 const userCategoriesDB = new CouchBase('userCategories')
@@ -213,10 +213,10 @@ export default new Vuex.Store({
     currentComponent: 'EnRecipes',
     sortType: 'Oldest first',
     language: [
-      // {
-      //   locale: 'da',
-      //   title: 'Dansk',
-      // },
+      {
+        locale: 'da',
+        title: 'Dansk',
+      },
       {
         locale: 'de',
         title: 'Deutsch',
@@ -273,6 +273,10 @@ export default new Vuex.Store({
       //   locale: 'pt',
       //   title: 'Português',
       // },
+      {
+        locale: 'pt-BR',
+        title: 'Português (BR)',
+      },
       {
         locale: 'ru',
         title: 'Русский',

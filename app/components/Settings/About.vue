@@ -14,7 +14,7 @@
           <StackLayout class="app-info">
             <Image
               class="icon"
-              src="res://ic_launcher_foreground"
+              src="res://logo"
               stretch="none"
             />
             <Label class="name tb tac" :text="'EnRecipes' | L" />
@@ -68,7 +68,7 @@ export default {
         {
           icon: "help",
           title: "guide",
-          url: "https://github.com/vishnuraghavb/EnRecipes/wiki/User-Guide",
+          url: "https://github.com/vishnuraghavb/EnRecipes/wiki/User_Guide-v1.3.2",
         },
         {
           icon: "priv",
