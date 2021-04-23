@@ -21,24 +21,24 @@
 ## Features
 
 - Create recipes quickly
-- Add photo, notes and combinations to your recipes
+- Add photo, combinations and notes to your recipes
 - Organise your recipes by cuisine, category and tags
-- Mark recipes as Favourites and add them to your Try Later list
+- Add recipes to your Try Later list and mark them as favourites
 - Quickly search for recipes by title or ingredient
 - Scale your recipe ingredients to serve more or less people
 - Get notified of the last time you tried a recipe
-- Share your recipe to anyone by any means as a nicely formatted message. You can share the recipe photo too
+- Share your recipe to anyone by any means as a nicely formatted message. You can share the recipe photo too.
 - Shake device to view random recipe
 - Create meal plans
 - Import/Export recipes
-- Light & Dark theme
+- Light, Dark and Black themes
 
 ## Highlights
 
 - 100% free and open-source
 - Private by Design
+- No permissions required
 - No annoying ads or pop-ups
-- No internet access is required and never asks for any unwanted permissions
 
 **Languages being translated**:
 
@@ -49,16 +49,16 @@ Check the [Roadmap](https://github.com/vishnuraghavb/EnRecipes/projects/1) for u
 Please read the [User Guide](https://github.com/vishnuraghavb/EnRecipes/wiki/User-Guide) to get the most out of EnRecipes.
 
 ## Screenshots
-|<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width=276>|<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width=276>|
-|:---:|:---:|
-|**Home - Light theme**|**Home - Dark theme**|
-|<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width=276>|<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" width=276>|
-|**Side drawer**|**Recipe view**|
-|<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" width=276>|<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" width=276>|
-|**Share menu**|**Scale ingredients**|
-|<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" width=276>|<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/8.png" width=276>|
-|**Meal planner**|**Settings**|
 
+| <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width=276> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width=276> |
+| :---------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------: |
+|                               **Home - Light theme**                                |                                **Home - Dark theme**                                |
+| <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width=276> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" width=276> |
+|                                   **Home - Black theme**                                   |                                   **Recipe view**                                   |
+| <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" width=276> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" width=276> |
+|                                   **Share menu**                                    |                                **Scale ingredients**                                |
+| <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" width=276> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/8.png" width=276> |
+|                                  **Meal planner**                                   |                                    **About**                                     |
 
 ## Contribution
 
