@@ -68,7 +68,7 @@ export default {
         {
           icon: "help",
           title: "guide",
-          url: "https://github.com/vishnuraghavb/EnRecipes/wiki/User_Guide-v1.3.2",
+          url: "https://github.com/vishnuraghavb/EnRecipes/wiki/User-Guide",
         },
         {
           icon: "priv",
