@@ -288,5 +288,6 @@
   "yieldQ": "Yield quantity",
   "yieldU": "Yield unit",
   "yld": "Yield",
-  "buto": "Backed up to %s"
+  "buto": "Backed up to %s",
+  "sysDefB": "System default + Black"
 }
