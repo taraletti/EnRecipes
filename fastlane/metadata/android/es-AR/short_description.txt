@@ -1,0 +1,1 @@
+Un administrador de Recetas, simple y Offline.
