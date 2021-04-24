@@ -1,0 +1,10 @@
+- New: Add cuisine and tags to your recipes along with category
+- New: Rate and set difficulty level to your recipes
+- New: Shake device to view random recipe
+- Improvement: Search your recipes by name, ingredient or tag
+- Improvement: Add or delete cuisines, categories, yield units, units
+- Improvement: More sorting options
+- Added app languages: Danish, Dutch, Portuguese, Russian and Spanish
+- Removed: Categories rename feature
+- Updated translations
+- Several UI improvements and bug fixes
