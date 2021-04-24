@@ -1088,7 +1088,7 @@ export default {
     },
   },
   created() {
-    this.setTheme(ApplicationSettings.getString("appTheme", "Light"));
+    this.setTheme(ApplicationSettings.getString("appTheme", "sysDef"));
     this.setLayout(ApplicationSettings.getString("layout", "detailed"));
     if (!this.recipes.length) this.initRecipes();
     this.initListItems();

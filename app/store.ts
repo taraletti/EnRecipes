@@ -2,7 +2,7 @@ import Vue from 'nativescript-vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
 import { CouchBase } from '@triniwiz/nativescript-couchbase'
-import { getFileAccess, File, ApplicationSettings, Device } from '@nativescript/core'
+import { getFileAccess, File, ApplicationSettings, Application } from '@nativescript/core'
 const EnRecipesDB = new CouchBase('EnRecipes')
 const userCuisinesDB = new CouchBase('userCuisines')
 const userCategoriesDB = new CouchBase('userCategories')
@@ -300,7 +300,7 @@ export default new Vuex.Store({
     selectedCuisine: null,
     selectedCategory: null,
     selectedTag: null,
-    appTheme: 'Light',
+    appTheme: 'sysDef',
     mondayFirst: false,
   },
   mutations: {
@@ -312,7 +312,17 @@ export default new Vuex.Store({
       ApplicationSettings.setBoolean('mondayFirst', bool)
     },
     setTheme(state, theme) {
-      state.appTheme = theme
+      switch (theme) {
+        case 'sysDef':
+          state.appTheme = Application.systemAppearance() == 'dark' ? "Dark" : "Light"
+          break;
+        case 'sysDefB':
+          state.appTheme = Application.systemAppearance() == 'dark' ? "Black" : "Light"
+          break;
+        default:
+          state.appTheme = theme
+          break;
+      }
       ApplicationSettings.setString('appTheme', theme)
     },
     clearFilter(state) {

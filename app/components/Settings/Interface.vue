@@ -67,7 +67,9 @@ export default {
         {
           icon: "theme",
           title: "Theme",
-          subTitle: localize(this.appTheme),
+          subTitle: localize(
+            ApplicationSettings.getString("appTheme", "sysDef")
+          ),
           action: this.selectThemes,
         },
         {
@@ -124,10 +126,15 @@ export default {
       this.$showModal(ActionDialog, {
         props: {
           title: "Theme",
-          list: ["Light", "Dark", "Black"],
+          list: ["Light", "Dark", "Black", "sysDef", "sysDefB"],
         },
       }).then((action) => {
-        if (action && action !== "Cancel" && this.appTheme !== action) {
+        if (
+          action &&
+          (ApplicationSettings.getString("appTheme") != this.appTheme
+            ? true
+            : this.appTheme != action)
+        ) {
           this.setTheme(action);
           Frame.reloadPage();
         }
