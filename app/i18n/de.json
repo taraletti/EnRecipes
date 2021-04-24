@@ -288,5 +288,6 @@
     "yieldQ": "Ertragsmenge",
     "yieldU": "Ertragseinheit",
     "yld": "Ergebnis",
-    "buto": "Gesichert in %s"
+    "buto": "Gesichert in %s",
+    "sysDefB": "Systemstandard + schwarz"
 }
