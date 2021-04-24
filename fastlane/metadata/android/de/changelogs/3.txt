@@ -1,0 +1,5 @@
+- Mehrere Fehler behoben, die zum Absturz der App führten
+- Kleinere Verbesserungen der Benutzeroberfläche
+- Unterstützung von Anwendungssprachen
+ - Tamilisch hinzugefügt
+ - Weitere Sprachen folgen in Kürze!
