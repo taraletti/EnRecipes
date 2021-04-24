@@ -3,10 +3,10 @@
 - Tema Negro
 - Panel de filtro
 - Elegí la carpeta de copias de seguridad
-- Poné el Lunes como primer día de la semana en el Planeador
-- Arreglado: Creasheo de app al iniciar con sensores bloqueados #30
+- Poné el Lunes como primer día de la semana
+- Arreglado: Creasheo de app #30
 - Arreglado: Launcher de app sin nombre
 - Cambiá de tema sin reiniciar app
 - Removido: Permiso al almacenamiento
 - Traducciones actualizadas
-- Lollipop dado de baja
+- Varias mejoras y arreglos #33
