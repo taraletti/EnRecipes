@@ -1,1 +1,1 @@
-Un administrador de Recetas, simple y Offline.
+Un Administrador de Recetas, Simple y Offline

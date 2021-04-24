@@ -1,0 +1,8 @@
+- Neu: Hinzufügen von Küche und Tags zu Rezepten zusammen mit der Kategorie
+- Neu: Bewerte deine Rezepte und lege den Schwierigkeitsgrad fest
+- Neu: Gerät schütteln, um zufälliges Rezept anzuzeigen
+- Verbessert: Suche Rezepte nach Name, Zutat oder Tag
+- Verbesserung: Hinzufügen/Löschen von Küchen, Kategorien, Ertragseinheiten, Einheiten
+- Verbesserung: Mehr Sortieroptionen
+- App-Sprachen hinzugefügt: Dänisch, Niederländisch, Portugiesisch, Russisch, Spanisch
+- Entfernt: Umbenennen von Kategorien

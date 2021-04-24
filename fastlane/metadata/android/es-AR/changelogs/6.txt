@@ -1,0 +1,10 @@
+- Mejora: Lista de recetas carga más rápido
+- Mejora: Mantené apretado para seleccionar varias recetas
+- Mejora: Mejor búsqueda y filtrado
+- Mejora: Tocá para quitar las instrucciones completadas
+- Obsoleto: Deslizar para borrar receta
+- Obsoleto: Buscar receta con etiqueta
+- Renovado: Calendario del Planeador de Comidas, Diálogos e Íconos de Interfaz
+- Más idiomas: Francés, Italiano, Noruego y Bokmål
+- Traducciones actualizadas
+- Varias mejoras a IU y bugs arreglados

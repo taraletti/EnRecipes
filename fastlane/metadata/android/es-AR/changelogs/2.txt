@@ -1,0 +1,2 @@
+- Las notas de recetas ahora soportan URLs en línea
+- Ahora se puede establecer el tiempo de preparación y cocción
