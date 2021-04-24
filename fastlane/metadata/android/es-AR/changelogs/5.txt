@@ -1,0 +1,10 @@
+- Nuevo: Agregá origen y etiquetas a tus recetas junto con su categoría
+- Nuevo: Establecé nivel de dificultad y puntuá recetas
+- Nuevo: Agitá para ver una receta al azar
+- Mejora: Buscá por nombre, ingrediente o etiqueta
+- Mejora: Agregá o borrá origen, porciones y unidades
+- Mejora: Más opciones de ordenado.
+- Idiomas agregados: Danés, Holandés, Portugués, Ruso y Español
+- Removido: Función de borrar categorías.
+- Traducciones actualizadas
+- Varias mejoras a la interfaz y bugs arreglados
