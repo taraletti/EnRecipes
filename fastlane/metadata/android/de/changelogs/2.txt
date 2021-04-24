@@ -1,0 +1,2 @@
+- Rezeptnotizen unterstützen jetzt eingebettete URLs
+- Möglichkeit, die Zubereitungs- und Garzeit von Rezepten festzulegen
