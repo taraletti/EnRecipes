@@ -1,1 +1,1 @@
-Ein einfacher Offline-Rezeptmanager
+Ein einfaches Offline-Rezeptverwaltungsprogramm
