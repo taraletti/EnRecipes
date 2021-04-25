@@ -1,1 +1,1 @@
-- [Added] System default theme
+- You can now choose a system default theme to follow your device's dark mode setting (for Android 10 and above)
