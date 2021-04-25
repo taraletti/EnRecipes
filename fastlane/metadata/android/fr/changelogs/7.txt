@@ -1,0 +1,12 @@
+- Nouvelle icône de l'appli et interface utilisateur redessinée
+- Nouveaux modes d'affichage de la liste des recettes
+- Thème noir
+- Panneau de filtre dédié
+- Emplacement de sauvegarde
+- Définir le premier jour de la semaine le lundi
+- Plantage au démarrage de l'application #30
+- Pas de nom d'application #29
+- Changer de thème sans redémarrer l'appli
+- Permission de stockage (sup.)
+- Ajout : Hindi, indonésien, italien, malayalam, portugais, espagnol et télougou.
+- Correctifs et améliorations #33
