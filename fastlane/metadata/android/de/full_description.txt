@@ -4,7 +4,7 @@ Funktionen:
 
 - Schnelles Erstellen von Rezepten
 - Hinzufügen von Fotos, Kombinationen und Notizen zu deinen Rezepten
-- Organisiere deine Rezepte nach Küche, Kategorie und Tags
+- Organisiere deine Rezepte nach Küche, Kategorie und Markierungen
 - Füge Rezepte zu deiner Liste „Später ausprobieren“ hinzu und markiere sie als Favoriten
 - Schnelles Suchen von Rezepten nach Titel oder Zutat
 - Skaliere deine Rezeptzutaten, um mehr oder weniger Personen zu versorgen
@@ -17,7 +17,7 @@ Funktionen:
 
 Höhepunkte:
 
-- 100% kostenlos und quelloffen
+- 100 % kostenlos und quelloffen
 - Datenschutz als Standard
 - Keine Berechtigungen erforderlich
 - Keine lästige Werbung oder Popups
