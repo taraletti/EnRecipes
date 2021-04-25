@@ -1,6 +1,6 @@
 - Verbessert: Rezeptliste lädt schneller als bisher
 - Verbessert: Langes Drücken zur Auswahl mehrerer Rezepte
-- Verbessert: Bessere Suche & Filterung
+- Verbessert: Bessere Suche und Filterung
 - Verbessert: Tippen zum Durchstreichen von abgeschlossenen Anweisungen
 - Eingestellt: Wischen, um Rezept zu löschen
 - Eingestellt: Rezept mit Tag suchen
