@@ -1,0 +1,5 @@
+- Corretti diversi bug che causavano crash dell'applicazione
+- Miglioramenti minori dell'interfaccia utente
+- Supporto della lingua dell'applicazione
+    - Aggiunta del tamil
+    - Altre lingue in arrivo!
