@@ -5,7 +5,7 @@ Características:
 - Creá recetas rápidamente
 - Agregá foto, combinaciones y notas a tus recetas
 - Organizá tus recetas por origen, categoría y etiqueta
-- Agregá recetas a tu lista de "Probar luego" y marcalas como favoritas
+- Agregá recetas a tu lista de «Probar luego» y marcalas como favoritas
 - Buscá recetas rápidamente por título o ingredientes
 - Escalá los ingredientes de tu receta para servir a más o menos comensales
 - Sé notificado de la última vez que probaste una receta
@@ -17,7 +17,7 @@ Características:
 
 Destacado:
 
-- 100% gratis y de código abierto
+- 100 % gratis y de código abierto
 - Privado por Diseño
 - No requiere permisos
 - Sin anuncios molestos ni ventanas emergentes
