@@ -1,1 +1,1 @@
-- [Hinzugefügt] Systemstandard-Design
+- Du kannst jetzt ein Standarddesign für das System auswählen, das der Einstellung des dunklen Modus deines Geräts folgt (ab Android 10)

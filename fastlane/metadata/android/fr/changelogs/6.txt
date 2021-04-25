@@ -1,0 +1,10 @@
+- La liste des recettes se charge plus rapidement
+- Appui long pour choisir plusieurs recettes
+- Amélioration de la recherche et du filtrage
+- Touchez pour rayer des instructions complétées
+- Déclassé : balayer pour supprimer une recette
+- Déclassé : rechercher une recette avec un tag
+- Calendrier du planificateur de repas, boîtes de dialogue et icônes de l'interface utilisateur.
+- Ajout de langues : fr, it, no
+- Traductions mises à jour
+- Améliorations de l'interface utilisateur et correctifs

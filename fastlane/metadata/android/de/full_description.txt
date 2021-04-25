@@ -5,7 +5,7 @@ EnRecipes ist ein quelloffenes, datenschutzfreundliches digitales Kochbuch, mit 
 * Schnelles Erstellen von Rezepten
 * Hinzufügen von Fotos, Kombinationen und Notizen zu deinen Rezepten
 * Organisiere deine Rezepte nach Küche, Kategorie und Tags
-* Füge Rezepte zu deiner Liste "Später ausprobieren" hinzu und markiere sie als Favoriten
+* Füge Rezepte zu deiner Liste „Später ausprobieren“ hinzu und markiere sie als Favoriten
 * Schnelles Suchen von Rezepten nach Titel oder Zutat
 * Skaliere deine Rezeptzutaten, um mehr oder weniger Personen zu versorgen
 * Lasse dich benachrichtigen, wenn du ein Rezept zuletzt ausprobiert hast
@@ -15,13 +15,13 @@ EnRecipes ist ein quelloffenes, datenschutzfreundliches digitales Kochbuch, mit 
 * Importieren/Exportieren von Rezepten
 * Helle, dunkle und schwarze Designs
 
-<b>Highlights:</b>
+<b>Höhepunkte</b>
 
-* 100% kostenlos und Open-Source
-* Privacy by Design
+* 100 % kostenlos und quelloffen
+* Datenschutz als Standard
 * Keine Berechtigungen erforderlich
 * Keine lästige Werbung oder Popups
 
 <b>Danksagung:</b>
 
-Diese App wurde in meiner Freizeit mit NativeScript-Vue geschrieben. Ich möchte mich bei all den Leuten bedanken, die mir während des Prozesses geholfen haben, die Konzepte zu verstehen. Mein besonderer Dank gilt dem NativeScript-Team und der Community. Ich möchte mich auch bei den Mitgliedern der Telegram EnRecipes-Gruppe bedanken, die ihre Ideen für dieses Projekt beigesteuert haben.
+Diese Anwendung wurde in meiner Freizeit mit NativeScript-Vue geschrieben. Ich möchte mich bei all den Leuten bedanken, die mir während des Prozesses geholfen haben, die Konzepte zu verstehen. Mein besonderer Dank gilt dem NativeScript-Team und der Gemeinschaft. Ich möchte mich auch bei den Mitgliedern der Telegram EnRecipes-Gruppe bedanken, die ihre Ideen für dieses Projekt beigesteuert haben.

@@ -1,0 +1,10 @@
+- Ajouter une cuisine et des étiquettes à vos recettes en plus de la catégorie
+- Noter et définir le niveau de difficulté
+- Secouer l'appareil pour afficher une recette aléatoire
+- Recherche de vos recettes par nom, ingrédient ou étiquette
+- Ajout ou suppression de cuisines, catégories, unités de rendement, unités
+- Plus d'options de tri
+- Ajout de langues : da, nl, pt, ru et es
+- Renommage des catégories supprimé
+- Mise à jour des trad.
+- Améliorations de l'interface utilisateur et correctifs
