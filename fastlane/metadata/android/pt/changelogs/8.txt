@@ -1,0 +1,1 @@
+- Agora pode escolher um tema padrão do sistema para seguir a configuração do modo escuro do seu dispositivo (para Android 10 e superior)
