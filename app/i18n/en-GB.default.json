@@ -144,6 +144,7 @@
   "mg": "mg",
   "Millilitre": "Millilitre",
   "min": "min",
+  "sec": "sec",
   "minimal": "Minimal",
   "ml": "ml",
   "Moderate": "Moderate",
@@ -289,5 +290,9 @@
   "yieldU": "Yield unit",
   "yld": "Yield",
   "buto": "Backed up to %s",
-  "sysDefB": "System default + Black"
+  "sysDefB": "System default + Black",
+  "timer": "Cooking Timer",
+  "ntmr": "New timer",
+  "strtBtn": "START",
+  "tmr": "Timer %s"
 }
