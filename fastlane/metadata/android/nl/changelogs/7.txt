@@ -1,0 +1,12 @@
+- [Nieuw] App-pictogram en opnieuw ontworpen vormgeving;
+- [Nieuw] Weergavemodi;
+- [Nieuw] Zwart thema;
+- [Nieuw] Filterpaneel;
+- [Nieuw] Stel een back-uplocatie in;
+- [Nieuw] Stel maandag in als eerste dag van de week;
+- [Opgelost] Crash bij opstarten (#30);
+- [Opgelost] Geen appnaam (#29);
+- [Verbeterd] Wijzig het thema zonder de app te herstarten;
+- [Verwijderd] Opslagrecht;
+- [Nieuwe vertalingen] Hindi, Indonesisch, Italiaans, Malayalam, Portugees, Spaans en Telugu;
+- Verbeteringen (#33).

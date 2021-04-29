@@ -1,0 +1,9 @@
+- Nieuw: voeg keukens, labels en categorieën toe;
+- Nieuw: ken moeilijkheidsgraden toe;
+- Nieuw: schud je apparaat om een willekeurig recept te tonen;
+- Verbeterd: zoek naar receptnamen, ingrediënten en labels;
+- Verbeterd: voeg keukens, categorieën en eenheden toe of verwijder ze;
+- Verbeterd: meer sorteeropties;
+- Nieuwe vertalingen: Deens, Nederlands, Portugees, Russisch en Spaans;
+- Verwijderd: mogelijkheid om categorienamen te wijzigen;
+- Verschillende verbeteringen en foutoplossingen.
