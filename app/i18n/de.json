@@ -289,5 +289,10 @@
     "yieldU": "Ertragseinheit",
     "yld": "Ergebnis",
     "buto": "Gesichert in %s",
-    "sysDefB": "Systemstandard + schwarz"
+    "sysDefB": "Systemstandard + schwarz",
+    "tmr": "Timer %s",
+    "strtBtn": "START",
+    "ntmr": "Neuer Timer",
+    "timer": "Kochtimer",
+    "sec": "sec"
 }
