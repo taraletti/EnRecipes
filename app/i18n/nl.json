@@ -290,15 +290,16 @@
     "yld": "Hoeveelheid",
     "buto": "Gebackupt naar %s",
     "sysDefB": "Systeemthema + Zwart",
-    "tmr": "Wekker %s",
+    "tmr": "Kookwekker %s",
     "strtBtn": "STARTEN",
-    "ntmr": "Nieuwe wekker",
+    "ntmr": "Nieuwe kookwekker",
     "timer": "Kookwekker",
     "sec": "sec.",
-    "tmrSnd": "Wekkergeluid",
+    "tmrSnd": "Kookwekkergeluid",
     "aTPrst": "Toegevoegd aan voorinstellingen",
     "fwr": "bij welk recept?",
-    "tmrPrsts": "Tijdklok-voorinstellingen",
+    "tmrPrsts": "Kookwekker: voorinstellingen",
     "prstBtn": "VOORINSTELLINGEN",
-    "stop": "Stoppen"
+    "stop": "Stoppen",
+    "tmrvbrt": "Kookwekker laten trillen"
 }
