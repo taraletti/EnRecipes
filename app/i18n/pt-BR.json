@@ -289,5 +289,9 @@
     "Thai": "Tailandesa",
     "mAgo": "%s meses atrás",
     "Filipino": "Filipina",
-    "dAgo": "%s dias atrás"
+    "dAgo": "%s dias atrás",
+    "tmr": "Temporizador %s",
+    "strtBtn": "INICIAR",
+    "ntmr": "Novo timer",
+    "timer": "Temporizador de Culinária"
 }

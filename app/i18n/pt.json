@@ -289,5 +289,9 @@
     "aFBu": "Adicione uma receita para fazer uma cópia de segurança",
     "addCmbBtn": "ADICIONAR COMBINAÇÃO",
     "aD": "Terminado!",
-    "aBtn": "ADICIONAR"
+    "aBtn": "ADICIONAR",
+    "tmr": "Temporizador %s",
+    "strtBtn": "INICIAR",
+    "ntmr": "Novo temporizador",
+    "timer": "Temporizador de cozedura"
 }

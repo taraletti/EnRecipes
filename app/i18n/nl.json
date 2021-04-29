@@ -289,5 +289,16 @@
     "yieldU": "Eenheid",
     "yld": "Hoeveelheid",
     "buto": "Gebackupt naar %s",
-    "sysDefB": "Systeemthema + Zwart"
+    "sysDefB": "Systeemthema + Zwart",
+    "tmr": "Wekker %s",
+    "strtBtn": "STARTEN",
+    "ntmr": "Nieuwe wekker",
+    "timer": "Kookwekker",
+    "sec": "sec.",
+    "tmrSnd": "Wekkergeluid",
+    "aTPrst": "Toegevoegd aan voorinstellingen",
+    "fwr": "bij welk recept?",
+    "tmrPrsts": "Tijdklok-voorinstellingen",
+    "prstBtn": "VOORINSTELLINGEN",
+    "stop": "Stoppen"
 }
