@@ -294,5 +294,12 @@
   "timer": "Cooking Timer",
   "ntmr": "New timer",
   "strtBtn": "START",
-  "tmr": "Timer %s"
+  "stop": "Stop",
+  "tmr": "Timer %s",
+  "prstBtn": "PRESETS",
+  "tmrPrsts": "Timer presets",
+  "fwr": "for which recipe?",
+  "aTPrst": "Added to presets",
+  "tmrSnd": "Timer sound",
+  "tmrvbrt": "Timer vibrate"
 }
