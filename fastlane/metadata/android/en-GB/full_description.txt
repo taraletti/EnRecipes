@@ -10,16 +10,17 @@ Features:
 - Scale your recipe ingredients to serve more or less people
 - Get notified of the last time you tried a recipe
 - Share your recipe to anyone by any means as a nicely formatted message. You can share the recipe photo too.
-- Shake device to view random recipe
+- Shake your device to view a random recipe
 - Create meal plans
-- Import/Export recipes
-- Light, Dark and Black themes
+- Set cooking timers
+- You can Import or Export your data
+- Has Light, Dark and Black themes
 
 Highlights:
 
 - 100% free and open-source
 - Private by Design
-- No permissions required
+- No special permissions required
 - No annoying ads or pop-ups
 
 Credits:
