@@ -12,6 +12,7 @@ Mogelijkheden:
 - Deel je recept met anderen, evt. inclusief de bijbehorende foto;
 - Schud je apparaat om een willekeurig recept te tonen;
 - Maak maaltijdschema's;
+- Stel kookwekkers in;
 - Importeer/Exporteer recepten;
 - Keuze uit een licht, donker of zwart thema.
 
