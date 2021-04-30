@@ -1,1 +1,3 @@
-- Du kannst jetzt ein Standarddesign für das System auswählen, das der Einstellung des dunklen Modus deines Geräts folgt (ab Android 10)
+- Sie können jetzt ein Standardthema für das System auswählen, das den Einstellungen des dunklen Modus Ihres Geräts folgt (für Android 10 und höher)
+- Kochwecker wurde hinzugefügt
+- Individuelle Einstellungsseite für jedes Werkzeug

@@ -12,14 +12,15 @@ Funktionen:
 - Teile dein Rezept auf beliebige Weise als schön formatierte Nachricht mit anderen. Du kannst auch das Rezeptfoto teilen.
 - Gerät schütteln, um ein zufälliges Rezept anzuzeigen
 - Erstellen von Mahlzeitenplänen
-- Importieren/Exportieren von Rezepten
-- Helle, dunkle und schwarze Designs
+- Kochwecker
+- Du kannst deine Rezepte importieren/exportieren
+- Hat Helle, dunkle und schwarze Designs
 
 Höhepunkte:
 
 - 100 % kostenlos und quelloffen
 - Datenschutz als Standard
-- Keine Berechtigungen erforderlich
+- Keine spezielle Berechtigungen erforderlich
 - Keine lästige Werbung oder Popups
 
 Danksagung:
