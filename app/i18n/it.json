@@ -290,8 +290,16 @@
     "yld": "Resa",
     "buto": "Backup salvato in %s",
     "sysDefB": "Predefinito del sistema + Nero",
-    "tmr": "Timer %s",
+    "tmr": "Contaminuti %s",
     "strtBtn": "AVVIO",
-    "ntmr": "Nuovo timer",
-    "timer": "Timer di cottura"
+    "ntmr": "Nuovo contaminuti",
+    "timer": "Contaminuti di cottura",
+    "tmrvbrt": "Vibrazione contaminuti",
+    "tmrSnd": "Suono del contaminuti",
+    "aTPrst": "Aggiunto alle preimpostazioni",
+    "fwr": "per quale ricetta?",
+    "tmrPrsts": "Preimpostazioni del contaminuti",
+    "prstBtn": "Preimpostazioni",
+    "stop": "Ferma",
+    "sec": "s"
 }

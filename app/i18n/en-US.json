@@ -289,5 +289,17 @@
     "yieldU": "Yield unit",
     "yld": "Yield",
     "buto": "Backed up to %s",
-    "sysDefB": "System default + Black"
+    "sysDefB": "System default + Black",
+    "tmrvbrt": "Timer vibrate",
+    "tmrSnd": "Timer sound",
+    "aTPrst": "Added to presets",
+    "fwr": "for which recipe?",
+    "tmrPrsts": "Timer presets",
+    "prstBtn": "PRESETS",
+    "tmr": "Timer %s",
+    "stop": "Stop",
+    "strtBtn": "START",
+    "ntmr": "New timer",
+    "timer": "Cooking Timer",
+    "sec": "s"
 }
