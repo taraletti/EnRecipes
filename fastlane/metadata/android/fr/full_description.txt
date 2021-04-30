@@ -12,6 +12,7 @@ Caractéristiques :
 - Partagez votre recette avec n'importe qui, par n'importe quel moyen, sous la forme d'un message joliment formaté. Vous pouvez également partager la photo de la recette.
 - Secouez votre appareil pour afficher une recette au hasard
 - Créer des plans de repas
+- Définissez une minuterie
 - Importez/exportez des recettes
 - Thèmes clair, foncé et noir
 
@@ -19,7 +20,7 @@ Points forts :
 
 - 100 % gratuit et code ouvert
 - Privé de base
-- Aucune autorisation requise
+- Aucune autorisation spéciale requise
 - Pas de publicités ennuyeuses ou de pop-ups
 
 Crédits :
