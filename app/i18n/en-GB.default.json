@@ -295,11 +295,18 @@
   "ntmr": "New timer",
   "strtBtn": "START",
   "stop": "Stop",
+  "delay": "Delay",
   "tmr": "Timer %s",
   "prstBtn": "PRESETS",
   "tmrPrsts": "Timer presets",
   "fwr": "for which recipe?",
   "aTPrst": "Added to presets",
   "tmrSnd": "Timer sound",
-  "tmrvbrt": "Timer vibrate"
+  "tmrvbrt": "Timer vibrate",
+  "dlyDur": "Delay duration",
+  "minute": "minute",
+  "minutes": "minutes",
+  "hour": "hour",
+  "hours": "hours",
+  "seconds": "seconds"
 }
