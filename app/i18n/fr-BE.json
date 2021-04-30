@@ -301,5 +301,12 @@
     "strtBtn": "DÉMARRER",
     "ntmr": "Nouvelle minuterie",
     "timer": "Minuterie de cuisson",
-    "sec": "s"
+    "sec": "s",
+    "seconds": "secondes",
+    "hours": "heures",
+    "hour": "heure",
+    "minutes": "minutes",
+    "minute": "minute",
+    "dlyDur": "Durée du retard",
+    "delay": "Retard"
 }
