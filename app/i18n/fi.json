@@ -289,5 +289,14 @@
     "yieldU": "",
     "yld": "",
     "buto": "",
-    "sysDefB": "Järjestelmän oletusarvo + Musta"
+    "sysDefB": "Järjestelmän oletusarvo + Musta",
+    "tmr": "Ajastin %s",
+    "stop": "Pysäytä",
+    "ntmr": "Uusi ajastin",
+    "timer": "Keittoajastin",
+    "tmrSnd": "Ajastinääni",
+    "aTPrst": "Lisätty esiasetuksiin",
+    "fwr": "mitä reseptiä varten?",
+    "tmrPrsts": "Ajastimen esiasetukset",
+    "prstBtn": "ESIASETUKSET"
 }
