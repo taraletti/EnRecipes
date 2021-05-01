@@ -290,9 +290,14 @@
     "yld": "Producir",
     "buto": "Copia de seguridad guardada a %s",
     "sysDefB": "Por defecto del Sistema + Negro",
-    "sec": "seg",
+    "sec": "s",
     "timer": "Temporizador de cocción",
     "ntmr": "Nuevo temporizador",
     "strtBtn": "INICIO",
-    "tmr": "Temporizador %s"
+    "tmr": "Temporizador %s",
+    "seconds": "segundos",
+    "hours": "horas",
+    "hour": "hora",
+    "minutes": "minutos",
+    "minute": "minuto"
 }
