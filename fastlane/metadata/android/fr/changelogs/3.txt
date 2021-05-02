@@ -1,5 +1,0 @@
-- Correction de plusieurs erreurs provoquant des plantages de l'application
-- Améliorations mineures de l'interface utilisateur
-- Prise en charge de la langue de l'application
-    - Ajout du tamoul
-    - D'autres langues seront bientôt disponibles !

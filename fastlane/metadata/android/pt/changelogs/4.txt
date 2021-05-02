@@ -1,2 +1,0 @@
-- Corrigido: unidade de ingredientes revertida para a predefinida ao guardar
-- Adicionado idioma da aplicação: Alemão

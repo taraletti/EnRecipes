@@ -1,2 +1,0 @@
-- Oppskriftsmerknader støtter nå nettadresser på samme linje
-- Mulighet til å angi forberedelses- og koketid

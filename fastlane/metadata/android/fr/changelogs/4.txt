@@ -1,2 +1,0 @@
-- Correction : l'unité d'ingrédients était remise à zéro lors de la sauvegarde
-- Ajout de la langue de l'application : allemand

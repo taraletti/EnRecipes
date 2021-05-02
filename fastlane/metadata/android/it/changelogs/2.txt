@@ -1,2 +1,0 @@
-- Le note delle ricette ora supportano gli URL in linea
-- Possibilità di impostare il tempo di preparazione e cottura delle ricette

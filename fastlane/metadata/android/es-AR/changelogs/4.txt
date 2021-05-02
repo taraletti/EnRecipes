@@ -1,2 +1,0 @@
-- Arreglado: Unidad de ingredientes reseteandose al guardar
-- Idioma de app agregado: Alemán

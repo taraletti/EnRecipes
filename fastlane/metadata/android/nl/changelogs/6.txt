@@ -1,9 +1,0 @@
-- Verbeterd: de receptenlijst laad sneller dan voorheen;
-- Verbeterd: houd een recept ingedrukt om meerdere te kunnen selecteren;
-- Verbeterd: zoekfunctie en filteren;
-- Verbeterd: druk om stappen door te strepen;
-- Verouderd: veeg om recept te verwijderen;
-- Verouderd: zoek naar recepten op basis van labels;
-- Vernieuwd: maaltdijschema's, dialoogvensters en pictogrammen;
-- Nieuwe vertalingen: Frans, Italiaans en Noors (Bokmål);
-- Verschillende verbeteringen en foutoplossingen.

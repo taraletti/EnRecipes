@@ -1,2 +1,0 @@
-- Behoben: Zutateneinheit wird beim Speichern zurückgesetzt
-- App-Sprache hinzugefügt: Deutsch

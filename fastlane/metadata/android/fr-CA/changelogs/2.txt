@@ -1,2 +1,0 @@
-- Les notes de recettes prennent désormais en charge les URL en ligne
-- Possibilité de définir le temps de préparation et de cuisson des recettes

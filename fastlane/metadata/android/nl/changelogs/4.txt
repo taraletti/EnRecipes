@@ -1,2 +1,0 @@
-- Opgelost: ingrediënteenheden werden niet bewaard na het opslaan;
-- Nieuw: Duitse vertaling.
