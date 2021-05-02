@@ -308,5 +308,6 @@
   "minutes": "minutes",
   "hour": "hour",
   "hours": "hours",
-  "seconds": "seconds"
+  "seconds": "seconds",
+  "tmrClr": "Timer cleared"
 }
