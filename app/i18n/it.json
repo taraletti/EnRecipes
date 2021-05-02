@@ -301,5 +301,12 @@
     "tmrPrsts": "Preimpostazioni del contaminuti",
     "prstBtn": "Preimpostazioni",
     "stop": "Ferma",
-    "sec": "s"
+    "sec": "s",
+    "seconds": "secondi",
+    "hours": "ore",
+    "hour": "ora",
+    "minutes": "minuti",
+    "minute": "minuto",
+    "dlyDur": "Durata del ritardo",
+    "delay": "Ritardo"
 }

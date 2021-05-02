@@ -294,12 +294,19 @@
     "strtBtn": "STARTEN",
     "ntmr": "Nieuwe kookwekker",
     "timer": "Kookwekker",
-    "sec": "sec.",
+    "sec": "s",
     "tmrSnd": "Kookwekkergeluid",
     "aTPrst": "Toegevoegd aan voorinstellingen",
     "fwr": "bij welk recept?",
     "tmrPrsts": "Kookwekker: voorinstellingen",
     "prstBtn": "VOORINSTELLINGEN",
     "stop": "Stoppen",
-    "tmrvbrt": "Kookwekker laten trillen"
+    "tmrvbrt": "Kookwekker laten trillen",
+    "seconds": "seconden",
+    "hours": "uur",
+    "hour": "uur",
+    "minutes": "minuten",
+    "minute": "minuut",
+    "dlyDur": "Vertragingsduur",
+    "delay": "Vertraging"
 }

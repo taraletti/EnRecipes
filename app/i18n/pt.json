@@ -293,5 +293,20 @@
     "tmr": "Temporizador %s",
     "strtBtn": "INICIAR",
     "ntmr": "Novo temporizador",
-    "timer": "Temporizador de cozedura"
+    "timer": "Temporizador de cozedura",
+    "dlyDur": "Duração do atraso",
+    "delay": "Atraso",
+    "stop": "Parar",
+    "sec": "s",
+    "minute": "minuto",
+    "minutes": "minutos",
+    "hour": "hora",
+    "hours": "horas",
+    "seconds": "segundos",
+    "tmrvbrt": "Vibrador temporizador",
+    "tmrSnd": "Som temporizador",
+    "aTPrst": "Adicionado às predefinições",
+    "fwr": "para que receita?",
+    "tmrPrsts": "Predefinições temporizadas",
+    "prstBtn": "PRIMEIROS"
 }
