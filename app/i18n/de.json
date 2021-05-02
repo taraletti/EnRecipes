@@ -290,14 +290,14 @@
     "yld": "Ergebnis",
     "buto": "Gesichert in %s",
     "sysDefB": "Systemstandard + schwarz",
-    "tmr": "Kochwecker %s",
+    "tmr": "Timer %s",
     "strtBtn": "START",
-    "ntmr": "Neuer Kochwecker",
-    "timer": "Kochwecker",
+    "ntmr": "Neuer Timer",
+    "timer": "Kochtimer",
     "sec": "sec",
-    "tmrvbrt": "Kochwecker vibrieren",
-    "tmrSnd": "Kochwecker-Ton",
-    "tmrPrsts": "Voreinstellungen des Kochweckers",
+    "tmrvbrt": "Timervibration",
+    "tmrSnd": "Timerton",
+    "tmrPrsts": "Timer-Voreinstellungen",
     "aTPrst": "Zu Voreinstellungen hinzugefügt",
     "fwr": "für welches Rezept?",
     "prstBtn": "Voreinstellungen",
@@ -308,5 +308,6 @@
     "minutes": "Minuten",
     "minute": "Minute",
     "dlyDur": "Verzögerungsdauer",
-    "delay": "Verzögerung"
+    "delay": "Verzögerung",
+    "tmrClr": "Timer gelöscht"
 }
