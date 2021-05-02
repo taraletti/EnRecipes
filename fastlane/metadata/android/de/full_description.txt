@@ -1,7 +1,7 @@
-Um weiterhin Updates zu erhalten, aktualisiere bitte EnRecipes auf diese Version.
+Um weiterhin Aktualisierungen zu erhalten, aktualisiere bitte EnRecipes auf diese Version.
 
 In dieser Version gibt es einige wesentliche Änderungen. Um fortzufahren, musst du also Folgendes tun:
-1. Exportiere ein vollständiges Backup.
+1. Exportiere eine vollständige Datensicherung.
 2. Deinstalliere EnRecipes.
 3. Installiere diese Version und importiere deine Daten.
 
