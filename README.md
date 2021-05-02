@@ -1,4 +1,4 @@
-<p align="center"><a href="https://enrecipes.vercel.app"><img src="fastlane/metadata/android/en-US/images/featureGraphic.png" width="100%"></a></p>
+<p align="center"><a href="https://enrecipes.vercel.app"><img src="fastlane/metadata/android/en-GB/images/featureGraphic.png" width="100%"></a></p>
 
 <h1 align="center">A Simple, Offline Recipe Manager</h1>
 <p align="center">EnRecipes is an open source, privacy-friendly digital cookbook that lets you create, manage and share your recipes.</p>
@@ -50,14 +50,14 @@ Please read the [User Guide](https://github.com/vishnuraghavb/EnRecipes/wiki/Use
 
 ## Screenshots
 
-| <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width=276> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width=276> |
+| <img src="fastlane/metadata/android/en-GB/images/phoneScreenshots/1.png" width=276> | <img src="fastlane/metadata/android/en-GB/images/phoneScreenshots/2.png" width=276> |
 | :---------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------: |
 |                               **Home - Light theme**                                |                                **Home - Dark theme**                                |
-| <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width=276> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" width=276> |
+| <img src="fastlane/metadata/android/en-GB/images/phoneScreenshots/3.png" width=276> | <img src="fastlane/metadata/android/en-GB/images/phoneScreenshots/4.png" width=276> |
 |                               **Home - Black theme**                                |                                   **Recipe view**                                   |
-| <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" width=276> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" width=276> |
+| <img src="fastlane/metadata/android/en-GB/images/phoneScreenshots/5.png" width=276> | <img src="fastlane/metadata/android/en-GB/images/phoneScreenshots/6.png" width=276> |
 |                                   **Share menu**                                    |                                **Scale ingredients**                                |
-| <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" width=276> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/8.png" width=276> |
+| <img src="fastlane/metadata/android/en-GB/images/phoneScreenshots/7.png" width=276> | <img src="fastlane/metadata/android/en-GB/images/phoneScreenshots/8.png" width=276> |
 |                                  **Meal planner**                                   |                                      **About**                                      |
 
 ## Contribution
