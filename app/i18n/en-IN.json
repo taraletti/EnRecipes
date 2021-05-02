@@ -308,5 +308,6 @@
     "minutes": "minutes",
     "minute": "minute",
     "dlyDur": "Delay duration",
-    "delay": "Delay"
+    "delay": "Delay",
+    "tmrClr": "Timer cleared"
 }
