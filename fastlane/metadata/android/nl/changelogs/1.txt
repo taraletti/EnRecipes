@@ -1,0 +1,3 @@
+[NIEUW] Keuze om het systeemthema te gebruiken (Android 10 en hoger);
+[NIEUW] Kookwekker;
+[NIEUW] Individuele instellingenpagina per hulpmiddel.
