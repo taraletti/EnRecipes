@@ -267,7 +267,7 @@
     "today": "aujourd’hui",
     "triedInfo": "Vous avez essayé cette recette %s",
     "trnsl": "Traduire",
-    "trylater": "Essayer plus tard",
+    "trylater": "À essayer plus tard",
     "trySer": "RECHERCHE DANS TOUTES LES RECETTES ?",
     "ts": "Étiquettes",
     "tsInfo": "séparez par des espaces",
@@ -309,5 +309,5 @@
     "minute": "minute",
     "dlyDur": "Durée du retard",
     "delay": "Retard",
-    "tmrClr": "Timer effacé"
+    "tmrClr": "Minuterie effacée"
 }
