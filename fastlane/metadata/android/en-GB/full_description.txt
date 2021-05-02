@@ -1,3 +1,10 @@
+To continue receiving updates, please update your EnRecipes to this version.
+
+There are some significant changes in this version. So, in order to continue, you must do the following:
+1. Export a full backup.
+2. Uninstall EnRecipes.
+3. Install this version and Import your data.
+
 EnRecipes is an open source, privacy-friendly digital cookbook that lets you create, manage and share your recipes.
 
 Features:
