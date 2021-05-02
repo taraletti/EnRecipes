@@ -301,5 +301,12 @@
     "strtBtn": "START",
     "ntmr": "New timer",
     "timer": "Cooking Timer",
-    "sec": "s"
+    "sec": "s",
+    "seconds": "seconds",
+    "hours": "hours",
+    "hour": "hour",
+    "minutes": "minutes",
+    "minute": "minute",
+    "dlyDur": "Delay duration",
+    "delay": "Delay"
 }

@@ -293,5 +293,20 @@
     "tmr": "Temporizador %s",
     "strtBtn": "INICIAR",
     "ntmr": "Novo timer",
-    "timer": "Temporizador de Culinária"
+    "timer": "Temporizador de Culinária",
+    "prstBtn": "PERSPECTIVAS",
+    "sec": "s",
+    "stop": "Parada",
+    "delay": "Atraso",
+    "tmrPrsts": "Predefinições temporizadas",
+    "fwr": "para qual receita?",
+    "aTPrst": "Adicionado às predefinições",
+    "tmrSnd": "Som temporizador",
+    "tmrvbrt": "Temporizador vibrar",
+    "dlyDur": "Duração do atraso",
+    "minute": "minuto",
+    "minutes": "atas",
+    "hour": "hora",
+    "hours": "horas",
+    "seconds": "segundos"
 }
