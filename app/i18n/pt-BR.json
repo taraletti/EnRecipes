@@ -308,5 +308,6 @@
     "minutes": "atas",
     "hour": "hora",
     "hours": "horas",
-    "seconds": "segundos"
+    "seconds": "segundos",
+    "tmrClr": "Temporizador liberado"
 }
