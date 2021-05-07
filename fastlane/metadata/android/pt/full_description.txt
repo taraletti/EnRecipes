@@ -17,7 +17,7 @@ Características:
 - Adapte a quantidade dos ingredientes da sua receita para servir mais ou menos pessoas.
 - Seja notificado sobre a última vez que experimentou uma receita.
 - Partilhe a sua receita com qualquer pessoa, por qualquer meio, como uma mensagem bem formatada. Também pode partilhar a fotografia da receita.
-- Agite o dispositivo para ver uma receita aleatória.
+- Agite o aparelho para ver uma receita aleatória.
 - Crie planos de refeições.
 - Importação/exportação de receitas.
 - Temas da interface: claro, escuro e preto.
