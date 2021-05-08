@@ -290,5 +290,10 @@
     "nwCat": "Ny kategori",
     "November": "November",
     "sysDefB": "Systemstandard + sort",
-    "sec": "s"
+    "sec": "s",
+    "delay": "Forsinkelse",
+    "stop": "Stopper",
+    "strtBtn": "STARTER",
+    "ntmr": "Ny timer",
+    "timer": "Kogetid Timer"
 }
