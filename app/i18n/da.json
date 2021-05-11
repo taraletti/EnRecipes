@@ -295,5 +295,6 @@
     "stop": "Stopper",
     "strtBtn": "STARTER",
     "ntmr": "Ny timer",
-    "timer": "Kogetid Timer"
+    "timer": "Kogetid Timer",
+    "tmrClr": "Timeren er slettet"
 }
