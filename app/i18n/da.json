@@ -296,5 +296,18 @@
     "strtBtn": "STARTER",
     "ntmr": "Ny timer",
     "timer": "Kogetid Timer",
-    "tmrClr": "Timeren er slettet"
+    "tmrClr": "Timeren er slettet",
+    "hour": "timer",
+    "hours": "timers",
+    "aTPrst": "Tilføjet til forudindstillinger",
+    "fwr": "til hvilken opskrift?",
+    "tmrPrsts": "Timeren forindstillinger",
+    "prstBtn": "FORUDSÆTTER",
+    "tmrSnd": "Timeren lyd",
+    "tmr": "Timeren %s",
+    "tmrvbrt": "Timer vibrerer",
+    "dlyDur": "Forsinkelsens varighed",
+    "minute": "minut",
+    "minutes": "minutter",
+    "seconds": "sekunder"
 }
