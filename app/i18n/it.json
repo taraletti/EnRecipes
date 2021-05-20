@@ -267,7 +267,7 @@
     "today": "oggi",
     "triedInfo": "Hai provato questa ricetta %s",
     "trnsl": "Traduci",
-    "trylater": "Prova più tardi",
+    "trylater": "Da provare più tardi",
     "trySer": "CERCARE IN TUTTE LE RICETTE?",
     "ts": "Etichette",
     "tsInfo": "separa con spazi",
@@ -291,7 +291,7 @@
     "buto": "Backup salvato in %s",
     "sysDefB": "Predefinito del sistema + Nero",
     "tmr": "Contaminuti %s",
-    "strtBtn": "AVVIO",
+    "strtBtn": "AVVIA",
     "ntmr": "Nuovo contaminuti",
     "timer": "Contaminuti di cottura",
     "tmrvbrt": "Vibrazione contaminuti",
@@ -308,5 +308,6 @@
     "minutes": "minuti",
     "minute": "minuto",
     "dlyDur": "Durata del ritardo",
-    "delay": "Ritardo"
+    "delay": "Ritardo",
+    "tmrClr": "Contaminuti cancellato"
 }
