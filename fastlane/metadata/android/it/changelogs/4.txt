@@ -1,2 +1,0 @@
-- Risolto: l'unità degli ingredienti viene resettata al salvataggio
-- Aggiunta lingua dell'app: tedesco

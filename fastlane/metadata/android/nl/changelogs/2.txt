@@ -1,2 +1,0 @@
-- Nieuw: voeg url's toe aan aantekeningen;
-- Nieuw: stel de voorbereidings- en kooktijd in.

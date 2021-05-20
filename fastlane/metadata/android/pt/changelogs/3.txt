@@ -1,5 +1,0 @@
-- Corrigidos vários erros que causavam falhas na aplicação
-- Pequenas melhorias na IU
-- Suporte de linguagem da aplicação
-    - Adicionado Tâmil
-    - Mais idiomas em breve!

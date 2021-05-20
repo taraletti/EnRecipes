@@ -1,2 +1,0 @@
-- Recipe notes now support inline URLs
-- Ability to set recipe preparation and cooking time

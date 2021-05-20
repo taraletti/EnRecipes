@@ -1,3 +1,10 @@
+Um weiterhin Aktualisierungen zu erhalten, aktualisiere bitte EnRecipes auf diese Version.
+
+In dieser Version gibt es einige wesentliche Änderungen. Um fortzufahren, musst du also Folgendes tun:
+1. Exportiere eine vollständige Datensicherung.
+2. Deinstalliere EnRecipes.
+3. Installiere diese Version und importiere deine Daten.
+
 EnRecipes ist ein quelloffenes, datenschutzfreundliches digitales Kochbuch, mit dem du deine Rezepte erstellen, verwalten und teilen kannst.
 
 Funktionen:
@@ -12,7 +19,7 @@ Funktionen:
 - Teile dein Rezept auf beliebige Weise als schön formatierte Nachricht mit anderen. Du kannst auch das Rezeptfoto teilen.
 - Gerät schütteln, um ein zufälliges Rezept anzuzeigen
 - Erstellen von Mahlzeitenplänen
-- Kochwecker
+- Kochtimer
 - Du kannst deine Rezepte importieren/exportieren
 - Hat Helle, dunkle und schwarze Designs
 

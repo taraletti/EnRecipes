@@ -1,5 +1,0 @@
-- Opgelost: verschillende bugs die crashes veroorzaakten;
-- Nieuw: taalondersteuning;
-    - Tamilse vertaling toegevoegd;
-    - Meer talen volgen binnenkort!
-- Kleine verbeteringen aan de vormgeving.

@@ -1,2 +1,0 @@
-- As notas de receita agora suportam URLs inline
-- Capacidade de definir a preparação da receita e o tempo de cozedura

@@ -1,5 +1,0 @@
-- Se arreglaron varios bugs que crasheaban la app
-- Pequeñas mejoras a la interfaz
-- Soporte de idiomas para la aplicación
- - Tamil agregado
- - Pronto habrán más idiomas!
