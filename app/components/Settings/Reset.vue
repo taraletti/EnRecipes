@@ -31,7 +31,7 @@
         v-show="!toast"
         row="1"
         class="appbar"
-        rows="*"
+        @loaded="onAppBarLoad"
         columns="auto, *"
       >
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
@@ -42,7 +42,7 @@
         colSpan="2"
         class="appbar snackBar"
         columns="*"
-        @tap="toast = null"
+        @swipe="hideToast"
       >
         <FlexboxLayout minHeight="48" alignItems="center">
           <Label class="title msg" :text="toast" />
@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { Observable } from "@nativescript/core";
+import { Observable, CoreTypes } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
 import { mapState, mapActions } from "vuex";
 import * as utils from "~/shared/utils";
@@ -61,6 +61,7 @@ export default {
   data() {
     return {
       toast: null,
+      appbar: null,
     };
   },
   computed: {
@@ -95,13 +96,40 @@ export default {
       const page = args.object;
       page.bindingContext = new Observable();
     },
+    onAppBarLoad({ object }) {
+      this.appbar = object;
+    },
     // RESET
     resetListItems(listName) {
       this.resetListItemsAction(listName);
+      this.showToast();
+    },
+    showToast() {
       this.toast = localize("restDone");
       utils.timer(5, (val) => {
         if (!val) this.toast = val;
       });
+    },
+    hideToast({ object }) {
+      object
+        .animate({
+          opacity: 0,
+          translate: { x: 0, y: 64 },
+          duration: 250,
+          curve: CoreTypes.AnimationCurve.ease,
+        })
+        .then(() => {
+          this.showUndo = false;
+          this.appbar.translateY = 64;
+          this.appbar.animate({
+            translate: { x: 0, y: 0 },
+            duration: 250,
+            curve: CoreTypes.AnimationCurve.ease,
+          });
+          object.opacity = 1;
+          object.translateY = 0;
+          this.toast = null;
+        });
     },
     touch({ object, action }, type) {
       object.className = action.match(/down|move/) ? "option fade" : "option";

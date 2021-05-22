@@ -11,11 +11,7 @@
         v-if="filteredRecipes.length || searchQuery"
         class="input"
       >
-        <TextField
-          class="modalInput"
-          :hint="'ser' | L"
-          v-model="searchQuery"
-        />
+        <TextField class="modalInput" :hint="'ser' | L" v-model="searchQuery" />
       </StackLayout>
       <ListView row="2" for="recipe in filteredRecipes">
         <v-template>
@@ -48,7 +44,7 @@
         <Button
           col="2"
           class="text sm"
-          :text="'CANCEL' | L"
+          :text="'cBtn' | L"
           @tap="$modal.close(false)"
         />
       </GridLayout>

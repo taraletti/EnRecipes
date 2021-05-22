@@ -3,14 +3,16 @@ import {
   androidLaunchEventLocalizationHandler,
 } from '@nativescript/localize'
 import { on, launchEvent } from '@nativescript/core/application'
-on(launchEvent, (args) => {
-  if (args.android) {
-    androidLaunchEventLocalizationHandler()
-  }
+
+on(launchEvent, ({ android }) => {
+  if (android) androidLaunchEventLocalizationHandler()
 })
+
 import Vue from 'nativescript-vue'
 import EnRecipes from './components/EnRecipes.vue'
 import store from './store'
+
+export const EventBus = new Vue()
 
 import CollectionView from '@nativescript-community/ui-collectionview/vue'
 Vue.use(CollectionView)

@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="tmrClr">"Temporizador liberado"</string>
+  <string name="seconds">"segundos"</string>
+  <string name="hours">"horas"</string>
+  <string name="hour">"hora"</string>
+  <string name="minutes">"atas"</string>
+  <string name="minute">"minuto"</string>
+  <string name="dlyDur">"Duração do atraso"</string>
+  <string name="tmrvbrt">"Temporizador vibrar"</string>
+  <string name="tmrSnd">"Som temporizador"</string>
+  <string name="aTPrst">"Adicionado às predefinições"</string>
+  <string name="fwr">"para qual receita?"</string>
+  <string name="tmrPrsts">"Predefinições temporizadas"</string>
+  <string name="delay">"Atraso"</string>
+  <string name="stop">"Parada"</string>
+  <string name="sec">"s"</string>
+  <string name="prstBtn">"PERSPECTIVAS"</string>
+  <string name="timer">"Temporizador de Culinária"</string>
+  <string name="ntmr">"Novo timer"</string>
+  <string name="strtBtn">"INICIAR"</string>
+  <string name="tmr">"Temporizador %1$s"</string>
+  <string name="dAgo">"%1$s dias atrás"</string>
+  <string name="Filipino">"Filipina"</string>
+  <string name="mAgo">"%1$s meses atrás"</string>
+  <string name="Thai">"Tailandesa"</string>
+  <string name="wAgo">"%1$s semanas atrás"</string>
+  <string name="sysDefB">"Padrão do sistema + Preto"</string>
+  <string name="yld">"Porção"</string>
   <string name="Jewish">"Judeu"</string>
   <string name="Japanese">"Japonês"</string>
   <string name="January">"Janeiro"</string>
@@ -70,7 +97,7 @@
   <string name="restDone">"Reposição feita"</string>
   <string name="restInfo">"A redefinição de uma lista eliminará as entradas criadas pelo usuário e restaurará as entradas padrão. As receitas existentes não serão afetadas."</string>
   <string name="restUL">"Reiniciar a lista de unidades"</string>
-  <string name="restYUL">"Redefinir a lista de unidades de rendimento"</string>
+  <string name="restYUL">"Redefinir a lista de unidades de porção"</string>
   <string name="rmCmb">"Combinação removida"</string>
   <string name="rmIng">"Ingrediente removido"</string>
   <string name="rmIns">"Instrução retirada"</string>
@@ -114,7 +141,7 @@
   <string name="_Oldest_first_Z6cq4h">"Os mais antigos"</string>
   <string name="OK">"OK"</string>
   <string name="October">"Outubro"</string>
-  <string name="nwYiU">"Nova unidade de produção"</string>
+  <string name="nwYiU">"Nova unidade de porção"</string>
   <string name="nwCat">"Nova categoria"</string>
   <string name="noRecsInL">"Nenhuma das receitas aqui corresponde à sua busca"</string>
   <string name="noAccSensor">"O sensor do acelerômetro está desativado ou não está funcionando"</string>
@@ -143,8 +170,8 @@
   <string name="WED">"VIA"</string>
   <string name="FRI">"SEX"</string>
   <string name="MON">"SEG"</string>
-  <string name="yieldU">"Unidade de rendimento"</string>
-  <string name="yieldQ">"Quantidade de rendimento"</string>
+  <string name="yieldU">"Unidade de porção"</string>
+  <string name="yieldQ">"Quantidade de porção"</string>
   <string name="Vegetarian">"Vegetariano"</string>
   <string name="Vegan">"Vegano"</string>
   <string name="unit">"Unidade"</string>
@@ -177,7 +204,7 @@
   <string name="Salads">"Saladas"</string>
   <string name="rst">"REINICIAR"</string>
   <string name="Roll">"Lista"</string>
-  <string name="rmYUInfo">"Você está prestes a remover a unidade de rendimento"</string>
+  <string name="rmYUInfo">"Você está prestes a remover a unidade de porção"</string>
   <string name="rmUInfo">"Você está prestes a remover a unidade"</string>
   <string name="rmCuiInfo">"Você está prestes a remover a cozinha"</string>
   <string name="rmCatInfo">"Você está prestes a remover a categoria"</string>
@@ -286,10 +313,4 @@
   <string name="aD">"Tudo feito!"</string>
   <string name="aBtn">"ADICIONAR"</string>
   <string name="About">"Sobre"</string>
-  <string name="yld">"Yield"</string>
-  <string name="wAgo">"%1$s weeks ago"</string>
-  <string name="Thai">"Thai"</string>
-  <string name="mAgo">"%1$s months ago"</string>
-  <string name="Filipino">"Filipino"</string>
-  <string name="dAgo">"%1$s days ago"</string>
 </resources>

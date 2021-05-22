@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { Observable } from "@nativescript/core";
+import { Observable, Device } from "@nativescript/core";
 import { mapState, mapActions } from "vuex";
 import { localize } from "@nativescript/localize";
 import ActionDialog from "../modal/ActionDialog.vue";

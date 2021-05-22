@@ -71,7 +71,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon", "shakeEnabled", "mondayFirst"]),
+    ...mapState(["icon", "shakeEnabled"]),
     items() {
       return [
         {},
@@ -83,25 +83,15 @@ export default {
           checked: this.shakeEnabled,
           action: this.toggleShake,
         },
-        {
-          type: "switch",
-          icon: "week",
-          title: "swm",
-          checked: this.mondayFirst,
-          action: this.toggleFirstDay,
-        },
         {},
       ];
     },
   },
   methods: {
-    ...mapActions(["setShake", "setFirstDay"]),
+    ...mapActions(["setShake"]),
     onPageLoad(args) {
       const page = args.object;
       page.bindingContext = new Observable();
-    },
-    toggleFirstDay({ object }) {
-      this.setFirstDay(object.checked);
     },
     // SHAKE VIEW RANDOM RECIPE
     toggleShake({ object }) {

@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="tmrClr">"Timer gelöscht"</string>
+  <string name="delay">"Verzögerung"</string>
+  <string name="dlyDur">"Verzögerungsdauer"</string>
+  <string name="minute">"Minute"</string>
+  <string name="minutes">"Minuten"</string>
+  <string name="hour">"Stunde"</string>
+  <string name="hours">"Stunden"</string>
+  <string name="seconds">"Sekunden"</string>
+  <string name="stop">"Stopp"</string>
+  <string name="prstBtn">"Voreinstellungen"</string>
+  <string name="fwr">"für welches Rezept?"</string>
+  <string name="aTPrst">"Zu Voreinstellungen hinzugefügt"</string>
+  <string name="tmrPrsts">"Timer-Voreinstellungen"</string>
+  <string name="tmrSnd">"Timerton"</string>
+  <string name="tmrvbrt">"Timervibration"</string>
+  <string name="sec">"sec"</string>
+  <string name="timer">"Kochtimer"</string>
+  <string name="ntmr">"Neuer Timer"</string>
+  <string name="strtBtn">"START"</string>
+  <string name="tmr">"Timer %1$s"</string>
+  <string name="sysDefB">"Systemstandard + schwarz"</string>
   <string name="buto">"Gesichert in %1$s"</string>
   <string name="yld">"Ergebnis"</string>
   <string name="yieldU">"Ertragseinheit"</string>

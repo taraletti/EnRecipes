@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="sysDefB">"സിസ്റ്റം സ്ഥിരസ്ഥിതി + കറുപ്പ്"</string>
   <string name="buto">"%1$s ലേക്ക് ബാക്കപ്പ് ചെയ്തു"</string>
   <string name="yld">"വരുമാനം"</string>
   <string name="yieldU">"വിളവ് യൂണിറ്റ്"</string>
@@ -292,4 +293,24 @@
   <string name="aBtn">"ചേർക്കുക"</string>
   <string name="About">"കുറിച്ച്"</string>
   <string name="aap">"ഒരു ഫോട്ടോ അറ്റാച്ചുചെയ്യുക"</string>
+  <string name="tmrClr">"Timer cleared"</string>
+  <string name="seconds">"seconds"</string>
+  <string name="hours">"hours"</string>
+  <string name="hour">"hour"</string>
+  <string name="minutes">"minutes"</string>
+  <string name="minute">"minute"</string>
+  <string name="dlyDur">"Delay duration"</string>
+  <string name="tmrvbrt">"Timer vibrate"</string>
+  <string name="tmrSnd">"Timer sound"</string>
+  <string name="aTPrst">"Added to presets"</string>
+  <string name="fwr">"for which recipe?"</string>
+  <string name="tmrPrsts">"Timer presets"</string>
+  <string name="prstBtn">"PRESETS"</string>
+  <string name="tmr">"Timer %1$s"</string>
+  <string name="delay">"Delay"</string>
+  <string name="stop">"Stop"</string>
+  <string name="strtBtn">"START"</string>
+  <string name="ntmr">"New timer"</string>
+  <string name="timer">"Cooking Timer"</string>
+  <string name="sec">"sec"</string>
 </resources>

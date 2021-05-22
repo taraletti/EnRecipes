@@ -67,15 +67,17 @@ import {
   ApplicationSettings,
   path,
   knownFolders,
+  AndroidApplication,
   File,
   Folder,
   Observable,
   Application,
+  getFileAccess,
 } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
 import ConfirmDialog from "../modal/ConfirmDialog.vue";
 import { mapState, mapActions } from "vuex";
-
+import { openOrCreate } from "@akylas/nativescript-sqlite";
 import * as utils from "~/shared/utils";
 
 export default {
@@ -124,9 +126,11 @@ export default {
   },
   methods: {
     ...mapActions([
-      "importListItemsAction",
-      "importRecipesAction",
-      "importMealPlansAction",
+      "importListItems",
+      "importRecipesFromJSON",
+      "importRecipesFromDB",
+      "importMealPlansFromJSON",
+      "importMealPlansFromDB",
       "unlinkBrokenImages",
       "clearImportSummary",
     ]),
@@ -185,7 +189,7 @@ export default {
     },
     exportBackup() {
       this.progress = localize("expip");
-      this.exportFiles("create");
+      this.hijackBackEvent();
       let date = new Date();
       let formattedDate =
         date.getFullYear() +
@@ -198,6 +202,9 @@ export default {
         ("0" + date.getMinutes()).slice(-2) +
         ("0" + date.getSeconds()).slice(-2);
 
+      // Copy db file to EnRecipes folder
+      utils.copyDBToExport();
+
       let filename = `${localize("EnRecipes")}_${formattedDate}.zip`;
       let fromPath = path.join(knownFolders.documents().path, "EnRecipes");
       utils.Zip.zip(fromPath, this.backupFolder, filename)
@@ -205,61 +212,20 @@ export default {
         .catch((err) => {
           console.log("Backup error: ", err);
           this.progress = null;
+          this.releaseBackEvent();
           this.setBackupFolder(true);
         });
     },
-    exportFiles(option) {
-      const folder = path.join(knownFolders.documents().path, "EnRecipes");
-      const EnRecipesFile = File.fromPath(path.join(folder, "recipes.json"));
-      let userCuisinesFile,
-        userCategoriesFile,
-        userYieldUnitsFile,
-        userUnitsFile,
-        mealPlansFile;
-      if (this.cuisines.length)
-        userCuisinesFile = File.fromPath(
-          path.join(folder, "userCuisines.json")
-        );
-      if (this.categories.length)
-        userCategoriesFile = File.fromPath(
-          path.join(folder, "userCategories.json")
-        );
-      if (this.yieldUnits.length)
-        userYieldUnitsFile = File.fromPath(
-          path.join(folder, "userYieldUnits.json")
-        );
-      if (this.units.length)
-        userUnitsFile = File.fromPath(path.join(folder, "userUnits.json"));
-      if (this.mealPlans.length)
-        mealPlansFile = File.fromPath(path.join(folder, "mealPlans.json"));
-      switch (option) {
-        case "create":
-          this.writeDataToFile(EnRecipesFile, this.recipes);
-          this.cuisines.length &&
-            this.writeDataToFile(userCuisinesFile, this.cuisines);
-          this.categories.length &&
-            this.writeDataToFile(userCategoriesFile, this.categories);
-          this.yieldUnits.length &&
-            this.writeDataToFile(userYieldUnitsFile, this.yieldUnits);
-          this.units.length && this.writeDataToFile(userUnitsFile, this.units);
-          this.mealPlans.length &&
-            this.writeDataToFile(mealPlansFile, this.mealPlans);
-          break;
-        case "delete":
-          EnRecipesFile.remove();
-          this.cuisines.length && userCuisinesFile.remove();
-          this.categories.length && userCategoriesFile.remove();
-          this.yieldUnits.length && userYieldUnitsFile.remove();
-          this.units.length && userUnitsFile.remove();
-          this.mealPlans.length && mealPlansFile.remove();
-          break;
-      }
-    },
-    writeDataToFile(file, data) {
-      file.writeText(JSON.stringify(data));
-    },
     showExportSummary(filename) {
+      // delete copied db file
+      getFileAccess().deleteFile(
+        path.join(
+          knownFolders.documents().getFolder("EnRecipes").path,
+          "EnRecipes.db"
+        )
+      );
       this.progress = null;
+      this.releaseBackEvent();
       let description = localize("buto", `"${filename}"`);
       this.$showModal(ConfirmDialog, {
         props: {
@@ -281,63 +247,77 @@ export default {
         }
       });
     },
-    validateZipContent(extractedFolderPath, uri) {
+    validateZipContent(dest, uri) {
       this.progress = localize("impip");
-      let cacheFolderPath = extractedFolderPath + "/EnRecipes";
-      const EnRecipesFilePath = cacheFolderPath + "/recipes.json";
-      const ImagesFolderPath = cacheFolderPath + "/Images";
-      const userCuisinesFilePath = cacheFolderPath + "/userCuisines.json";
-      const userCategoriesFilePath = cacheFolderPath + "/userCategories.json";
-      const userYieldUnitsFilePath = cacheFolderPath + "/userYieldUnits.json";
-      const userUnitsFilePath = cacheFolderPath + "/userUnits.json";
-      const mealPlansFilePath = cacheFolderPath + "/mealPlans.json";
-      if (Folder.exists(cacheFolderPath)) {
-        this.isFileDataValid([
-          {
-            path: EnRecipesFilePath,
-            db: "EnRecipesDB",
-            file: "recipes.json",
-          },
-          {
-            path: userCuisinesFilePath,
-            db: "userCuisinesDB",
-            file: "userCuisines.json",
-          },
-          {
-            path: userCategoriesFilePath,
-            db: "userCategoriesDB",
-            file: "userCategories.json",
-          },
-          {
-            path: userYieldUnitsFilePath,
-            db: "userYieldUnitsDB",
-            file: "userYieldUnits.json",
-          },
-          {
-            path: userUnitsFilePath,
-            db: "userUnitsDB",
-            file: "userUnits.json",
-          },
-          {
-            path: mealPlansFilePath,
-            db: "mealPlansDB",
-            file: "mealPlans.json",
-          },
-        ]);
+      this.hijackBackEvent();
+      let cache = dest + "/EnRecipes";
+      const recipesDB = cache + "/EnRecipes.db";
+      const recipes = cache + "/recipes.json";
+      const images = cache + "/Images";
+      const userCuisines = cache + "/userCuisines.json";
+      const userCategories = cache + "/userCategories.json";
+      const userYieldUnits = cache + "/userYieldUnits.json";
+      const userUnits = cache + "/userUnits.json";
+      const mealPlans = cache + "/mealPlans.json";
+      let vm = this;
+      // IMPORT IMAGES FINALLY
+      function importImages() {
         const timer = setInterval(() => {
-          if (!this.progress) clearInterval(timer);
-          if (this.progress && this.importSummary.found) {
-            Folder.exists(ImagesFolderPath)
-              ? this.importImages(uri)
-              : this.showImportSummary();
+          if (!vm.progress) clearInterval(timer);
+          if (vm.progress && vm.importSummary.found) {
+            Folder.exists(images)
+              ? vm.importImages(uri)
+              : vm.showImportSummary();
           }
         }, 100);
+      }
+      if (Folder.exists(cache)) {
+        if (File.exists(recipesDB)) {
+          // IMPORT FROM DB FILE
+          this.extractData(recipesDB);
+          importImages();
+        } else if (File.exists(recipes)) {
+          // IMPORT FROM JSON FILES
+          this.isFileDataValid([
+            {
+              path: recipes,
+              db: "recipes",
+              file: "recipes.json",
+            },
+            {
+              path: userCuisines,
+              db: "userCuisines",
+              file: "userCuisines.json",
+            },
+            {
+              path: userCategories,
+              db: "userCategories",
+              file: "userCategories.json",
+            },
+            {
+              path: userYieldUnits,
+              db: "userYieldUnits",
+              file: "userYieldUnits.json",
+            },
+            {
+              path: userUnits,
+              db: "userUnits",
+              file: "userUnits.json",
+            },
+            {
+              path: mealPlans,
+              db: "mealPlans",
+              file: "mealPlans.json",
+            },
+          ]);
+          importImages();
+        } else this.failedImport(localize("buEmp"));
       } else this.failedImport(localize("buInc"));
     },
     isFileDataValid(file) {
       const files = file.filter((e) => File.exists(e.path));
       if (files.length) {
-        let isValid = files.map((e) => false);
+        let isValid = files.map(() => false);
         files.forEach((file, i) => {
           File.fromPath(file.path)
             .readText()
@@ -354,7 +334,7 @@ export default {
                   File.fromPath(file.path)
                     .readText()
                     .then((data) => {
-                      this.importDataToDB(JSON.parse(data), file.db);
+                      this.importData(JSON.parse(data), file.db);
                     });
                 });
               }
@@ -364,6 +344,7 @@ export default {
     },
     failedImport(description) {
       this.progress = null;
+      this.releaseBackEvent();
       knownFolders.temp().clear();
       this.$showModal(ConfirmDialog, {
         props: {
@@ -381,37 +362,62 @@ export default {
       }
       return true;
     },
-    importDataToDB(data, db) {
+    extractData(recipesDB) {
+      const db = openOrCreate(recipesDB);
+
+      // Import recipes
+      db.select(`SELECT * FROM recipes`).then((res) => {
+        this.importRecipesFromDB(res);
+      });
+
+      // Import listitems
+      db.select(
+        `SELECT cuisines, categories, yieldUnits, units FROM lists`
+      ).then((res) =>
+        Object.keys(res[0]).forEach((listName) =>
+          this.importListItems({
+            data: JSON.parse(res[0][listName]),
+            listName,
+          })
+        )
+      );
+
+      // Import mealPlans
+      db.select(`SELECT * FROM mealPlans`).then((res) =>
+        this.importMealPlansFromDB(res)
+      );
+    },
+    importData(data, db) {
       switch (db) {
-        case "EnRecipesDB":
-          this.importRecipesAction(data);
+        case "recipes":
+          this.importRecipesFromJSON(data);
           break;
-        case "userCuisinesDB":
-          this.importListItemsAction({
+        case "userCuisines":
+          this.importListItems({
             data,
             listName: "cuisines",
           });
           break;
-        case "userCategoriesDB":
-          this.importListItemsAction({
+        case "userCategories":
+          this.importListItems({
             data,
             listName: "categories",
           });
           break;
-        case "userYieldUnitsDB":
-          this.importListItemsAction({
+        case "userYieldUnits":
+          this.importListItems({
             data,
             listName: "yieldUnits",
           });
           break;
-        case "userUnitsDB":
-          this.importListItemsAction({
+        case "userUnits":
+          this.importListItems({
             data,
             listName: "units",
           });
           break;
-        case "mealPlansDB":
-          this.importMealPlansAction(data);
+        case "mealPlans":
+          this.importMealPlansFromJSON(data);
           break;
       }
     },
@@ -420,6 +426,16 @@ export default {
       Folder.fromPath(destPath);
       utils.Zip.unzip(uri, destPath).then((res) => {
         if (res) {
+          // delete unzipped json files
+          Folder.fromPath(path.join(destPath, "EnRecipes"))
+            .getEntities()
+            .then((entities) => {
+              entities.forEach((entity) => {
+                if (/.json|.db/.test(entity._extension))
+                  File.fromPath(entity._path).remove();
+              });
+            });
+
           this.showImportSummary();
           this.unlinkBrokenImages();
         }
@@ -427,8 +443,8 @@ export default {
     },
     showImportSummary() {
       this.progress = null;
+      this.releaseBackEvent();
       knownFolders.temp().clear();
-      this.exportFiles("delete");
       let { found, imported, updated } = this.importSummary;
       let exists = Math.abs(found - imported - updated) + updated;
       let importedNote = `\n${localize("recI")} ${imported}`;
@@ -443,6 +459,23 @@ export default {
           okButtonText: "OK",
         },
       }).then(() => this.clearImportSummary());
+    },
+
+    // NAVIGATION HANDLERS
+    hijackBackEvent() {
+      AndroidApplication.on(
+        AndroidApplication.activityBackPressedEvent,
+        this.backEvent
+      );
+    },
+    releaseBackEvent() {
+      AndroidApplication.off(
+        AndroidApplication.activityBackPressedEvent,
+        this.backEvent
+      );
+    },
+    backEvent(args) {
+      args.cancel = true;
     },
 
     // HELPERS

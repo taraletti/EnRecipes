@@ -12,7 +12,7 @@
           @scroll="!selectMode && onScroll($event)"
         >
           <v-template name="header">
-            <GridLayout rows="auto" columns="*, auto, 12">
+            <GridLayout rows="auto" columns="*, auto, 8">
               <Label class="pageTitle" :text="`${currentComponent}` | L" />
               <Button
                 col="1"
@@ -78,8 +78,8 @@
               <Image
                 class="imgHolder"
                 verticalAlignment="center"
-                v-if="recipe.imageSrc"
-                :src="recipe.imageSrc"
+                v-if="recipe.image"
+                :src="recipe.image"
                 stretch="none"
                 decodeWidth="96"
                 decodeHeight="96"
@@ -143,8 +143,8 @@
             >
               <Image
                 class="imgHolder"
-                v-if="recipe.imageSrc"
-                :src="recipe.imageSrc"
+                v-if="recipe.image"
+                :src="recipe.image"
                 stretch="aspectFit"
                 :decodeWidth="imgWidth"
                 :decodeHeight="imgWidth"
@@ -198,8 +198,8 @@
             >
               <Image
                 class="imgHolder"
-                v-if="recipe.imageSrc"
-                :src="recipe.imageSrc"
+                v-if="recipe.image"
+                :src="recipe.image"
                 stretch="aspectFit"
                 :decodeWidth="imgWidth"
                 :decodeHeight="imgWidth"
@@ -311,11 +311,20 @@
         </GridLayout>
         <GridLayout
           row="1"
-          rows="auto"
+          rows="auto, auto"
           columns="auto"
           class="appbar toolbar"
           :hidden="!showTools"
         >
+          <GridLayout
+            rows="48"
+            class="tool"
+            columns="auto, *"
+            @touch="touchTool($event, CookingTimer, 'CookingTimer')"
+          >
+            <Label class="ico" :text="icon.timer" />
+            <Label col="1" :text="'timer' | L" />
+          </GridLayout>
           <GridLayout
             row="1"
             rows="48"
@@ -416,10 +425,12 @@ import {
   startAccelerometerUpdates,
   stopAccelerometerUpdates,
 } from "@triniwiz/nativescript-accelerometer";
+
 import { mapActions, mapState } from "vuex";
 import ViewRecipe from "./ViewRecipe";
 import EditRecipe from "./EditRecipe";
 import MealPlanner from "./MealPlanner";
+import CookingTimer from "./CookingTimer";
 import GroceryList from "./GroceryList";
 import Settings from "./Settings";
 import ActionDialog from "./modal/ActionDialog.vue";
@@ -445,9 +456,10 @@ export default {
       scrollPos: 1,
       filterFavourites: false,
       filterTrylater: false,
-      MealPlanner: MealPlanner,
-      GroceryList: GroceryList,
       Settings: Settings,
+      MealPlanner: MealPlanner,
+      CookingTimer: CookingTimer,
+      GroceryList: GroceryList,
       topmenu: [
         {
           title: "EnRecipes",
@@ -465,13 +477,6 @@ export default {
       showTools: false,
     };
   },
-  components: {
-    ViewRecipe,
-    EditRecipe,
-    MealPlanner,
-    GroceryList,
-    Settings,
-  },
   computed: {
     ...mapState([
       "icon",
@@ -488,6 +493,7 @@ export default {
       "selectedCategory",
       "selectedTag",
       "appTheme",
+      "timerSound",
     ]),
     filteredRecipes() {
       let vm = this;
@@ -501,7 +507,7 @@ export default {
         return this.recipes
           .filter(
             (e) =>
-              e.isFavorite &&
+              e.favorite &&
               (e.title.toLowerCase().includes(this.searchQuery) ||
                 getIngredients(e))
           )
@@ -557,16 +563,16 @@ export default {
       "setFirstDay",
       "setLayout",
       "setSortType",
-      "deleteRecipeAction",
-      "deleteRecipesAction",
+      "deleteRecipes",
       "clearFilter",
       "setTheme",
+      "setTimerSound",
     ]),
     onFrameLoad() {
       const View = android.view.View;
       const window = Application.android.startActivity.getWindow();
       const decorView = window.getDecorView();
-      let sdkv = Device.sdkVersion;
+      let sdkv = Device.sdkVersion * 1;
       function setColors(color) {
         window.setStatusBarColor(new Color(color).android);
         sdkv >= 27 && window.setNavigationBarColor(new Color(color).android);
@@ -694,7 +700,7 @@ export default {
           ],
         },
       }).then((action) => {
-        if (action && action !== "Cancel" && this.sortType !== action) {
+        if (action && this.sortType !== action) {
           this.setSortType(action);
           ApplicationSettings.setString("sortType", action);
           this.updateSort();
@@ -733,53 +739,35 @@ export default {
       this.listview.refresh();
     },
     deleteSelection() {
-      this.selection.length === 1
-        ? this.deleteRecipe(this.selection[0])
-        : this.deleteRecipes(this.selection);
+      this.deletionDialogActive = true;
+      let hasMany = this.selection.length > 1;
+      let what = hasMany
+        ? `${this.selection.length} ${localize("recs")}`
+        : `"${
+            this.recipes[
+              this.recipes.findIndex((e) => e.id === this.selection[0])
+            ].title
+          }"`;
+      this.$showModal(ConfirmDialog, {
+        props: {
+          title: localize("conf"),
+          description: `${localize(
+            hasMany ? "delRecsInfo" : "delRecInfo",
+            what
+          )}`,
+          cancelButtonText: "cBtn",
+          okButtonText: "dBtn",
+        },
+      }).then((action) => {
+        if (action) {
+          this.deleteRecipes(this.selection);
+          if (!this.filteredRecipes.length) this.goToHome();
+          this.clearSelection();
+        }
+        this.deletionDialogActive = false;
+      });
     },
     exportSelection() {},
-    deleteRecipe(id) {
-      this.deletionDialogActive = true;
-      let index = this.recipes.findIndex((e) => e.id === id);
-      let recipeTitle = `"${this.recipes[index].title}"`;
-      this.$showModal(ConfirmDialog, {
-        props: {
-          title: localize("conf"),
-          description: `${localize("delRecInfo", recipeTitle)}`,
-          cancelButtonText: "cBtn",
-          okButtonText: "dBtn",
-        },
-      }).then((action) => {
-        if (action) {
-          this.deleteRecipeAction({
-            index,
-            id,
-          });
-          if (!this.filteredRecipes.length) this.goToHome();
-          this.clearSelection();
-        }
-        this.deletionDialogActive = false;
-      });
-    },
-    deleteRecipes(idsArr) {
-      this.deletionDialogActive = true;
-      let selectionCount = `${this.selection.length} ${localize("recs")}`;
-      this.$showModal(ConfirmDialog, {
-        props: {
-          title: localize("conf"),
-          description: `${localize("delRecsInfo", selectionCount)}`,
-          cancelButtonText: "cBtn",
-          okButtonText: "dBtn",
-        },
-      }).then((action) => {
-        if (action) {
-          this.deleteRecipesAction(idsArr);
-          if (!this.filteredRecipes.length) this.goToHome();
-          this.clearSelection();
-        }
-        this.deletionDialogActive = false;
-      });
-    },
 
     // SHAKE DETECTOR
     onSensorData({ x, y, z }) {
@@ -836,7 +824,7 @@ export default {
           count = this.recipes.filter((e) => !e.tried).length;
           break;
         case "favourites":
-          count = this.recipes.filter((e) => e.isFavorite).length;
+          count = this.recipes.filter((e) => e.favorite).length;
           break;
         default:
           count = this.recipes.filter((e) => {
@@ -1089,12 +1077,10 @@ export default {
   },
   created() {
     this.setTheme(ApplicationSettings.getString("appTheme", "sysDef"));
-    this.setLayout(ApplicationSettings.getString("layout", "detailed"));
     if (!this.recipes.length) this.initRecipes();
+    this.initMealPlans();
     this.initListItems();
-    if (!this.mealPlans.length) this.initMealPlans();
-    this.setShake(ApplicationSettings.getBoolean("shakeEnabled", true));
-    this.setFirstDay(ApplicationSettings.getBoolean("mondayFirst", false));
+    if (!this.timerSound.title) this.setTimerSound(utils.getTones()[0]);
   },
 };
 </script>

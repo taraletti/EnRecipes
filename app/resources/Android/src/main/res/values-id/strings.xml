@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="stop">"Berhenti"</string>
+  <string name="delay">"Menunda"</string>
+  <string name="tmr">"Timer %1$s"</string>
+  <string name="prstBtn">"PRESET"</string>
+  <string name="tmrPrsts">"Preset timer"</string>
+  <string name="fwr">"untuk resep yang mana?"</string>
+  <string name="aTPrst">"Ditambahkan ke preset"</string>
+  <string name="tmrSnd">"Suara timer"</string>
+  <string name="tmrvbrt">"Timer bergetar"</string>
+  <string name="dlyDur">"Durasi penundaan"</string>
+  <string name="minute">"menit"</string>
+  <string name="minutes">"menit"</string>
+  <string name="hour">"jam"</string>
+  <string name="hours">"jam"</string>
+  <string name="seconds">"detik"</string>
+  <string name="tmrClr">"Timer dibersihkan"</string>
+  <string name="timer">"Timer Memasak"</string>
+  <string name="ntmr">"Timer baru"</string>
+  <string name="strtBtn">"MULAI"</string>
+  <string name="sec">"s"</string>
+  <string name="sysDefB">"Default sistem + Hitam"</string>
   <string name="buto">"Didukung ke %1$s"</string>
   <string name="yld">"Menghasilkan"</string>
   <string name="yieldU">"Satuan hasil"</string>

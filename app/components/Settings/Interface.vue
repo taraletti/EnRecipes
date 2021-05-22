@@ -97,7 +97,7 @@ export default {
           list: [...languages],
         },
       }).then((action) => {
-        if (action && action !== "Cancel" && this.appLanguage !== action) {
+        if (action && this.appLanguage !== action) {
           let currentLocale = Device.language.split("-")[0];
           let locale = this.language.filter((e) => e.title === action)[0]
             .locale;
@@ -148,7 +148,7 @@ export default {
           list: ["detailed", "grid", "photogrid", "simple", "minimal"],
         },
       }).then((action) => {
-        if (action && action !== "Cancel" && this.layoutMode !== action) {
+        if (action && this.layoutMode !== action) {
           let act = action.toLowerCase();
           ApplicationSettings.setString("layout", act);
           this.setLayout(act);

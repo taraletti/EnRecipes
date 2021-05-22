@@ -9,6 +9,9 @@
 	<color name="ns_accent">
 		#ffffff
 	</color>
+	<color name="orange">
+		#ff5200
+	</color>
 	<color name="white">
 		#ffffff
 	</color>

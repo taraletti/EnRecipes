@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="sec">"सेकंड"</string>
+  <string name="timer">"कुकिंग टाइमर"</string>
+  <string name="ntmr">"नया टाइमर"</string>
+  <string name="strtBtn">"शुरू"</string>
+  <string name="stop">"रुकें"</string>
+  <string name="delay">"देरी"</string>
+  <string name="tmr">"टाइमर%1$s"</string>
+  <string name="prstBtn">"प्रीसेट"</string>
+  <string name="tmrPrsts">"टाइमर प्रीसेट"</string>
+  <string name="aTPrst">"प्रीसेट में जोड़ा गया"</string>
+  <string name="tmrSnd">"टाइमर की आवाज़"</string>
+  <string name="tmrvbrt">"टाइमर वाइब्रेट"</string>
+  <string name="dlyDur">"विलंब अवधि"</string>
+  <string name="minute">"मिनट"</string>
+  <string name="minutes">"मिनटो"</string>
+  <string name="hour">"घंटा"</string>
+  <string name="hours">"घंटे"</string>
+  <string name="seconds">"सेकंड"</string>
+  <string name="tmrClr">"टाइमर साफ"</string>
+  <string name="fwr">"किस विधि के लिए?"</string>
+  <string name="sysDefB">"प्रणालीगत चूक + काला"</string>
   <string name="buto">"%1$s में बैकअप लिया गया"</string>
   <string name="yld">"मान जाना"</string>
   <string name="yieldU">"उपज इकाई"</string>

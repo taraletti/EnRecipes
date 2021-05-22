@@ -12,11 +12,11 @@ $gray10: #000000;
 $orange: #ff5200;
 
 Page {
-  font-family: "Inter-Medium";
+  font-family: 'Inter-Medium';
   font-size: 14;
 }
 .ico {
-  font-family: "enrecipes";
+  font-family: 'enrecipes';
   font-size: 24;
   vertical-alignment: center;
   &.sm {
@@ -25,7 +25,7 @@ Page {
   }
 }
 .tb {
-  font-family: "Inter-Bold";
+  font-family: 'Inter-Bold';
 }
 .tac {
   text-align: center;
@@ -180,7 +180,7 @@ TextView {
 .progressContainer {
   width: 100%;
 }
-Progress {
+progress {
   margin: 16;
   background-color: $gray5;
 }
@@ -203,7 +203,7 @@ Switch {
     @extend .hl;
   }
 }
-Button {
+button {
   background-color: transparent;
   z-index: 0;
   padding: 8;
@@ -240,7 +240,7 @@ Button {
     width: 32;
     height: 32;
     min-width: 0;
-    margin: 0 0 0 8;
+    margin: 0 0 0 4;
     vertical-alignment: center;
   }
   &.rate {
@@ -253,7 +253,7 @@ Button {
 // HOME
 .emptyState {
   padding: 16 16 8;
-  Label {
+  label {
     @extend .tw;
   }
   .title {
@@ -312,6 +312,25 @@ Button {
   border-radius: 12;
 }
 // -----------------------------
+// COOKING TIMER
+
+.singleTimer {
+  padding: 8 16;
+  .info {
+    margin: 8;
+  }
+  .recipeTitle {
+    horizontal-alignment: left;
+    // font-size: 12;
+  }
+  progress {
+    color: $orange;
+    width: 100%;
+    height: 4;
+    margin: 8 0 0;
+  }
+}
+// -----------------------------
 // SETTINGS
 .group-info {
   padding: 16 16 16 72;
@@ -334,9 +353,9 @@ Button {
       font-size: 12;
     }
   }
-  .listSpace {
-    height: 72;
-  }
+}
+.listSpace {
+  height: 72;
 }
 
 // -----------------------------
@@ -376,9 +395,9 @@ Button {
     @extend .tb;
     @extend .tw;
   }
-  .clickable {
-    color: $orange;
-  }
+}
+.clickable {
+  color: $orange;
 }
 .ingredient {
   padding: 0 16;
@@ -452,7 +471,7 @@ Button {
   horizontal-alignment: left;
   .tool {
     padding: 0 12;
-    Label {
+    label {
       vertical-alignment: center;
     }
     .ico {
@@ -509,7 +528,7 @@ Button {
     color: $orange;
   }
   .activeDay {
-    background-color: rgba($orange, 0.2);
+    @extend .hl;
   }
 }
 .dayPlan {
@@ -549,7 +568,8 @@ Button {
   }
   ListPicker {
     width: 25%;
-    height: 160;
+    height: 128;
+    margin: 16 0;
   }
   .listItem {
     @extend .tw;
@@ -596,19 +616,34 @@ ActivityIndicator {
 }
 // -----------------------------
 // Transitions
+.blink {
+  animation-name: blink;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease;
+}
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 .hl {
   animation-name: hl;
   animation-duration: 0.2s;
   animation-fill-mode: forwards;
-  animation-timing-function: ease-out;
+  animation-timing-function: ease;
 }
 @keyframes hl {
   0% {
-    opacity: 0.5;
     background-color: transparent;
   }
   100% {
-    opacity: 1;
     background-color: rgba($orange, 0.2);
   }
 }
@@ -616,7 +651,7 @@ ActivityIndicator {
   animation-name: fade;
   animation-duration: 0.2s;
   animation-fill-mode: forwards;
-  animation-timing-function: ease-out;
+  animation-timing-function: ease;
 }
 @keyframes fade {
   0% {

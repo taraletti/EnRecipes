@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="tmrClr">"Таймер очищен"</string>
+  <string name="seconds">"секунды"</string>
+  <string name="hours">"часы"</string>
+  <string name="hour">"час"</string>
+  <string name="minutes">"минут"</string>
+  <string name="minute">"минута"</string>
+  <string name="dlyDur">"Длительность задержки"</string>
+  <string name="tmrvbrt">"Таймер вибрации"</string>
+  <string name="tmrSnd">"Звук таймера"</string>
+  <string name="aTPrst">"Добавлено в предустановки"</string>
+  <string name="fwr">"для какого рецепта?"</string>
+  <string name="tmrPrsts">"Предустановки таймера"</string>
+  <string name="prstBtn">"ПРЕЗЕТЫ"</string>
+  <string name="delay">"Задержка"</string>
+  <string name="stop">"Стоп"</string>
+  <string name="sec">"вто"</string>
+  <string name="timer">"Таймер готовки"</string>
+  <string name="ntmr">"Новый таймер"</string>
+  <string name="tmr">"Таймер %1$s"</string>
+  <string name="strtBtn">"СТАРТ"</string>
+  <string name="sysDefB">"По умолчанию + Чернить"</string>
   <string name="buto">"Резервировано до %1$s"</string>
   <string name="yld">"Урожай"</string>
   <string name="yieldU">"Подавать в"</string>

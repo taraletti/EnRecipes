@@ -1,7 +1,7 @@
 import { NativeScriptConfig } from "@nativescript/core"
 
 export default {
-  id: "com.vishnuraghav.enrecipes",
+  id: "com.vishnuraghav.EnRecipes",
   appPath: "app",
   appResourcesPath: "app/resources",
   android: {

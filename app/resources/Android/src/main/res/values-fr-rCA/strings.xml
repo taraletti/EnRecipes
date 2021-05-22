@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="tmrClr">"Minuterie effacée"</string>
+  <string name="delay">"Retard"</string>
+  <string name="dlyDur">"Durée du retard"</string>
+  <string name="minute">"minute"</string>
+  <string name="minutes">"minutes"</string>
+  <string name="hour">"heure"</string>
+  <string name="hours">"heures"</string>
+  <string name="seconds">"secondes"</string>
+  <string name="sec">"s"</string>
+  <string name="timer">"Minuterie de cuisson"</string>
+  <string name="ntmr">"Nouvelle minuterie"</string>
+  <string name="strtBtn">"DÉMARRER"</string>
+  <string name="stop">"Arrêter"</string>
+  <string name="tmr">"Minuterie %1$s"</string>
+  <string name="prstBtn">"PRÉRÉGLAGES"</string>
+  <string name="tmrPrsts">"Préréglages de la minuterie"</string>
+  <string name="fwr">"pour quelle recette?"</string>
+  <string name="aTPrst">"Ajouté aux préréglages"</string>
+  <string name="tmrSnd">"Son de la minuterie"</string>
+  <string name="tmrvbrt">"Vibreur de la minuterie"</string>
+  <string name="sysDefB">"Selon le système + Noir"</string>
   <string name="buto">"Sauvegardé dans %1$s"</string>
   <string name="yld">"Rendement"</string>
   <string name="yieldU">"Unité de rendement"</string>
@@ -21,7 +42,7 @@
   <string name="tsInfo">"séparez par des espaces"</string>
   <string name="ts">"Étiquettes"</string>
   <string name="trySer">"RECHERCHE DANS TOUTES LES RECETTES?"</string>
-  <string name="trylater">"Essayer plus tard"</string>
+  <string name="trylater">"À essayer plus tard"</string>
   <string name="trnsl">"Traduire"</string>
   <string name="triedInfo">"Vous avez essayé cette recette %1$s"</string>
   <string name="today">"aujourd’hui"</string>
@@ -49,7 +70,7 @@
   <string name="_Sri_Lankan_Z7GfBa">"sri-lankaise"</string>
   <string name="Spanish">"espagnole"</string>
   <string name="Soups">"Soupes"</string>
-  <string name="snacks">"en-cas"</string>
+  <string name="snacks">"En-cas"</string>
   <string name="small">"petit"</string>
   <string name="sltd">"sélectionné"</string>
   <string name="_Slowest_first_hHjY6">"La plus lente d’abord"</string>
@@ -88,7 +109,7 @@
   <string name="restCatL">"Réinitialiser la liste des catégories"</string>
   <string name="rest">"Réinitialiser"</string>
   <string name="resNF">"Recette introuvable"</string>
-  <string name="req">"%1$s requise"</string>
+  <string name="req">"%1$s requis(e)"</string>
   <string name="recU">"mise à jour :"</string>
   <string name="recTitle">"Ma recette saine"</string>
   <string name="recs">"recettes"</string>
@@ -110,7 +131,7 @@
   <string name="Poultry">"Volaille"</string>
   <string name="Portuguese">"portugaise"</string>
   <string name="plsAdd">"Utilisez le bouton plus pour en ajouter une"</string>
-  <string name="planner">"Organisateur de repas"</string>
+  <string name="planner">"Planificateur de repas"</string>
   <string name="pinch">"pincée"</string>
   <string name="Piece">"Morceau"</string>
   <string name="piece">"morceau"</string>
@@ -154,8 +175,8 @@
   <string name="May">"mai"</string>
   <string name="March">"mars"</string>
   <string name="_Main_dishes_u6RGQ">"Plats principaux"</string>
-  <string name="mAgo">"Il ya %1$s mois"</string>
-  <string name="lunch">"dîner"</string>
+  <string name="mAgo">"Il y a %1$s mois"</string>
+  <string name="lunch">"Dîner"</string>
   <string name="ltAgo">"il y a longtemps"</string>
   <string name="Loaf">"Miche"</string>
   <string name="Litre">"Litre"</string>
@@ -229,7 +250,7 @@
   <string name="donate">"Faire un don"</string>
   <string name="disc">"Cette recette a des modifications non enregistrées. Que voudriez-vous faire?"</string>
   <string name="disBtn">"IGNORER"</string>
-  <string name="dinner">"souper"</string>
+  <string name="dinner">"Souper"</string>
   <string name="_Difficulty_level_cSL5d">"Niveau de difficulté"</string>
   <string name="detailed">"Détaillée"</string>
   <string name="Desserts">"Desserts"</string>
