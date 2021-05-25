@@ -313,4 +313,6 @@
   <string name="aBtn">"ДОБАВИТЬ"</string>
   <string name="About">"О приложении"</string>
   <string name="aap">"Прикрепить фото"</string>
+  <string name="notifSetg">"Notification settings"</string>
+  <string name="tmrRm">"Timer removed"</string>
 </resources>

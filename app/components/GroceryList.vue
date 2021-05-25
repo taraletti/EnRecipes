@@ -28,9 +28,8 @@ export default {
   },
   methods: {
     ...mapActions(["setComponent"]),
-    onPageLoad(args) {
-      const page = args.object;
-      page.bindingContext = new Observable();
+    onPageLoad({ object }) {
+      object.bindingContext = new Observable();
       this.setComponent("GroceryList");
     },
     // HELPERS

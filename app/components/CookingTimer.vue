@@ -16,7 +16,7 @@
               @tap="$navigateTo(CTSettings)"
             />
           </GridLayout>
-          <SingleTimer
+          <Timer
             v-for="(timer, i) in activeTimers"
             :key="timer.id"
             ref="singleTimer"
@@ -41,22 +41,19 @@
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
         <Button class="ico fab" :text="icon.plus" @tap="addTimer" col="2" />
       </GridLayout>
-      <GridLayout
-        row="1"
-        class="appbar snackBar"
-        :hidden="!showUndo"
-        columns="auto, *, auto"
-        @swipe="hideUndoBar"
-      >
-        <Button :text="countdown" class="ico countdown tb" />
-        <Label class="title" col="1" :text="snackMsg | L" />
-        <Button class="ico fab" :text="icon.undo" @tap="undoDel" col="3" />
-      </GridLayout>
+      <SnackBar
+        :hidden="!showUndo || toast"
+        :count="countdown"
+        :msg="snackMsg"
+        :undo="undoDel"
+        :action="hideBar"
+      />
+      <Toast :toast="toast" :action="hideBar" />
     </GridLayout>
   </Page>
 </template>
 
-<script>
+<script lang="ts">
 import { localize } from "@nativescript/localize";
 import {
   Observable,
@@ -64,20 +61,25 @@ import {
   Application,
   ApplicationSettings,
   AndroidApplication,
+  Utils,
 } from "@nativescript/core";
 import { mapState, mapActions } from "vuex";
-import CTSettings from "./Settings/CTSettings.vue";
-import ActionDialog from "./modal/ActionDialog.vue";
-import CookingTimePicker from "./modal/CookingTimePicker.vue";
-import CookingTimer from "./CookingTimer.vue";
-import SingleTimer from "./SingleTimer.vue";
-import * as utils from "~/shared/utils";
 
+import Action from "./modals/Action.vue";
+import CookingTimer from "./CookingTimer.vue";
+import CTSettings from "./settings/CTSettings.vue";
+import TimePickerHMS from "./modals/TimePickerHMS.vue";
+import Timer from "./sub/Timer.vue";
+import Toast from "./sub/Toast.vue";
+import SnackBar from "./sub/SnackBar.vue";
+
+import * as utils from "~/shared/utils";
+// import { fgs } from "~/foreground.android";
 import { EventBus } from "~/main";
 let undoTimer;
 
 export default {
-  components: { SingleTimer },
+  components: { Timer, Toast, SnackBar },
   props: ["recipeID"],
   data() {
     return {
@@ -88,6 +90,7 @@ export default {
       showUndo: false,
       undo: false,
       CTSettings: CTSettings,
+      toast: null,
     };
   },
   computed: {
@@ -111,9 +114,8 @@ export default {
       "addTimerPreset",
       "updateActiveTimer",
     ]),
-    onPageLoad(args) {
-      const page = args.object;
-      page.bindingContext = new Observable();
+    onPageLoad({ object }) {
+      object.bindingContext = new Observable();
       this.setComponent("CookingTimer");
     },
     onAppBarLoad({ object }) {
@@ -170,17 +172,17 @@ export default {
       let pausedCount = this.activeTimers.filter((e) => e.isPaused).length;
       let ongoingCount = activeCount - pausedCount;
       console.log("notifying");
-      utils.TimerNotification.show({
+      utils.TimerNotif.show({
         bID: "bringToFront",
-        cID: "CookingTimer",
-        cName: "Cooking Timer",
+        cID: "cti",
+        cName: "Cooking Timer info",
         description: `${ongoingCount} ongoing, ${pausedCount} paused`,
         nID: 999,
-        priority: 0,
+        priority: -2,
         sound: null,
         title: localize("timer"),
       });
-      if (activeCount <= 0) utils.TimerNotification.clear(999);
+      if (activeCount <= 0) utils.TimerNotif.clear(999);
     },
     intentListener({ intent, android }) {
       let ct = "CookingTimer";
@@ -191,10 +193,11 @@ export default {
         let openTimer = setInterval(() => {
           if (comp == ct) clearInterval(openTimer);
           else {
-            this.$navigateTo(CookingTimer);
+            if (comp == "CTSettings") this.$navigateBack();
+            else this.$navigateTo(CookingTimer);
             comp = ct;
           }
-          // Application.off(Application.launchEvent, this.intentListener);
+          Application.off(Application.launchEvent, this.intentListener);
           Application.android.off(
             AndroidApplication.activityNewIntentEvent,
             this.intentListener
@@ -210,11 +213,11 @@ export default {
       let title = timer.label;
       let time = this.formattedTime(timer.time);
       let bID = "timer" + timer.id;
-      utils.TimerNotification.show({
+      utils.TimerNotif.show({
         actions: true,
         bID,
-        cID: "FiringTimers",
-        cName: "Firing timers",
+        cID: "cta",
+        cName: "Cooking Timer alerts",
         description: time,
         nID: timer.id,
         priority: 1,
@@ -228,10 +231,18 @@ export default {
         EventBus.$emit(bID, action);
       });
     },
+    startForegroundService() {
+      const ctx = Utils.ad.getApplicationContext();
+      const intent = new android.content.Intent();
+      intent.setClassName(ctx, "com.tns.ForegroundService");
+      ctx.startService(intent);
+    },
 
     // DATA HANDLERS
     addTimer() {
-      this.$showModal(CookingTimePicker, {
+      // fgs.class
+      this.startForegroundService();
+      this.$showModal(TimePickerHMS, {
         props: {
           title: "ntmr",
           label: `${localize("tmr", this.activeTimers.length + 1)}`,
@@ -244,7 +255,7 @@ export default {
             let list = this.timerPresets.map(
               (e) => `${e.label} - ${this.formattedTime(e.time)}`
             );
-            this.$showModal(ActionDialog, {
+            this.$showModal(Action, {
               props: {
                 title: "tmrPrsts",
                 list,
@@ -285,7 +296,7 @@ export default {
     removeTimer(id, index, noUndo) {
       let temp = this.activeTimers[index];
       this.removeActiveTimer(index);
-      utils.TimerNotification.clear(id);
+      utils.TimerNotif.clear(id);
       if (!noUndo) {
         this.showUndoBar("tmrClr")
           .then(() => {
@@ -306,12 +317,19 @@ export default {
       timer.recipeID = timer.timerInterval = null;
       timer.preset = 1;
       this.addTimerPreset(timer);
+      this.showToast("aTPrst");
     },
     togglePause(timer, bool) {
       if (typeof bool === "boolean") timer.isPaused = bool;
       else timer.isPaused = !timer.isPaused;
       this.updateActiveTimer(timer);
       this.notifyTimers();
+    },
+    showToast(data) {
+      this.toast = localize(data);
+      utils.timer(5, (val) => {
+        if (!val) this.toast = val;
+      });
     },
     showUndoBar(message) {
       return new Promise((resolve, reject) => {
@@ -335,7 +353,8 @@ export default {
         }, 100);
       });
     },
-    hideUndoBar({ object }) {
+    hideBar({ object }) {
+      this.appbar.translateY = 64;
       object
         .animate({
           opacity: 0,
@@ -345,7 +364,7 @@ export default {
         })
         .then(() => {
           this.showUndo = false;
-          this.appbar.translateY = 64;
+          this.toast = null;
           this.appbar.animate({
             translate: { x: 0, y: 0 },
             duration: 250,
@@ -366,7 +385,7 @@ export default {
     },
   },
   created() {
-    // Application.on(Application.launchEvent, this.intentListener);
+    Application.on(Application.launchEvent, this.intentListener);
     Application.android.on(
       AndroidApplication.activityNewIntentEvent,
       this.intentListener

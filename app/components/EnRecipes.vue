@@ -18,7 +18,7 @@
                 col="1"
                 class="ico"
                 :text="icon.cog"
-                @tap="navigateTo(Settings, 'Settings', true)"
+                @tap="navigateTo(AppSettings, 'Settings', true)"
               />
             </GridLayout>
           </v-template>
@@ -432,10 +432,10 @@ import EditRecipe from "./EditRecipe";
 import MealPlanner from "./MealPlanner";
 import CookingTimer from "./CookingTimer";
 import GroceryList from "./GroceryList";
-import Settings from "./Settings";
-import ActionDialog from "./modal/ActionDialog.vue";
-import ConfirmDialog from "./modal/ConfirmDialog.vue";
-import Filters from "./modal/Filters.vue";
+import AppSettings from "./settings/AppSettings";
+import Action from "./modals/Action";
+import Confirm from "./modals/Confirm";
+import Filters from "./modals/Filter";
 import * as utils from "~/shared/utils";
 let lastTime = 0;
 let lastShake = 0;
@@ -456,7 +456,7 @@ export default {
       scrollPos: 1,
       filterFavourites: false,
       filterTrylater: false,
-      Settings: Settings,
+      AppSettings: AppSettings,
       MealPlanner: MealPlanner,
       CookingTimer: CookingTimer,
       GroceryList: GroceryList,
@@ -603,9 +603,8 @@ export default {
             : View.SYSTEM_UI_FLAG_DARK_STATUS_BAR
         );
     },
-    onPageLoad(args) {
-      const page = args.object;
-      page.bindingContext = new Observable();
+    onPageLoad({ object }) {
+      object.bindingContext = new Observable();
       this.filterFavourites
         ? this.setComponent("favourites")
         : this.filterTrylater
@@ -685,7 +684,7 @@ export default {
     openSort() {
       this.showTools = false;
       this.releaseBackEvent();
-      this.$showModal(ActionDialog, {
+      this.$showModal(Action, {
         props: {
           title: "srt",
           list: [
@@ -748,7 +747,7 @@ export default {
               this.recipes.findIndex((e) => e.id === this.selection[0])
             ].title
           }"`;
-      this.$showModal(ConfirmDialog, {
+      this.$showModal(Confirm, {
         props: {
           title: localize("conf"),
           description: `${localize(
@@ -1080,7 +1079,12 @@ export default {
     if (!this.recipes.length) this.initRecipes();
     this.initMealPlans();
     this.initListItems();
-    if (!this.timerSound.title) this.setTimerSound(utils.getTones()[0]);
+    if (!this.timerSound.title) {
+      let hasTimerSound = ApplicationSettings.getString("timerSound", 0);
+      this.setTimerSound(
+        hasTimerSound ? JSON.parse(hasTimerSound) : utils.getTones().defaultTone
+      );
+    }
   },
 };
 </script>

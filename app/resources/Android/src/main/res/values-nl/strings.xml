@@ -313,4 +313,6 @@
   <string name="aBtn">"TOEVOEGEN"</string>
   <string name="About">"Over"</string>
   <string name="aap">"Foto bijvoegen"</string>
+  <string name="notifSetg">"Notification settings"</string>
+  <string name="tmrRm">"Timer removed"</string>
 </resources>

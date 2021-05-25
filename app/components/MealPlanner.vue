@@ -120,17 +120,13 @@
           col="3"
         />
       </GridLayout>
-      <GridLayout
-        row="1"
-        class="appbar snackBar"
+      <SnackBar
         :hidden="!showUndo"
-        columns="auto, *, auto"
-        @swipe="hideUndoBar"
-      >
-        <Button :text="countdown" class="ico countdown tb" />
-        <Label class="title" col="1" :text="snackMsg | L" />
-        <Button class="ico fab" :text="icon.undo" @tap="undoDel" col="3" />
-      </GridLayout>
+        :count="countdown"
+        :msg="snackMsg"
+        :undo="undoDel"
+        :action="hideUndoBar"
+      />
     </GridLayout>
   </Page>
 </template>
@@ -138,12 +134,16 @@
 <script>
 import { Observable, CoreTypes } from "@nativescript/core";
 import { mapState, mapActions } from "vuex";
-import ViewRecipe from "./ViewRecipe.vue";
-import MPSettings from "./Settings/MPSettings.vue";
-import ActionDialogWithSearch from "./modal/ActionDialogWithSearch.vue";
+import ViewRecipe from "./ViewRecipe";
+import MPSettings from "./settings/MPSettings";
+import ActionWithSearch from "./modals/ActionWithSearch";
+import SnackBar from "./sub/SnackBar";
 let undoTimer;
 
 export default {
+  components: {
+    SnackBar,
+  },
   data() {
     return {
       mealTimes: ["breakfast", "lunch", "dinner", "snacks"],
@@ -227,9 +227,8 @@ export default {
       "addMealPlanAction",
       "deleteMealPlanAction",
     ]),
-    onPageLoad(args) {
-      const page = args.object;
-      page.bindingContext = new Observable();
+    onPageLoad({ object }) {
+      object.bindingContext = new Observable();
       this.setComponent("MealPlanner");
       if (!this.today || this.today === new Date().getDate()) this.goToToday();
     },
@@ -342,7 +341,7 @@ export default {
       let filteredRecipes = this.recipes.filter((e) =>
         this.getRecipes[type] ? !this.getRecipes[type].includes(e.id) : true
       );
-      this.$showModal(ActionDialogWithSearch, {
+      this.$showModal(ActionWithSearch, {
         props: {
           title: "selRec",
           recipes: filteredRecipes,

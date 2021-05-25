@@ -1,32 +1,7 @@
 <template>
   <Page @loaded="onPageLoad" actionBarHidden="true">
     <GridLayout rows="*, auto" columns="auto, *">
-      <ListView
-        colSpan="2"
-        rowSpan="2"
-        class="options-list"
-        for="item in items"
-      >
-        <v-template if="$index == 0">
-          <Label class="pageTitle" :text="'db' | L" />
-        </v-template>
-        <v-template if="$index == 4">
-          <StackLayout class="listSpace"> </StackLayout>
-        </v-template>
-        <v-template>
-          <GridLayout
-            columns="auto, *"
-            class="option"
-            @touch="touch($event, item.action)"
-          >
-            <Label class="ico" :text="icon[item.icon]" />
-            <StackLayout col="1" verticalAlignment="center">
-              <Label :text="item.title | L" class="info" />
-              <Label v-if="item.subTitle" :text="item.subTitle" class="sub" />
-            </StackLayout>
-          </GridLayout>
-        </v-template>
-      </ListView>
+      <OptionsList title="db" :items="items" />
       <GridLayout
         v-show="!toast && !progress"
         row="1"
@@ -36,18 +11,7 @@
       >
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
-      <GridLayout
-        v-show="toast"
-        row="1"
-        colSpan="2"
-        class="appbar snackBar"
-        columns="*"
-        @tap="toast = null"
-      >
-        <FlexboxLayout minHeight="48" alignItems="center">
-          <Label class="title msg" :text="toast" />
-        </FlexboxLayout>
-      </GridLayout>
+      <Toast :toast="toast" :action="hideToast" />
       <GridLayout
         v-show="progress"
         row="1"
@@ -75,12 +39,15 @@ import {
   getFileAccess,
 } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
-import ConfirmDialog from "../modal/ConfirmDialog.vue";
+import Confirm from "../modals/Confirm";
+import OptionsList from "../sub/OptionsList";
+import Toast from "../sub/Toast";
 import { mapState, mapActions } from "vuex";
 import { openOrCreate } from "@akylas/nativescript-sqlite";
 import * as utils from "~/shared/utils";
 
 export default {
+  components: { OptionsList, Toast },
   data() {
     return {
       backupFolder: null,
@@ -103,18 +70,21 @@ export default {
       return [
         {},
         {
+          type: "list",
           icon: "folder",
           title: "buFol",
           subTitle: this.backupFolder,
           action: this.setBackupFolder,
         },
         {
+          type: "list",
           icon: "exp",
           title: "expBu",
           subTitle: localize("buInfo"),
           action: this.exportCheck,
         },
         {
+          type: "list",
           icon: "imp",
           title: "impBu",
           subTitle: localize("impInfo"),
@@ -134,9 +104,8 @@ export default {
       "unlinkBrokenImages",
       "clearImportSummary",
     ]),
-    onPageLoad(args) {
-      const page = args.object;
-      page.bindingContext = new Observable();
+    onPageLoad({ object }) {
+      object.bindingContext = new Observable();
       const ContentResolver = Application.android.nativeApp.getContentResolver();
       this.backupFolder = ApplicationSettings.getString("backupFolder");
       if (
@@ -227,7 +196,7 @@ export default {
       this.progress = null;
       this.releaseBackEvent();
       let description = localize("buto", `"${filename}"`);
-      this.$showModal(ConfirmDialog, {
+      this.$showModal(Confirm, {
         props: {
           title: "expSuc",
           description,
@@ -240,6 +209,7 @@ export default {
     openZipFile() {
       utils.getBackupFile().then((uri) => {
         if (uri) {
+          knownFolders.temp().clear();
           let dest = knownFolders.temp().path;
           utils.Zip.unzip(uri, dest)
             .then((res) => res && this.validateZipContent(res, uri))
@@ -346,7 +316,7 @@ export default {
       this.progress = null;
       this.releaseBackEvent();
       knownFolders.temp().clear();
-      this.$showModal(ConfirmDialog, {
+      this.$showModal(Confirm, {
         props: {
           title: "impFail",
           description,
@@ -366,7 +336,7 @@ export default {
       const db = openOrCreate(recipesDB);
 
       // Import recipes
-      db.select(`SELECT * FROM recipes`).then((res) => {
+      db.select("SELECT * FROM recipes").then((res) => {
         this.importRecipesFromDB(res);
       });
 
@@ -426,7 +396,7 @@ export default {
       Folder.fromPath(destPath);
       utils.Zip.unzip(uri, destPath).then((res) => {
         if (res) {
-          // delete unzipped json files
+          // delete unzipped data files
           Folder.fromPath(path.join(destPath, "EnRecipes"))
             .getEntities()
             .then((entities) => {
@@ -444,13 +414,12 @@ export default {
     showImportSummary() {
       this.progress = null;
       this.releaseBackEvent();
-      knownFolders.temp().clear();
       let { found, imported, updated } = this.importSummary;
       let exists = Math.abs(found - imported - updated) + updated;
       let importedNote = `\n${localize("recI")} ${imported}`;
       let existsNote = `\n${localize("recE")} ${exists}`;
       let updatedNote = `\n${localize("recU")} ${updated}`;
-      this.$showModal(ConfirmDialog, {
+      this.$showModal(Confirm, {
         props: {
           title: "impSuc",
           description: `${found} ${localize(
@@ -479,9 +448,8 @@ export default {
     },
 
     // HELPERS
-    touch({ object, action }, method) {
-      object.className = action.match(/down|move/) ? "option fade" : "option";
-      if (action == "up") method();
+    hideToast() {
+      this.toast = null;
     },
   },
 };

@@ -1,34 +1,9 @@
 <template>
   <Page @loaded="onPageLoad" actionBarHidden="true">
     <GridLayout rows="*, auto" columns="auto, *">
-      <ListView
-        colSpan="2"
-        rowSpan="2"
-        class="options-list"
-        for="item in items"
-      >
-        <v-template if="$index == 0">
-          <Label class="pageTitle" :text="'rest' | L" />
-        </v-template>
-        <v-template if="$index == 5">
-          <Label class="group-info sub tw" :text="'restInfo' | L" />
-        </v-template>
-        <v-template if="$index == 6">
-          <StackLayout class="listSpace"> </StackLayout>
-        </v-template>
-        <v-template>
-          <GridLayout
-            columns="auto, *"
-            class="option"
-            @touch="touch($event, item.type)"
-          >
-            <Label class="ico" :text="icon.reset" />
-            <Label col="1" :text="item.title | L" class="info" />
-          </GridLayout>
-        </v-template>
-      </ListView>
+      <OptionsList title="rest" :items="items" :action="resetListItems" />
       <GridLayout
-        v-show="!toast"
+        :hidden="toast"
         row="1"
         class="appbar"
         @loaded="onAppBarLoad"
@@ -36,18 +11,7 @@
       >
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
-      <GridLayout
-        v-show="toast"
-        row="1"
-        colSpan="2"
-        class="appbar snackBar"
-        columns="*"
-        @swipe="hideToast"
-      >
-        <FlexboxLayout minHeight="48" alignItems="center">
-          <Label class="title msg" :text="toast" />
-        </FlexboxLayout>
-      </GridLayout>
+      <Toast :toast="toast" :action="hideToast" />
     </GridLayout>
   </Page>
 </template>
@@ -57,7 +21,10 @@ import { Observable, CoreTypes } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
 import { mapState, mapActions } from "vuex";
 import * as utils from "~/shared/utils";
+import OptionsList from "../sub/OptionsList";
+import Toast from "../sub/Toast";
 export default {
+  components: { OptionsList, Toast },
   data() {
     return {
       toast: null,
@@ -70,20 +37,28 @@ export default {
       return [
         {},
         {
-          type: "cuisines",
+          type: "list",
+          icon: "reset",
           title: "restCuiL",
+          data: "cuisines",
         },
         {
-          type: "categories",
+          type: "list",
+          icon: "reset",
           title: "restCatL",
+          data: "categories",
         },
         {
-          type: "yieldUnits",
+          type: "list",
+          icon: "reset",
           title: "restYUL",
+          data: "yieldUnits",
         },
         {
-          type: "units",
+          type: "list",
+          icon: "reset",
           title: "restUL",
+          data: "units",
         },
         {},
         {},
@@ -92,9 +67,8 @@ export default {
   },
   methods: {
     ...mapActions(["resetListItemsAction"]),
-    onPageLoad(args) {
-      const page = args.object;
-      page.bindingContext = new Observable();
+    onPageLoad({ object }) {
+      object.bindingContext = new Observable();
     },
     onAppBarLoad({ object }) {
       this.appbar = object;
@@ -111,6 +85,7 @@ export default {
       });
     },
     hideToast({ object }) {
+      this.appbar.translateY = 64;
       object
         .animate({
           opacity: 0,
@@ -120,7 +95,7 @@ export default {
         })
         .then(() => {
           this.showUndo = false;
-          this.appbar.translateY = 64;
+          this.toast = null;
           this.appbar.animate({
             translate: { x: 0, y: 0 },
             duration: 250,
@@ -128,12 +103,7 @@ export default {
           });
           object.opacity = 1;
           object.translateY = 0;
-          this.toast = null;
         });
-    },
-    touch({ object, action }, type) {
-      object.className = action.match(/down|move/) ? "option fade" : "option";
-      if (action == "up") this.resetListItems(type);
     },
   },
 };

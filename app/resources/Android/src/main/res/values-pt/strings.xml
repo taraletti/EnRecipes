@@ -313,4 +313,6 @@
   <string name="American">"Americana"</string>
   <string name="About">"Sobre"</string>
   <string name="aap">"Anexar uma fotografia"</string>
+  <string name="notifSetg">"Notification settings"</string>
+  <string name="tmrRm">"Timer removed"</string>
 </resources>

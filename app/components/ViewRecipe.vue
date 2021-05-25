@@ -232,17 +232,7 @@
           @tap="shareHandler"
         />
       </GridLayout>
-      <GridLayout
-        v-show="toast"
-        row="1"
-        class="appbar snackBar"
-        columns="*"
-        @swipe="hideLastTried"
-      >
-        <FlexboxLayout minHeight="48" alignItems="center">
-          <Label class="title msg" :text="toast" />
-        </FlexboxLayout>
-      </GridLayout>
+      <Toast :toast="toast" :action="hideLastTried" />
       <AbsoluteLayout rowSpan="2">
         <Image
           @tap="({ object }) => (object.cancel = true)"
@@ -269,17 +259,18 @@ import {
   Observable,
   Screen,
   CoreTypes,
-  Color,
 } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
 const intl = require("nativescript-intl");
 import { mapActions, mapState } from "vuex";
 import CookingTimer from "./CookingTimer.vue";
 import EditRecipe from "./EditRecipe.vue";
-import ActionDialog from "./modal/ActionDialog.vue";
-import PromptDialog from "./modal/PromptDialog.vue";
+import Action from "./modals/Action.vue";
+import Toast from "./sub/Toast.vue";
+import Prompt from "./modals/Prompt.vue";
 import * as utils from "~/shared/utils";
 export default {
+  components: { Toast },
   props: ["filterTrylater", "recipeID"],
   data() {
     return {
@@ -337,9 +328,8 @@ export default {
       "setRatingAction",
       "toggleCartAction",
     ]),
-    onPageLoad(args) {
-      const page = args.object;
-      page.bindingContext = new Observable();
+    onPageLoad({ object }) {
+      object.bindingContext = new Observable();
       this.busy = this.photoOpen = false;
       this.setComponent("ViewRecipe");
       if (this.yieldMultiplier == this.recipe.yieldQuantity)
@@ -462,7 +452,7 @@ export default {
       return localize(title) + text;
     },
     changeYield() {
-      this.$showModal(PromptDialog, {
+      this.$showModal(Prompt, {
         props: {
           title: `${localize("req", localize(this.recipe.yieldUnit))}`,
           placeholder: Math.abs(parseFloat(this.yieldMultiplier)),
@@ -694,7 +684,7 @@ export default {
     // SHARE ACTION
     shareHandler() {
       if (this.recipe.image) {
-        this.$showModal(ActionDialog, {
+        this.$showModal(Action, {
           props: {
             title: "shr",
             list: ["rec", "pht"],

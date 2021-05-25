@@ -313,4 +313,6 @@
   <string name="aBtn">"Tambah"</string>
   <string name="About">"Tentang"</string>
   <string name="aap">"Lampirkan foto"</string>
+  <string name="notifSetg">"Notification settings"</string>
+  <string name="tmrRm">"Timer removed"</string>
 </resources>

@@ -313,4 +313,6 @@
   <string name="American">"American"</string>
   <string name="aD">"Fuldendt!"</string>
   <string name="About">"Om"</string>
+  <string name="notifSetg">"Notification settings"</string>
+  <string name="tmrRm">"Timer removed"</string>
 </resources>

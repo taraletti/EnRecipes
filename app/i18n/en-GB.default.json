@@ -309,5 +309,6 @@
   "hour": "hour",
   "hours": "hours",
   "seconds": "seconds",
-  "tmrClr": "Timer cleared"
+  "tmrRm": "Timer removed",
+  "notifSetg": "Notification settings"
 }

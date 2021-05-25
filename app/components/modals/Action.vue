@@ -50,7 +50,7 @@
 import { Screen } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
 import { mapState, mapActions } from "vuex";
-import ConfirmDialog from "./ConfirmDialog.vue";
+import Confirm from "./Confirm.vue";
 
 interface IData {
   newList: unknown[];
@@ -92,7 +92,7 @@ export default {
       this.$modal.close(item);
     },
     deletionConfirmation(description: string): void {
-      return this.$showModal(ConfirmDialog, {
+      return this.$showModal(Confirm, {
         props: {
           title: "conf",
           description,

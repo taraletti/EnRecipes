@@ -267,7 +267,15 @@
         />
         <ActivityIndicator col="2" v-if="saving" :busy="saving" />
       </GridLayout>
-      <GridLayout
+      <SnackBar
+        :hidden="!showUndo"
+        colSpan="2"
+        :count="countdown"
+        :msg="snackMsg"
+        :undo="undoDel"
+        :action="hideUndoBar"
+      />
+      <!-- <GridLayout
         row="1"
         class="appbar snackBar"
         :hidden="!showUndo"
@@ -278,7 +286,7 @@
         <Button :text="countdown" class="ico countdown tb" />
         <Label class="title" col="1" :text="snackMsg | L" />
         <Button class="ico fab" :text="icon.undo" @tap="undoDel" col="3" />
-      </GridLayout>
+      </GridLayout> -->
     </GridLayout>
   </Page>
 </template>
@@ -300,14 +308,18 @@ import {
 import { localize } from "@nativescript/localize";
 import { ImageCropper } from "nativescript-imagecropper";
 import { mapState, mapActions } from "vuex";
-import ActionDialog from "./modal/ActionDialog.vue";
-import ActionDialogWithSearch from "./modal/ActionDialogWithSearch.vue";
-import ConfirmDialog from "./modal/ConfirmDialog.vue";
-import PromptDialog from "./modal/PromptDialog.vue";
-import TimePicker from "./modal/TimePicker.vue";
+import Action from "./modals/Action";
+import ActionWithSearch from "./modals/ActionWithSearch";
+import Confirm from "./modals/Confirm";
+import Prompt from "./modals/Prompt";
+import TimePickerHM from "./modals/TimePickerHM";
 import * as utils from "~/shared/utils";
+import SnackBar from "./sub/SnackBar";
 let undoTimer;
 export default {
+  components: {
+    SnackBar,
+  },
   props: [
     "recipeID",
     "filterFavourites",
@@ -384,9 +396,8 @@ export default {
       "addListItemAction",
       "unSyncCombinationsAction",
     ]),
-    onPageLoad(args) {
-      const page = args.object;
-      page.bindingContext = new Observable();
+    onPageLoad({ object }) {
+      object.bindingContext = new Observable();
       this.hijackBackEvent();
     },
     onPageUnload() {
@@ -424,7 +435,7 @@ export default {
       this.clearEmptyFields(true);
       if (this.recipe.image) {
         this.modalOpen = true;
-        this.$showModal(ActionDialog, {
+        this.$showModal(Action, {
           props: {
             title: "recPic",
             list: ["aap", "rp"],
@@ -488,7 +499,7 @@ export default {
     // DATA LIST
     showCuisine(focus) {
       this.modalOpen = true;
-      this.$showModal(ActionDialog, {
+      this.$showModal(Action, {
         props: {
           title: "cui",
           list: this.cuisines,
@@ -496,7 +507,7 @@ export default {
         },
       }).then((action) => {
         if (action == "aNBtn") {
-          this.$showModal(PromptDialog, {
+          this.$showModal(Prompt, {
             props: {
               title: "newCui",
               action: "aBtn",
@@ -526,7 +537,7 @@ export default {
     },
     showCategories(focus) {
       this.modalOpen = true;
-      this.$showModal(ActionDialog, {
+      this.$showModal(Action, {
         props: {
           title: "cat",
           list: this.categories,
@@ -534,7 +545,7 @@ export default {
         },
       }).then((action) => {
         if (action == "aNBtn") {
-          this.$showModal(PromptDialog, {
+          this.$showModal(Prompt, {
             props: {
               title: "nwCat",
               action: "aBtn",
@@ -564,7 +575,7 @@ export default {
     },
     showYieldUnits(focus) {
       this.modalOpen = true;
-      this.$showModal(ActionDialog, {
+      this.$showModal(Action, {
         props: {
           title: "yieldU",
           list: this.yieldUnits,
@@ -572,7 +583,7 @@ export default {
         },
       }).then((action) => {
         if (action == "aNBtn") {
-          this.$showModal(PromptDialog, {
+          this.$showModal(Prompt, {
             props: {
               title: "nwYiU",
               action: "aBtn",
@@ -602,7 +613,7 @@ export default {
     },
     showDifficultyLevel(focus) {
       this.modalOpen = true;
-      this.$showModal(ActionDialog, {
+      this.$showModal(Action, {
         props: {
           title: "Difficulty level",
           list: this.difficultyLevels,
@@ -620,7 +631,7 @@ export default {
     },
     showUnits(e, focus, index) {
       this.modalOpen = true;
-      this.$showModal(ActionDialog, {
+      this.$showModal(Action, {
         props: {
           title: "Unit",
           list: this.units,
@@ -628,7 +639,7 @@ export default {
         },
       }).then((action) => {
         if (action == "aNBtn") {
-          this.$showModal(PromptDialog, {
+          this.$showModal(Prompt, {
             props: {
               title: "newUnit",
               action: "aBtn",
@@ -662,7 +673,7 @@ export default {
       let filteredRecipes = this.recipes.filter(
         (e) => !existingCombinations.includes(e.id)
       );
-      this.$showModal(ActionDialogWithSearch, {
+      this.$showModal(ActionWithSearch, {
         props: {
           title: "selRec",
           recipes: filteredRecipes,
@@ -923,7 +934,7 @@ export default {
       let t = this.recipe[time].split(":");
       let hr = t[0];
       let min = t[1];
-      this.$showModal(TimePicker, {
+      this.$showModal(TimePickerHM, {
         props: {
           title: `${time == "prepTime" ? "prepT" : "cookT"}`,
           action: "SET",
@@ -975,7 +986,7 @@ export default {
     navigateBack() {
       if (this.hasChanges) {
         this.modalOpen = true;
-        this.$showModal(ConfirmDialog, {
+        this.$showModal(Confirm, {
           props: {
             title: "unsaved",
             description: localize("disc"),

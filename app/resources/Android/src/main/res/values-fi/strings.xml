@@ -309,8 +309,10 @@
   <string name="aBtn">"LISÄÄ"</string>
   <string name="About">"Tietoja"</string>
   <string name="aap">"Liitä valokuva"</string>
-  <string name="tmrClr">"Timer cleared"</string>
+  <string name="notifSetg">"Notification settings"</string>
+  <string name="tmrRm">"Timer removed"</string>
   <string name="tmrvbrt">"Timer vibrate"</string>
   <string name="delay">"Delay"</string>
   <string name="strtBtn">"START"</string>
+  <string name="tmrClr">"tmrClr"</string>
 </resources>

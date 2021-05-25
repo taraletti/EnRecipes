@@ -313,4 +313,6 @@
   <string name="aBtn">"HINZUFÜGEN"</string>
   <string name="About">"Über"</string>
   <string name="aap">"Foto anhängen"</string>
+  <string name="notifSetg">"Notification settings"</string>
+  <string name="tmrRm">"Timer removed"</string>
 </resources>

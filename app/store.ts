@@ -387,8 +387,7 @@ export default new Vuex.Store({
         title: sound.title,
         uri: sound.uri,
       }
-      ApplicationSettings.setString('timerSoundTitle', sound.title)
-      ApplicationSettings.setString('timerSoundUri', sound.uri)
+      ApplicationSettings.setString('timerSound', JSON.stringify(sound))
     },
     setTimerVibrate(state, bool) {
       state.timerVibrate = bool
@@ -626,9 +625,7 @@ export default new Vuex.Store({
         )
         if (partition[0].length) createDocuments(partition[0])
         if (partition[1].length) updateDocuments(partition[1])
-      } else {
-        createDocuments(recipes)
-      }
+      } else createDocuments(recipes)
       state.importSummary.found = recipes.length
       state.importSummary.imported = imported
       state.importSummary.updated = updated

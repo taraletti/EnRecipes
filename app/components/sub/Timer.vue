@@ -48,7 +48,7 @@
 import { ApplicationSettings, Application } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
 import { mapState, mapActions } from "vuex";
-import ActionDialogWithSearch from "./modal/ActionDialogWithSearch.vue";
+import ActionWithSearch from "../modals/ActionWithSearch";
 import * as utils from "~/shared/utils";
 import { EventBus } from "~/main";
 
@@ -92,7 +92,7 @@ export default {
   methods: {
     ...mapActions(["removeActiveTimer", "updateActiveTimer", "addTimerPreset"]),
     attachRecipe() {
-      this.$showModal(ActionDialogWithSearch, {
+      this.$showModal(ActionWithSearch, {
         props: {
           title: "selRec",
           recipes: this.recipes,
@@ -140,7 +140,7 @@ export default {
     },
     clearNotification() {
       Application.android.unregisterBroadcastReceiver("timer" + this.timer.id);
-      utils.TimerNotification.clear(this.timer.id);
+      utils.TimerNotif.clear(this.timer.id);
     },
     toggleProgress(bool) {
       this.togglePause(this.timer, bool);

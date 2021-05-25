@@ -313,4 +313,6 @@
   <string name="aBtn">"जोड़ें"</string>
   <string name="About">"तकरीबन"</string>
   <string name="aap">"एक तस्वीर लगाओ"</string>
+  <string name="notifSetg">"Notification settings"</string>
+  <string name="tmrRm">"Timer removed"</string>
 </resources>

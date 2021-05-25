@@ -313,4 +313,6 @@
   <string name="aBtn">"أضف"</string>
   <string name="About">"حول"</string>
   <string name="aap">"ألحق صورة"</string>
+  <string name="notifSetg">"Notification settings"</string>
+  <string name="tmrRm">"Timer removed"</string>
 </resources>

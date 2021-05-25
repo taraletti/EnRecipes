@@ -313,4 +313,6 @@
   <string name="aBtn">"AÑADIR"</string>
   <string name="About">"Acerca de"</string>
   <string name="aap">"Adjuntar una foto"</string>
+  <string name="notifSetg">"Notification settings"</string>
+  <string name="tmrRm">"Timer removed"</string>
 </resources>
