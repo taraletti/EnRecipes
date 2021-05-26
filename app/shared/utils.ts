@@ -6,6 +6,7 @@ import {
   Color,
   path,
   knownFolders,
+  TimerInfo,
 } from '@nativescript/core'
 let timerOne
 declare const global, android, androidx, com, java, Array: any
@@ -318,39 +319,45 @@ export class TimerNotif {
     const NotifySrv = ctx.getSystemService(
       android.content.Context.NOTIFICATION_SERVICE
     )
+    // nID ? NotifySrv.cancel(nID) : NotifySrv.cancelAll()
     NotifySrv.cancel(nID)
   }
-  static show({
-    actions,
-    bID,
-    cID,
-    cName,
-    description,
-    nID,
-    priority,
-    sound,
-    title,
-    vibrate,
-  }: {
-    actions?: boolean
-    bID: string
-    cID: string
-    cName: string
-    description: string
-    nID: number
-    priority: number
-    sound: string
-    title: string
-    vibrate?: number
-  }) {
+
+  static getNotification(
+    {
+      actions,
+      bID,
+      cID,
+      cName,
+      description,
+      nID,
+      priority,
+      sound,
+      title,
+      vibrate,
+    }: {
+      actions?: boolean
+      bID: string
+      cID: string
+      cName: string
+      description: string
+      nID: number
+      priority: number
+      sound: string
+      title: string
+      vibrate?: number
+    },
+    ctx
+  ) {
     let sdkv: number = parseInt(Device.sdkVersion)
     let soundUri: any
     if (sound) soundUri = new android.net.Uri.parse(sound)
     const NotifyMgr = android.app.NotificationManager
-    let ctx = Utils.ad.getApplicationContext()
     const NotifySrv = ctx.getSystemService(
       android.content.Context.NOTIFICATION_SERVICE
     )
+    const NotificationCompat = androidx.core.app.NotificationCompat
+    const AudioManager = android.media.AudioManager
     if (sdkv >= 26) {
       const importance =
         priority > 0 ? NotifyMgr.IMPORTANCE_HIGH : NotifyMgr.IMPORTANCE_MIN
@@ -371,6 +378,7 @@ export class TimerNotif {
       if (sound) Channel.setSound(soundUri, audioAttributes)
       else Channel.setSound(null, null)
       Channel.setShowBadge(true)
+      Channel.setLockscreenVisibility(NotificationCompat.VISIBILITY_PUBLIC)
       NotifySrv.createNotificationChannel(Channel)
     }
 
@@ -390,7 +398,7 @@ export class TimerNotif {
     let actionInt1, actionInt2, actionPInt1, actionPInt2
     if (actions) {
       actionInt1 = new Intent(bID)
-      actionInt1.putExtra('action', 'delay')
+      actionInt1.putExtra('action', 'stop')
       actionPInt1 = PendingIntent.getBroadcast(
         ctx,
         2,
@@ -398,7 +406,7 @@ export class TimerNotif {
         PendingIntent.FLAG_UPDATE_CURRENT
       )
       actionInt2 = new Intent(bID)
-      actionInt2.putExtra('action', 'stop')
+      actionInt2.putExtra('action', 'delay')
       actionPInt2 = PendingIntent.getBroadcast(
         ctx,
         3,
@@ -408,8 +416,7 @@ export class TimerNotif {
     }
 
     // CREATE NOTIFICATION
-    const NotificationCompat = androidx.core.app.NotificationCompat
-    const AudioManager = android.media.AudioManager
+
     let icon = TimerNotif.getIcon(ctx, 'ic_stat_notify_silhouette')
     let builder = new NotificationCompat.Builder(ctx, cID)
       .setColor(new Color('#ff5200').android)
@@ -421,6 +428,7 @@ export class TimerNotif {
       .setSmallIcon(icon)
       .setTicker(title)
       .setAutoCancel(false)
+      .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
     if (sound) builder.setSound(soundUri, AudioManager.STREAM_ALARM)
     else builder.setSound(null)
     if (description) builder.setContentText(description)
@@ -428,13 +436,21 @@ export class TimerNotif {
     if (actions) {
       builder.setDeleteIntent(actionPInt2)
       builder.setFullScreenIntent(mainPInt, true)
-      builder.addAction(null, 'Delay', actionPInt1)
-      builder.addAction(null, 'Stop', actionPInt2)
+      builder.addAction(null, 'Stop', actionPInt1)
+      builder.addAction(null, 'Delay', actionPInt2)
     }
     let notification = builder.build()
     notification.flags =
       NotificationCompat.FLAG_INSISTENT | NotificationCompat.FLAG_ONGOING_EVENT
-    NotifySrv.notify(nID, notification)
+
+    return notification
+  }
+  static show(data) {
+    const ctx = Utils.ad.getApplicationContext()
+    const NotifySrv = ctx.getSystemService(
+      android.content.Context.NOTIFICATION_SERVICE
+    )
+    NotifySrv.notify(data.nID, TimerNotif.getNotification(data, ctx))
   }
 }
 

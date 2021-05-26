@@ -4,9 +4,9 @@
     columns="auto, *, auto, auto, auto"
     class="singleTimer"
   >
+      <!-- :class="{ blink: done }" -->
     <Button
       class="ico"
-      :class="{ blink: done }"
       :text="done ? icon.ring : timer.isPaused ? icon.start : icon.pause"
       @tap="!done && toggleProgress()"
     />

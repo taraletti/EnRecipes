@@ -19,7 +19,6 @@
           <Timer
             v-for="(timer, i) in activeTimers"
             :key="timer.id"
-            ref="singleTimer"
             :timer="timer"
             :timerIndex="i"
             :formattedTime="formattedTime"
@@ -62,21 +61,23 @@ import {
   ApplicationSettings,
   AndroidApplication,
   Utils,
+  Device,
 } from "@nativescript/core";
 import { mapState, mapActions } from "vuex";
 
 import Action from "./modals/Action.vue";
-import CookingTimer from "./CookingTimer.vue";
 import CTSettings from "./settings/CTSettings.vue";
 import TimePickerHMS from "./modals/TimePickerHMS.vue";
+import TimerReminder from "./modals/TimerReminder.vue";
 import Timer from "./sub/Timer.vue";
 import Toast from "./sub/Toast.vue";
 import SnackBar from "./sub/SnackBar.vue";
 
 import * as utils from "~/shared/utils";
-// import { fgs } from "~/foreground.android";
 import { EventBus } from "~/main";
-let undoTimer;
+let undoTimer,
+  firingTimers = [];
+declare const com: any;
 
 export default {
   components: { Timer, Toast, SnackBar },
@@ -177,33 +178,12 @@ export default {
         cID: "cti",
         cName: "Cooking Timer info",
         description: `${ongoingCount} ongoing, ${pausedCount} paused`,
-        nID: 999,
+        nID: 777,
         priority: -2,
         sound: null,
         title: localize("timer"),
       });
-      if (activeCount <= 0) utils.TimerNotif.clear(999);
-    },
-    intentListener({ intent, android }) {
-      let ct = "CookingTimer";
-      let action = (intent || android).getStringExtra("action");
-      console.log("calling: ", action);
-      let comp = this.currentComponent;
-      if (action == "open_timer" && this.currentComponent != ct) {
-        let openTimer = setInterval(() => {
-          if (comp == ct) clearInterval(openTimer);
-          else {
-            if (comp == "CTSettings") this.$navigateBack();
-            else this.$navigateTo(CookingTimer);
-            comp = ct;
-          }
-          Application.off(Application.launchEvent, this.intentListener);
-          Application.android.off(
-            AndroidApplication.activityNewIntentEvent,
-            this.intentListener
-          );
-        }, 250);
-      }
+      if (activeCount <= 0) this.foregroundService(false);
     },
     fireTimer(timer) {
       console.log("firing");
@@ -230,18 +210,39 @@ export default {
         console.log(action, "firing");
         EventBus.$emit(bID, action);
       });
+      firingTimers.push(timer);
+      // if (firingTimers.length == 1) {
+      //   this.$showModal(TimerReminder, {
+      //     fullscreen: true,
+      //     props: {
+      //       timers: firingTimers,
+      //       stop: this.stopFiringTimers,
+      //       formattedTime: this.formattedTime,
+      //     },
+      //   });
+      // }
     },
-    startForegroundService() {
+    stopFiringTimers() {
+      firingTimers.forEach((e) => utils.TimerNotif.clear(e.id));
+      firingTimers = [];
+    },
+    openReminder() {},
+    foregroundService(bool) {
       const ctx = Utils.ad.getApplicationContext();
-      const intent = new android.content.Intent();
-      intent.setClassName(ctx, "com.tns.ForegroundService");
-      ctx.startService(intent);
+      const intent = new android.content.Intent(
+        ctx,
+        com.tns.ForegroundService.class
+      );
+      if (bool)
+        parseInt(Device.sdkVersion) < 26
+          ? ctx.startService(intent)
+          : ctx.startForegroundService(intent);
+      else ctx.stopService(intent);
     },
 
     // DATA HANDLERS
     addTimer() {
-      // fgs.class
-      this.startForegroundService();
+      this.foregroundService(true);
       this.$showModal(TimePickerHMS, {
         props: {
           title: "ntmr",
@@ -300,6 +301,7 @@ export default {
       if (!noUndo) {
         this.showUndoBar("tmrClr")
           .then(() => {
+            this.foregroundService(true);
             this.addActiveTimer({
               timer: temp,
               index,
@@ -385,11 +387,6 @@ export default {
     },
   },
   created() {
-    Application.on(Application.launchEvent, this.intentListener);
-    Application.android.on(
-      AndroidApplication.activityNewIntentEvent,
-      this.intentListener
-    );
     this.clearTimerInterval();
   },
 };
