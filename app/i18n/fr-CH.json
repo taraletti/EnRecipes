@@ -307,5 +307,9 @@
     "minutes": "minutes",
     "minute": "minute",
     "dlyDur": "Durée du retard",
-    "delay": "Retard"
+    "delay": "Retard",
+    "notifSetg": "Paramètres de notification",
+    "tmrRm": "Minuterie retirée",
+    "delPrst": "Vous êtes sur le point de supprimer %s des préréglages",
+    "prsts": "Préréglages"
 }
