@@ -7,7 +7,15 @@
         scrollBarIndicatorVisible="false"
       >
         <StackLayout>
-          <Label class="pageTitle" :text="'planner' | L" />
+          <GridLayout rows="auto" columns="*, auto, 8">
+            <Label class="pageTitle" :text="'planner' | L" />
+            <Button
+              col="1"
+              class="ico"
+              :text="icon.cog"
+              @tap="$navigateTo(MPSettings)"
+            />
+          </GridLayout>
           <GridLayout
             class="calendar"
             columns="*, *, *, *, *, *, *"
@@ -112,31 +120,32 @@
           col="3"
         />
       </GridLayout>
-      <GridLayout
-        row="1"
-        class="appbar snackBar"
+      <SnackBar
         :hidden="!showUndo"
-        columns="auto, *, auto"
-      >
-        <Button :text="countdown" class="ico countdown tb" />
-        <Label class="title" col="1" :text="snackMsg | L" />
-        <Button class="ico fab" :text="icon.undo" @tap="undoDel" col="3" />
-      </GridLayout>
+        :count="countdown"
+        :msg="snackMsg"
+        :undo="undoDel"
+        :action="hideUndoBar"
+      />
     </GridLayout>
   </Page>
 </template>
 
 <script>
-import { ApplicationSettings, Observable, CoreTypes } from "@nativescript/core";
+import { Observable, CoreTypes } from "@nativescript/core";
 import { mapState, mapActions } from "vuex";
-import ViewRecipe from "./ViewRecipe.vue";
-import ActionDialogWithSearch from "./modal/ActionDialogWithSearch.vue";
+import ViewRecipe from "./ViewRecipe";
+import MPSettings from "./settings/MPSettings";
+import ActionWithSearch from "./modals/ActionWithSearch";
+import SnackBar from "./sub/SnackBar";
 let undoTimer;
 
 export default {
+  components: {
+    SnackBar,
+  },
   data() {
     return {
-      appTheme: "Light",
       mealTimes: ["breakfast", "lunch", "dinner", "snacks"],
       dNames: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
       year: 2021,
@@ -163,6 +172,7 @@ export default {
       snackMsg: null,
       showUndo: false,
       undo: false,
+      MPSettings: MPSettings,
     };
   },
   computed: {
@@ -181,8 +191,9 @@ export default {
       } else return 0;
     },
     getDayNames() {
-      if (!this.mondayFirst) this.dNames.unshift(this.dNames.pop());
-      return this.dNames;
+      let dNames = [...this.dNames];
+      if (!this.mondayFirst) dNames.unshift(dNames.pop());
+      return dNames;
     },
     getCal() {
       let y = this.year;
@@ -216,9 +227,8 @@ export default {
       "addMealPlanAction",
       "deleteMealPlanAction",
     ]),
-    onPageLoad(args) {
-      const page = args.object;
-      page.bindingContext = new Observable();
+    onPageLoad({ object }) {
+      object.bindingContext = new Observable();
       this.setComponent("MealPlanner");
       if (!this.today || this.today === new Date().getDate()) this.goToToday();
     },
@@ -316,12 +326,11 @@ export default {
     setToday(date) {
       if (date) this.today = date;
     },
-    newMealPlan(title, date, type, index) {
+    newMealPlan(date, type, title) {
       this.addMealPlanAction({
-        title,
         date: date ? date : this.todaysTime,
         type,
-        index,
+        title,
       });
     },
     toggleEditMode() {
@@ -332,30 +341,22 @@ export default {
       let filteredRecipes = this.recipes.filter((e) =>
         this.getRecipes[type] ? !this.getRecipes[type].includes(e.id) : true
       );
-      this.$showModal(ActionDialogWithSearch, {
+      this.$showModal(ActionWithSearch, {
         props: {
           title: "selRec",
           recipes: filteredRecipes,
         },
-      }).then((title) => {
-        title && this.newMealPlan(title, null, type, null);
-      });
+      }).then((title) => title && this.newMealPlan(null, type, title));
     },
     removeRecipe(title, type) {
       let date = this.todaysTime;
-      let index = this.mealPlans.findIndex(
-        (e) => e.title === title && e.type === type && e.date === date
-      );
       let mealPlan = {
-        title,
         date,
         type,
-        index,
+        title,
       };
       this.deleteMealPlanAction(mealPlan);
-      this.showUndoBar("recRm").then((res) =>
-        this.newMealPlan(title, date, type, index)
-      );
+      this.showUndoBar("recRm").then(() => this.newMealPlan(date, type, title));
     },
     showUndoBar(message) {
       return new Promise((resolve, reject) => {
@@ -379,12 +380,30 @@ export default {
         }, 100);
       });
     },
+    hideUndoBar({ object }) {
+      object
+        .animate({
+          opacity: 0,
+          translate: { x: 0, y: 64 },
+          duration: 250,
+          curve: CoreTypes.AnimationCurve.ease,
+        })
+        .then(() => {
+          this.showUndo = false;
+          this.appbar.translateY = 64;
+          this.appbar.animate({
+            translate: { x: 0, y: 0 },
+            duration: 250,
+            curve: CoreTypes.AnimationCurve.ease,
+          });
+          object.opacity = 1;
+          object.translateY = 0;
+          clearTimeout(undoTimer);
+        });
+    },
     undoDel() {
       this.undo = true;
     },
-  },
-  created() {
-    this.appTheme = ApplicationSettings.getString("appTheme", "Light");
   },
 };
 </script>

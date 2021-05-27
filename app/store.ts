@@ -1,14 +1,36 @@
 import Vue from 'nativescript-vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
-import { CouchBase } from '@triniwiz/nativescript-couchbase'
-import { getFileAccess, File, ApplicationSettings, Application } from '@nativescript/core'
-const EnRecipesDB = new CouchBase('EnRecipes')
-const userCuisinesDB = new CouchBase('userCuisines')
-const userCategoriesDB = new CouchBase('userCategories')
-const userYieldUnitsDB = new CouchBase('userYieldUnits')
-const userUnitsDB = new CouchBase('userUnits')
-const mealPlansDB = new CouchBase('mealPlans')
+import { openOrCreate } from '@akylas/nativescript-sqlite'
+import {
+  getFileAccess,
+  File,
+  ApplicationSettings,
+  Application,
+  knownFolders,
+  path,
+} from '@nativescript/core'
+
+// OPEN DATABASE FILE
+const db = openOrCreate(
+  path.join(knownFolders.documents().path, 'EnRecipes.db')
+)
+
+// CREATE recipes TABLE
+db.execute(
+  'CREATE TABLE IF NOT EXISTS recipes (id TEXT PRIMARY KEY, image TEXT, title TEXT, cuisine TEXT, category TEXT, tags TEXT, prepTime TEXT, cookTime TEXT, yieldQuantity TEXT, yieldUnit TEXT, difficulty TEXT, rating INT, ingredients TEXT, instructions TEXT, combinations TEXT, notes TEXT, favorite INT, tried INT, lastTried INT, lastModified INT, created INT)'
+)
+
+// CREATE lists TABLE
+db.execute(
+  'CREATE TABLE IF NOT EXISTS lists (cuisines TEXT, categories TEXT, yieldUnits TEXT, units TEXT)'
+)
+
+// CREATE mealPlans TABLE
+db.execute(
+  'CREATE TABLE IF NOT EXISTS mealPlans (date INT, type TEXT, title TEXT)'
+)
+
 const defaultCuisines = [
   'American',
   'Brazilian',
@@ -116,30 +138,18 @@ const defaultUnits = [
 ]
 const listItems = {
   cuisines: {
-    db: userCuisinesDB,
-    key: 'userCuisines',
-    stateName: 'cuisines',
     sort: true,
     defaultItems: defaultCuisines,
   },
   categories: {
-    db: userCategoriesDB,
-    key: 'userCategories',
-    stateName: 'categories',
     sort: true,
     defaultItems: defaultCategories,
   },
   yieldUnits: {
-    db: userYieldUnitsDB,
-    key: 'userYieldUnits',
-    stateName: 'yieldUnits',
     sort: false,
     defaultItems: defaultYieldUnits,
   },
   units: {
-    db: userUnitsDB,
-    key: 'userUnits',
-    stateName: 'units',
     sort: false,
     defaultItems: defaultUnits,
   },
@@ -154,61 +164,69 @@ export default new Vuex.Store({
     units: [],
     mealPlans: [],
     icon: {
-      back: '\ue900',
-      bag: '\ue901',
-      bagged: '\ue902',
-      cal: '\ue903',
-      category: '\ue904',
-      check: '\ue905',
-      cog: '\ue906',
+      cog: '\ue900',
+      home: '\ue901',
+      try: '\ue902',
+      tried: '\ue903',
+      fav: '\ue904',
+      faved: '\ue905',
+      menu: '\ue906',
       cuisine: '\ue907',
-      db: '\ue908',
-      del: '\ue909',
-      diff: '\ue90a',
-      don: '\ue90b',
-      done: '\ue90c',
-      edit: '\ue90d',
-      exp: '\ue90e',
-      fav: '\ue90f',
-      faved: '\ue910',
-      filter: '\ue911',
-      folder: '\ue912',
-      gh: '\ue913',
-      help: '\ue914',
-      home: '\ue915',
-      img: '\ue916',
-      imp: '\ue917',
-      info: '\ue918',
-      interface: '\ue919',
-      lang: '\ue91a',
-      layout: '\ue91b',
-      left: '\ue91c',
-      menu: '\ue91d',
-      opts: '\ue91e',
-      plus: '\ue91f',
-      price: '\ue920',
-      priv: '\ue921',
-      reset: '\ue922',
-      right: '\ue923',
-      save: '\ue924',
-      sear: '\ue925',
-      share: '\ue926',
-      shuf: '\ue927',
-      sort: '\ue928',
-      star: '\ue929',
-      starred: '\ue92a',
-      tag: '\ue92b',
-      tg: '\ue92c',
-      theme: '\ue92d',
-      time: '\ue92e',
-      tod: '\ue92f',
-      trans: '\ue930',
-      tried: '\ue931',
-      try: '\ue932',
-      uncheck: '\ue933',
-      undo: '\ue934',
-      week: '\ue935',
-      x: '\ue936',
+      category: '\ue908',
+      tag: '\ue909',
+      star: '\ue90a',
+      starred: '\ue90b',
+      time: '\ue90c',
+      diff: '\ue90d',
+      bag: '\ue90e',
+      bagged: '\ue90f',
+      price: '\ue910',
+      sear: '\ue911',
+      sort: '\ue912',
+      filter: '\ue913',
+      plus: '\ue914',
+      done: '\ue915',
+      back: '\ue916',
+      x: '\ue917',
+      del: '\ue918',
+      save: '\ue919',
+      undo: '\ue91a',
+      edit: '\ue91b',
+      cal: '\ue91c',
+      tod: '\ue91d',
+      left: '\ue91e',
+      right: '\ue91f',
+      img: '\ue920',
+      uncheck: '\ue921',
+      check: '\ue922',
+      share: '\ue923',
+      timer: '\ue924',
+      start: '\ue925',
+      pause: '\ue926',
+      addTo: '\ue927',
+      sound: '\ue928',
+      vibrate: '\ue929',
+      interface: '\ue92a',
+      opts: '\ue92b',
+      db: '\ue92c',
+      reset: '\ue92d',
+      info: '\ue92e',
+      lang: '\ue92f',
+      theme: '\ue930',
+      layout: '\ue931',
+      shuf: '\ue932',
+      week: '\ue933',
+      folder: '\ue934',
+      exp: '\ue935',
+      imp: '\ue936',
+      gh: '\ue937',
+      tg: '\ue938',
+      help: '\ue939',
+      priv: '\ue93a',
+      don: '\ue93b',
+      trans: '\ue93c',
+      delay: '\ue93d',
+      ring: '\ue93e',
     },
     currentComponent: 'EnRecipes',
     sortType: 'Oldest first',
@@ -290,20 +308,91 @@ export default new Vuex.Store({
         title: 'తెలుగు',
       },
     ],
-    shakeEnabled: true,
+    shakeEnabled: ApplicationSettings.getBoolean('shakeEnabled', true),
     importSummary: {
       found: 0,
       imported: 0,
       updated: 0,
     },
-    layout: 'detailed',
+    layout: ApplicationSettings.getString('layout', 'detailed'),
     selectedCuisine: null,
     selectedCategory: null,
     selectedTag: null,
     appTheme: 'sysDef',
-    mondayFirst: false,
+    mondayFirst: ApplicationSettings.getBoolean('mondayFirst', false),
+    timerDelay: ApplicationSettings.getString('timerDelay', '1 minute'),
+    timerSound: {},
+    timerVibrate: ApplicationSettings.getBoolean('timerVibrate', false),
+    timerPresets: [
+      {
+        id: 534534563,
+        label: 'Soft Eggs',
+        recipeID: null,
+        time: '00:06:00',
+        timerInterval: null,
+        isPaused: false,
+        preset: 1,
+      },
+      {
+        id: 564646,
+        label: 'Medium Eggs',
+        recipeID: null,
+        time: '00:08:00',
+        timerInterval: null,
+        isPaused: false,
+        preset: 1,
+      },
+      {
+        id: 43276767,
+        label: 'Hard Eggs',
+        recipeID: null,
+        time: '00:10:00',
+        timerInterval: null,
+        isPaused: false,
+        preset: 1,
+      },
+    ],
+    activeTimers: [],
+    timerIntervals: [],
   },
   mutations: {
+    addTimerPreset(state, timer) {
+      state.timerPresets.push(timer)
+    },
+    removeTimerPreset(state, index) {
+      state.timerPresets.splice(index, 1)
+    },
+    clearTimerInterval(state) {
+      state.activeTimers.forEach((e) => {
+        clearInterval(e.timerInterval)
+        e.timerInterval = null
+      })
+    },
+    addActiveTimer(state, { timer, index }) {
+      state.activeTimers.splice(index, 0, timer)
+    },
+    updateActiveTimer(state, timer) {
+      let index = state.activeTimers.findIndex((e) => e.id == timer.id)
+      state.activeTimers.splice(index, 1, timer)
+    },
+    removeActiveTimer(state, index) {
+      state.activeTimers.splice(index, 1)
+    },
+    setTimerDelay(state, delay) {
+      state.timerDelay = delay
+      ApplicationSettings.setString('timerDelay', delay)
+    },
+    setTimerSound(state, sound) {
+      state.timerSound = {
+        title: sound.title,
+        uri: sound.uri,
+      }
+      ApplicationSettings.setString('timerSound', JSON.stringify(sound))
+    },
+    setTimerVibrate(state, bool) {
+      state.timerVibrate = bool
+      ApplicationSettings.setBoolean('timerVibrate', bool)
+    },
     clearImportSummary(state) {
       for (const key in state.importSummary) state.importSummary[key] = 0
     },
@@ -314,14 +403,16 @@ export default new Vuex.Store({
     setTheme(state, theme) {
       switch (theme) {
         case 'sysDef':
-          state.appTheme = Application.systemAppearance() == 'dark' ? "Dark" : "Light"
-          break;
+          state.appTheme =
+            Application.systemAppearance() == 'dark' ? 'Dark' : 'Light'
+          break
         case 'sysDefB':
-          state.appTheme = Application.systemAppearance() == 'dark' ? "Black" : "Light"
-          break;
+          state.appTheme =
+            Application.systemAppearance() == 'dark' ? 'Black' : 'Light'
+          break
         default:
           state.appTheme = theme
-          break;
+          break
       }
       ApplicationSettings.setString('appTheme', theme)
     },
@@ -335,25 +426,20 @@ export default new Vuex.Store({
       state.sortType = sortType
     },
     initRecipes(state) {
-      EnRecipesDB.query({ select: [] }).forEach((r) => {
-        if (r.timeRequired) {
-          r.prepTime = '00:00'
-          r.cookTime = r.timeRequired
-          delete r.timeRequired
-        }
-        if (!r.hasOwnProperty('cuisine')) r.cuisine = 'Undefined'
-        if (!r.hasOwnProperty('tags')) r.tags = []
-        if (!r.hasOwnProperty('difficulty')) r.difficulty = 'Easy'
-        if (!r.hasOwnProperty('rating')) r.rating = 0
-        if (!r.hasOwnProperty('created')) r.created = r.lastModified
-        // if (!r.hasOwnProperty("inBag"))
-        //   r.inBag = false
-        state.recipes.push(r)
+      db.select('SELECT * FROM recipes').then((res) => {
+        res.forEach((e) => {
+          Object.keys(e).forEach(
+            (f) =>
+              f.match(/tags|ingredients|instructions|combinations|notes/) &&
+              (e[f] = JSON.parse(e[f]))
+          )
+          state.recipes.push(e)
+        })
       })
       state.shakeEnabled = ApplicationSettings.getBoolean('shakeEnabled', true)
       state.sortType = ApplicationSettings.getString('sortType', 'Oldest first')
     },
-    importRecipes(state, recipes) {
+    importRecipesFromJSON(state, recipes) {
       let localRecipesIDs, partition
       let imported = 0
       let updated = 0
@@ -365,45 +451,100 @@ export default new Vuex.Store({
             r.cookTime = r.timeRequired
             delete r.timeRequired
           }
+          if (r.imageSrc) {
+            r.image = r.imageSrc.replace('enrecipes', 'EnRecipes')
+            delete r.imageSrc
+          }
           if (!r.hasOwnProperty('cuisine')) r.cuisine = 'Undefined'
           if (!r.hasOwnProperty('tags')) r.tags = []
           if (!r.hasOwnProperty('difficulty')) r.difficulty = 'Easy'
           if (!r.hasOwnProperty('rating')) r.rating = 0
           if (!r.hasOwnProperty('created')) r.created = r.lastModified
-          // if (!r.hasOwnProperty("inBag"))
-          //   r.inBag = false
+          r.yieldQuantity = r.yield.quantity
+          r.yieldUnit = r.yield.unit
+          delete r.yield
           return r
         })
       }
       function createDocuments(data) {
         data = getUpdatedData(data)
         state.recipes = [...state.recipes, ...data]
-        data.forEach((recipe) => {
+        data.forEach((r) => {
           imported++
-          EnRecipesDB.createDocument(recipe, recipe.id)
+          db.execute(
+            `INSERT INTO recipes (id, image, title, cuisine, category, tags, prepTime, cookTime, yieldQuantity, yieldUnit, difficulty, rating, ingredients, instructions, combinations, notes, favorite, tried, lastTried, lastModified, created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+              r.id,
+              r.image,
+              r.title,
+              r.cuisine,
+              r.category,
+              JSON.stringify(r.tags),
+              r.prepTime,
+              r.cookTime,
+              r.yieldQuantity,
+              r.yieldUnit,
+              r.difficulty,
+              r.rating,
+              JSON.stringify(r.ingredients),
+              JSON.stringify(r.instructions),
+              JSON.stringify(r.combinations),
+              JSON.stringify(r.notes),
+              r.favorite ? 1 : 0,
+              r.tried ? 1 : 0,
+              r.lastTried ? new Date(r.lastTried).getTime() : null,
+              r.lastModified ? new Date(r.lastModified).getTime() : null,
+              r.created ? new Date(r.created).getTime() : null,
+            ]
+          )
         })
       }
       function updateDocuments(data) {
         data = getUpdatedData(data)
-        data.forEach((recipe) => {
+        data.forEach((r) => {
           let recipeIndex = state.recipes
             .map((e, i) => {
               let d1 = new Date(e.lastModified).getTime()
-              let d2 = new Date(recipe.lastModified).getTime()
-              return e.id === recipe.id && d1 < d2 ? i : -1
+              let d2 = new Date(r.lastModified).getTime()
+              return e.id === r.id && d1 < d2 ? i : -1
             })
             .filter((e) => e >= 0)[0]
           if (recipeIndex >= 0) {
             updated++
-            Object.assign(state.recipes[recipeIndex], recipe)
-            EnRecipesDB.updateDocument(recipe.id, recipe)
+            Object.assign(state.recipes[recipeIndex], r)
+            db.execute(
+              `REPLACE INTO recipes (id, image, title, cuisine, category, tags, prepTime, cookTime, yieldQuantity, yieldUnit, difficulty, rating, ingredients, instructions, combinations, notes, favorite, tried, lastTried, lastModified, created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+              [
+                r.id,
+                r.image,
+                r.title,
+                r.cuisine,
+                r.category,
+                JSON.stringify(r.tags),
+                r.prepTime,
+                r.cookTime,
+                r.yieldQuantity,
+                r.yieldUnit,
+                r.difficulty,
+                r.rating,
+                JSON.stringify(r.ingredients),
+                JSON.stringify(r.instructions),
+                JSON.stringify(r.combinations),
+                JSON.stringify(r.notes),
+                r.favorite ? 1 : 0,
+                r.tried ? 1 : 0,
+                r.lastTried ? new Date(r.lastTried).getTime() : null,
+                r.lastModified ? new Date(r.lastModified).getTime() : null,
+                r.created ? new Date(r.created).getTime() : null,
+              ]
+            )
           }
         })
       }
       if (state.recipes.length) {
         localRecipesIDs = state.recipes.map((e) => e.id)
         partition = recipes.reduce(
-          (result, recipe, i) => {
+          (result, recipe) => {
             localRecipesIDs.indexOf(recipe.id) < 0
               ? result[0].push(recipe) // create candidates
               : result[1].push(recipe) // update candidates
@@ -420,160 +561,194 @@ export default new Vuex.Store({
       state.importSummary.imported = imported
       state.importSummary.updated = updated
     },
-    addRecipe(state, { id, recipe }) {
-      state.recipes.push(recipe)
-      EnRecipesDB.createDocument(recipe, id)
+    importRecipesFromDB(state, recipes) {
+      let localRecipesIDs: string[], partition: any[]
+      let imported = 0
+      let updated = 0
+      function createDocuments(data: any[]) {
+        data.forEach((r) => {
+          const cols = Object.keys(r).join(', ')
+          const placeholder = Object.keys(r)
+            .fill('?')
+            .join(', ')
+          imported++
+          db.execute(
+            `REPLACE INTO recipes (${cols}) VALUES (${placeholder})`,
+            Object.values(r)
+          )
+          Object.keys(r).forEach(
+            (f) =>
+              f.match(/tags|ingredients|instructions|combinations|notes/) &&
+              (r[f] = JSON.parse(r[f]))
+          )
+          state.recipes.push(r)
+        })
+      }
+      function updateDocuments(data: any[]) {
+        data.forEach((r) => {
+          let recipeIndex = state.recipes
+            .map((e, i) => {
+              let d1 = new Date(e.lastModified).getTime()
+              let d2 = new Date(r.lastModified).getTime()
+              return e.id === r.id && d1 < d2 ? i : -1
+            })
+            .filter((e) => e >= 0)[0]
+          if (recipeIndex >= 0) {
+            updated++
+            const cols = Object.keys(r).join(', ')
+            const placeholder = Object.keys(r)
+              .fill('?')
+              .join(', ')
+            db.execute(
+              `REPLACE INTO recipes (${cols}) VALUES (${placeholder})`,
+              Object.values(r)
+            )
+            Object.keys(r).forEach(
+              (f) =>
+                f.match(/tags|ingredients|instructions|combinations|notes/) &&
+                (r[f] = JSON.parse(r[f]))
+            )
+            Object.assign(state.recipes[recipeIndex], r)
+          }
+        })
+      }
+      if (state.recipes.length) {
+        localRecipesIDs = state.recipes.map((e) => e.id)
+        partition = recipes.reduce(
+          (result, recipe) => {
+            localRecipesIDs.indexOf(recipe.id) < 0
+              ? result[0].push(recipe) // create candidates
+              : result[1].push(recipe) // update candidates
+            return result
+          },
+          [[], []]
+        )
+        if (partition[0].length) createDocuments(partition[0])
+        if (partition[1].length) updateDocuments(partition[1])
+      } else createDocuments(recipes)
+      state.importSummary.found = recipes.length
+      state.importSummary.imported = imported
+      state.importSummary.updated = updated
     },
-    overwriteRecipe(state, { id, recipe }) {
-      let index = state.recipes.indexOf(
-        state.recipes.filter((e) => e.id === id)[0]
-      )
-      Object.assign(state.recipes[index], recipe)
-      EnRecipesDB.updateDocument(id, recipe)
-    },
-    deleteRecipe(state, { index, id }) {
-      getFileAccess().deleteFile(state.recipes[index].imageSrc)
-      state.recipes.splice(index, 1)
-      EnRecipesDB.deleteDocument(id)
-      state.recipes.forEach((e, i) => {
-        if (e.combinations.includes(id)) {
-          state.recipes[i].combinations.splice(e.combinations.indexOf(id), 1)
-          EnRecipesDB.updateDocument(state.recipes[i].id, state.recipes[i])
-        }
+    addRecipe(state, recipe) {
+      let r = JSON.parse(JSON.stringify(recipe))
+      Object.keys(recipe).forEach((e) => {
+        if (e.match(/tags|ingredients|instructions|combinations|notes/))
+          r[e] = JSON.stringify(r[e])
+        if (e.match(/favorite|tried/)) r[e] = r[e] ? 1 : 0
       })
+      const cols = Object.keys(recipe).join(', ')
+      const placeholder = Object.keys(recipe)
+        .fill('?')
+        .join(', ')
+      db.execute(
+        `REPLACE INTO recipes (${cols}) VALUES (${placeholder})`,
+        Object.values(r)
+      )
+      let i: number
+      function exist({ id }, index: number) {
+        if (id === recipe.id) {
+          i = index
+          return true
+        }
+        return false
+      }
+      state.recipes.some(exist)
+        ? Object.assign(state.recipes[i], recipe)
+        : state.recipes.push(recipe)
     },
     deleteRecipes(state, ids) {
-      ids.forEach((id) => {
+      ids.forEach((id: string) => {
         let index = state.recipes.findIndex((e) => e.id === id)
-        getFileAccess().deleteFile(state.recipes[index].imageSrc)
+        getFileAccess().deleteFile(state.recipes[index].image)
         state.recipes.splice(index, 1)
-        EnRecipesDB.deleteDocument(id)
+        db.execute(`DELETE FROM recipes WHERE id = '${id}'`)
         state.recipes.forEach((e, i) => {
           if (e.combinations.includes(id)) {
             state.recipes[i].combinations.splice(e.combinations.indexOf(id), 1)
-            EnRecipesDB.updateDocument(state.recipes[i].id, state.recipes[i])
+            db.execute(
+              `UPDATE recipes SET combinations = '${JSON.stringify(
+                state.recipes[i].combinations
+              )}' WHERE id = '${id}'`
+            )
           }
         })
       })
     },
     initListItems(state) {
-      function initialize(listName) {
-        let userItems
-        let db = listItems[listName].db
-        let key = listItems[listName].key
-        let stateName = listItems[listName].stateName
-        let defaultItems = listItems[listName].defaultItems
-        if (!state[stateName].length) {
-          let isStored = db.query({ select: [] }).length
-          if (isStored) {
-            userItems = db.getDocument(key)[key]
-            if (userItems.some((e) => defaultItems.includes(e)))
-              state[stateName] = userItems
-            else state[stateName] = [...defaultItems, ...userItems]
-          } else {
-            if (listItems[listName].sort) {
-              state[stateName].sort()
-            }
-            state[stateName] = defaultItems
-            db.createDocument(
-              {
-                [key]: [],
-              },
-              key
+      if (!state.cuisines.length) {
+        db.select(`SELECT * FROM lists`).then((res) => {
+          if (!res.length) {
+            db.execute(
+              `INSERT INTO lists (cuisines, categories, yieldUnits, units) VALUES (?, ?, ?, ?)`,
+              [null, null, null, null]
             )
           }
-        }
+
+          db.select(`SELECT * FROM lists`).then((res) => {
+            Object.keys(res[0]).forEach((list) => {
+              let userItems: string[]
+              let defaultItems = listItems[list].defaultItems
+              if (res[0][list]) {
+                userItems = JSON.parse(res[0][list])
+                state[list] = userItems.some((e: string) =>
+                  defaultItems.includes(e)
+                )
+                  ? userItems
+                  : [...defaultItems, ...userItems]
+              } else {
+                state[list] = defaultItems
+                listItems[list].sort && state[list].sort()
+              }
+            })
+          })
+        })
       }
-      ;['cuisines', 'categories', 'yieldUnits', 'units'].forEach((item) => {
-        initialize(item)
-      })
     },
     importListItems(state, { data, listName }) {
-      let db = listItems[listName].db
-      let key = listItems[listName].key
-      let stateName = listItems[listName].stateName
-      let items = new Set([...state[stateName], ...data])
-      state[stateName] = [...items]
-      if (listItems[listName].sort) state[stateName].sort()
-      db.updateDocument(key, { [key]: state[stateName] })
+      state[listName] = [...new Set([...state[listName], ...data])]
+      if (listItems[listName].sort) state[listName].sort()
+      db.execute(
+        `UPDATE lists SET ${listName} = '${JSON.stringify(state[listName])}'`
+      )
     },
     addListItem(state, { item, listName }) {
-      let db = listItems[listName].db
-      let key = listItems[listName].key
-      let stateName = listItems[listName].stateName
-      let lowercase = state[stateName].map((e) => e.toLowerCase())
+      let lowercase = state[listName].map((e: string) => e.toLowerCase())
       if (lowercase.indexOf(item.toLowerCase()) == -1) {
-        state[stateName].push(item)
-        db.updateDocument(key, { [key]: state[stateName] })
+        state[listName].push(item)
         if (listItems[listName].sort)
-          state[stateName].sort((a, b) =>
+          state[listName].sort((a: string, b: string) =>
             a.toLowerCase().localeCompare(b.toLowerCase())
           )
-      }
-    },
-    removeListItem(state, { item, listName }) {
-      let db = listItems[listName].db
-      let key = listItems[listName].key
-      let stateName = listItems[listName].stateName
-      let index = state[stateName].indexOf(item)
-      state[stateName].splice(index, 1)
-      db.updateDocument(key, { [key]: state[stateName] })
-      if (listItems[listName].sort) state[stateName].sort()
-    },
-    resetListItems(state, listName) {
-      let stateName = listItems[listName].stateName
-      let defaultItems = listItems[listName].defaultItems
-      state[listName] = [...defaultItems]
-      if (listItems[listName].sort) {
-        state[stateName].sort()
-      }
-    },
-    initMealPlans(state) {
-      let isMealPlansDBStored = mealPlansDB.query({ select: [] }).length
-      if (isMealPlansDBStored) {
-        let plans = mealPlansDB.getDocument('mealPlans').mealPlans
-        if (plans.length && plans[0].hasOwnProperty('eventColor')) {
-          plans.forEach((p) => {
-            let d = new Date(p.startDate)
-            p.date = new Date(
-              d.getFullYear(),
-              d.getMonth(),
-              d.getDate(),
-              0
-            ).getTime()
-            switch (new Date(p.date).getHours()) {
-              case 0:
-                p.type = 'breakfast'
-                break
-              case 5:
-                p.type = 'lunch'
-                break
-              case 10:
-                p.type = 'dinner'
-                break
-              case 15:
-                p.type = 'snacks'
-                break
-            }
-            delete p.startDate
-            delete p.endDate
-            delete p.eventColor
-            state.mealPlans.push(p)
-          })
-          mealPlansDB.updateDocument('mealPlans', {
-            mealPlans: state.mealPlans,
-          })
-        } else state.mealPlans = [...plans]
-      } else {
-        mealPlansDB.createDocument(
-          {
-            mealPlans: [],
-          },
-          'mealPlans'
+        db.execute(
+          `UPDATE lists SET ${listName} = '${JSON.stringify(state[listName])}'`
         )
       }
     },
-    importMealPlans(state, mealPlans) {
+    removeListItem(state, { item, listName }) {
+      state[listName].splice(state[listName].indexOf(item), 1)
+      db.execute(
+        `UPDATE lists SET ${listName} = '${JSON.stringify(state[listName])}'`
+      )
+    },
+    resetListItems(state, listName) {
+      let defaultItems = listItems[listName].defaultItems
+      state[listName] = [...defaultItems]
+      if (listItems[listName].sort)
+        state[listName].sort((a: string, b: string) =>
+          a.toLowerCase().localeCompare(b.toLowerCase())
+        )
+      db.execute(
+        `UPDATE lists SET ${listName} = '${JSON.stringify(state[listName])}'`
+      )
+    },
+    initMealPlans(state) {
+      if (!state.mealPlans.length)
+        db.select(`SELECT * FROM mealPlans`).then((res) =>
+          res.forEach((m: {}) => state.mealPlans.push(m))
+        )
+    },
+    importMealPlansFromJSON(state, mealPlans) {
       let newMealPlans = mealPlans.filter((e) => {
         if (e.hasOwnProperty('eventColor')) {
           return !state.mealPlans.some((f) => {
@@ -638,46 +813,66 @@ export default new Vuex.Store({
         })
       }
       state.mealPlans = [...state.mealPlans, ...updatedMealPlans]
-      mealPlansDB.updateDocument('mealPlans', { mealPlans: state.mealPlans })
+      updatedMealPlans.forEach((m) => {
+        db.execute(
+          `INSERT INTO mealPlans (date, type, title) VALUES (?, ?, ?)`,
+          [m.date, m.type, m.title]
+        )
+      })
     },
-    addMealPlan(state, { title, date, type, index }) {
+    importMealPlansFromDB(state, mealPlans) {
+      let newMealPlans = mealPlans.filter(
+        (e) =>
+          !state.mealPlans.some((f) =>
+            Object.keys(f).every((key) => f[key] == e[key])
+          )
+      )
+      state.mealPlans = [...state.mealPlans, ...newMealPlans]
+      newMealPlans.forEach((m) => {
+        db.execute(
+          `INSERT INTO mealPlans (date, type, title) VALUES (?, ?, ?)`,
+          [m.date, m.type, m.title]
+        )
+      })
+    },
+    addMealPlan(state, { date, type, title }) {
       let mealPlan = {
-        title,
         date,
         type,
+        title,
       }
-      if (index != null) state.mealPlans.splice(index, 0, mealPlan)
-      else state.mealPlans.push(mealPlan)
-      mealPlansDB.updateDocument('mealPlans', {
-        mealPlans: [...state.mealPlans],
-      })
+      state.mealPlans.push(mealPlan)
+      const cols = Object.keys(mealPlan).join(', ')
+      const placeholder = Object.keys(mealPlan)
+        .fill('?')
+        .join(', ')
+      db.execute(
+        `INSERT INTO mealPlans (${cols}) VALUES (${placeholder})`,
+        Object.values(mealPlan)
+      )
     },
-    deleteMealPlan(state, { title, date, type, index }) {
+    deleteMealPlan(state, { date, type, title }) {
+      let index = state.mealPlans.findIndex(
+        (e) => e.title === title && e.type === type && e.date === date
+      )
       state.mealPlans.splice(index, 1)
       state.mealPlans = [...state.mealPlans]
-      mealPlansDB.updateDocument('mealPlans', {
-        mealPlans: [...state.mealPlans],
-      })
-    },
-    toggleState(state, { id, recipe, key, setDate }) {
-      let index = state.recipes.indexOf(
-        state.recipes.filter((e) => e.id === id)[0]
+      db.execute(
+        `DELETE FROM mealPlans WHERE date = ${date} AND type = '${type}' AND title = '${title}'`
       )
-      state.recipes[index][key] = !state.recipes[index][key]
-      if (setDate) state.recipes[index].lastTried = new Date()
-      EnRecipesDB.updateDocument(id, recipe)
     },
-    setRecipeAsTried(state, { id, recipe }) {
-      let index = state.recipes.indexOf(
-        state.recipes.filter((e) => e.id === id)[0]
+    toggleState(state, { id, key, setDate }) {
+      let index = state.recipes.findIndex((e) => e.id == id)
+      state.recipes[index][key] = state.recipes[index][key] ? 0 : 1
+      db.execute(
+        `UPDATE recipes SET ${key} = ${state.recipes[index][key]} WHERE id = '${id}'`
       )
-      state.recipes[index].tried = true
-      state.recipes[index].lastTried = new Date()
-      EnRecipesDB.updateDocument(id, recipe)
-    },
-    setLastTriedDate(state, index) {
-      state.recipes[index].lastTried = new Date()
-      EnRecipesDB.updateDocument(state.recipes[index].id, state.recipes[index])
+      if (setDate) {
+        state.recipes[index].lastTried = new Date().getTime()
+        db.execute(
+          `UPDATE recipes SET lastTried = ${state.recipes[index].lastTried} WHERE id = '${id}'`
+        )
+      }
     },
     setComponent(state, comp) {
       state.currentComponent = comp
@@ -686,7 +881,11 @@ export default new Vuex.Store({
       state.recipes.forEach((e, i) => {
         if (combinations.includes(e.id)) {
           state.recipes[i].combinations.splice(e.combinations.indexOf(id), 1)
-          EnRecipesDB.updateDocument(state.recipes[i].id, state.recipes[i])
+          db.execute(
+            `UPDATE recipes SET combinations = '${JSON.stringify(
+              state.recipes[i].combinations
+            )}' WHERE id = '${id}'`
+          )
         }
       })
     },
@@ -694,26 +893,23 @@ export default new Vuex.Store({
       state.shakeEnabled = shake
       ApplicationSettings.setBoolean('shakeEnabled', shake)
     },
-    setRating(state, { id, recipe, rating }) {
-      let index = state.recipes.indexOf(
-        state.recipes.filter((e) => e.id === id)[0]
-      )
+    setRating(state, { id, rating }) {
+      let index = state.recipes.findIndex((e) => e.id == id)
       state.recipes[index].rating = rating
-      EnRecipesDB.updateDocument(id, recipe)
+      db.execute(`UPDATE recipes SET rating = ${rating} WHERE id = '${id}'`)
     },
-    toggleCart(state, { id, recipe }) {
+    toggleCart(state, { id }) {
       let index = state.recipes.indexOf(
         state.recipes.filter((e) => e.id === id)[0]
       )
       state.recipes[index].inBag = !state.recipes[index].inBag
-      EnRecipesDB.updateDocument(id, recipe)
     },
     unlinkBrokenImages(state) {
       state.recipes.forEach((r, i) => {
-        if (r.imageSrc && !File.exists(r.imageSrc)) {
-          r.imageSrc = null
+        if (r.image && !File.exists(r.image)) {
+          r.image = null
           Object.assign(state.recipes[i], r)
-          EnRecipesDB.updateDocument(r.id, r)
+          db.execute(`UPDATE recipes SET image = null WHERE id = '${r.id}'`)
         }
       })
     },
@@ -728,6 +924,33 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    addTimerPreset({ commit }, timer) {
+      commit('addTimerPreset', timer)
+    },
+    removeTimerPreset({ commit }, timer) {
+      commit('removeTimerPreset', timer)
+    },
+    clearTimerInterval({ commit }) {
+      commit('clearTimerInterval')
+    },
+    addActiveTimer({ commit }, timer) {
+      commit('addActiveTimer', timer)
+    },
+    updateActiveTimer({ commit }, timer) {
+      commit('updateActiveTimer', timer)
+    },
+    removeActiveTimer({ commit }, index) {
+      commit('removeActiveTimer', index)
+    },
+    setTimerDelay({ commit }, delay) {
+      commit('setTimerDelay', delay)
+    },
+    setTimerSound({ commit }, sound) {
+      commit('setTimerSound', sound)
+    },
+    setTimerVibrate({ commit }, bool) {
+      commit('setTimerVibrate', bool)
+    },
     clearImportSummary({ commit }) {
       commit('clearImportSummary')
     },
@@ -749,25 +972,22 @@ export default new Vuex.Store({
     initRecipes({ commit }) {
       commit('initRecipes')
     },
-    importRecipesAction({ commit }, recipes) {
-      commit('importRecipes', recipes)
+    importRecipesFromJSON({ commit }, recipes) {
+      commit('importRecipesFromJSON', recipes)
+    },
+    importRecipesFromDB({ commit }, recipes) {
+      commit('importRecipesFromDB', recipes)
     },
     addRecipeAction({ commit }, recipe) {
       commit('addRecipe', recipe)
     },
-    overwriteRecipeAction({ commit }, updatedRecipe) {
-      commit('overwriteRecipe', updatedRecipe)
-    },
-    deleteRecipeAction({ commit }, recipe) {
-      commit('deleteRecipe', recipe)
-    },
-    deleteRecipesAction({ commit }, ids) {
+    deleteRecipes({ commit }, ids) {
       commit('deleteRecipes', ids)
     },
     initListItems({ commit }) {
       commit('initListItems')
     },
-    importListItemsAction({ commit }, data) {
+    importListItems({ commit }, data) {
       commit('importListItems', data)
     },
     addListItemAction({ commit }, item) {
@@ -782,8 +1002,11 @@ export default new Vuex.Store({
     initMealPlans({ commit }) {
       commit('initMealPlans')
     },
-    importMealPlansAction({ commit }, mealPlans) {
-      commit('importMealPlans', mealPlans)
+    importMealPlansFromJSON({ commit }, mealPlans) {
+      commit('importMealPlansFromJSON', mealPlans)
+    },
+    importMealPlansFromDB({ commit }, mealPlans) {
+      commit('importMealPlansFromDB', mealPlans)
     },
     addMealPlanAction({ commit }, mealPlan) {
       commit('addMealPlan', mealPlan)
@@ -793,12 +1016,6 @@ export default new Vuex.Store({
     },
     toggleStateAction({ commit }, toggledRecipe) {
       commit('toggleState', toggledRecipe)
-    },
-    setRecipeAsTriedAction({ commit }, recipe) {
-      commit('setRecipeAsTried', recipe)
-    },
-    setLastTriedDateAction({ commit }, index) {
-      commit('setLastTriedDate', index)
     },
     setComponent({ commit }, comp) {
       commit('setComponent', comp)

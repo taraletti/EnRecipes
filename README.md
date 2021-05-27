@@ -6,7 +6,7 @@
 <a href="https://www.gnu.org/licenses/gpl-3.0" alt="License: GPLv3"><img src="https://img.shields.io/badge/license-GPL%20v3-blue"></a> <a href="https://github.com/vishnuraghavb/EnRecipes/releases" alt="Release version"><img src="https://img.shields.io/github/v/release/vishnuraghavb/EnRecipes?color=ff5200"/></a> <a href="https://hosted.weblate.org/engage/enrecipes/">
 <img src="https://hosted.weblate.org/widgets/enrecipes/-/app-translations/svg-badge.svg" alt="Translation status" /></a>
 <p align="center">
-<a href="https://play.google.com/store/apps/details?id=com.vishnuraghav.enrecipes"><img src="assets/Images/google-play-badge.png" height="80"/></a><a href="https://apt.izzysoft.de/fdroid/index/apk/com.vishnuraghav.enrecipes"><img src="assets/Images/IzzyOnDroid.png" height="80"/></a><br>You can also get the <a href="https://github.com/vishnuraghavb/EnRecipes/releases/latest">latest release on GitHub</a>
+<a href="https://play.google.com/store/apps/details?id=com.vishnuraghav.EnRecipes"><img src="assets/Images/google-play-badge.png" height="80"/></a><a href="https://apt.izzysoft.de/fdroid/index/apk/com.vishnuraghav.EnRecipes"><img src="assets/Images/IzzyOnDroid.png" height="80"/></a><br>You can also get the <a href="https://github.com/vishnuraghavb/EnRecipes/releases/latest">latest release on GitHub</a>
 </p>
 <h2 align="center">Enjoying EnRecipes?</h2>
 <p align="center">Please consider making a small donation to help fund the project. Developing an application, especially one that is open source and completely free, takes a lot of time and effort.

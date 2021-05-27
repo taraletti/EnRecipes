@@ -298,7 +298,8 @@
   "delay": "Delay",
   "tmr": "Timer %s",
   "prstBtn": "PRESETS",
-  "tmrPrsts": "Timer presets",
+  "prsts": "Presets",
+  "delPrst": "You are about to delete %s from the presets",
   "fwr": "for which recipe?",
   "aTPrst": "Added to presets",
   "tmrSnd": "Timer sound",
@@ -309,5 +310,6 @@
   "hour": "hour",
   "hours": "hours",
   "seconds": "seconds",
-  "tmrClr": "Timer cleared"
+  "tmrRm": "Timer removed",
+  "notifSetg": "Notification settings"
 }

@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="seconds">"sekunder"</string>
+  <string name="minutes">"minutter"</string>
+  <string name="minute">"minut"</string>
+  <string name="dlyDur">"Forsinkelsens varighed"</string>
+  <string name="tmrvbrt">"Timer vibrerer"</string>
+  <string name="tmr">"Timeren %1$s"</string>
+  <string name="tmrSnd">"Timeren lyd"</string>
+  <string name="prstBtn">"FORUDSÆTTER"</string>
+  <string name="tmrPrsts">"Timeren forindstillinger"</string>
+  <string name="fwr">"til hvilken opskrift?"</string>
+  <string name="aTPrst">"Tilføjet til forudindstillinger"</string>
+  <string name="hours">"timers"</string>
+  <string name="hour">"timer"</string>
+  <string name="tmrClr">"Timeren er slettet"</string>
+  <string name="timer">"Kogetid Timer"</string>
+  <string name="ntmr">"Ny timer"</string>
+  <string name="strtBtn">"STARTER"</string>
+  <string name="stop">"Stopper"</string>
+  <string name="delay">"Forsinkelse"</string>
+  <string name="sec">"s"</string>
+  <string name="sysDefB">"Systemstandard + sort"</string>
   <string name="November">"November"</string>
   <string name="nwCat">"Ny kategori"</string>
   <string name="nwYiU">"Ny udbytteenhed"</string>
@@ -292,4 +313,6 @@
   <string name="American">"American"</string>
   <string name="aD">"Fuldendt!"</string>
   <string name="About">"Om"</string>
+  <string name="notifSetg">"Notification settings"</string>
+  <string name="tmrRm">"Timer removed"</string>
 </resources>

@@ -26,8 +26,8 @@
           </StackLayout>
           <Image
             col="1"
-            v-if="recipe.imageSrc"
-            :src="recipe.imageSrc"
+            v-if="recipe.image"
+            :src="recipe.image"
             stretch="aspectFit"
             class="photo"
             decodeWidth="96"
@@ -81,8 +81,9 @@
                   <Label
                     @touch="touchYield"
                     class="value clickable"
+                    horizontalAlignment="left"
                     :text="`${tempYieldQuantity} ${$options.filters.L(
-                      recipe.yield.unit
+                      recipe.yieldUnit
                     )}`"
                   />
                 </StackLayout>
@@ -183,7 +184,7 @@
         @loaded="onAppBarLoad"
         class="appbar"
         v-show="!toast"
-        columns="auto, *, auto, auto, auto, auto"
+        columns="auto, *, auto, auto, auto, auto, auto"
       >
         <Button
           class="ico"
@@ -192,57 +193,53 @@
         />
         <Button
           col="2"
+          class="ico"
+          :text="icon.timer"
+          @tap="openCookingTimer"
+        />
+        <Button
+          col="3"
           v-if="!filterTrylater"
           class="ico"
           :text="recipe.tried ? icon.try : icon.tried"
           @tap="toggle('tried')"
         />
         <Button
-          col="2"
+          col="3"
           v-else
           class="ico"
           :text="icon.done"
-          @tap="recipeTried"
-        />
-        <Button
-          col="3"
-          class="ico"
-          :text="recipe.isFavorite ? icon.faved : icon.fav"
-          @tap="toggle('isFavorite')"
+          @tap="toggle('tried', true)"
         />
         <Button
           col="4"
+          class="ico"
+          :text="recipe.favorite ? icon.faved : icon.fav"
+          @tap="toggle('favorite')"
+        />
+        <Button
+          col="5"
           v-if="!busy"
           class="ico"
           :text="icon.edit"
           @tap="editRecipe"
         />
-        <ActivityIndicator col="4" v-else :busy="busy" />
+        <ActivityIndicator col="5" v-else :busy="busy" />
         <Button
+          col="6"
           class="ico fab"
           :text="icon.share"
-          col="5"
           @tap="shareHandler"
         />
       </GridLayout>
-      <GridLayout
-        v-show="toast"
-        row="1"
-        class="appbar snackBar"
-        columns="*"
-        @tap="toast = null"
-      >
-        <FlexboxLayout minHeight="48" alignItems="center">
-          <Label class="title msg" :text="toast" />
-        </FlexboxLayout>
-      </GridLayout>
+      <Toast :toast="toast" :action="hideLastTried" />
       <AbsoluteLayout rowSpan="2">
         <Image
           @tap="({ object }) => (object.cancel = true)"
           backgroundColor="black"
           stretch="aspectFit"
           @loaded="onImgViewLoad"
-          :src="recipe.imageSrc"
+          :src="recipe.image"
           class="photoviewer"
         />
       </AbsoluteLayout>
@@ -266,11 +263,14 @@ import {
 import { localize } from "@nativescript/localize";
 const intl = require("nativescript-intl");
 import { mapActions, mapState } from "vuex";
+import CookingTimer from "./CookingTimer.vue";
 import EditRecipe from "./EditRecipe.vue";
-import ActionDialog from "./modal/ActionDialog.vue";
-import PromptDialog from "./modal/PromptDialog.vue";
+import Action from "./modals/Action.vue";
+import Toast from "./sub/Toast.vue";
+import Prompt from "./modals/Prompt.vue";
 import * as utils from "~/shared/utils";
 export default {
+  components: { Toast },
   props: ["filterTrylater", "recipeID"],
   data() {
     return {
@@ -325,18 +325,15 @@ export default {
     ...mapActions([
       "toggleStateAction",
       "setComponent",
-      "overwriteRecipeAction",
-      "setRecipeAsTriedAction",
       "setRatingAction",
       "toggleCartAction",
     ]),
-    onPageLoad(args) {
-      const page = args.object;
-      page.bindingContext = new Observable();
+    onPageLoad({ object }) {
+      object.bindingContext = new Observable();
       this.busy = this.photoOpen = false;
       this.setComponent("ViewRecipe");
-      if (this.yieldMultiplier == this.recipe.yield.quantity)
-        this.yieldMultiplier = this.recipe.yield.quantity;
+      if (this.yieldMultiplier == this.recipe.yieldQuantity)
+        this.yieldMultiplier = this.recipe.yieldQuantity;
       this.keepScreenOn(true);
       this.syncCombinations();
     },
@@ -374,7 +371,6 @@ export default {
     onStickyLoad({ object }) {
       this.sticky = object;
     },
-    // FIX: scroll not smooth
     fixTitle({ object }, swipeUp: boolean): void {
       let ingL = this.recipe.ingredients.length;
       let insL = this.recipe.instructions.length;
@@ -394,17 +390,6 @@ export default {
           { length: 4 },
           (v, i) => (v = arr[i] ? i < n : false)
         );
-        // this.sticky
-        //   .animate({
-        //     opacity: 0.5,
-        //     duration: 0,
-        //   })
-        //   .then(() => {
-        //     this.sticky.animate({
-        //       opacity: 1,
-        //       duration: 250,
-        //     });
-        //   });
       };
 
       if (swipeUp) {
@@ -467,9 +452,9 @@ export default {
       return localize(title) + text;
     },
     changeYield() {
-      this.$showModal(PromptDialog, {
+      this.$showModal(Prompt, {
         props: {
-          title: `${localize("req", localize(this.recipe.yield.unit))}`,
+          title: `${localize("req", localize(this.recipe.yieldUnit))}`,
           placeholder: Math.abs(parseFloat(this.yieldMultiplier)),
           action: "SET",
         },
@@ -480,8 +465,7 @@ export default {
     hasTime(time) {
       return time != "00:00";
     },
-    niceDate(time) {
-      let lastTried = new Date(time).getTime();
+    niceDate(lastTried) {
       let now = new Date().getTime();
       let midnight = new Date().setHours(0, 0, 0, 0);
       let diff = (now - lastTried) / 1000;
@@ -506,19 +490,40 @@ export default {
         if (!val) this.toast = val;
       });
     },
+    hideLastTried({ object }) {
+      object
+        .animate({
+          opacity: 0,
+          translate: { x: 0, y: 64 },
+          duration: 250,
+          curve: CoreTypes.AnimationCurve.ease,
+        })
+        .then(() => {
+          this.showUndo = false;
+          this.appbar.translateY = 64;
+          this.appbar.animate({
+            translate: { x: 0, y: 0 },
+            duration: 250,
+            curve: CoreTypes.AnimationCurve.ease,
+          });
+          object.opacity = 1;
+          object.translateY = 0;
+          this.toast = null;
+        });
+    },
     // getMeasure(value: number, unit: string) {
     //   let vm = this;
     //   function roundedQ(val: number) {
     //     return Math.abs(
     //       Math.round(
-    //         (val / vm.recipe.yield.quantity) * vm.tempYieldQuantity * 100
+    //         (val / vm.recipe.yieldQuantity) * vm.tempYieldQuantity * 100
     //       ) / 100
     //     );
     //   }
     //   if (value) {
     //     let rounded = Math.abs(
     //       Math.round(
-    //         (value / this.recipe.yield.quantity) * this.tempYieldQuantity * 100
+    //         (value / this.recipe.yieldQuantity) * this.tempYieldQuantity * 100
     //       ) / 100
     //     );
     //     let lUnit = localize(unit);
@@ -551,7 +556,7 @@ export default {
     roundedQuantity(quantity: number) {
       return Math.abs(
         Math.round(
-          (quantity / this.recipe.yield.quantity) * this.tempYieldQuantity * 100
+          (quantity / this.recipe.yieldQuantity) * this.tempYieldQuantity * 100
         ) / 100
       );
     },
@@ -598,10 +603,10 @@ export default {
         )
         .map((e) => e.id);
       this.recipe.combinations = combinationForOtherRecipes;
-      this.overwriteRecipeAction({
-        id: this.currentRecipeID,
-        recipe: this.recipe,
-      });
+      // this.overwriteRecipeAction({
+      //   id: this.currentRecipeID,
+      //   recipe: this.recipe,
+      // });
     },
     touchIngredient({ object, action }, index) {
       object.className = action.match(/down|move/)
@@ -672,14 +677,14 @@ export default {
       this.currentRecipeID = combination;
       this.syncCombinations();
       this.createNotes();
-      this.yieldMultiplier = this.recipe.yield.quantity;
+      this.yieldMultiplier = this.recipe.yieldQuantity;
       this.recipe.tried && this.recipe.lastTried && this.showLastTried();
     },
 
     // SHARE ACTION
     shareHandler() {
-      if (this.recipe.imageSrc) {
-        this.$showModal(ActionDialog, {
+      if (this.recipe.image) {
+        this.$showModal(Action, {
           props: {
             title: "shr",
             list: ["rec", "pht"],
@@ -690,7 +695,7 @@ export default {
               this.shareRecipe();
               break;
             case "pht":
-              ImageSource.fromFile(this.recipe.imageSrc).then((res) =>
+              ImageSource.fromFile(this.recipe.image).then((res) =>
                 utils.shareImage(res, localize("srpu"))
               );
               break;
@@ -718,7 +723,7 @@ export default {
           this.recipe.cookTime
         )}\n`;
       overview += `${localize("yld")}: ${this.tempYieldQuantity} ${localize(
-        this.recipe.yield.unit
+        this.recipe.yieldUnit
       )}\n${localize("Difficulty level")}: ${localize(
         this.recipe.difficulty
       )}\n`;
@@ -765,26 +770,18 @@ export default {
     },
 
     // DATA HANDLERS
-    toggle(key, setDate) {
+    toggle(key: string, setDate: boolean) {
       this.toggleStateAction({
         id: this.currentRecipeID,
-        recipe: this.recipe,
         key,
         setDate,
       });
-    },
-    recipeTried() {
-      this.setRecipeAsTriedAction({
-        id: this.currentRecipeID,
-        recipe: this.recipe,
-      });
-      this.$navigateBack();
+      if (setDate) this.$navigateBack();
     },
     setRating(rating) {
       if (rating !== this.recipe.rating || rating === 1) {
         this.setRatingAction({
           id: this.currentRecipeID,
-          recipe: this.recipe,
           rating,
         });
       }
@@ -797,7 +794,6 @@ export default {
       }
       this.toggleCartAction({
         id: this.currentRecipeID,
-        recipe: this.recipe,
       });
     },
 
@@ -855,7 +851,6 @@ export default {
       } else this.$navigateBack();
     },
     viewPhoto() {
-      // this.imgView.initNativeView();
       this.photoOpen = true;
       this.hijackBackEvent();
       let pv = this.imgView;
@@ -920,6 +915,14 @@ export default {
       this.photoOpen ? this.closePhoto() : this.$navigateBack();
     },
 
+    //TIMERS
+    openCookingTimer() {
+      this.$navigateTo(CookingTimer, {
+        props: {
+          recipeID: this.recipe.id,
+        },
+      });
+    },
     //HELPERS
     touchYield({ object, action }) {
       object.className = action.match(/down|move/)
@@ -933,7 +936,7 @@ export default {
     this.recipe.ingredients.forEach((e) => this.checks.push(false));
   },
   mounted() {
-    this.yieldMultiplier = this.recipe.yield.quantity;
+    this.yieldMultiplier = this.recipe.yieldQuantity;
     this.recipe.tried && this.recipe.lastTried && this.showLastTried();
   },
 };

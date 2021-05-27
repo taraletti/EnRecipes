@@ -1,32 +1,7 @@
 <template>
   <Page @loaded="onPageLoad" actionBarHidden="true">
     <GridLayout rows="*, auto" columns="auto, *">
-      <ListView
-        colSpan="2"
-        rowSpan="2"
-        class="options-list"
-        for="item in items"
-      >
-        <v-template if="$index == 0">
-          <Label class="pageTitle" :text="'intf' | L" />
-        </v-template>
-        <v-template if="$index == 4">
-          <StackLayout class="listSpace"> </StackLayout>
-        </v-template>
-        <v-template>
-          <GridLayout
-            columns="auto, *"
-            class="option"
-            @touch="touch($event, item.action)"
-          >
-            <Label class="ico" :text="icon[item.icon]" />
-            <StackLayout col="1">
-              <Label :text="item.title | L" class="info" />
-              <Label :text="item.subTitle" class="sub" />
-            </StackLayout>
-          </GridLayout>
-        </v-template>
-      </ListView>
+      <OptionsList title="intf" :items="items" />
       <GridLayout row="1" class="appbar" rows="*" columns="auto, *">
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
@@ -42,12 +17,14 @@ import {
   Frame,
 } from "@nativescript/core";
 import { localize, overrideLocale } from "@nativescript/localize";
-import ActionDialog from "../modal/ActionDialog.vue";
-import ConfirmDialog from "../modal/ConfirmDialog.vue";
+import Action from "../modals/Action";
+import Confirm from "../modals/Confirm";
+import OptionsList from "../sub/OptionsList";
 import { mapState, mapActions } from "vuex";
 import * as utils from "~/shared/utils";
 
 export default {
+  components: { OptionsList },
   data() {
     return {
       appLanguage: "English",
@@ -59,12 +36,14 @@ export default {
       return [
         {},
         {
+          type: "list",
           icon: "lang",
           title: "lang",
           subTitle: this.appLanguage,
           action: this.selectAppLanguage,
         },
         {
+          type: "list",
           icon: "theme",
           title: "Theme",
           subTitle: localize(
@@ -73,6 +52,7 @@ export default {
           action: this.selectThemes,
         },
         {
+          type: "list",
           icon: "layout",
           title: "listVM",
           subTitle: localize(this.layout),
@@ -84,25 +64,24 @@ export default {
   },
   methods: {
     ...mapActions(["setTheme", "setLayout"]),
-    onPageLoad(args) {
-      const page = args.object;
-      page.bindingContext = new Observable();
+    onPageLoad({ object }) {
+      object.bindingContext = new Observable();
     },
     // LANGUAGE SELECTION
     selectAppLanguage() {
       let languages = this.language.map((e) => e.title);
-      this.$showModal(ActionDialog, {
+      this.$showModal(Action, {
         props: {
           title: "lang",
           list: [...languages],
         },
       }).then((action) => {
-        if (action && action !== "Cancel" && this.appLanguage !== action) {
+        if (action && this.appLanguage !== action) {
           let currentLocale = Device.language.split("-")[0];
           let locale = this.language.filter((e) => e.title === action)[0]
             .locale;
           if (currentLocale !== locale) {
-            this.$showModal(ConfirmDialog, {
+            this.$showModal(Confirm, {
               props: {
                 title: "appRst",
                 description: localize("nLangInfo"),
@@ -123,7 +102,7 @@ export default {
     },
     // THEME SELECTION
     selectThemes() {
-      this.$showModal(ActionDialog, {
+      this.$showModal(Action, {
         props: {
           title: "Theme",
           list: ["Light", "Dark", "Black", "sysDef", "sysDefB"],
@@ -142,26 +121,21 @@ export default {
     },
     // LAYOUT MODE
     setLayoutMode() {
-      this.$showModal(ActionDialog, {
+      this.$showModal(Action, {
         props: {
           title: "listVM",
           list: ["detailed", "grid", "photogrid", "simple", "minimal"],
         },
       }).then((action) => {
-        if (action && action !== "Cancel" && this.layoutMode !== action) {
+        if (action && this.layoutMode !== action) {
           let act = action.toLowerCase();
           ApplicationSettings.setString("layout", act);
           this.setLayout(act);
         }
       });
     },
-    // HELPERS
-    touch({ object, action }, method) {
-      object.className = action.match(/down|move/) ? "option fade" : "option";
-      if (action == "up") method();
-    },
   },
-  mounted() {
+  created() {
     this.appLanguage = ApplicationSettings.getString(
       "appLanguage",
       localize("sysDef")

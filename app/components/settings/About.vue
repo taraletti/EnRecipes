@@ -12,11 +12,7 @@
         </v-template>
         <v-template if="$index == 1">
           <StackLayout class="app-info">
-            <Image
-              class="icon"
-              src="res://logo"
-              stretch="none"
-            />
+            <Image class="icon" src="res://logo" stretch="none" />
             <Label class="name tb tac" :text="'EnRecipes' | L" />
             <Label :text="getVersion" class="version tb tac" />
 
@@ -99,9 +95,8 @@ export default {
     },
   },
   methods: {
-    onPageLoad(args) {
-      const page = args.object;
-      page.bindingContext = new Observable();
+    onPageLoad({ object }) {
+      object.bindingContext = new Observable();
     },
     // HELPERS
     openURL(url) {

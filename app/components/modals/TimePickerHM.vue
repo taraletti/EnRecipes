@@ -66,12 +66,7 @@ export default {
       return h.map((e) => `${e} ${localize("hr")}`);
     },
     minsList() {
-      let m = [
-        ...new Set([
-          ...Array(11).keys(),
-          ...Array.from(Array(12), (_, x) => x * 5),
-        ]),
-      ];
+      let m = [...Array(60).keys()];
       this.mins = m;
       return m.map((e) => `${e} ${localize("min")}`);
     },

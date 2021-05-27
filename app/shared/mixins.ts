@@ -1,3 +1,5 @@
+declare const android: any
+
 export const lvMixin = {
   methods: {
     transparentPage({ object }) {

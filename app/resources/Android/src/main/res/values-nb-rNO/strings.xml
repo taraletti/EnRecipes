@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="sec">"s"</string>
+  <string name="sysDefB">"Systemforvalg + Svart"</string>
   <string name="buto">"Støttet opp til %1$s"</string>
   <string name="yld">"Nyttemengde"</string>
   <string name="yieldU">"Enhet for nyttemengde"</string>
@@ -292,4 +294,25 @@
   <string name="aBtn">"Legg til"</string>
   <string name="About">"Om"</string>
   <string name="aap">"Legg ved et bilde"</string>
+  <string name="notifSetg">"Notification settings"</string>
+  <string name="tmrRm">"Timer removed"</string>
+  <string name="seconds">"seconds"</string>
+  <string name="hours">"hours"</string>
+  <string name="hour">"hour"</string>
+  <string name="minutes">"minutes"</string>
+  <string name="minute">"minute"</string>
+  <string name="dlyDur">"Delay duration"</string>
+  <string name="tmrvbrt">"Timer vibrate"</string>
+  <string name="tmrSnd">"Timer sound"</string>
+  <string name="aTPrst">"Added to presets"</string>
+  <string name="fwr">"for which recipe?"</string>
+  <string name="tmrPrsts">"Timer presets"</string>
+  <string name="prstBtn">"PRESETS"</string>
+  <string name="tmr">"Timer %1$s"</string>
+  <string name="delay">"Delay"</string>
+  <string name="stop">"Stop"</string>
+  <string name="strtBtn">"START"</string>
+  <string name="ntmr">"New timer"</string>
+  <string name="timer">"Cooking Timer"</string>
+  <string name="tmrClr">"tmrClr"</string>
 </resources>

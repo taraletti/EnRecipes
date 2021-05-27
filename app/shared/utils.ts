@@ -1,20 +1,30 @@
-import { Application, AndroidApplication, Utils } from '@nativescript/core'
+import {
+  Application,
+  AndroidApplication,
+  Utils,
+  Device,
+  Color,
+  path,
+  knownFolders,
+  TimerInfo,
+} from '@nativescript/core'
 let timerOne
+declare const global, android, androidx, com, java, Array: any
+
 export const restartApp = () => {
+  const ctx = Utils.ad.getApplicationContext()
   let mStartActivity = new android.content.Intent(
-    Application.android.context,
+    ctx,
     Application.android.startActivity.getClass()
   )
   let mPendingIntentId = Math.random() * 100000
   let mPendingIntent = android.app.PendingIntent.getActivity(
-    Application.android.context,
+    ctx,
     mPendingIntentId,
     mStartActivity,
     android.app.PendingIntent.FLAG_CANCEL_CURRENT
   )
-  let mgr = Application.android.context.getSystemService(
-    android.content.Context.ALARM_SERVICE
-  )
+  let mgr = ctx.getSystemService(android.content.Context.ALARM_SERVICE)
   mgr.set(
     android.app.AlarmManager.RTC,
     java.lang.System.currentTimeMillis() + 100,
@@ -86,11 +96,12 @@ export const getRecipePhoto = () => {
     android.content.Intent.ACTION_GET_CONTENT
   )
   intent.setType('image/*')
-  return callIntent(ctx, intent, 'Select photo', DIR_CODE).then((res) => {
-    if (res.resultCode === android.app.Activity.RESULT_OK)
-      if (res.intent != null && res.intent.getData())
-        return res.intent.getData()
-  })
+  return callIntent(ctx, intent, 'Select photo', DIR_CODE).then(
+    ({ resultCode, intent }: any) => {
+      if (resultCode === android.app.Activity.RESULT_OK)
+        if (intent != null && intent.getData()) return intent.getData()
+    }
+  )
 }
 export const copyPhotoToCache = (uri, filepath) => {
   const ContentResolver = Application.android.nativeApp.getContentResolver()
@@ -112,6 +123,26 @@ export const copyPhotoToCache = (uri, filepath) => {
   })
 }
 
+// COPY DB FILE
+export const copyDBToExport = () => {
+  const src = path.join(knownFolders.documents().path, 'EnRecipes.db')
+  const dst = path.join(
+    knownFolders.documents().getFolder('EnRecipes').path,
+    'EnRecipes.db'
+  )
+  const input = new java.io.FileInputStream(src)
+  try {
+    const output = new java.io.FileOutputStream(dst)
+    let len: number
+    let buffer = Array.create('byte', 1024)
+    while ((len = input.read(buffer)) > 0) output.write(buffer, 0, len)
+  } catch (error) {
+    console.log(error)
+  } finally {
+    input.close()
+  }
+}
+
 // BACKUP FOLDER PICKER
 export const getBackupFolder = () => {
   const ctx =
@@ -120,11 +151,12 @@ export const getBackupFolder = () => {
   const intent = new android.content.Intent(
     android.content.Intent.ACTION_OPEN_DOCUMENT_TREE
   )
-  return callIntent(ctx, intent, 'Select folder', DIR_CODE).then((res) => {
-    if (res.resultCode === android.app.Activity.RESULT_OK)
-      if (res.intent != null && res.intent.getData())
-        return res.intent.getData()
-  })
+  return callIntent(ctx, intent, 'Select folder', DIR_CODE).then(
+    ({ resultCode, intent }: any) => {
+      if (resultCode === android.app.Activity.RESULT_OK)
+        if (intent != null && intent.getData()) return intent.getData()
+    }
+  )
 }
 
 // BACKUP FILE PICKER
@@ -138,10 +170,9 @@ export const getBackupFile = () => {
   intent.addCategory(android.content.Intent.CATEGORY_OPENABLE)
   intent.setType('application/zip')
   return callIntent(ctx, intent, 'Select file to import', DIR_CODE).then(
-    (res) => {
-      if (res.resultCode === android.app.Activity.RESULT_OK) {
-        if (res.intent != null && res.intent.getData())
-          return res.intent.getData()
+    ({ resultCode, intent }: any) => {
+      if (resultCode === android.app.Activity.RESULT_OK) {
+        if (intent != null && intent.getData()) return intent.getData()
       }
     }
   )
@@ -149,7 +180,7 @@ export const getBackupFile = () => {
 
 // ZIP OPERATIONS
 export class Zip {
-  static getSubFiles(src, isRootFolder) {
+  static getSubFiles(src: string, isRootFolder?: boolean) {
     const fileList = new java.util.ArrayList()
     const sourceFile = new java.io.File(src)
     let tempList = sourceFile.listFiles()
@@ -271,4 +302,190 @@ export const shareImage = (image, subject) => {
   )
   intent.putExtra(android.content.Intent.EXTRA_STREAM, shareUri)
   share(intent, subject)
+}
+
+// TIMER NOTIFICATION
+export class TimerNotif {
+  static getIcon(ctx, icon) {
+    const packageName = ctx.getApplicationInfo().packageName
+    let resources = ctx.getResources()
+    return (
+      resources.getIdentifier(icon, 'drawable', packageName) ||
+      ctx.getApplicationInfo().icon
+    )
+  }
+  static clear(nID) {
+    let ctx = Utils.ad.getApplicationContext()
+    const NotifySrv = ctx.getSystemService(
+      android.content.Context.NOTIFICATION_SERVICE
+    )
+    // nID ? NotifySrv.cancel(nID) : NotifySrv.cancelAll()
+    NotifySrv.cancel(nID)
+  }
+
+  static getNotification(
+    {
+      actions,
+      bID,
+      cID,
+      cName,
+      description,
+      nID,
+      priority,
+      sound,
+      title,
+      vibrate,
+    }: {
+      actions?: boolean
+      bID: string
+      cID: string
+      cName: string
+      description: string
+      nID: number
+      priority: number
+      sound: string
+      title: string
+      vibrate?: number
+    },
+    ctx
+  ) {
+    let sdkv: number = parseInt(Device.sdkVersion)
+    let soundUri: any
+    if (sound) soundUri = new android.net.Uri.parse(sound)
+    const NotifyMgr = android.app.NotificationManager
+    const NotifySrv = ctx.getSystemService(
+      android.content.Context.NOTIFICATION_SERVICE
+    )
+    const NotificationCompat = androidx.core.app.NotificationCompat
+    const AudioManager = android.media.AudioManager
+    if (sdkv >= 26) {
+      const importance =
+        priority > 0 ? NotifyMgr.IMPORTANCE_HIGH : NotifyMgr.IMPORTANCE_MIN
+      console.log(priority, importance)
+      const AudioAttributes = android.media.AudioAttributes
+      const audioAttributes = new AudioAttributes.Builder()
+        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+        .setUsage(AudioAttributes.USAGE_ALARM)
+        .build()
+      const Channel = new android.app.NotificationChannel(
+        cID,
+        cName,
+        importance
+      )
+      if (description) Channel.setDescription(description)
+      Channel.enableVibration(vibrate)
+      Channel.enableLights(false)
+      if (sound) Channel.setSound(soundUri, audioAttributes)
+      else Channel.setSound(null, null)
+      Channel.setShowBadge(true)
+      Channel.setLockscreenVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+      NotifySrv.createNotificationChannel(Channel)
+    }
+
+    const Intent = android.content.Intent
+    const PendingIntent = android.app.PendingIntent
+
+    const mainInt = new Intent(ctx, com.tns.NativeScriptActivity.class)
+    mainInt.putExtra('action', 'open_timer')
+    const mainPInt = PendingIntent.getActivity(
+      ctx,
+      1,
+      mainInt,
+      PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
+    // Action intent
+    let actionInt1, actionInt2, actionPInt1, actionPInt2
+    if (actions) {
+      actionInt1 = new Intent(bID)
+      actionInt1.putExtra('action', 'stop')
+      actionPInt1 = PendingIntent.getBroadcast(
+        ctx,
+        2,
+        actionInt1,
+        PendingIntent.FLAG_UPDATE_CURRENT
+      )
+      actionInt2 = new Intent(bID)
+      actionInt2.putExtra('action', 'delay')
+      actionPInt2 = PendingIntent.getBroadcast(
+        ctx,
+        3,
+        actionInt2,
+        PendingIntent.FLAG_UPDATE_CURRENT
+      )
+    }
+
+    // CREATE NOTIFICATION
+
+    let icon = TimerNotif.getIcon(ctx, 'ic_stat_notify_silhouette')
+    let builder = new NotificationCompat.Builder(ctx, cID)
+      .setColor(new Color('#ff5200').android)
+      .setContentIntent(mainPInt)
+      .setContentTitle(title)
+      .setOngoing(true)
+      .setPriority(priority)
+      .setShowWhen(actions)
+      .setSmallIcon(icon)
+      .setTicker(title)
+      .setAutoCancel(false)
+      .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+    if (sound) builder.setSound(soundUri, AudioManager.STREAM_ALARM)
+    else builder.setSound(null)
+    if (description) builder.setContentText(description)
+    if (vibrate) builder.setVibrate([500, 1000])
+    if (actions) {
+      builder.setDeleteIntent(actionPInt2)
+      builder.setFullScreenIntent(mainPInt, true)
+      builder.addAction(null, 'Stop', actionPInt1)
+      builder.addAction(null, 'Delay', actionPInt2)
+    }
+    let notification = builder.build()
+    notification.flags =
+      NotificationCompat.FLAG_INSISTENT | NotificationCompat.FLAG_ONGOING_EVENT
+
+    return notification
+  }
+  static show(data) {
+    const ctx = Utils.ad.getApplicationContext()
+    const NotifySrv = ctx.getSystemService(
+      android.content.Context.NOTIFICATION_SERVICE
+    )
+    NotifySrv.notify(data.nID, TimerNotif.getNotification(data, ctx))
+  }
+}
+
+// GET RINGTONES LIST
+export const getTones = () => {
+  const RingtoneManager = android.media.RingtoneManager
+  let ctx = Utils.ad.getApplicationContext()
+  const ringtonesMgr = new RingtoneManager(ctx)
+  ringtonesMgr.setType(RingtoneManager.TYPE_ALARM)
+  const cursor = ringtonesMgr.getCursor()
+  let tones = []
+  while (cursor.moveToNext()) {
+    tones.push({
+      title: cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX),
+      uri:
+        cursor.getString(RingtoneManager.URI_COLUMN_INDEX) +
+        '/' +
+        cursor.getString(RingtoneManager.ID_COLUMN_INDEX),
+    })
+  }
+
+  let defaultToneUri = RingtoneManager.getActualDefaultRingtoneUri(
+    ctx,
+    RingtoneManager.TYPE_ALARM
+  )
+  let defaultTone
+  if (defaultToneUri) {
+    let uriString = defaultToneUri.toString()
+    let tonesAvailable = tones.filter((e) => e.uri == uriString)
+    let toneExist = tonesAvailable.length
+    defaultTone = {
+      title: toneExist ? tonesAvailable[0].title : tones[0].title,
+      uri: toneExist ? uriString : tones[0].uri,
+    }
+  }
+
+  return { tones, defaultTone: defaultToneUri ? defaultTone : tones[0] }
 }

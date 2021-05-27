@@ -6,7 +6,7 @@
     "lib": ["dom", "es2017"],
     "sourceMap": true,
     "noEmitHelpers": true,
-    "importHelpers": true,
+    "importHelpers": false, // Must be false to create custom android componentt
     "baseUrl": ".",
     "paths": {
       "~/*": ["app/*"],

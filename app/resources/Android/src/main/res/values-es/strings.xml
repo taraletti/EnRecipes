@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="tmrClr">"Temporizador borrado"</string>
+  <string name="dlyDur">"Duración del retraso"</string>
+  <string name="tmrvbrt">"Vibrador del temporizador"</string>
+  <string name="tmrSnd">"Sonido del temporizador"</string>
+  <string name="aTPrst">"Añadido a los preajustes"</string>
+  <string name="fwr">"para qué receta?"</string>
+  <string name="tmrPrsts">"Preselecciones del temporizador"</string>
+  <string name="prstBtn">"PRECIPIOS"</string>
+  <string name="delay">"Retraso"</string>
+  <string name="stop">"Detener"</string>
+  <string name="minute">"minuto"</string>
+  <string name="minutes">"minutos"</string>
+  <string name="hour">"hora"</string>
+  <string name="hours">"horas"</string>
+  <string name="seconds">"segundos"</string>
+  <string name="tmr">"Temporizador %1$s"</string>
+  <string name="strtBtn">"INICIO"</string>
+  <string name="ntmr">"Nuevo temporizador"</string>
+  <string name="timer">"Temporizador de cocción"</string>
+  <string name="sec">"s"</string>
+  <string name="sysDefB">"Por defecto del Sistema + Negro"</string>
   <string name="buto">"Copia de seguridad guardada a %1$s"</string>
   <string name="yld">"Producir"</string>
   <string name="yieldU">"Unidad de medida"</string>
@@ -292,4 +313,6 @@
   <string name="aBtn">"AÑADIR"</string>
   <string name="About">"Acerca de"</string>
   <string name="aap">"Adjuntar una foto"</string>
+  <string name="notifSetg">"Notification settings"</string>
+  <string name="tmrRm">"Timer removed"</string>
 </resources>

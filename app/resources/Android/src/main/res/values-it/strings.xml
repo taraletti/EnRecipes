@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="tmrClr">"Contaminuti cancellato"</string>
+  <string name="delay">"Ritardo"</string>
+  <string name="dlyDur">"Durata del ritardo"</string>
+  <string name="minute">"minuto"</string>
+  <string name="minutes">"minuti"</string>
+  <string name="hour">"ora"</string>
+  <string name="hours">"ore"</string>
+  <string name="seconds">"secondi"</string>
+  <string name="sec">"s"</string>
+  <string name="stop">"Ferma"</string>
+  <string name="prstBtn">"Preimpostazioni"</string>
+  <string name="tmrPrsts">"Preimpostazioni del contaminuti"</string>
+  <string name="fwr">"per quale ricetta?"</string>
+  <string name="aTPrst">"Aggiunto alle preimpostazioni"</string>
+  <string name="tmrSnd">"Suono del contaminuti"</string>
+  <string name="tmrvbrt">"Vibrazione contaminuti"</string>
+  <string name="timer">"Contaminuti di cottura"</string>
+  <string name="ntmr">"Nuovo contaminuti"</string>
+  <string name="strtBtn">"AVVIA"</string>
+  <string name="tmr">"Contaminuti %1$s"</string>
+  <string name="sysDefB">"Predefinito del sistema + Nero"</string>
   <string name="buto">"Backup salvato in %1$s"</string>
   <string name="yld">"Resa"</string>
   <string name="yieldU">"Unità di resa"</string>
@@ -21,7 +42,7 @@
   <string name="tsInfo">"separa con spazi"</string>
   <string name="ts">"Etichette"</string>
   <string name="trySer">"CERCARE IN TUTTE LE RICETTE?"</string>
-  <string name="trylater">"Prova più tardi"</string>
+  <string name="trylater">"Da provare più tardi"</string>
   <string name="trnsl">"Traduci"</string>
   <string name="triedInfo">"Hai provato questa ricetta %1$s"</string>
   <string name="today">"oggi"</string>
@@ -117,7 +138,7 @@
   <string name="pht">"Foto ricetta"</string>
   <string name="photogrid">"Griglia di foto"</string>
   <string name="Patty">"Polpetta"</string>
-  <string name="Pasta">"Pasta"</string>
+  <string name="Pasta">"Pastore"</string>
   <string name="oz">"oz"</string>
   <string name="Ounce">"Oncia"</string>
   <string name="opts">"Opzioni"</string>
@@ -292,4 +313,6 @@
   <string name="aBtn">"AGGIUNGI"</string>
   <string name="About">"Informazioni"</string>
   <string name="aap">"Allega una foto"</string>
+  <string name="notifSetg">"Notification settings"</string>
+  <string name="tmrRm">"Timer removed"</string>
 </resources>

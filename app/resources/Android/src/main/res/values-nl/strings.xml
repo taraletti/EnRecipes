@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="tmrClr">"Kookwekker gewist"</string>
+  <string name="delay">"Vertraging"</string>
+  <string name="dlyDur">"Vertragingsduur"</string>
+  <string name="minute">"minuut"</string>
+  <string name="minutes">"minuten"</string>
+  <string name="hour">"uur"</string>
+  <string name="hours">"uur"</string>
+  <string name="seconds">"seconden"</string>
+  <string name="tmrvbrt">"Kookwekker laten trillen"</string>
+  <string name="stop">"Stoppen"</string>
+  <string name="prstBtn">"VOORINSTELLINGEN"</string>
+  <string name="tmrPrsts">"Kookwekker: voorinstellingen"</string>
+  <string name="fwr">"bij welk recept?"</string>
+  <string name="aTPrst">"Toegevoegd aan voorinstellingen"</string>
+  <string name="tmrSnd">"Kookwekkergeluid"</string>
+  <string name="sec">"s"</string>
+  <string name="timer">"Kookwekker"</string>
+  <string name="ntmr">"Nieuwe kookwekker"</string>
+  <string name="strtBtn">"STARTEN"</string>
+  <string name="tmr">"Kookwekker %1$s"</string>
+  <string name="sysDefB">"Systeemthema + Zwart"</string>
   <string name="buto">"Gebackupt naar %1$s"</string>
   <string name="yld">"Hoeveelheid"</string>
   <string name="yieldU">"Eenheid"</string>
@@ -292,4 +313,6 @@
   <string name="aBtn">"TOEVOEGEN"</string>
   <string name="About">"Over"</string>
   <string name="aap">"Foto bijvoegen"</string>
+  <string name="notifSetg">"Notification settings"</string>
+  <string name="tmrRm">"Timer removed"</string>
 </resources>

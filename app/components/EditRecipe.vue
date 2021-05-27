@@ -10,8 +10,8 @@
           <Label class="pageTitle" padding="16 0" :text="`${title}` | L" />
           <Image
             margin="8 0 32"
-            v-if="recipe.imageSrc"
-            :src="recipe.imageSrc"
+            v-if="recipe.image"
+            :src="recipe.image"
             stretch="aspectFit"
             class="imgHolder"
             :width="screenWidth - 32"
@@ -95,7 +95,7 @@
               <Label class="fieldLabel" :text="'yieldQ' | L" />
               <TextField
                 ref="yieldQuantity"
-                v-model="recipe.yield.quantity"
+                v-model="recipe.yieldQuantity"
                 hint="1"
                 keyboardType="number"
                 returnKeyType="next"
@@ -104,7 +104,7 @@
             <StackLayout class="inputField" col="2">
               <Label class="fieldLabel" :text="'yieldU' | L" />
               <TextField
-                :text="`${recipe.yield.unit}` | L"
+                :text="`${recipe.yieldUnit}` | L"
                 editable="false"
                 @focus="!modalOpen && showYieldUnits(true)"
                 @tap="showYieldUnits(false)"
@@ -252,23 +252,41 @@
       <GridLayout
         row="1"
         @loaded="onAppBarLoad"
-        :colSpan="hasChanges || showUndo ? '2' : '1'"
+        :hidden="showUndo"
         class="appbar"
-        :class="{ snackBar: showUndo }"
+        :colSpan="hasChanges ? 2 : 1"
         columns="auto, *, auto"
       >
-        <Button v-if="showUndo" :text="countdown" class="countdown ico tb" />
-        <Button v-else class="ico" :text="icon.back" @tap="navigateBack" />
-        <Label class="title" col="1" :hidden="!showUndo" :text="snackMsg | L" />
+        <Button class="ico" :text="icon.back" @tap="navigateBack" />
         <Button
-          v-if="(hasChanges && !saving) || showUndo"
+          v-if="hasChanges && !saving"
           class="ico fab"
-          :text="showUndo ? icon.undo : icon.save"
+          :text="icon.save"
           col="2"
-          @tap="showUndo ? undoDel() : saveOperation()"
+          @tap="saveOperation()"
         />
         <ActivityIndicator col="2" v-if="saving" :busy="saving" />
       </GridLayout>
+      <SnackBar
+        :hidden="!showUndo"
+        colSpan="2"
+        :count="countdown"
+        :msg="snackMsg"
+        :undo="undoDel"
+        :action="hideUndoBar"
+      />
+      <!-- <GridLayout
+        row="1"
+        class="appbar snackBar"
+        :hidden="!showUndo"
+        colSpan="2"
+        columns="auto, *, auto"
+        @swipe="hideUndoBar"
+      >
+        <Button :text="countdown" class="ico countdown tb" />
+        <Label class="title" col="1" :text="snackMsg | L" />
+        <Button class="ico fab" :text="icon.undo" @tap="undoDel" col="3" />
+      </GridLayout> -->
     </GridLayout>
   </Page>
 </template>
@@ -276,7 +294,6 @@
 <script>
 import {
   AndroidApplication,
-  Application,
   ApplicationSettings,
   File,
   getFileAccess,
@@ -291,14 +308,18 @@ import {
 import { localize } from "@nativescript/localize";
 import { ImageCropper } from "nativescript-imagecropper";
 import { mapState, mapActions } from "vuex";
-import ActionDialog from "./modal/ActionDialog.vue";
-import ActionDialogWithSearch from "./modal/ActionDialogWithSearch.vue";
-import ConfirmDialog from "./modal/ConfirmDialog.vue";
-import PromptDialog from "./modal/PromptDialog.vue";
-import ListPicker from "./modal/ListPicker.vue";
+import Action from "./modals/Action";
+import ActionWithSearch from "./modals/ActionWithSearch";
+import Confirm from "./modals/Confirm";
+import Prompt from "./modals/Prompt";
+import TimePickerHM from "./modals/TimePickerHM";
 import * as utils from "~/shared/utils";
+import SnackBar from "./sub/SnackBar";
 let undoTimer;
 export default {
+  components: {
+    SnackBar,
+  },
   props: [
     "recipeID",
     "filterFavourites",
@@ -309,34 +330,32 @@ export default {
     return {
       title: "newRec",
       recipe: {
-        imageSrc: null,
-        title: undefined,
+        id: this.recipeID ? this.recipeID : this.getRandomID(),
+        image: null,
+        title: null,
         cuisine: "Undefined",
         category: "Undefined",
         tags: [],
         prepTime: "00:00",
         cookTime: "00:00",
-        yield: {
-          quantity: undefined,
-          unit: "Serving",
-        },
+        yieldQuantity: null,
+        yieldUnit: "Serving",
         difficulty: "Easy",
         rating: 0,
         ingredients: [],
         instructions: [],
         combinations: [],
         notes: [],
-        isFavorite: false,
-        tried: true,
+        favorite: 0,
+        tried: 1,
         lastTried: null,
         lastModified: null,
         created: null,
-        inBag: false,
       },
       tempRecipe: {},
       tags: undefined,
       modalOpen: false,
-      newRecipeID: null,
+      // newRecipeID: null,
       saving: false,
       cacheImagePath: null,
       unSyncCombinations: [],
@@ -374,13 +393,11 @@ export default {
     ...mapActions([
       "setComponent",
       "addRecipeAction",
-      "overwriteRecipeAction",
       "addListItemAction",
       "unSyncCombinationsAction",
     ]),
-    onPageLoad(args) {
-      const page = args.object;
-      page.bindingContext = new Observable();
+    onPageLoad({ object }) {
+      object.bindingContext = new Observable();
       this.hijackBackEvent();
     },
     onPageUnload() {
@@ -416,9 +433,9 @@ export default {
     // PHOTO HANDLERS
     imageHandler() {
       this.clearEmptyFields(true);
-      if (this.recipe.imageSrc) {
+      if (this.recipe.image) {
         this.modalOpen = true;
-        this.$showModal(ActionDialog, {
+        this.$showModal(Action, {
           props: {
             title: "recPic",
             list: ["aap", "rp"],
@@ -430,7 +447,7 @@ export default {
               this.imagePicker();
               break;
             case "rp":
-              this.recipe.imageSrc = null;
+              this.recipe.image = null;
               break;
           }
         });
@@ -470,7 +487,7 @@ export default {
                   )
                   .then((cropped) => {
                     cropped.image.saveToFile(this.cacheImagePath, "jpg", 75);
-                    this.recipe.imageSrc = this.cacheImagePath;
+                    this.recipe.image = this.cacheImagePath;
                   });
               });
             }
@@ -482,7 +499,7 @@ export default {
     // DATA LIST
     showCuisine(focus) {
       this.modalOpen = true;
-      this.$showModal(ActionDialog, {
+      this.$showModal(Action, {
         props: {
           title: "cui",
           list: this.cuisines,
@@ -490,7 +507,7 @@ export default {
         },
       }).then((action) => {
         if (action == "aNBtn") {
-          this.$showModal(PromptDialog, {
+          this.$showModal(Prompt, {
             props: {
               title: "newCui",
               action: "aBtn",
@@ -520,7 +537,7 @@ export default {
     },
     showCategories(focus) {
       this.modalOpen = true;
-      this.$showModal(ActionDialog, {
+      this.$showModal(Action, {
         props: {
           title: "cat",
           list: this.categories,
@@ -528,7 +545,7 @@ export default {
         },
       }).then((action) => {
         if (action == "aNBtn") {
-          this.$showModal(PromptDialog, {
+          this.$showModal(Prompt, {
             props: {
               title: "nwCat",
               action: "aBtn",
@@ -558,7 +575,7 @@ export default {
     },
     showYieldUnits(focus) {
       this.modalOpen = true;
-      this.$showModal(ActionDialog, {
+      this.$showModal(Action, {
         props: {
           title: "yieldU",
           list: this.yieldUnits,
@@ -566,7 +583,7 @@ export default {
         },
       }).then((action) => {
         if (action == "aNBtn") {
-          this.$showModal(PromptDialog, {
+          this.$showModal(Prompt, {
             props: {
               title: "nwYiU",
               action: "aBtn",
@@ -574,7 +591,7 @@ export default {
           }).then((item) => {
             this.modalOpen = false;
             if (item.length) {
-              this.recipe.yield.unit = item;
+              this.recipe.yieldUnit = item;
               this.addListItemAction({
                 item,
                 listName: "yieldUnits",
@@ -585,18 +602,18 @@ export default {
         } else {
           this.modalOpen = false;
           if (action) {
-            this.recipe.yield.unit = action;
+            this.recipe.yieldUnit = action;
             if (focus) this.autoFocusField("difficultyLevel", false);
           } else
-            this.yieldUnits.includes(this.recipe.yield.unit)
+            this.yieldUnits.includes(this.recipe.yieldUnit)
               ? mull
-              : (this.recipe.yield.unit = "Serving");
+              : (this.recipe.yieldUnit = "Serving");
         }
       });
     },
     showDifficultyLevel(focus) {
       this.modalOpen = true;
-      this.$showModal(ActionDialog, {
+      this.$showModal(Action, {
         props: {
           title: "Difficulty level",
           list: this.difficultyLevels,
@@ -614,7 +631,7 @@ export default {
     },
     showUnits(e, focus, index) {
       this.modalOpen = true;
-      this.$showModal(ActionDialog, {
+      this.$showModal(Action, {
         props: {
           title: "Unit",
           list: this.units,
@@ -622,7 +639,7 @@ export default {
         },
       }).then((action) => {
         if (action == "aNBtn") {
-          this.$showModal(PromptDialog, {
+          this.$showModal(Prompt, {
             props: {
               title: "newUnit",
               action: "aBtn",
@@ -656,7 +673,7 @@ export default {
       let filteredRecipes = this.recipes.filter(
         (e) => !existingCombinations.includes(e.id)
       );
-      this.$showModal(ActionDialogWithSearch, {
+      this.$showModal(ActionWithSearch, {
         props: {
           title: "selRec",
           recipes: filteredRecipes,
@@ -731,7 +748,7 @@ export default {
     // SAVE OPERATION
     clearEmptyFields(bool) {
       if (!this.recipe.title && !bool) this.recipe.title = localize("untRec");
-      if (!this.recipe.yield.quantity) this.recipe.yield.quantity = 1;
+      if (!this.recipe.yieldQuantity) this.recipe.yieldQuantity = 1;
       this.recipe.ingredients = this.recipe.ingredients.filter((e) => e.item);
       let vm = this;
 
@@ -744,13 +761,10 @@ export default {
     saveOperation() {
       this.saving = this.modalOpen = true;
       this.clearEmptyFields();
-      this.recipe.lastModified = new Date();
+      this.recipe.lastModified = new Date().getTime();
       ApplicationSettings.setString("previousCuisine", this.recipe.cuisine);
       ApplicationSettings.setString("previousCategory", this.recipe.category);
-      ApplicationSettings.setString(
-        "previousYieldUnit",
-        this.recipe.yield.unit
-      );
+      ApplicationSettings.setString("previousYieldUnit", this.recipe.yieldUnit);
       if (this.cacheImagePath) {
         let recipeImage = path.join(
           knownFolders.documents().getFolder("EnRecipes").getFolder("Images")
@@ -759,18 +773,18 @@ export default {
         );
         let binarySource = File.fromPath(this.cacheImagePath).readSync();
         File.fromPath(recipeImage).writeSync(binarySource);
-        this.recipe.imageSrc = recipeImage;
+        this.recipe.image = recipeImage;
         knownFolders.temp().clear();
       }
-      if (this.recipe.imageSrc) {
+      if (this.recipe.image) {
         if (
-          this.tempRecipe.imageSrc &&
-          this.tempRecipe.imageSrc !== this.recipe.imageSrc
+          this.tempRecipe.image &&
+          this.tempRecipe.image !== this.recipe.image
         ) {
-          getFileAccess().deleteFile(this.tempRecipe.imageSrc);
+          getFileAccess().deleteFile(this.tempRecipe.image);
         }
-      } else if (this.tempRecipe.imageSrc) {
-        getFileAccess().deleteFile(this.tempRecipe.imageSrc);
+      } else if (this.tempRecipe.image) {
+        getFileAccess().deleteFile(this.tempRecipe.image);
       }
       this.unSyncCombinationsAction({
         id: this.recipeID,
@@ -779,18 +793,7 @@ export default {
       this.saveRecipe();
     },
     saveRecipe() {
-      if (this.recipeID) {
-        this.overwriteRecipeAction({
-          id: this.recipeID,
-          recipe: this.recipe,
-        });
-      } else {
-        this.recipe.id = this.newRecipeID;
-        this.addRecipeAction({
-          id: this.newRecipeID,
-          recipe: this.recipe,
-        });
-      }
+      this.addRecipeAction(this.recipe);
       setTimeout(() => (this.saving = false), 100);
       this.$navigateBack();
     },
@@ -818,6 +821,27 @@ export default {
           }
         }, 100);
       });
+    },
+    hideUndoBar({ object }) {
+      object
+        .animate({
+          opacity: 0,
+          translate: { x: 0, y: 64 },
+          duration: 250,
+          curve: CoreTypes.AnimationCurve.ease,
+        })
+        .then(() => {
+          this.showUndo = false;
+          this.appbar.translateY = 64;
+          this.appbar.animate({
+            translate: { x: 0, y: 0 },
+            duration: 250,
+            curve: CoreTypes.AnimationCurve.ease,
+          });
+          object.opacity = 1;
+          object.translateY = 0;
+          clearTimeout(undoTimer);
+        });
     },
     undoDel() {
       this.undo = true;
@@ -910,7 +934,7 @@ export default {
       let t = this.recipe[time].split(":");
       let hr = t[0];
       let min = t[1];
-      this.$showModal(ListPicker, {
+      this.$showModal(TimePickerHM, {
         props: {
           title: `${time == "prepTime" ? "prepT" : "cookT"}`,
           action: "SET",
@@ -962,7 +986,7 @@ export default {
     navigateBack() {
       if (this.hasChanges) {
         this.modalOpen = true;
-        this.$showModal(ConfirmDialog, {
+        this.$showModal(Confirm, {
           props: {
             title: "unsaved",
             description: localize("disc"),
@@ -1001,15 +1025,15 @@ export default {
         this.tags = this.selectedTag;
         this.splitTags();
       }
-      this.recipe.yield.unit = ApplicationSettings.getString(
+      this.recipe.yieldUnit = ApplicationSettings.getString(
         "previousYieldUnit",
         "Serving"
       );
-      if (this.filterFavourites) this.recipe.isFavorite = true;
+      if (this.filterFavourites) this.recipe.favorite = true;
       if (this.filterTrylater) this.recipe.tried = false;
-      this.recipe.created = new Date();
+      this.recipe.created = new Date().getTime();
       Object.assign(this.tempRecipe, JSON.parse(JSON.stringify(this.recipe)));
-      this.newRecipeID = this.getRandomID();
+      // this.newRecipeID = this.getRandomID();
     }
   },
 };
