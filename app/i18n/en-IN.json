@@ -307,5 +307,9 @@
     "minutes": "minutes",
     "minute": "minute",
     "dlyDur": "Delay duration",
-    "delay": "Delay"
+    "delay": "Delay",
+    "notifSetg": "Notification settings",
+    "tmrRm": "Timer removed",
+    "delPrst": "You are about to delete %s from the presets",
+    "prsts": "Presets"
 }
