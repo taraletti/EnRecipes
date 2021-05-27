@@ -307,5 +307,9 @@
     "minutes": "minuti",
     "minute": "minuto",
     "dlyDur": "Durata del ritardo",
-    "delay": "Ritardo"
+    "delay": "Ritardo",
+    "notifSetg": "Impostazioni di notifica",
+    "tmrRm": "Contaminuti rimosso",
+    "delPrst": "Stai per eliminare %s dalle preimpostazioni",
+    "prsts": "Preimpostazioni"
 }
