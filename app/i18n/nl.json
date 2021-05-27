@@ -307,5 +307,9 @@
     "minutes": "minuten",
     "minute": "minuut",
     "dlyDur": "Vertragingsduur",
-    "delay": "Vertraging"
+    "delay": "Vertraging",
+    "notifSetg": "Meldingsinstellingen",
+    "tmrRm": "De kookwekker is verwijderd",
+    "delPrst": "Je staat op het punt om %s te verwijderen uit de voorinstellingen",
+    "prsts": "Voorinstellingen"
 }
