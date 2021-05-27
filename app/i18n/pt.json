@@ -307,5 +307,9 @@
     "tmrSnd": "Som temporizador",
     "aTPrst": "Adicionado às predefinições",
     "fwr": "para que receita?",
-    "prstBtn": "PRIMEIROS"
+    "prstBtn": "PREDEFINIÇÕES",
+    "notifSetg": "Definições de notificação",
+    "tmrRm": "Temporizador removido",
+    "delPrst": "Está prestes a eliminar %s das predefinições",
+    "prsts": "Predefinições"
 }
