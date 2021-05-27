@@ -297,7 +297,6 @@
     "sec": "sec",
     "tmrvbrt": "Timervibration",
     "tmrSnd": "Timerton",
-    "tmrPrsts": "Timer-Voreinstellungen",
     "aTPrst": "Zu Voreinstellungen hinzugefügt",
     "fwr": "für welches Rezept?",
     "prstBtn": "Voreinstellungen",
@@ -308,6 +307,5 @@
     "minutes": "Minuten",
     "minute": "Minute",
     "dlyDur": "Verzögerungsdauer",
-    "delay": "Verzögerung",
-    "tmrClr": "Timer gelöscht"
+    "delay": "Verzögerung"
 }

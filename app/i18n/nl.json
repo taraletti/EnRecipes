@@ -298,7 +298,6 @@
     "tmrSnd": "Kookwekkergeluid",
     "aTPrst": "Toegevoegd aan voorinstellingen",
     "fwr": "bij welk recept?",
-    "tmrPrsts": "Kookwekker: voorinstellingen",
     "prstBtn": "VOORINSTELLINGEN",
     "stop": "Stoppen",
     "tmrvbrt": "Kookwekker laten trillen",
@@ -308,6 +307,5 @@
     "minutes": "minuten",
     "minute": "minuut",
     "dlyDur": "Vertragingsduur",
-    "delay": "Vertraging",
-    "tmrClr": "Kookwekker gewist"
+    "delay": "Vertraging"
 }

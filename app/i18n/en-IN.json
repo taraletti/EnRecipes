@@ -294,7 +294,6 @@
     "tmrSnd": "Timer sound",
     "aTPrst": "Added to presets",
     "fwr": "for which recipe?",
-    "tmrPrsts": "Timer presets",
     "prstBtn": "PRESETS",
     "tmr": "Timer %s",
     "stop": "Stop",
@@ -308,6 +307,5 @@
     "minutes": "minutes",
     "minute": "minute",
     "dlyDur": "Delay duration",
-    "delay": "Delay",
-    "tmrClr": "Timer cleared"
+    "delay": "Delay"
 }
