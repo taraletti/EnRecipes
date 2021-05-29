@@ -307,5 +307,9 @@
     "dlyDur": "Forsinkelsens varighed",
     "minute": "minut",
     "minutes": "minutter",
-    "seconds": "sekunder"
+    "seconds": "sekunder",
+    "notifSetg": "Indstillinger for meddelelser",
+    "tmrRm": "Timer fjernet",
+    "delPrst": "Du er ved at slette %s fra de forudindstillinger",
+    "prsts": "Forindstillinger"
 }
