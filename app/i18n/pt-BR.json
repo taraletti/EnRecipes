@@ -307,5 +307,9 @@
     "minutes": "atas",
     "hour": "hora",
     "hours": "horas",
-    "seconds": "segundos"
+    "seconds": "segundos",
+    "prsts": "Predefinições",
+    "delPrst": "Você está prestes a apagar %s das predefinições",
+    "tmrRm": "Timer removido",
+    "notifSetg": "Configurações de notificação"
 }
