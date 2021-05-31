@@ -1,8 +1,8 @@
 <template>
-  <Page @loaded="onPageLoad" actionBarHidden="true">
+  <Page @loaded="pgLoad" actionBarHidden="true">
     <GridLayout rows="*, auto" columns="*">
       <ScrollView
-        @scroll="!edit && onScroll($event)"
+        @scroll="!edit && svLoad($event)"
         rowSpan="2"
         scrollBarIndicatorVisible="false"
       >
@@ -24,6 +24,7 @@
             <Button class="ico navBtn" :text="icon.left" @tap="prevMonth" />
             <Label
               class="monthName"
+              @touch="touchMonthYearPicker"
               col="1"
               colSpan="5"
               :text="$options.filters.L(mNames[month]) + ' ' + year"
@@ -100,7 +101,7 @@
       </ScrollView>
       <GridLayout
         row="1"
-        @loaded="onAppBarLoad"
+        @loaded="abLoad"
         class="appbar"
         :hidden="showUndo"
         columns="auto, *, auto, auto"
@@ -125,7 +126,8 @@
         :count="countdown"
         :msg="snackMsg"
         :undo="undoDel"
-        :action="hideUndoBar"
+        :action="hideBar"
+        :onload="sbLoad"
       />
     </GridLayout>
   </Page>
@@ -137,8 +139,9 @@ import { mapState, mapActions } from "vuex";
 import ViewRecipe from "./ViewRecipe";
 import MPSettings from "./settings/MPSettings";
 import ActionWithSearch from "./modals/ActionWithSearch";
+import MonthYearPicker from "./modals/MonthYearPicker";
 import SnackBar from "./sub/SnackBar";
-let undoTimer;
+let barTimer;
 
 export default {
   components: {
@@ -164,10 +167,11 @@ export default {
         "December",
       ],
       month: 0,
-      today: null,
+      date: null,
       edit: false,
       scrollPos: 1,
       appbar: null,
+      snackbar: null,
       countdown: 5,
       snackMsg: null,
       showUndo: false,
@@ -178,7 +182,7 @@ export default {
   computed: {
     ...mapState(["icon", "recipes", "mealPlans", "mondayFirst"]),
     todaysTime() {
-      return new Date(this.year, this.month, this.today, 0).getTime();
+      return new Date(this.year, this.month, this.date, 0).getTime();
     },
     getRecipes() {
       if (this.mealPlans.length) {
@@ -200,11 +204,16 @@ export default {
       let m = this.month;
       let ds = new Date(y, m + 1, 0).getDate();
       let fd = new Date(y, m, 1).getDay();
+      let ld = new Date(y, m, ds).getDay();
       if (this.mondayFirst) fd -= 1;
       let days = new Array(fd).fill(0);
-      for (let i = 1; i <= ds; i++) {
-        days.push(i);
-      }
+      // let prevDays = Array.from(
+      //   { length: fd },
+      //   (e, k) => k + new Date(!m ? y - 1 : y, m, 0).getDate() - fd + 1
+      // );
+      // let days = prevDays;
+      for (let i = 1; i <= ds; i++) days.push(i);
+      // for (let i = 1; i <= 6 - ld; i++) days.push(i);
       return days;
     },
     isExactlyToday() {
@@ -212,7 +221,7 @@ export default {
       return (
         this.year == d.getFullYear() &&
         this.month == d.getMonth() &&
-        this.today == d.getDate()
+        this.date == d.getDate()
       );
     },
     mealTimesWithRecipes() {
@@ -227,15 +236,18 @@ export default {
       "addMealPlanAction",
       "deleteMealPlanAction",
     ]),
-    onPageLoad({ object }) {
+    pgLoad({ object }) {
       object.bindingContext = new Observable();
       this.setComponent("MealPlanner");
-      if (!this.today || this.today === new Date().getDate()) this.goToToday();
+      if (!this.date || this.date === new Date().getDate()) this.goToToday();
     },
-    onAppBarLoad({ object }) {
+    abLoad({ object }) {
       this.appbar = object;
     },
-    onScroll(args) {
+    sbLoad({ object }) {
+      this.snackbar = object;
+    },
+    svLoad(args) {
       let scrollUp;
       let y = args.scrollY;
       if (y) {
@@ -286,6 +298,7 @@ export default {
         });
       }
     },
+
     // CALENDAR
     prevMonth() {
       if (this.month == 0) {
@@ -305,7 +318,7 @@ export default {
       let d = new Date();
       this.year = d.getFullYear();
       this.month = d.getMonth();
-      this.today = d.getDate();
+      this.date = d.getDate();
       this.showAppBar();
     },
     isToday(date) {
@@ -317,14 +330,14 @@ export default {
       );
     },
     isActive(date) {
-      return this.today == date;
+      return this.date == date;
     },
     hasPlans(date) {
       let d = new Date(this.year, this.month, date, 0).getTime();
       return this.mealPlans.filter((e) => e.date == d).length;
     },
     setToday(date) {
-      if (date) this.today = date;
+      if (date) this.date = date;
     },
     newMealPlan(date, type, title) {
       this.addMealPlanAction({
@@ -336,6 +349,22 @@ export default {
     toggleEditMode() {
       this.edit = !this.edit;
     },
+    openMonthYearPicker() {
+      this.$showModal(MonthYearPicker, {
+        props: {
+          title: "gtD",
+          monthNames: this.mNames,
+          currentM: this.month,
+          currentY: this.year,
+        },
+      }).then((res) => {
+        if (res) {
+          this.month = res.month;
+          this.year = res.year;
+        }
+      });
+    },
+
     // DATA HANDLERS
     addRecipe(type) {
       let filteredRecipes = this.recipes.filter((e) =>
@@ -359,50 +388,46 @@ export default {
       this.showUndoBar("recRm").then(() => this.newMealPlan(date, type, title));
     },
     showUndoBar(message) {
+      clearInterval(barTimer);
       return new Promise((resolve, reject) => {
-        clearTimeout(undoTimer);
-        this.showUndo = true;
-        this.snackMsg = message;
-        this.countdown = 5;
-        let a = 5;
-        undoTimer = setInterval(() => {
-          if (this.undo) {
-            this.showUndo = this.undo = false;
-            clearTimeout(undoTimer);
-            resolve(true);
-          }
-          this.countdown = Math.round((a -= 0.1));
-          if (this.countdown < 1) {
-            this.showUndo = false;
-            clearTimeout(undoTimer);
-            reject(true);
-          }
-        }, 100);
+        this.animateBar(this.appbar, 0).then(() => {
+          this.showUndo = true;
+          this.snackMsg = message;
+          this.countdown = 5;
+          this.animateBar(this.snackbar, 1).then(() => {
+            let a = 5;
+            barTimer = setInterval(() => {
+              if (this.undo) {
+                this.hideBar();
+                resolve(true);
+              }
+              this.countdown = Math.round((a -= 0.1));
+              if (this.countdown < 1) {
+                this.hideBar();
+                reject(true);
+              }
+            }, 100);
+          });
+        });
       });
     },
-    hideUndoBar({ object }) {
-      object
-        .animate({
-          opacity: 0,
-          translate: { x: 0, y: 64 },
-          duration: 250,
-          curve: CoreTypes.AnimationCurve.ease,
-        })
-        .then(() => {
-          this.showUndo = false;
-          this.appbar.translateY = 64;
-          this.appbar.animate({
-            translate: { x: 0, y: 0 },
-            duration: 250,
-            curve: CoreTypes.AnimationCurve.ease,
-          });
-          object.opacity = 1;
-          object.translateY = 0;
-          clearTimeout(undoTimer);
-        });
+    hideBar() {
+      clearInterval(barTimer);
+      this.animateBar(this.snackbar, 0).then(() => {
+        this.showUndo = this.undo = false;
+        this.animateBar(this.appbar, 1);
+      });
     },
     undoDel() {
       this.undo = true;
+    },
+
+    //HELPERS
+    touchMonthYearPicker({ object, action }) {
+      object.className = action.match(/down|move/)
+        ? "monthName fade"
+        : "monthName";
+      if (action == "up") this.openMonthYearPicker();
     },
   },
 };
