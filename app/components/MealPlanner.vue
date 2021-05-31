@@ -92,7 +92,7 @@
                   col="1"
                   class="ico x"
                   :text="icon.x"
-                  @tap="removeRecipe(recipeID, mealType)"
+                  @tap="removeRecipe(mealType, recipeID)"
                 />
               </GridLayout>
             </StackLayout>
@@ -177,6 +177,7 @@ export default {
       showUndo: false,
       undo: false,
       MPSettings: MPSettings,
+      temp: 0,
     };
   },
   computed: {
@@ -339,13 +340,6 @@ export default {
     setToday(date) {
       if (date) this.date = date;
     },
-    newMealPlan(date, type, title) {
-      this.addMealPlanAction({
-        date: date ? date : this.todaysTime,
-        type,
-        title,
-      });
-    },
     toggleEditMode() {
       this.edit = !this.edit;
     },
@@ -366,6 +360,15 @@ export default {
     },
 
     // DATA HANDLERS
+    newMealPlan({ date, type, title, index, inDB }) {
+      this.addMealPlanAction({
+        date: date ? date : this.todaysTime,
+        type,
+        title,
+        index,
+        inDB,
+      });
+    },
     addRecipe(type) {
       let filteredRecipes = this.recipes.filter((e) =>
         this.getRecipes[type] ? !this.getRecipes[type].includes(e.id) : true
@@ -375,20 +378,43 @@ export default {
           title: "selRec",
           recipes: filteredRecipes,
         },
-      }).then((title) => title && this.newMealPlan(null, type, title));
+      }).then(
+        (title) =>
+          title &&
+          this.newMealPlan({ date: 0, type, title, index: null, inDB: true })
+      );
     },
-    removeRecipe(title, type) {
+    deleteTempFromDB() {
+      if (this.temp) {
+        this.temp.inDB = 1;
+        this.deleteMealPlanAction(this.temp);
+        this.temp = 0;
+      }
+    },
+    removeRecipe(type, title) {
+      this.deleteTempFromDB();
       let date = this.todaysTime;
+      let index = this.mealPlans.findIndex(
+        (e) => e.date == date && e.type == type && e.title == title
+      );
       let mealPlan = {
         date,
         type,
         title,
+        index,
       };
+      let temp;
+      this.temp = temp = mealPlan;
       this.deleteMealPlanAction(mealPlan);
-      this.showUndoBar("recRm").then(() => this.newMealPlan(date, type, title));
+      this.showUndoBar("recRm")
+        .then(() => this.newMealPlan({ date, type, title, index }))
+        .catch(() => {
+          temp.inDB = 1;
+          console.log("deleting inDB after catch: ", temp);
+          this.deleteMealPlanAction(temp);
+        });
     },
     showUndoBar(message) {
-      clearInterval(barTimer);
       return new Promise((resolve, reject) => {
         this.animateBar(this.appbar, 0).then(() => {
           this.showUndo = true;
@@ -396,6 +422,7 @@ export default {
           this.countdown = 5;
           this.animateBar(this.snackbar, 1).then(() => {
             let a = 5;
+            clearInterval(barTimer);
             barTimer = setInterval(() => {
               if (this.undo) {
                 this.hideBar();
