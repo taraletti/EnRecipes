@@ -134,7 +134,7 @@
     "Loaf": "Miche",
     "ltAgo": "il y a longtemps",
     "lunch": "Déjeuner",
-    "mAgo": "Il y a %s mois",
+    "mAgo": "il y a %s mois",
     "Main dishes": "Plats principaux",
     "March": "mars",
     "May": "mai",
@@ -200,7 +200,7 @@
     "recs": "recettes",
     "recTitle": "Ma recette saine",
     "recU": "mise à jour :",
-    "req": "%s requis(e)",
+    "req": "%s nécessaire",
     "resNF": "Recette introuvable",
     "rest": "Réinitialiser",
     "restCatL": "Réinitialiser la liste des catégories",
@@ -311,5 +311,14 @@
     "notifSetg": "Paramètres de notification",
     "tmrRm": "Minuterie retirée",
     "delPrst": "Vous êtes sur le point de supprimer %s des préréglages",
-    "prsts": "Préréglages"
+    "prsts": "Préréglages",
+    "wDBy": "%1$s a été retardée de %2$s",
+    "ttv": "Appuyez pour voir",
+    "dismissAll": "Rejeter toutes les minuteries",
+    "dismiss": "Rejeter",
+    "texp": "%s minuteries ont expiré",
+    "prstTU": "Temps du préréglage mis à jour",
+    "ccwt": "Cuisinez avec confiance avec des minuteries !",
+    "gtD": "Aller à la date",
+    "random": "Aléatoire"
 }
