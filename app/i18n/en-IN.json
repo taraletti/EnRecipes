@@ -311,5 +311,14 @@
     "notifSetg": "Notification settings",
     "tmrRm": "Timer removed",
     "delPrst": "You are about to delete %s from the presets",
-    "prsts": "Presets"
+    "prsts": "Presets",
+    "ttv": "Tap to view",
+    "dismissAll": "Dismiss all timers",
+    "dismiss": "Dismiss",
+    "texp": "%s timers expired",
+    "wDBy": "%1$s was delayed by %2$s",
+    "prstTU": "Preset time updated",
+    "ccwt": "Cook confidently with timers!",
+    "gtD": "Go to date",
+    "random": "Random"
 }
