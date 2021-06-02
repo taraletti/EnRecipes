@@ -311,5 +311,14 @@
   "hours": "hours",
   "seconds": "seconds",
   "tmrRm": "Timer removed",
-  "notifSetg": "Notification settings"
+  "notifSetg": "Notification settings",
+  "random": "Random",
+  "gtD": "Go to date",
+  "cwewt": "Cook with ease with timers!",
+  "prstTU": "Preset time updated",
+  "wDBy": "%1$s was delayed by %2$s",
+  "texp": "%s timers expired",
+  "dismiss": "Dismiss",
+  "dismissAll": "Dismiss all timers",
+  "ttv": "Tap to view"
 }
