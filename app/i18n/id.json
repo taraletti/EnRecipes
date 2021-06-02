@@ -279,8 +279,8 @@
     "Unit": "Satuan",
     "unsaved": "Perubahan yang belum disimpan",
     "untRec": "Resep tanpa judul",
-    "Vegan": "Vegan",
-    "Vegetarian": "Vegetarian",
+    "Vegan": "vegan",
+    "Vegetarian": "vegetarian",
     "Vietnamese": "Vietnam",
     "wAgo": "%s minggu yang lalu",
     "WED": "RAB",
@@ -294,7 +294,6 @@
     "strtBtn": "MULAI",
     "ntmr": "Timer baru",
     "timer": "Timer Memasak",
-    "tmrClr": "Timer dibersihkan",
     "seconds": "detik",
     "hours": "jam",
     "hour": "jam",
@@ -305,9 +304,12 @@
     "tmrSnd": "Suara timer",
     "aTPrst": "Ditambahkan ke preset",
     "fwr": "untuk resep yang mana?",
-    "tmrPrsts": "Preset timer",
     "prstBtn": "PRESET",
     "tmr": "Timer %s",
     "delay": "Menunda",
-    "stop": "Berhenti"
+    "stop": "Berhenti",
+    "prsts": "Preset",
+    "delPrst": "Anda akan menghapus %s dari presets",
+    "tmrRm": "Timer dihapus",
+    "notifSetg": "Pengaturan notifikasi"
 }

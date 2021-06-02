@@ -294,7 +294,6 @@
     "tmrSnd": "Timer sound",
     "aTPrst": "Added to presets",
     "fwr": "for which recipe?",
-    "tmrPrsts": "Timer presets",
     "prstBtn": "PRESETS",
     "tmr": "Timer %s",
     "stop": "Stop",
@@ -309,5 +308,17 @@
     "minute": "minute",
     "dlyDur": "Delay duration",
     "delay": "Delay",
-    "tmrClr": "Timer cleared"
+    "notifSetg": "Notification settings",
+    "tmrRm": "Timer removed",
+    "delPrst": "You are about to delete %s from the presets",
+    "prsts": "Presets",
+    "ttv": "Tap to view",
+    "dismissAll": "Dismiss all timers",
+    "dismiss": "Dismiss",
+    "texp": "%s timers expired",
+    "wDBy": "%1$s was delayed by %2$s",
+    "prstTU": "Preset time updated",
+    "ccwt": "Cook confidently with timers!",
+    "gtD": "Go to date",
+    "random": "Random"
 }
