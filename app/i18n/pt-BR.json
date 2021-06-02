@@ -298,7 +298,6 @@
     "sec": "s",
     "stop": "Parada",
     "delay": "Atraso",
-    "tmrPrsts": "Predefinições temporizadas",
     "fwr": "para qual receita?",
     "aTPrst": "Adicionado às predefinições",
     "tmrSnd": "Som temporizador",
@@ -309,5 +308,8 @@
     "hour": "hora",
     "hours": "horas",
     "seconds": "segundos",
-    "tmrClr": "Temporizador liberado"
+    "prsts": "Predefinições",
+    "delPrst": "Você está prestes a apagar %s das predefinições",
+    "tmrRm": "Timer removido",
+    "notifSetg": "Configurações de notificação"
 }

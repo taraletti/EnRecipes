@@ -294,7 +294,6 @@
     "tmrSnd": "Son de la minuterie",
     "aTPrst": "Ajouté aux préréglages",
     "fwr": "pour quelle recette ?",
-    "tmrPrsts": "Préréglages de la minuterie",
     "prstBtn": "PRÉRÉGLAGES",
     "tmr": "Minuterie %s",
     "stop": "Arrêter",
@@ -309,5 +308,8 @@
     "minute": "minute",
     "dlyDur": "Durée du retard",
     "delay": "Retard",
-    "tmrClr": "Minuterie effacée"
+    "notifSetg": "Paramètres de notification",
+    "tmrRm": "Minuterie retirée",
+    "delPrst": "Vous êtes sur le point de supprimer %s des préréglages",
+    "prsts": "Préréglages"
 }

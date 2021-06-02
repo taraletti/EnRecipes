@@ -298,7 +298,6 @@
     "tmrSnd": "Suono del contaminuti",
     "aTPrst": "Aggiunto alle preimpostazioni",
     "fwr": "per quale ricetta?",
-    "tmrPrsts": "Preimpostazioni del contaminuti",
     "prstBtn": "Preimpostazioni",
     "stop": "Ferma",
     "sec": "s",
@@ -309,5 +308,8 @@
     "minute": "minuto",
     "dlyDur": "Durata del ritardo",
     "delay": "Ritardo",
-    "tmrClr": "Contaminuti cancellato"
+    "notifSetg": "Impostazioni di notifica",
+    "tmrRm": "Contaminuti rimosso",
+    "delPrst": "Stai per eliminare %s dalle preimpostazioni",
+    "prsts": "Preimpostazioni"
 }

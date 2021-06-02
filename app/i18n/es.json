@@ -303,11 +303,13 @@
     "stop": "Detener",
     "delay": "Retraso",
     "prstBtn": "PRECIPIOS",
-    "tmrPrsts": "Preselecciones del temporizador",
     "fwr": "para qué receta?",
     "aTPrst": "Añadido a los preajustes",
     "tmrSnd": "Sonido del temporizador",
     "tmrvbrt": "Vibrador del temporizador",
     "dlyDur": "Duración del retraso",
-    "tmrClr": "Temporizador borrado"
+    "notifSetg": "Ajustes de notificación",
+    "tmrRm": "Temporizador eliminado",
+    "delPrst": "Está a punto de eliminar %s de los preajustes",
+    "prsts": "Preselecciones"
 }
