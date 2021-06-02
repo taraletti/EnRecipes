@@ -311,5 +311,14 @@
     "notifSetg": "Meldingsinstellingen",
     "tmrRm": "De kookwekker is verwijderd",
     "delPrst": "Je staat op het punt om %s te verwijderen uit de voorinstellingen",
-    "prsts": "Voorinstellingen"
+    "prsts": "Voorinstellingen",
+    "ttv": "Druk om te bekijken",
+    "dismissAll": "Alle kookwekkers verwerpen",
+    "dismiss": "Verwerpen",
+    "texp": "%s kookwekkers zijn afgegaan",
+    "wDBy": "%1$s is %2$s vertraagd",
+    "prstTU": "De tijd is bijgewerkt",
+    "ccwt": "Kook vol vertrouwen d.m.v. kookwekkers!",
+    "gtD": "Ga naar datum",
+    "random": "Willekeurig"
 }
