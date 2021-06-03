@@ -1,3 +1,5 @@
 - Du kannst jetzt ein Standarddesign für das System auswählen, das den Einstellungen des dunklen Modus deines Geräts folgt (für Android 10 und höher)
-- Kochtimer wurde hinzugefügt
+- Eieruhr-Funktion wurde hinzugefügt
 - Individuelle Einstellungsseite für jedes Werkzeug
+- Die Rezepte können nun in zufälliger Reihenfolge sortiert werden
+- Unterstützung der Sprachen, die von rechts nach links geschrieben werden
