@@ -5,11 +5,17 @@ import { openOrCreate } from '@akylas/nativescript-sqlite'
 import {
   getFileAccess,
   File,
-  ApplicationSettings,
   Application,
   knownFolders,
   path,
 } from '@nativescript/core'
+import {
+  getNumber,
+  setNumber,
+  getString,
+  setString,
+} from '@nativescript/core/application-settings'
+import * as utils from '~/shared/utils'
 
 // OPEN DATABASE FILE
 const db = openOrCreate(
@@ -29,6 +35,11 @@ db.execute(
 // CREATE mealPlans TABLE
 db.execute(
   'CREATE TABLE IF NOT EXISTS mealPlans (date INT, type TEXT, title TEXT)'
+)
+
+// CREATE timerPresets TABLE
+db.execute(
+  'CREATE TABLE IF NOT EXISTS timerPresets (id INT PRIMARY KEY, label TEXT, time TEXT)'
 )
 
 const defaultCuisines = [
@@ -136,21 +147,22 @@ const defaultUnits = [
   'medium',
   'large',
 ]
+
 const listItems = {
   cuisines: {
-    sort: true,
+    sort: 1,
     defaultItems: defaultCuisines,
   },
   categories: {
-    sort: true,
+    sort: 1,
     defaultItems: defaultCategories,
   },
   yieldUnits: {
-    sort: false,
+    sort: 0,
     defaultItems: defaultYieldUnits,
   },
   units: {
-    sort: false,
+    sort: 0,
     defaultItems: defaultUnits,
   },
 }
@@ -227,10 +239,15 @@ export default new Vuex.Store({
       trans: '\ue93c',
       delay: '\ue93d',
       ring: '\ue93e',
+      print: '\ue93f',
     },
     currentComponent: 'EnRecipes',
-    sortType: 'Oldest first',
+    sortType: 'random',
     language: [
+      {
+        locale: 'ar',
+        title: 'العربية',
+      },
       {
         locale: 'da',
         title: 'Dansk',
@@ -240,8 +257,16 @@ export default new Vuex.Store({
         title: 'Deutsch',
       },
       {
+        locale: 'en-IN',
+        title: 'English (IN)',
+      },
+      {
         locale: 'en-GB',
         title: 'English (UK)',
+      },
+      {
+        locale: 'en-US',
+        title: 'English (US)',
       },
       {
         locale: 'es',
@@ -268,16 +293,20 @@ export default new Vuex.Store({
         title: 'हिंदी',
       },
       {
-        locale: 'ml',
-        title: 'മലയാളം',
-      },
-      {
         locale: 'id',
         title: 'Indonesia',
       },
       {
         locale: 'it',
         title: 'Italiano',
+      },
+      {
+        locale: 'ja',
+        title: '日本語',
+      },
+      {
+        locale: 'ml',
+        title: 'മലയാളം',
       },
       {
         locale: 'nb-NO',
@@ -287,10 +316,10 @@ export default new Vuex.Store({
         locale: 'nl',
         title: 'Nederlands',
       },
-      // {
-      //   locale: 'pt',
-      //   title: 'Português',
-      // },
+      {
+        locale: 'pt',
+        title: 'Português',
+      },
       {
         locale: 'pt-BR',
         title: 'Português (BR)',
@@ -308,97 +337,114 @@ export default new Vuex.Store({
         title: 'తెలుగు',
       },
     ],
-    shakeEnabled: ApplicationSettings.getBoolean('shakeEnabled', true),
+    shakeEnabled: getNumber('shakeEnabled', 1),
     importSummary: {
       found: 0,
       imported: 0,
       updated: 0,
     },
-    layout: ApplicationSettings.getString('layout', 'detailed'),
+    layout: getString('layout', 'detailed'),
     selectedCuisine: null,
     selectedCategory: null,
     selectedTag: null,
     appTheme: 'sysDef',
-    mondayFirst: ApplicationSettings.getBoolean('mondayFirst', false),
-    timerDelay: ApplicationSettings.getString('timerDelay', '1 minute'),
+    mondayFirst: getNumber('mondayFirst', 0),
+    timerDelay: getString('timerDelay', '1 minute'),
     timerSound: {},
-    timerVibrate: ApplicationSettings.getBoolean('timerVibrate', false),
-    timerPresets: [
-      {
-        id: 534534563,
-        label: 'Soft Eggs',
-        recipeID: null,
-        time: '00:06:00',
-        timerInterval: null,
-        isPaused: false,
-        preset: 1,
-      },
-      {
-        id: 564646,
-        label: 'Medium Eggs',
-        recipeID: null,
-        time: '00:08:00',
-        timerInterval: null,
-        isPaused: false,
-        preset: 1,
-      },
-      {
-        id: 43276767,
-        label: 'Hard Eggs',
-        recipeID: null,
-        time: '00:10:00',
-        timerInterval: null,
-        isPaused: false,
-        preset: 1,
-      },
-    ],
+    timerVibrate: getNumber('timerVibrate', 0),
+    timerPresets: [],
     activeTimers: [],
-    timerIntervals: [],
+    FGService: 0,
+    RTL: 0,
   },
   mutations: {
-    addTimerPreset(state, timer) {
-      state.timerPresets.push(timer)
+    setRTL(state) {
+      state.RTL = utils.RTL() as any | 0
     },
-    removeTimerPreset(state, index) {
-      state.timerPresets.splice(index, 1)
+    setFGService(state, val) {
+      state.FGService = val
+    },
+    addTimerPreset(state, timer) {
+      let i = state.timerPresets.findIndex((e) => e.id == timer.id)
+      if (state.timerPresets.some((e) => e.id == timer.id)) {
+        state.timerPresets.splice(i, 1, timer)
+      } else state.timerPresets.push(timer)
+      db.execute(
+        `REPLACE INTO timerPresets (id, label, time) VALUES (?, ?, ?)`,
+        [timer.id, timer.label, timer.time]
+      )
+    },
+    deleteTimerPreset(state, i) {
+      let id = state.timerPresets[i]
+      state.timerPresets.splice(i, 1)
+      db.execute(`DELETE FROM timerPresets WHERE id = ${id}`)
+    },
+    initTimerPresets(state) {
+      if (!state.timerPresets.length)
+        db.select(`SELECT * FROM timerPresets`).then((res) => {
+          res.forEach((t) => {
+            t.recipeID = 0
+            t.timerInt = 0
+            t.isPaused = 0
+            t.preset = 1
+            t.done = 0
+            state.timerPresets.push(t)
+          })
+        })
+    },
+    importTimerPresets(state, timers) {
+      let newPresets = timers.filter(
+        (e) => !state.timerPresets.some((f) => f.id === e.id)
+      )
+      newPresets.forEach((t) => {
+        db.execute(
+          `INSERT INTO timerPresets (id, label, time) VALUES (?, ?, ?)`,
+          [t.id, t.label, t.time]
+        )
+        state.timerPresets.push(t)
+      })
     },
     clearTimerInterval(state) {
       state.activeTimers.forEach((e) => {
-        clearInterval(e.timerInterval)
-        e.timerInterval = null
+        clearInterval(e.timerInt)
+        e.timerInt = 0
       })
     },
-    addActiveTimer(state, { timer, index }) {
-      state.activeTimers.splice(index, 0, timer)
+    addActiveTimer(state, { timer, i }) {
+      state.activeTimers.splice(i, 0, timer)
+    },
+    sortActiveTimers(state) {
+      let a = state.activeTimers.reduce((acc, e) => {
+        ;(acc[e.recipeID] = acc[e.recipeID] || []).push(e)
+        return acc
+      }, {})
+      state.activeTimers = [...(<any>Object).values(a).flat(2)]
     },
     updateActiveTimer(state, timer) {
-      let index = state.activeTimers.findIndex((e) => e.id == timer.id)
-      state.activeTimers.splice(index, 1, timer)
+      let i = state.activeTimers.findIndex((e) => e.id == timer.id)
+      state.activeTimers.splice(i, 1, timer)
     },
-    removeActiveTimer(state, index) {
-      state.activeTimers.splice(index, 1)
+    removeActiveTimer(state, i) {
+      state.activeTimers.splice(i, 1)
     },
     setTimerDelay(state, delay) {
       state.timerDelay = delay
-      ApplicationSettings.setString('timerDelay', delay)
+      setString('timerDelay', delay)
     },
     setTimerSound(state, sound) {
-      state.timerSound = {
-        title: sound.title,
-        uri: sound.uri,
-      }
-      ApplicationSettings.setString('timerSound', JSON.stringify(sound))
+      state.timerSound = sound
+      setString('timerSound', JSON.stringify(sound))
     },
-    setTimerVibrate(state, bool) {
-      state.timerVibrate = bool
-      ApplicationSettings.setBoolean('timerVibrate', bool)
+    setTimerVibrate(state, n) {
+      state.timerVibrate = n
+      setNumber('timerVibrate', n)
     },
     clearImportSummary(state) {
       for (const key in state.importSummary) state.importSummary[key] = 0
     },
-    setFirstDay(state, bool) {
-      state.mondayFirst = bool
-      ApplicationSettings.setBoolean('mondayFirst', bool)
+    setFirstDay(state, n) {
+      state.mondayFirst = n | 0
+      setNumber('mondayFirst', n | 0)
     },
     setTheme(state, theme) {
       switch (theme) {
@@ -414,7 +460,7 @@ export default new Vuex.Store({
           state.appTheme = theme
           break
       }
-      ApplicationSettings.setString('appTheme', theme)
+      setString('appTheme', theme)
     },
     clearFilter(state) {
       state.selectedCuisine = state.selectedCategory = state.selectedTag = null
@@ -436,8 +482,8 @@ export default new Vuex.Store({
           state.recipes.push(e)
         })
       })
-      state.shakeEnabled = ApplicationSettings.getBoolean('shakeEnabled', true)
-      state.sortType = ApplicationSettings.getString('sortType', 'Oldest first')
+      state.shakeEnabled = getNumber('shakeEnabled', 1)
+      state.sortType = getString('sortType', 'random')
     },
     importRecipesFromJSON(state, recipes) {
       let localRecipesIDs, partition
@@ -463,6 +509,12 @@ export default new Vuex.Store({
           r.yieldQuantity = r.yield.quantity
           r.yieldUnit = r.yield.unit
           delete r.yield
+          function getTime(d) {
+            return new Date(d).getTime()
+          }
+          r.lastTried = getTime(r.lastTried)
+          r.lastModified = getTime(r.lastModified)
+          r.created = getTime(r.created)
           return r
         })
       }
@@ -492,9 +544,9 @@ export default new Vuex.Store({
               JSON.stringify(r.notes),
               r.favorite ? 1 : 0,
               r.tried ? 1 : 0,
-              r.lastTried ? new Date(r.lastTried).getTime() : null,
-              r.lastModified ? new Date(r.lastModified).getTime() : null,
-              r.created ? new Date(r.created).getTime() : null,
+              r.lastTried,
+              r.lastModified,
+              r.created,
             ]
           )
         })
@@ -533,9 +585,9 @@ export default new Vuex.Store({
                 JSON.stringify(r.notes),
                 r.favorite ? 1 : 0,
                 r.tried ? 1 : 0,
-                r.lastTried ? new Date(r.lastTried).getTime() : null,
-                r.lastModified ? new Date(r.lastModified).getTime() : null,
-                r.created ? new Date(r.created).getTime() : null,
+                r.lastTried,
+                r.lastModified,
+                r.created,
               ]
             )
           }
@@ -649,9 +701,9 @@ export default new Vuex.Store({
       function exist({ id }, index: number) {
         if (id === recipe.id) {
           i = index
-          return true
+          return 1
         }
-        return false
+        return 0
       }
       state.recipes.some(exist)
         ? Object.assign(state.recipes[i], recipe)
@@ -659,9 +711,9 @@ export default new Vuex.Store({
     },
     deleteRecipes(state, ids) {
       ids.forEach((id: string) => {
-        let index = state.recipes.findIndex((e) => e.id === id)
-        getFileAccess().deleteFile(state.recipes[index].image)
-        state.recipes.splice(index, 1)
+        let i = state.recipes.findIndex((e) => e.id === id)
+        getFileAccess().deleteFile(state.recipes[i].image)
+        state.recipes.splice(i, 1)
         db.execute(`DELETE FROM recipes WHERE id = '${id}'`)
         state.recipes.forEach((e, i) => {
           if (e.combinations.includes(id)) {
@@ -774,11 +826,11 @@ export default new Vuex.Store({
                 type = 'snacks'
                 break
             }
-            return f.title === e.title && f.date === date && f.type === type
+            return f.title == e.title && f.date == date && f.type == type
           })
         } else {
           return !state.mealPlans.some(
-            (f) => f.title === e.title && f.date === e.date && f.type === e.type
+            (f) => f.title == e.title && f.date == e.date && f.type == e.type
           )
         }
       })
@@ -835,47 +887,48 @@ export default new Vuex.Store({
         )
       })
     },
-    addMealPlan(state, { date, type, title }) {
+    addMealPlan(state, { date, type, title, index, inDB }) {
       let mealPlan = {
         date,
         type,
         title,
       }
-      state.mealPlans.push(mealPlan)
-      const cols = Object.keys(mealPlan).join(', ')
-      const placeholder = Object.keys(mealPlan)
-        .fill('?')
-        .join(', ')
-      db.execute(
-        `INSERT INTO mealPlans (${cols}) VALUES (${placeholder})`,
-        Object.values(mealPlan)
-      )
-    },
-    deleteMealPlan(state, { date, type, title }) {
-      let index = state.mealPlans.findIndex(
-        (e) => e.title === title && e.type === type && e.date === date
-      )
-      state.mealPlans.splice(index, 1)
-      state.mealPlans = [...state.mealPlans]
-      db.execute(
-        `DELETE FROM mealPlans WHERE date = ${date} AND type = '${type}' AND title = '${title}'`
-      )
-    },
-    toggleState(state, { id, key, setDate }) {
-      let index = state.recipes.findIndex((e) => e.id == id)
-      state.recipes[index][key] = state.recipes[index][key] ? 0 : 1
-      db.execute(
-        `UPDATE recipes SET ${key} = ${state.recipes[index][key]} WHERE id = '${id}'`
-      )
-      if (setDate) {
-        state.recipes[index].lastTried = new Date().getTime()
+      if (inDB) {
+        const cols = Object.keys(mealPlan).join(', ')
+        const placeholder = Object.keys(mealPlan)
+          .fill('?')
+          .join(', ')
         db.execute(
-          `UPDATE recipes SET lastTried = ${state.recipes[index].lastTried} WHERE id = '${id}'`
+          `INSERT INTO mealPlans (${cols}) VALUES (${placeholder})`,
+          Object.values(mealPlan)
         )
+        if (index === null) state.mealPlans.push(mealPlan)
+      } else {
+        state.mealPlans.splice(index, 0, mealPlan)
       }
     },
-    setComponent(state, comp) {
-      state.currentComponent = comp
+    deleteMealPlan(state, { date, type, title, index, inDB }) {
+      if (inDB) {
+        db.execute(
+          `DELETE FROM mealPlans WHERE date = ${date} AND type = '${type}' AND title = '${title}'`
+        )
+      } else {
+        state.mealPlans.splice(index, 1)
+        state.mealPlans = [...state.mealPlans]
+      }
+    },
+    toggleState(state, { id, key, setDate }) {
+      let i = state.recipes.findIndex((e) => e.id == id)
+      state.recipes[i][key] = state.recipes[i][key] ? 0 : 1
+      db.execute(
+        `UPDATE recipes SET ${key} = ${state.recipes[i][key]} WHERE id = '${id}'`
+      )
+      if (setDate) {
+        state.recipes[i].lastTried = new Date().getTime()
+        db.execute(
+          `UPDATE recipes SET lastTried = ${state.recipes[i].lastTried} WHERE id = '${id}'`
+        )
+      }
     },
     unSyncCombinations(state, { id, combinations }) {
       state.recipes.forEach((e, i) => {
@@ -890,19 +943,17 @@ export default new Vuex.Store({
       })
     },
     setShake(state, shake) {
-      state.shakeEnabled = shake
-      ApplicationSettings.setBoolean('shakeEnabled', shake)
+      state.shakeEnabled = shake | 0
+      setNumber('shakeEnabled', shake | 0)
     },
     setRating(state, { id, rating }) {
-      let index = state.recipes.findIndex((e) => e.id == id)
-      state.recipes[index].rating = rating
+      let i = state.recipes.findIndex((e) => e.id == id)
+      state.recipes[i].rating = rating
       db.execute(`UPDATE recipes SET rating = ${rating} WHERE id = '${id}'`)
     },
     toggleCart(state, { id }) {
-      let index = state.recipes.indexOf(
-        state.recipes.filter((e) => e.id === id)[0]
-      )
-      state.recipes[index].inBag = !state.recipes[index].inBag
+      let i = state.recipes.indexOf(state.recipes.filter((e) => e.id === id)[0])
+      state.recipes[i].inBag = !state.recipes[i].inBag
     },
     unlinkBrokenImages(state) {
       state.recipes.forEach((r, i) => {
@@ -924,11 +975,26 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    setRTL({ commit }) {
+      commit('setRTL')
+    },
+    sortActiveTimers({ commit }) {
+      commit('sortActiveTimers')
+    },
+    setFGService({ commit }, val) {
+      commit('setFGService', val)
+    },
     addTimerPreset({ commit }, timer) {
       commit('addTimerPreset', timer)
     },
-    removeTimerPreset({ commit }, timer) {
-      commit('removeTimerPreset', timer)
+    deleteTimerPreset({ commit }, timer) {
+      commit('deleteTimerPreset', timer)
+    },
+    initTimerPresets({ commit }) {
+      commit('initTimerPresets')
+    },
+    importTimerPresets({ commit }, timers) {
+      commit('importTimerPresets', timers)
     },
     clearTimerInterval({ commit }) {
       commit('clearTimerInterval')
@@ -939,8 +1005,8 @@ export default new Vuex.Store({
     updateActiveTimer({ commit }, timer) {
       commit('updateActiveTimer', timer)
     },
-    removeActiveTimer({ commit }, index) {
-      commit('removeActiveTimer', index)
+    removeActiveTimer({ commit }, i) {
+      commit('removeActiveTimer', i)
     },
     setTimerDelay({ commit }, delay) {
       commit('setTimerDelay', delay)
@@ -948,14 +1014,14 @@ export default new Vuex.Store({
     setTimerSound({ commit }, sound) {
       commit('setTimerSound', sound)
     },
-    setTimerVibrate({ commit }, bool) {
-      commit('setTimerVibrate', bool)
+    setTimerVibrate({ commit }, n) {
+      commit('setTimerVibrate', n)
     },
     clearImportSummary({ commit }) {
       commit('clearImportSummary')
     },
-    setFirstDay({ commit }, bool) {
-      commit('setFirstDay', bool)
+    setFirstDay({ commit }, n) {
+      commit('setFirstDay', n)
     },
     setTheme({ commit }, theme) {
       commit('setTheme', theme)
@@ -1016,9 +1082,6 @@ export default new Vuex.Store({
     },
     toggleStateAction({ commit }, toggledRecipe) {
       commit('toggleState', toggledRecipe)
-    },
-    setComponent({ commit }, comp) {
-      commit('setComponent', comp)
     },
     unSyncCombinationsAction({ commit }, combinations) {
       commit('unSyncCombinations', combinations)
