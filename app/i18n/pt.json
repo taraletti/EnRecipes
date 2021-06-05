@@ -189,7 +189,7 @@
     "restCatL": "Reiniciar lista de categorias",
     "rest": "Reiniciar",
     "resNF": "Receita não encontrada",
-    "req": "Necessárias %s",
+    "req": "Necessário %s",
     "recU": "Atualizado:",
     "recTitle": "A minha receita saudável",
     "recs": "receitas",
@@ -311,5 +311,14 @@
     "notifSetg": "Definições de notificação",
     "tmrRm": "Temporizador removido",
     "delPrst": "Está prestes a eliminar %s das predefinições",
-    "prsts": "Predefinições"
+    "prsts": "Predefinições",
+    "ttv": "Tocar para ver",
+    "dismissAll": "Rejeitar todos os temporizadores",
+    "dismiss": "Rejeitar",
+    "texp": "%s temporizadores expiraram",
+    "wDBy": "%1$s foi adiado por %2$s",
+    "prstTU": "Tempo predefinido atualizado",
+    "ccwt": "Cozinhe com segurança com temporizadores!",
+    "gtD": "Ir à data",
+    "random": "Aleatória"
 }
