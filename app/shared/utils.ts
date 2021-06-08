@@ -6,10 +6,17 @@ import {
   Color,
   path,
   knownFolders,
-  TimerInfo,
 } from '@nativescript/core'
+import { localize } from '@nativescript/localize'
+
 let timerOne
 declare const global, android, androidx, com, java, Array: any
+
+const PowerManager = android.os.PowerManager
+const pm = Utils.android
+  .getApplicationContext()
+  .getSystemService(android.content.Context.POWER_SERVICE)
+const wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, 'Timers')
 
 export const restartApp = () => {
   const ctx = Utils.ad.getApplicationContext()
@@ -60,14 +67,14 @@ export const vibrate = (duration) => {
   if (vibratorService.hasVibrator()) vibratorService.vibrate(duration)
 }
 export const timer = (dur, callback) => {
-  clearInterval(timerOne)
   callback(true)
+  clearInterval(timerOne)
   timerOne = setInterval(() => {
     dur--
     callback(true)
     if (dur == 0) {
-      callback(false)
       clearInterval(timerOne)
+      callback(false)
     }
   }, 1000)
 }
@@ -285,12 +292,12 @@ export const shareText = (text, subject) => {
   intent.putExtra(android.content.Intent.EXTRA_TEXT, text)
   share(intent, subject)
 }
-export const shareImage = (image, subject) => {
+export const shareImage = (image, subject, title) => {
   let ctx = Application.android.context
   const intent = getSendIntent('image/jpeg')
   const baos = new java.io.ByteArrayOutputStream()
   image.android.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, baos)
-  const tmpFile = new java.io.File(ctx.getExternalCacheDir(), 'EnRecipes.jpg')
+  const tmpFile = new java.io.File(ctx.getCacheDir(), `${title}.jpg`)
   const fos = new java.io.FileOutputStream(tmpFile)
   fos.write(baos.toByteArray())
   fos.flush()
@@ -302,6 +309,14 @@ export const shareImage = (image, subject) => {
   )
   intent.putExtra(android.content.Intent.EXTRA_STREAM, shareUri)
   share(intent, subject)
+}
+
+export const keepScreenOn = (bool) => {
+  let ctx =
+    Application.android.foregroundActivity || Application.android.startActivity
+  let window = ctx.getWindow()
+  let flag = android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+  bool ? window.addFlags(flag) : window.clearFlags(flag)
 }
 
 // TIMER NOTIFICATION
@@ -322,26 +337,25 @@ export class TimerNotif {
     // nID ? NotifySrv.cancel(nID) : NotifySrv.cancelAll()
     NotifySrv.cancel(nID)
   }
-
   static getNotification(
     {
+      multi,
       actions,
       bID,
       cID,
       cName,
       description,
-      nID,
       priority,
       sound,
       title,
       vibrate,
     }: {
+      multi?: boolean
       actions?: boolean
       bID: string
       cID: string
       cName: string
       description: string
-      nID: number
       priority: number
       sound: string
       title: string
@@ -361,7 +375,6 @@ export class TimerNotif {
     if (sdkv >= 26) {
       const importance =
         priority > 0 ? NotifyMgr.IMPORTANCE_HIGH : NotifyMgr.IMPORTANCE_MIN
-      console.log(priority, importance)
       const AudioAttributes = android.media.AudioAttributes
       const audioAttributes = new AudioAttributes.Builder()
         .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
@@ -386,7 +399,7 @@ export class TimerNotif {
     const PendingIntent = android.app.PendingIntent
 
     const mainInt = new Intent(ctx, com.tns.NativeScriptActivity.class)
-    mainInt.putExtra('action', 'open_timer')
+    mainInt.putExtra('action', 'timer')
     const mainPInt = PendingIntent.getActivity(
       ctx,
       1,
@@ -395,10 +408,15 @@ export class TimerNotif {
     )
 
     // Action intent
-    let actionInt1, actionInt2, actionPInt1, actionPInt2
+    let actionInt1,
+      actionInt2,
+      actionInt3,
+      actionPInt1,
+      actionPInt2,
+      actionPInt3
     if (actions) {
       actionInt1 = new Intent(bID)
-      actionInt1.putExtra('action', 'stop')
+      actionInt1.putExtra('action', 'delay')
       actionPInt1 = PendingIntent.getBroadcast(
         ctx,
         2,
@@ -406,18 +424,26 @@ export class TimerNotif {
         PendingIntent.FLAG_UPDATE_CURRENT
       )
       actionInt2 = new Intent(bID)
-      actionInt2.putExtra('action', 'delay')
+      actionInt2.putExtra('action', 'dismiss')
       actionPInt2 = PendingIntent.getBroadcast(
         ctx,
         3,
         actionInt2,
         PendingIntent.FLAG_UPDATE_CURRENT
       )
+      actionInt3 = new Intent(bID)
+      actionInt3.putExtra('action', 'dismissAll')
+      actionPInt3 = PendingIntent.getBroadcast(
+        ctx,
+        4,
+        actionInt3,
+        PendingIntent.FLAG_UPDATE_CURRENT
+      )
     }
 
     // CREATE NOTIFICATION
 
-    let icon = TimerNotif.getIcon(ctx, 'ic_stat_notify_silhouette')
+    let icon = this.getIcon(ctx, 'notify_icon_sil')
     let builder = new NotificationCompat.Builder(ctx, cID)
       .setColor(new Color('#ff5200').android)
       .setContentIntent(mainPInt)
@@ -434,10 +460,12 @@ export class TimerNotif {
     if (description) builder.setContentText(description)
     if (vibrate) builder.setVibrate([500, 1000])
     if (actions) {
-      builder.setDeleteIntent(actionPInt2)
       builder.setFullScreenIntent(mainPInt, true)
-      builder.addAction(null, 'Stop', actionPInt1)
-      builder.addAction(null, 'Delay', actionPInt2)
+      if (multi) builder.addAction(null, localize('dismissAll'), actionPInt3)
+      else {
+        builder.addAction(null, localize('delay'), actionPInt1)
+        builder.addAction(null, localize('dismiss'), actionPInt2)
+      }
     }
     let notification = builder.build()
     notification.flags =
@@ -450,7 +478,45 @@ export class TimerNotif {
     const NotifySrv = ctx.getSystemService(
       android.content.Context.NOTIFICATION_SERVICE
     )
-    NotifySrv.notify(data.nID, TimerNotif.getNotification(data, ctx))
+    NotifySrv.notify(data.nID, this.getNotification(data, ctx))
+  }
+}
+export class Printer {
+  static PrintPackage = global.androidx.print
+  static isSupported() {
+    return this.PrintPackage.PrintHelper.systemSupportsPrint()
+  }
+  static print(view) {
+    return new Promise((resolve, reject) => {
+      try {
+        let img: any
+        img = android.graphics.Bitmap.createBitmap(
+          view.getMeasuredWidth(),
+          view.getMeasuredHeight(),
+          android.graphics.Bitmap.Config.ARGB_8888
+        )
+        view.android.draw(new android.graphics.Canvas(img))
+        this.printImage(img).then(resolve, reject)
+      } catch (e) {
+        reject(e)
+      }
+    })
+  }
+  static printImage(img) {
+    return new Promise((resolve, reject) => {
+      try {
+        let callback = (success) => resolve(success)
+        let printHelper = new this.PrintPackage.PrintHelper(
+          Application.android.foregroundActivity
+        )
+        printHelper.setScaleMode(this.PrintPackage.PrintHelper.SCALE_MODE_FIT)
+        let jobName = 'MyPrintJob'
+        printHelper.printBitmap(jobName, img)
+        callback(true)
+      } catch (e) {
+        reject(e)
+      }
+    })
   }
 }
 
@@ -488,4 +554,16 @@ export const getTones = () => {
   }
 
   return { tones, defaultTone: defaultToneUri ? defaultTone : tones[0] }
+}
+
+//DETECT RTL LANGUAGE
+export const RTL = (): boolean => {
+  const ctx = Utils.android.getApplicationContext()
+  const config = ctx.getResources().getConfiguration()
+  return config.getLayoutDirection() == android.view.View.LAYOUT_DIRECTION_RTL
+}
+
+//WAKE LOCK
+export const wakeLock = (bool) => {
+  bool ? !wl.isHeld() && wl.acquire() : wl.isHeld() && wl.release()
 }
