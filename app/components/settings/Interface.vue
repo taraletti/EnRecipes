@@ -1,11 +1,17 @@
 <template>
-  <Page @loaded="onPageLoad" actionBarHidden="true">
-    <GridLayout rows="*, auto" columns="auto, *">
+  <Page @loaded="pgLoad" actionBarHidden="true">
+    <RGridLayout :isRtl="RTL" rows="*, auto" columns="auto, *">
       <OptionsList title="intf" :items="items" />
-      <GridLayout row="1" class="appbar" rows="*" columns="auto, *">
+      <GridLayout
+        :isRtl="RTL"
+        row="1"
+        class="appbar"
+        rows="*"
+        columns="auto, *"
+      >
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
-    </GridLayout>
+    </RGridLayout>
   </Page>
 </template>
 
@@ -16,7 +22,7 @@ import {
   Device,
   Frame,
 } from "@nativescript/core";
-import { localize, overrideLocale } from "@nativescript/localize";
+import { localize } from "@nativescript/localize";
 import Action from "../modals/Action";
 import Confirm from "../modals/Confirm";
 import OptionsList from "../sub/OptionsList";
@@ -27,11 +33,11 @@ export default {
   components: { OptionsList },
   data() {
     return {
-      appLanguage: "English",
+      applang: 0,
     };
   },
   computed: {
-    ...mapState(["icon", "language", "appTheme", "layout"]),
+    ...mapState(["icon", "language", "appTheme", "layout", "RTL"]),
     items() {
       return [
         {},
@@ -39,23 +45,21 @@ export default {
           type: "list",
           icon: "lang",
           title: "lang",
-          subTitle: this.appLanguage,
-          action: this.selectAppLanguage,
+          subTitle: this.applang,
+          action: this.setAppLang,
         },
         {
           type: "list",
           icon: "theme",
           title: "Theme",
-          subTitle: localize(
-            ApplicationSettings.getString("appTheme", "sysDef")
-          ),
+          subTitle: ApplicationSettings.getString("appTheme", "sysDef"),
           action: this.selectThemes,
         },
         {
           type: "list",
           icon: "layout",
           title: "listVM",
-          subTitle: localize(this.layout),
+          subTitle: this.layout,
           action: this.setLayoutMode,
         },
         {},
@@ -63,12 +67,12 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["setTheme", "setLayout"]),
-    onPageLoad({ object }) {
+    ...mapActions(["setTheme", "setLayout", "setRTL"]),
+    pgLoad({ object }) {
       object.bindingContext = new Observable();
     },
     // LANGUAGE SELECTION
-    selectAppLanguage() {
+    setAppLang() {
       let languages = this.language.map((e) => e.title);
       this.$showModal(Action, {
         props: {
@@ -76,26 +80,19 @@ export default {
           list: [...languages],
         },
       }).then((action) => {
-        if (action && this.appLanguage !== action) {
-          let currentLocale = Device.language.split("-")[0];
+        if (action && this.applang !== action) {
+          let currentLocale = ApplicationSettings.getString(
+            "appLocale",
+            "none"
+          ).split("-");
           let locale = this.language.filter((e) => e.title === action)[0]
             .locale;
           if (currentLocale !== locale) {
-            this.$showModal(Confirm, {
-              props: {
-                title: "appRst",
-                description: localize("nLangInfo"),
-                cancelButtonText: "cBtn",
-                okButtonText: "rst",
-              },
-            }).then((result) => {
-              if (result) {
-                this.appLanguage = action;
-                ApplicationSettings.setString("appLanguage", action);
-                overrideLocale(locale);
-                setTimeout(utils.restartApp, 250);
-              }
-            });
+            this.applang = action;
+            ApplicationSettings.setString("applang", action);
+            ApplicationSettings.setString("appLocale", locale);
+            utils.updateLocale();
+            this.setRTL();
           }
         }
       });
@@ -111,7 +108,7 @@ export default {
         if (
           action &&
           (ApplicationSettings.getString("appTheme") != this.appTheme
-            ? true
+            ? 1
             : this.appTheme != action)
         ) {
           this.setTheme(action);
@@ -136,10 +133,7 @@ export default {
     },
   },
   created() {
-    this.appLanguage = ApplicationSettings.getString(
-      "appLanguage",
-      localize("sysDef")
-    );
+    this.applang = ApplicationSettings.getString("applang", "sysDef");
   },
 };
 </script>
