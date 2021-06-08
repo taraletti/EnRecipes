@@ -320,5 +320,21 @@
   "texp": "%s timers expired",
   "dismiss": "Dismiss",
   "dismissAll": "Dismiss all timers",
-  "ttv": "Tap to view"
+  "ttv": "Tap to view",
+  "oAP": "%1$s ongoing, %2$s paused",
+  "calVM": "Calendar view mode",
+  "mnthly": "Monthly",
+  "wkly": "Weekly",
+  "dly": "Daily",
+  "sun": "Sunday",
+  "mon": "Monday",
+  "tue": "Tuesday",
+  "wed": "Wednesday",
+  "thu": "Thursday",
+  "fri": "Friday",
+  "sat": "Saturday",
+  "cpy": "copy",
+  "tdy": "Today",
+  "tmrw": "Tomorrow",
+  "ystr": "Yesterday"
 }
