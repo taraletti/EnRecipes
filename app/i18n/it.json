@@ -200,7 +200,7 @@
     "recs": "ricette",
     "recTitle": "La mia ricetta sana",
     "recU": "Aggiornate:",
-    "req": "%s richiesto",
+    "req": "%s necessario",
     "resNF": "Ricetta non trovata",
     "rest": "Ripristina",
     "restCatL": "Reimposta l'elenco delle categorie",
@@ -311,5 +311,14 @@
     "notifSetg": "Impostazioni di notifica",
     "tmrRm": "Contaminuti rimosso",
     "delPrst": "Stai per eliminare %s dalle preimpostazioni",
-    "prsts": "Preimpostazioni"
+    "prsts": "Preimpostazioni",
+    "ttv": "Tocca per visualizzare",
+    "dismissAll": "Disattiva tutti i contaminuti",
+    "dismiss": "Diattiva",
+    "texp": "%s contaminuti scaduti",
+    "wDBy": "%1$s è stato ritardato di %2$s",
+    "prstTU": "Tempo preimpostato aggiornato",
+    "ccwt": "Cucina con fiducia con i contaminuti!",
+    "gtD": "Vai alla data",
+    "random": "Casuale"
 }

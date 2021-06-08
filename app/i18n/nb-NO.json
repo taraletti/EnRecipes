@@ -290,5 +290,18 @@
     "yld": "Nyttemengde",
     "buto": "Støttet opp til %s",
     "sysDefB": "Systemforvalg + Svart",
-    "sec": "s"
+    "sec": "s",
+    "ntmr": "Nytt tidsur",
+    "gtD": "Gå til dato",
+    "random": "Tilfeldig",
+    "notifSetg": "Merknadsinnstillinger",
+    "tmrRm": "Tidsur fjernet",
+    "seconds": "sekunder",
+    "hours": "timer",
+    "hour": "time",
+    "minutes": "minutter",
+    "minute": "minutt",
+    "delay": "Utsett",
+    "stop": "Stopp",
+    "strtBtn": "Start"
 }
