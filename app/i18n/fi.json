@@ -252,7 +252,7 @@
     "strAdd": "",
     "SUN": "su",
     "sVw": "Ravista nähdäksesi satunnainen resepti",
-    "sVwInfo": "Auttaa sinua valitsemaan, mitä valmistaa, kun et osaa päättää.",
+    "sVwInfo": "Auttaa sinua valitsemaan, mitä valmistaa, kun et osaa päättää",
     "Swedish": "ruotsalainen",
     "swm": "Aloita viikko maanantaina",
     "sysDef": "Järjestelmän oletus",
@@ -304,5 +304,16 @@
     "hours": "tuntia",
     "minutes": "minuuttia",
     "hour": "tunti",
-    "minute": "minuutti"
+    "minute": "minuutti",
+    "prsts": "Esiasetukset",
+    "texp": "%s ajastinta on vanhentunut",
+    "tmrRm": "Ajastin poistettu",
+    "ccwt": "Keitä luottavaisesti ajastimien avulla!",
+    "gtD": "Siirry päivämäärään",
+    "random": "Satunnainen",
+    "notifSetg": "Ilmoitusasetukset",
+    "prstTU": "Esiasetettu aika päivitetty",
+    "ttv": "Napauta nähdäksesi",
+    "dismissAll": "Hylkää kaikki ajastimet",
+    "dismiss": "Hylkää"
 }
