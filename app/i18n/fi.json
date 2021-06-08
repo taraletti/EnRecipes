@@ -315,5 +315,21 @@
     "prstTU": "Esiasetettu aika päivitetty",
     "ttv": "Napauta nähdäksesi",
     "dismissAll": "Hylkää kaikki ajastimet",
-    "dismiss": "Hylkää"
+    "dismiss": "Hylkää",
+    "ystr": "Eilen",
+    "tmrw": "Huomenna",
+    "tdy": "Tänään",
+    "cpy": "kopio",
+    "sat": "lauantai",
+    "fri": "perjantai",
+    "thu": "torstai",
+    "wed": "keskiviikko",
+    "tue": "tiistai",
+    "mon": "maanantai",
+    "sun": "sunnuntai",
+    "dly": "Päivittäin",
+    "wkly": "Viikoittain",
+    "mnthly": "Kuukausittain",
+    "calVM": "Kalenterinäkymätila",
+    "oAP": "%1$s käynnissä, %2$s keskeytetty"
 }
