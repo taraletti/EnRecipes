@@ -320,5 +320,21 @@
     "prstTU": "Preset time updated",
     "ccwt": "Cook confidently with timers!",
     "gtD": "Go to date",
-    "random": "Random"
+    "random": "Random",
+    "ystr": "Yesterday",
+    "tmrw": "Tomorrow",
+    "tdy": "Today",
+    "cpy": "copy",
+    "sat": "Saturday",
+    "fri": "Friday",
+    "thu": "Thursday",
+    "wed": "Wednesday",
+    "tue": "Tuesday",
+    "mon": "Monday",
+    "sun": "Sunday",
+    "dly": "Daily",
+    "wkly": "Weekly",
+    "mnthly": "Monthly",
+    "calVM": "Calendar view mode",
+    "oAP": "%1$s ongoing, %2$s paused"
 }
