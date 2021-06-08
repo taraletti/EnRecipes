@@ -320,5 +320,21 @@
     "prstTU": "Voreingestellte Zeit aktualisiert",
     "ccwt": "Koche selbstbewusst mit Eieruhren!",
     "gtD": "Zu Datum gehen",
-    "random": "Zufällig"
+    "random": "Zufällig",
+    "oAP": "%1$s laufend, %2$s angehalten",
+    "ystr": "Gestern",
+    "tmrw": "Morgen",
+    "tdy": "Heute",
+    "cpy": "Kopie",
+    "sat": "Samstag",
+    "fri": "Freitag",
+    "thu": "Donnerstag",
+    "wed": "Mittwoch",
+    "tue": "Dienstag",
+    "mon": "Montag",
+    "sun": "Sonntag",
+    "dly": "Täglich",
+    "wkly": "Wöchentlich",
+    "mnthly": "Monatlich",
+    "calVM": "Modus der Kalenderansicht"
 }
