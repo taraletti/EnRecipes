@@ -327,7 +327,6 @@
     "tue": "tiistai",
     "mon": "maanantai",
     "sun": "sunnuntai",
-    "wkly": "Viikoittain",
     "calVM": "Kalenterinäkymätila",
     "oAP": "%1$s käynnissä, %2$s keskeytetty"
 }

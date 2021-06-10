@@ -332,7 +332,6 @@
     "tue": "dinsdag",
     "mon": "maandag",
     "sun": "zondag",
-    "wkly": "Wekelijks",
     "calVM": "Weergavemodus van kalender",
     "oAP": "%1$s lopende; %2$s onderbroken"
 }
