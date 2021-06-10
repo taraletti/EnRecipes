@@ -311,5 +311,20 @@
     "prsts": "Predefinições",
     "delPrst": "Você está prestes a apagar %s das predefinições",
     "tmrRm": "Timer removido",
-    "notifSetg": "Configurações de notificação"
+    "notifSetg": "Configurações de notificação",
+    "calVM": "Modo de visualização de calendário",
+    "oAP": "%1$s em curso, %2$s em pausa",
+    "gtD": "Ir à data",
+    "random": "Aleatório",
+    "ystr": "Ontem",
+    "tmrw": "Amanhã",
+    "tdy": "Hoje",
+    "cpy": "cópia",
+    "sat": "sábado",
+    "fri": "sexta-feira",
+    "thu": "quinta-feira",
+    "wed": "quarta-feira",
+    "tue": "terça-feira",
+    "mon": "segunda-feira",
+    "sun": "domingo"
 }
