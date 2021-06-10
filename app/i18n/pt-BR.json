@@ -327,7 +327,5 @@
     "tue": "terça-feira",
     "mon": "segunda-feira",
     "sun": "domingo",
-    "dly": "Diário",
-    "wkly": "Semanal",
-    "mnthly": "Mensal"
+    "wkly": "Semanal"
 }

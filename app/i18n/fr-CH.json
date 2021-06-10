@@ -332,9 +332,7 @@
     "tue": "mardi",
     "mon": "lundi",
     "sun": "dimanche",
-    "dly": "Par jour",
     "wkly": "Par semaine",
-    "mnthly": "Par mois",
     "calVM": "Mode d’affichage du calendrier",
     "oAP": "%1$s en cours, %2$s en pause"
 }

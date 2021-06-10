@@ -332,9 +332,7 @@
     "tue": "martedì",
     "mon": "lunedì",
     "sun": "domenica",
-    "dly": "Quotidiano",
     "wkly": "Settimanale",
-    "mnthly": "Mensile",
     "calVM": "Modalità di visualizzazione calendario",
     "oAP": "%1$s in corso, %2$s in pausa"
 }
