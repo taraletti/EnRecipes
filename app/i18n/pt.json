@@ -320,5 +320,18 @@
     "prstTU": "Tempo predefinido atualizado",
     "ccwt": "Cozinhe com segurança com temporizadores!",
     "gtD": "Ir à data",
-    "random": "Aleatória"
+    "random": "Aleatória",
+    "cpy": "cópia",
+    "oAP": "%1$s em curso, %2$s em pausa",
+    "calVM": "Modo de visualização de calendário",
+    "ystr": "Ontem",
+    "tmrw": "Amanhã",
+    "tdy": "Hoje",
+    "sat": "sábado",
+    "fri": "sexta-feira",
+    "thu": "quinta-feira",
+    "wed": "quarta-feira",
+    "tue": "terça-feira",
+    "mon": "segunda-feira",
+    "sun": "domingo"
 }

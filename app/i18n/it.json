@@ -320,5 +320,18 @@
     "prstTU": "Tempo preimpostato aggiornato",
     "ccwt": "Cucina con fiducia con i contaminuti!",
     "gtD": "Vai alla data",
-    "random": "Casuale"
+    "random": "Casuale",
+    "ystr": "Ieri",
+    "tmrw": "Domani",
+    "tdy": "Oggi",
+    "cpy": "copia",
+    "sat": "sabato",
+    "fri": "venerdì",
+    "thu": "giovedì",
+    "wed": "mercoledì",
+    "tue": "martedì",
+    "mon": "lunedì",
+    "sun": "domenica",
+    "calVM": "Modalità di visualizzazione calendario",
+    "oAP": "%1$s in corso, %2$s in pausa"
 }
