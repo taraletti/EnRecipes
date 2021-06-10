@@ -332,9 +332,7 @@
     "tue": "Tuesday",
     "mon": "Monday",
     "sun": "Sunday",
-    "dly": "Daily",
     "wkly": "Weekly",
-    "mnthly": "Monthly",
     "calVM": "Calendar view mode",
     "oAP": "%1$s ongoing, %2$s paused"
 }
