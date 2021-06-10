@@ -333,5 +333,8 @@
     "tue": "Dienstag",
     "mon": "Montag",
     "sun": "Sonntag",
-    "calVM": "Modus der Kalenderansicht"
+    "calVM": "Modus der Kalenderansicht",
+    "d": "Tag",
+    "wk": "Woche",
+    "mnth": "Monat"
 }
