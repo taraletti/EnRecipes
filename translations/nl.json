@@ -320,5 +320,21 @@
     "prstTU": "De tijd is bijgewerkt",
     "ccwt": "Kook vol vertrouwen d.m.v. kookwekkers!",
     "gtD": "Ga naar datum",
-    "random": "Willekeurig"
+    "random": "Willekeurig",
+    "ystr": "Gisteren",
+    "tmrw": "Morgen",
+    "tdy": "Vandaag",
+    "cpy": "kopie",
+    "sat": "zaterdag",
+    "fri": "vrijdag",
+    "thu": "donderdag",
+    "wed": "woensdag",
+    "tue": "dinsdag",
+    "mon": "maandag",
+    "sun": "zondag",
+    "d": "Dag",
+    "wk": "Week",
+    "mnth": "Maand",
+    "calVM": "Weergavemodus van kalender",
+    "oAP": "%1$s lopende; %2$s onderbroken"
 }
