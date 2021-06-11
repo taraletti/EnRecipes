@@ -336,5 +336,13 @@
     "wk": "Settimana",
     "mnth": "Mese",
     "calVM": "Modalità di visualizzazione calendario",
-    "oAP": "%1$s in corso, %2$s in pausa"
+    "oAP": "%1$s in corso, %2$s in pausa",
+    "otaw": "Dopo una settimana",
+    "otam": "Dopo un mese",
+    "otay": "Dopo un anno",
+    "nvr": "Mai",
+    "admp": "Elimina automaticamente i piani pasto",
+    "plsCrt": "Usa il pulsante più per crearne uno",
+    "ehwmp": "Mangia sano con i piani dei pasti!",
+    "selMT": "Seleziona il tipo di pasto"
 }
