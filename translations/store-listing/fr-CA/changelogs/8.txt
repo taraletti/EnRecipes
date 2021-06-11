@@ -1,3 +1,0 @@
-- Vous pouvez désormais choisir un thème par défaut pour suivre le réglage du mode sombre de votre appareil (pour Android 10 et plus).
-- L'outil de minuterie de cuisson a été ajouté
-- Page de paramètres individuelle pour chaque outil
