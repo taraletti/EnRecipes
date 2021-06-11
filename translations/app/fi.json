@@ -331,5 +331,13 @@
     "mon": "maanantai",
     "sun": "sunnuntai",
     "calVM": "Kalenterinäkymätila",
-    "oAP": "%1$s käynnissä, %2$s keskeytetty"
+    "oAP": "%1$s käynnissä, %2$s keskeytetty",
+    "ehwmp": "Syö terveellisesti ateriasuunnitelmien avulla!",
+    "selMT": "Valitse ateriatyyppi",
+    "plsCrt": "Käytä plus-painiketta luodaksesi yhden",
+    "nvr": "Ei koskaan",
+    "otaw": "Viikon jälkeen",
+    "otam": "Kuukauden jälkeen",
+    "otay": "Vuoden jälkeen",
+    "admp": "Poista ateriasuunnitelmat automaattisesti"
 }
