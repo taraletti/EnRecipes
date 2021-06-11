@@ -336,5 +336,13 @@
     "calVM": "Modus der Kalenderansicht",
     "d": "Tag",
     "wk": "Woche",
-    "mnth": "Monat"
+    "mnth": "Monat",
+    "nvr": "Nie",
+    "otaw": "Älter als eine Woche",
+    "otam": "Älter als ein Monat",
+    "otay": "Älter als ein Jahr",
+    "admp": "Mahlzeitenpläne automatisch löschen",
+    "plsCrt": "Verwende die Plus-Taste, um einen zu erstellen",
+    "ehwmp": "Iss gesund mit Essensplänen!",
+    "selMT": "Mahlzeitentyp auswählen"
 }
