@@ -333,8 +333,6 @@
     "tue": "Dienstag",
     "mon": "Montag",
     "sun": "Sonntag",
-    "dly": "Täglich",
     "wkly": "Wöchentlich",
-    "mnthly": "Monatlich",
     "calVM": "Modus der Kalenderansicht"
 }
