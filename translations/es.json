@@ -311,5 +311,19 @@
     "notifSetg": "Ajustes de notificación",
     "tmrRm": "Temporizador eliminado",
     "delPrst": "Está a punto de eliminar %s de los preajustes",
-    "prsts": "Preselecciones"
+    "prsts": "Preselecciones",
+    "cpy": "copia",
+    "sat": "sábado",
+    "fri": "viernes",
+    "thu": "jueves",
+    "wed": "miércoles",
+    "tue": "martes",
+    "mon": "lunes",
+    "sun": "domingo",
+    "d": "Día",
+    "wk": "Semana",
+    "mnth": "Mes",
+    "ystr": "Ayer",
+    "tmrw": "Mañana",
+    "tdy": "Hoy"
 }
