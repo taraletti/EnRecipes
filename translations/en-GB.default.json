@@ -336,5 +336,13 @@
   "cpy": "copy",
   "tdy": "Today",
   "tmrw": "Tomorrow",
-  "ystr": "Yesterday"
+  "ystr": "Yesterday",
+  "selMT": "Select meal type",
+  "ehwmp": "Eat healthy with meal plans!",
+  "plsCrt": "Use the plus button to create one",
+  "admp": "Auto delete meal plans",
+  "otay": "Older than a year",
+  "otam": "Older than a month",
+  "otaw": "Older than a week",
+  "nvr": "Never"
 }
