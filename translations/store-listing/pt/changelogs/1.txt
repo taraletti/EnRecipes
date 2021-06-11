@@ -1,0 +1,3 @@
+- Agora pode escolher um tema padrão do sistema para seguir a configuração do modo escuro do seu aparelhos (para Android 10 e superior)
+- Foi adicionada a ferramenta temporizador de cozedura
+- Página de configurações individuais para cada ferramenta
