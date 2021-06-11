@@ -5,4 +5,4 @@
 - RTL language support
 - Print recipe
 - Create duplicate recipes for alternate versions
-- App shortcut for all the tools
+- Meal planner UI revamp
