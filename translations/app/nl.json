@@ -336,5 +336,13 @@
     "wk": "Week",
     "mnth": "Maand",
     "calVM": "Weergavemodus van kalender",
-    "oAP": "%1$s lopende; %2$s onderbroken"
+    "oAP": "%1$s lopende; %2$s onderbroken",
+    "nvr": "Nooit",
+    "otaw": "Ouder dan een week",
+    "otam": "Ouder dan een maand",
+    "otay": "Ouder dan een jaar",
+    "admp": "Schema's automatisch verwijderen",
+    "plsCrt": "Druk op de plusknop om een schema toe te voegen",
+    "ehwmp": "Eet gezond met maaltijdschema's!",
+    "selMT": "Kies het soort maaltijd"
 }
