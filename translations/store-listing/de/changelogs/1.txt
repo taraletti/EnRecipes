@@ -1,3 +1,8 @@
-- Du kannst jetzt ein Standarddesign für das System auswählen, das den Einstellungen des dunklen Modus deines Geräts folgt (für Android 10 und höher)
-- Kochtimer wurde hinzugefügt
-- Individuelle Einstellungsseite für jedes Werkzeug
+- Sie können jetzt ein Standardthema für das System auswählen, das den Einstellungen des dunklen Modus Ihres Geräts folgt (für Android 10 und höher)
+- Kurzzeitwecker-Werkzeug wurde hinzugefügt
+- Individuelle Einstellungsseite für jedes Tool
+- Die Rezepte können nun in zufälliger Reihenfolge sortiert werden
+- Sprachunterstützung, die von rechts zu links geschrieben werden
+- Rezept ausdrucken
+- Rezept duplizieren
+- Überarbeitete Benutzeroberfläche des Mahlzeitenplaners

@@ -1,3 +1,0 @@
-- [NIEUW] Ondersteuning voor het gebruiken van het systeemthema (Android 10 en hoger);
-- [NIEUW] Kookwekker;
-- [NIEUW] Individuele instellingenpagina's per hulpmiddel.
