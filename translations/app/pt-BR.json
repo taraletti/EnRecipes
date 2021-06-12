@@ -342,5 +342,7 @@
     "texp": "%s temporizadores expiraram",
     "prstTU": "Tempo predefinido atualiado",
     "ccwt": "Cozinhe co confiança com temporizadores!",
-    "random": "Aleatória"
+    "random": "Aleatória",
+    "nvr": "Nunca",
+    "gtD": "Ir à data"
 }
