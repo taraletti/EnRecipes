@@ -1,28 +1,30 @@
 <template>
-  <Page @loaded="onPageLoad" actionBarHidden="true">
-    <GridLayout rows="*, auto" columns="auto, *">
+  <Page @loaded="pgLoad" actionBarHidden="true">
+    <RGridLayout :rtl="RTL" rows="*, auto" columns="auto, *">
       <OptionsList title="db" :items="items" />
       <GridLayout
-        v-show="!toast && !progress"
+        :hidden="toast || progress"
+        @loaded="abLoad"
         row="1"
-        class="appbar"
+        class="appbar rtl"
         rows="*"
         columns="auto, *"
       >
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
-      <Toast :toast="toast" :action="hideToast" />
-      <GridLayout
+      <Toast :onload="tbLoad" :toast="toast" :action="hideBar" />
+      <RGridLayout
+        :rtl="RTL"
         v-show="progress"
         row="1"
         colSpan="2"
-        class="appbar snackBar"
+        class="appbar snackBar rtl"
         columns="auto, *"
       >
-        <ActivityIndicator :busy="progress ? true : false" />
-        <Label col="1" class="title" :text="progress" textWrap="true" />
-      </GridLayout>
-    </GridLayout>
+        <ActivityIndicator :busy="!!progress" />
+        <RLabel col="1" class="title" :text="progress" />
+      </RGridLayout>
+    </RGridLayout>
   </Page>
 </template>
 
@@ -50,9 +52,11 @@ export default {
   components: { OptionsList, Toast },
   data() {
     return {
-      backupFolder: null,
-      progress: null,
-      toast: null,
+      backupFolder: 0,
+      progress: 0,
+      toast: 0,
+      appbar: 0,
+      toastbar: 0,
     };
   },
   computed: {
@@ -65,6 +69,7 @@ export default {
       "units",
       "mealPlans",
       "importSummary",
+      "RTL",
     ]),
     items() {
       return [
@@ -101,13 +106,15 @@ export default {
       "importRecipesFromDB",
       "importMealPlansFromJSON",
       "importMealPlansFromDB",
+      "importTimerPresets",
       "unlinkBrokenImages",
       "clearImportSummary",
     ]),
-    onPageLoad({ object }) {
+    pgLoad({ object }) {
       object.bindingContext = new Observable();
-      const ContentResolver = Application.android.nativeApp.getContentResolver();
-      this.backupFolder = ApplicationSettings.getString("backupFolder");
+      const ContentResolver =
+        Application.android.nativeApp.getContentResolver();
+      this.backupFolder = ApplicationSettings.getString("backupFolder", null);
       if (
         !this.backupFolder ||
         ContentResolver.getPersistedUriPermissions().isEmpty()
@@ -115,22 +122,33 @@ export default {
         this.backupFolder = null;
       }
     },
-    // BACKUP FOLDER PICKER
+    abLoad({ object }) {
+      this.appbar = object;
+    },
+    tbLoad({ object }) {
+      this.toastbar = object;
+    },
+
+    // BackupFolderPicker
     setBackupFolder(startExport) {
-      const ContentResolver = Application.android.nativeApp.getContentResolver();
+      const ContentResolver =
+        Application.android.nativeApp.getContentResolver();
       const FLAGS =
         android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION |
         android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
       utils.getBackupFolder().then((uri) => {
+        console.log(uri.toString());
         if (uri != null) {
-          if (this.backupFolder)
+          // ReleaseExistingPermissions
+
+          if (this.backupFolder && this.backupFolder != uri.toString())
             ContentResolver.releasePersistableUriPermission(
               new android.net.Uri.parse(this.backupFolder),
               FLAGS
             );
           this.backupFolder = uri.toString();
           ApplicationSettings.setString("backupFolder", this.backupFolder);
-          // PERSIST PERMISSIONS
+          // PersistPermissions
           ContentResolver.takePersistableUriPermission(uri, FLAGS);
           if (startExport && this.backupFolder) {
             this.exportBackup();
@@ -141,18 +159,15 @@ export default {
 
     // EXPORT HANDLERS
     exportCheck() {
-      const ContentResolver = Application.android.nativeApp.getContentResolver();
-      if (!this.recipes.length) {
-        this.toast = localize("aFBu");
-        utils.timer(5, (val) => {
-          if (!val) this.toast = val;
-        });
-      } else {
+      const ContentResolver =
+        Application.android.nativeApp.getContentResolver();
+      if (!this.recipes.length) this.showToast(localize("aFBu"));
+      else {
         if (
           !this.backupFolder ||
           ContentResolver.getPersistedUriPermissions().isEmpty()
         ) {
-          this.setBackupFolder(true);
+          this.setBackupFolder(1);
         } else this.exportBackup();
       }
     },
@@ -182,7 +197,7 @@ export default {
           console.log("Backup error: ", err);
           this.progress = null;
           this.releaseBackEvent();
-          this.setBackupFolder(true);
+          this.setBackupFolder(1);
         });
     },
     showExportSummary(filename) {
@@ -248,6 +263,8 @@ export default {
           importImages();
         } else if (File.exists(recipes)) {
           // IMPORT FROM JSON FILES
+          console.log("import from json");
+
           this.isFileDataValid([
             {
               path: recipes,
@@ -285,9 +302,10 @@ export default {
       } else this.failedImport(localize("buInc"));
     },
     isFileDataValid(file) {
+      console.log("isFileDataValid");
       const files = file.filter((e) => File.exists(e.path));
       if (files.length) {
-        let isValid = files.map(() => false);
+        let isValid = files.map(() => 0);
         files.forEach((file, i) => {
           File.fromPath(file.path)
             .readText()
@@ -299,7 +317,7 @@ export default {
                 );
                 return 0;
               }
-              if (isValid.every((e) => e === true)) {
+              if (isValid.every((e) => e === 1)) {
                 files.forEach((file) => {
                   File.fromPath(file.path)
                     .readText()
@@ -328,9 +346,9 @@ export default {
       try {
         JSON.parse(data) && Array.isArray(JSON.parse(data));
       } catch (e) {
-        return false;
+        return 0;
       }
-      return true;
+      return 1;
     },
     extractData(recipesDB) {
       const db = openOrCreate(recipesDB);
@@ -356,8 +374,14 @@ export default {
       db.select(`SELECT * FROM mealPlans`).then((res) =>
         this.importMealPlansFromDB(res)
       );
+
+      // Import timerPresets
+      db.select(`SELECT * FROM timerPresets`).then((res) =>
+        this.importTimerPresets(res)
+      );
     },
     importData(data, db) {
+      console.log("importing");
       switch (db) {
         case "recipes":
           this.importRecipesFromJSON(data);
@@ -405,7 +429,6 @@ export default {
                   File.fromPath(entity._path).remove();
               });
             });
-
           this.showImportSummary();
           this.unlinkBrokenImages();
         }
@@ -447,9 +470,19 @@ export default {
       args.cancel = true;
     },
 
-    // HELPERS
-    hideToast() {
-      this.toast = null;
+    // TOAST
+    showToast(data) {
+      this.animateBar(this.appbar, 0).then(() => {
+        this.toast = data;
+        this.animateBar(this.toastbar, 1);
+        utils.timer(5, (val) => !val && this.hideBar());
+      });
+    },
+    hideBar() {
+      this.animateBar(this.toastbar, 0).then(() => {
+        this.toast = null;
+        this.animateBar(this.appbar, 1);
+      });
     },
   },
 };

@@ -2,31 +2,31 @@
   <Page
     @loaded="transparentPage"
     backgroundColor="transparent"
-    :class="appTheme"
+    :class="theme"
   >
     <GridLayout rows="auto, auto, auto" class="modal">
-      <Label class="title" :text="title | L" />
+      <RLabel class="title" :text="title | L" />
       <Label
         row="1"
         v-if="description"
         class="description tw"
         :text="description"
       />
-      <GridLayout row="2" columns="*, auto, auto" class="actions">
+      <RGridLayout :rtl="RTL" row="2" columns="*, auto, auto" class="actions">
         <Button
           v-if="cancelButtonText"
           col="1"
           class="text sm"
           :text="cancelButtonText | L"
-          @tap="$modal.close(false)"
+          @tap="$modal.close(0)"
         />
         <Button
           col="2"
           class="text sm"
           :text="okButtonText | L"
-          @tap="$modal.close(true)"
+          @tap="$modal.close(1)"
         />
-      </GridLayout>
+      </RGridLayout>
     </GridLayout>
   </Page>
 </template>
@@ -53,7 +53,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["icon", "appTheme"]),
+    ...mapState(["icon", "theme", "RTL"]),
   },
 };
 </script>

@@ -333,5 +333,16 @@
     "mon": "Monday",
     "sun": "Sunday",
     "calVM": "Calendar view mode",
-    "oAP": "%1$s ongoing, %2$s paused"
+    "oAP": "%1$s ongoing, %2$s paused",
+    "d": "Day",
+    "wk": "Week",
+    "mnth": "Month",
+    "nvr": "Never",
+    "otaw": "Older than a week",
+    "otam": "Older than a month",
+    "otay": "Older than a year",
+    "admp": "Auto delete meal plans",
+    "plsCrt": "Use the plus button to create one",
+    "ehwmp": "Eat healthy with meal plans!",
+    "selMT": "Select meal type"
 }

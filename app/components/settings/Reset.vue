@@ -1,77 +1,90 @@
 <template>
-  <Page @loaded="onPageLoad" actionBarHidden="true">
-    <GridLayout rows="*, auto" columns="auto, *">
+  <Page @loaded="pgLoad" actionBarHidden="true">
+    <RGridLayout :rtl="RTL" rows="*, auto" columns="auto, *">
       <OptionsList title="rest" :items="items" :action="resetListItems" />
       <GridLayout
         :hidden="toast"
         row="1"
-        class="appbar"
-        @loaded="onAppBarLoad"
+        class="appbar rtl"
+        @loaded="abLoad"
         columns="auto, *"
       >
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
-      <Toast :toast="toast" :action="hideToast" />
-    </GridLayout>
+      <Toast :onload="tbLoad" :toast="toast" :action="hideToast" />
+    </RGridLayout>
   </Page>
 </template>
 
 <script>
-import { Observable, CoreTypes } from "@nativescript/core";
+import { Observable } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
 import { mapState, mapActions } from "vuex";
 import * as utils from "~/shared/utils";
 import OptionsList from "../sub/OptionsList";
 import Toast from "../sub/Toast";
+let barTimer;
+
 export default {
   components: { OptionsList, Toast },
   data() {
     return {
-      toast: null,
-      appbar: null,
+      toast: 0,
+      appbar: 0,
+      toastbar: 0,
     };
   },
   computed: {
-    ...mapState(["icon"]),
+    ...mapState(["icon", "RTL"]),
     items() {
       return [
         {},
         {
           type: "list",
           icon: "reset",
+          rtl: 1,
           title: "restCuiL",
           data: "cuisines",
         },
         {
           type: "list",
           icon: "reset",
+          rtl: 1,
           title: "restCatL",
           data: "categories",
         },
         {
           type: "list",
           icon: "reset",
+          rtl: 1,
           title: "restYUL",
           data: "yieldUnits",
         },
         {
           type: "list",
           icon: "reset",
+          rtl: 1,
           title: "restUL",
           data: "units",
         },
-        {},
+        {
+          type: "info",
+          title: "restInfo",
+        },
         {},
       ];
     },
   },
   methods: {
     ...mapActions(["resetListItemsAction"]),
-    onPageLoad({ object }) {
+    pgLoad({ object }) {
       object.bindingContext = new Observable();
     },
-    onAppBarLoad({ object }) {
+    abLoad({ object }) {
       this.appbar = object;
+    },
+    tbLoad({ object }) {
+      this.toastbar = object;
     },
     // RESET
     resetListItems(listName) {
@@ -79,31 +92,17 @@ export default {
       this.showToast();
     },
     showToast() {
-      this.toast = localize("restDone");
-      utils.timer(5, (val) => {
-        if (!val) this.toast = val;
+      this.animateBar(this.appbar, 0).then(() => {
+        this.toast = localize("restDone");
+        this.animateBar(this.toastbar, 1);
       });
+      utils.timer(5, (val) => !val && this.hideToast());
     },
-    hideToast({ object }) {
-      this.appbar.translateY = 64;
-      object
-        .animate({
-          opacity: 0,
-          translate: { x: 0, y: 64 },
-          duration: 250,
-          curve: CoreTypes.AnimationCurve.ease,
-        })
-        .then(() => {
-          this.showUndo = false;
-          this.toast = null;
-          this.appbar.animate({
-            translate: { x: 0, y: 0 },
-            duration: 250,
-            curve: CoreTypes.AnimationCurve.ease,
-          });
-          object.opacity = 1;
-          object.translateY = 0;
-        });
+    hideToast() {
+      this.animateBar(this.toastbar, 0).then(() => {
+        this.toast = null;
+        this.animateBar(this.appbar, 1);
+      });
     },
   },
 };

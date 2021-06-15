@@ -2,14 +2,14 @@
   <Page
     @loaded="transparentPage"
     backgroundColor="transparent"
-    :class="appTheme"
+    :class="theme"
   >
     <GridLayout
       columns="*"
       :rows="`auto, auto, ${stretch ? '*' : 'auto'}, auto`"
       class="modal"
     >
-      <Label class="title" :text="title | L" />
+      <RLabel class="title" :text="title | L" />
       <ListView
         rowHeight="48"
         row="2"
@@ -17,10 +17,9 @@
         :height="stretch ? '100%' : listHeight"
       >
         <v-template>
-          <Label
+          <RLabel
             class="listItem"
-            :class="{ tb: title === 'srt' && sortType === item }"
-            :color="title === 'srt' && sortType === item ? '#ff5200' : ''"
+            :class="{ select: item == selected || $index == selected }"
             :text="`${localized(item)}`"
             @touch="touch"
             @tap="tapAction(item)"
@@ -28,9 +27,9 @@
           />
         </v-template>
       </ListView>
-      <GridLayout row="3" columns="auto, *, auto" class="actions">
+      <RGridLayout :rtl="RTL" row="3" columns="auto, *, auto" class="actions">
         <Button
-          v-if="action"
+          :hidden="!action"
           class="text sm"
           :text="action | L"
           @tap="$modal.close(action)"
@@ -39,9 +38,9 @@
           col="2"
           class="text sm"
           :text="'cBtn' | L"
-          @tap="$modal.close(false)"
+          @tap="$modal.close(0)"
         />
-      </GridLayout>
+      </RGridLayout>
     </GridLayout>
   </Page>
 </template>
@@ -54,7 +53,7 @@ import Confirm from "./Confirm.vue";
 
 interface IData {
   newList: unknown[];
-  stretch: boolean;
+  stretch: number;
   listHeight: number;
 }
 
@@ -72,26 +71,30 @@ export default {
       type: String,
       required: false,
     },
+    selected: {
+      type: String,
+      required: false,
+    },
   },
   data(): IData {
     return {
       newList: this.list,
-      stretch: false,
+      stretch: 0,
       listHeight: 0,
     };
   },
   computed: {
-    ...mapState(["sortType", "icon", "appTheme"]),
+    ...mapState(["sortType", "icon", "theme", "RTL"]),
   },
   methods: {
-    ...mapActions(["removeListItemAction"]),
+    ...mapActions(["removeListItemAction", "deleteTimerPreset"]),
     localized(item: string): string {
       return this.title !== "lang" ? localize(item) : item;
     },
     tapAction(item: string): void {
       this.$modal.close(item);
     },
-    deletionConfirmation(description: string): void {
+    removeConfirmation(description: string): void {
       return this.$showModal(Confirm, {
         props: {
           title: "conf",
@@ -101,17 +104,38 @@ export default {
         },
       });
     },
+    deletionConfirmation(description: string): void {
+      return this.$showModal(Confirm, {
+        props: {
+          title: "conf",
+          description,
+          cancelButtonText: "cBtn",
+          okButtonText: "dBtn",
+        },
+      });
+    },
     removeItem(item: string): void {
       let vm = this;
+      let index = this.newList.findIndex((e) => e === item);
       let localizedItem = `"${localize(item)}"`;
       function removeListItem(listName: string, desc: string): void {
-        vm.deletionConfirmation(`${localize(desc, localizedItem)}`).then(
+        vm.removeConfirmation(`${localize(desc, localizedItem)}`).then(
           (action: boolean) => {
-            if (action != null && action)
+            if (action)
               vm.removeListItemAction({
                 item,
                 listName,
               });
+          }
+        );
+      }
+      function deleteTimerPreset(): void {
+        vm.deletionConfirmation(`${localize("delPrst", `"${item}"`)}`).then(
+          (action: boolean) => {
+            if (action) {
+              vm.deleteTimerPreset(index);
+              vm.newList.splice(index, 1);
+            }
           }
         );
       }
@@ -128,12 +152,18 @@ export default {
         case "Unit":
           removeListItem("units", "rmUInfo");
           break;
+        case "prsts":
+          deleteTimerPreset();
+          break;
       }
     },
     touch({ object, action }): void {
+      let classes = object.className;
       object.className = action.match(/down|move/)
-        ? "listItem fade"
-        : "listItem";
+        ? !classes.includes("fade")
+          ? classes + " fade"
+          : classes
+        : classes.replace(/ fade/g, "");
     },
   },
   created() {
@@ -145,7 +175,7 @@ export default {
     if (modalHeight < usableHeight) {
       this.listHeight = listHeight;
     } else {
-      this.stretch = true;
+      this.stretch = 1;
     }
   },
 };

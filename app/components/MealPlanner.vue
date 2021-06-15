@@ -1,112 +1,146 @@
 <template>
   <Page @loaded="pgLoad" actionBarHidden="true">
-    <GridLayout rows="*, auto" columns="*">
+    <GridLayout rows="*, auto, 72" columns="*">
       <ScrollView
-        @scroll="!edit && svLoad($event)"
-        rowSpan="2"
+        @scroll="!edit && svScroll($event)"
+        rowSpan="3"
         scrollBarIndicatorVisible="false"
       >
         <StackLayout>
-          <GridLayout rows="auto" columns="*, auto, 8">
-            <Label class="pageTitle" :text="'planner' | L" />
-            <Button
+          <RGridLayout :rtl="RTL" columns="*, auto, 12">
+            <Label class="pageTitle a" :text="'planner' | L" />
+            <Button col="1" class="ico" :text="icon.cog" @tap="navigateTo" />
+          </RGridLayout>
+          <GridLayout class="monthSwitcher" columns="auto, *, auto">
+            <Button class="ico min" :text="icon.left" @tap="navigate(0)" />
+            <Label
+              class="month"
+              @touch="mYPicker"
               col="1"
-              class="ico"
-              :text="icon.cog"
-              @tap="$navigateTo(MPSettings)"
+              :text="formattedDate(0)"
+            />
+            <Button
+              class="ico min"
+              col="2"
+              :text="icon.right"
+              @tap="navigate(1)"
             />
           </GridLayout>
-          <GridLayout
+          <RGridLayout
+            :rtl="RTL"
             class="calendar"
             columns="*, *, *, *, *, *, *"
-            rows="auto, auto, auto, auto, auto, auto, auto, auto"
+            :rows="calRows"
           >
-            <Button class="ico navBtn" :text="icon.left" @tap="prevMonth" />
             <Label
-              class="monthName"
-              @touch="touchMonthYearPicker"
-              col="1"
-              colSpan="5"
-              :text="$options.filters.L(mNames[month]) + ' ' + year"
-            />
-            <Button
-              class="ico navBtn"
-              col="6"
-              :text="icon.right"
-              @tap="nextMonth"
-            />
-            <Label
-              class="dayName"
-              row="1"
+              class="dayName sub rtl"
+              :class="{ f: RTL }"
               :col="i"
               v-for="(d, i) in getDayNames"
-              :key="d"
+              :key="d + i"
               :text="d | L"
             />
             <Button
-              class="min day"
-              :class="{
-                tb: isToday(d),
-                activeDay: isActive(d),
-                hasPlans: hasPlans(d),
-              }"
+              v-for="(cal, i) in getCal"
+              :key="i"
               :row="getrow(i)"
               :col="i % 7"
-              v-for="(d, i) in getCal"
-              :key="i"
-              :text="d ? d : null"
-              @tap="setToday(d)"
+              :class="dayClasses(cal)"
+              :text="cal.ld"
+              @tap="setDate(cal)"
             />
-          </GridLayout>
-          <StackLayout class="dayPlan">
-            <StackLayout
-              v-for="(mealType, index) in mealTimesWithRecipes"
-              :key="'mealType' + index"
-            >
-              <GridLayout columns="auto, auto">
-                <Label
-                  class="periodLabel tb"
-                  :class="mealType"
-                  :text="mealType | L"
-                />
-                <Button
-                  :visibility="edit ? 'visible' : 'hidden'"
-                  col="1"
-                  class="ico"
-                  :text="icon.plus"
-                  @tap="addRecipe(mealType)"
-                />
-              </GridLayout>
-              <GridLayout
-                :columns="`*, ${edit ? 'auto' : 0}`"
-                v-for="(recipeID, index) in getRecipes[mealType]"
-                :key="mealType + index"
+          </RGridLayout>
+          <StackLayout class="plans">
+            <RLabel
+              v-if="plannerView != 'd' && mealPlans.length"
+              class="date tb"
+              :text="formattedDate(1)"
+              textWrap="true"
+            />
+            <StackLayout v-for="(meal, i) in mealTypes" :key="'meal' + i">
+              <Label
+                :hidden="!getRecipes[meal]"
+                class="meal tb"
+                :class="[meal]"
+                :text="meal | L"
+              />
+              <RGridLayout
+                :rtl="RTL"
+                v-for="(plan, i) in getRecipes[meal]"
+                :key="meal + i"
+                class="plan"
+                columns="*, auto"
               >
-                <Button
-                  class="recipeTitle"
-                  :text="getRecipeTitle(recipeID)"
-                  @tap="viewRecipe(recipeID)"
+                <RGridLayout
+                  :rtl="RTL"
+                  class="rtl"
+                  :hidden="!plan.recipeID"
+                  :columns="noImg ? '*' : '48, *'"
+                  @touch="touchRecipe"
+                  @tap="viewRecipe(plan.id)"
+                >
+                  <Image
+                    class="imgHolder"
+                    verticalAlignment="middle"
+                    v-if="!noImg && getRecipeImage(plan.recipeID)"
+                    :src="getRecipeImage(plan.recipeID)"
+                    stretch="none"
+                    decodeWidth="48"
+                    decodeHeight="48"
+                    loadMode="async"
+                  />
+                  <Label
+                    v-else-if="!noImg && !getRecipeImage(plan.recipeID)"
+                    verticalAlignment="middle"
+                    class="ico imgHolder"
+                    @loaded="centerLabel($event, 17)"
+                    width="48"
+                    height="48"
+                    fontSize="24"
+                    :text="icon.img"
+                  />
+                  <StackLayout class="planContent" col="1">
+                    <RLabel
+                      class="title"
+                      :text="getRecipeTitle(plan.recipeID)"
+                    />
+                    <RLabel class="attr" :text="getYield(plan.id)" />
+                  </StackLayout>
+                </RGridLayout>
+                <Label
+                  class="planContent tw"
+                  @loaded="centerLabel($event, 16)"
+                  :hidden="!plan.note"
+                  :text="plan.note"
                 />
                 <Button
-                  :visibility="edit ? 'visible' : 'hidden'"
+                  :hidden="!edit"
                   col="1"
-                  class="ico x"
+                  class="ico min"
                   :text="icon.x"
-                  @tap="removeRecipe(mealType, recipeID)"
+                  @tap="removeRecipe(plan.id)"
                 />
-              </GridLayout>
+              </RGridLayout>
             </StackLayout>
           </StackLayout>
         </StackLayout>
       </ScrollView>
-      <GridLayout
-        row="1"
+      <GridLayout rowSpan="2" rows="*, auto" v-if="!mealPlans.length">
+        <StackLayout row="1" class="emptyState">
+          <RLabel class="title" :text="'ehwmp' | L" />
+          <RLabel :text="'plsCrt' | L" />
+        </StackLayout>
+      </GridLayout>
+      <RGridLayout
+        :rtl="RTL"
+        row="2"
         @loaded="abLoad"
         class="appbar"
         :hidden="showUndo"
-        columns="auto, *, auto, auto"
+        columns="auto, *,  auto, auto, auto"
+        @swipe="stSwipe"
       >
-        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
+        <Button class="ico rtl" :text="icon.back" @tap="navigateBack" />
         <Button
           class="ico"
           :text="icon.tod"
@@ -115,13 +149,22 @@
           col="2"
         />
         <Button
-          class="ico fab"
+          :hidden="!hasRecipes"
+          class="ico"
           :text="edit ? icon.done : icon.edit"
           @tap="toggleEditMode"
           col="3"
         />
-      </GridLayout>
+        <!-- <Button
+          class="ico"
+          :text="hasRecipes ? (edit ? icon.done : icon.edit) : icon.madd"
+          @tap="hasRecipes ? toggleEditMode() : randomMealPlan()"
+          col="3"
+        /> -->
+        <Button class="ico fab" :text="icon.plus" @tap="addMealPlan" col="4" />
+      </RGridLayout>
       <SnackBar
+        row="2"
         :hidden="!showUndo"
         :count="countdown"
         :msg="snackMsg"
@@ -133,14 +176,21 @@
   </Page>
 </template>
 
-<script>
-import { Observable, CoreTypes } from "@nativescript/core";
+<script lang="ts">
+import { Frame, Observable, CoreTypes, Screen } from "@nativescript/core";
 import { mapState, mapActions } from "vuex";
-import ViewRecipe from "./ViewRecipe";
-import MPSettings from "./settings/MPSettings";
-import ActionWithSearch from "./modals/ActionWithSearch";
-import MonthYearPicker from "./modals/MonthYearPicker";
-import SnackBar from "./sub/SnackBar";
+import ViewRecipe from "./ViewRecipe.vue";
+import EditRecipe from "./EditRecipe.vue";
+import EnRecipes from "./EnRecipes.vue";
+import MPSettings from "./settings/MPSettings.vue";
+import Action from "./modals/Action.vue";
+import ActionWithSearch from "./modals/ActionWithSearch.vue";
+import Prompt from "./modals/Prompt.vue";
+import DMYPicker from "./modals/DMYPicker.vue";
+import SnackBar from "./sub/SnackBar.vue";
+import * as utils from "~/shared/utils";
+const Intl = require("nativescript-intl");
+import { localize } from "@nativescript/localize";
 let barTimer;
 
 export default {
@@ -149,10 +199,9 @@ export default {
   },
   data() {
     return {
-      mealTimes: ["breakfast", "lunch", "dinner", "snacks"],
-      dNames: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
+      mealTypes: ["breakfast", "lunch", "dinner", "snacks"],
       year: 2021,
-      mNames: [
+      monthNames: [
         "January",
         "February",
         "March",
@@ -168,20 +217,27 @@ export default {
       ],
       month: 0,
       date: null,
-      edit: false,
+      edit: 0,
       scrollPos: 1,
       appbar: null,
       snackbar: null,
       countdown: 5,
       snackMsg: null,
-      showUndo: false,
-      undo: false,
-      MPSettings: MPSettings,
+      showUndo: 0,
+      undo: 0,
       temp: 0,
     };
   },
   computed: {
-    ...mapState(["icon", "recipes", "mealPlans", "mondayFirst"]),
+    ...mapState([
+      "icon",
+      "recipes",
+      "layout",
+      "mealPlans",
+      "mondayFirst",
+      "RTL",
+      "plannerView",
+    ]),
     todaysTime() {
       return new Date(this.year, this.month, this.date, 0).getTime();
     },
@@ -189,33 +245,58 @@ export default {
       if (this.mealPlans.length) {
         return this.mealPlans.reduce((acc, e) => {
           if (e.date == this.todaysTime) {
-            acc[e.type] = [...(acc[e.type] || []), e.title];
+            acc[e.mealType] = [...(acc[e.mealType] || []), e];
           }
           return acc;
         }, {});
-      } else return 0;
+      } else return {};
+    },
+    calRows() {
+      let h = (Screen.mainScreen.widthDIPs - 32) / 8;
+      let pv = this.plannerView;
+      return pv != "d" ? `${h}, `.repeat(pv == "wk" ? 1 : 6) + h : 0;
     },
     getDayNames() {
-      let dNames = [...this.dNames];
-      if (!this.mondayFirst) dNames.unshift(dNames.pop());
+      let dNames =
+        this.plannerView != "d" &&
+        this.getCal.slice(0, 7).map((d) => {
+          let date = new Date(d.y, d.m, d.d);
+          return new Intl.DateTimeFormat(null, {
+            weekday: "short",
+          }).format(date);
+        });
       return dNames;
     },
     getCal() {
-      let y = this.year;
-      let m = this.month;
-      let ds = new Date(y, m + 1, 0).getDate();
-      let fd = new Date(y, m, 1).getDay();
-      let ld = new Date(y, m, ds).getDay();
-      if (this.mondayFirst) fd -= 1;
-      let days = new Array(fd).fill(0);
-      // let prevDays = Array.from(
-      //   { length: fd },
-      //   (e, k) => k + new Date(!m ? y - 1 : y, m, 0).getDate() - fd + 1
-      // );
-      // let days = prevDays;
-      for (let i = 1; i <= ds; i++) days.push(i);
-      // for (let i = 1; i <= 6 - ld; i++) days.push(i);
-      return days;
+      const getDays = (s, e) => {
+        let a = [];
+        for (
+          let d = new Date(s);
+          d <= new Date(e);
+          d.setDate(d.getDate() + 1)
+        ) {
+          a.push({
+            d: d.getDate(),
+            ld: this.getLocaleN(d.getDate()),
+            m: d.getMonth(),
+            y: d.getFullYear(),
+          });
+        }
+        return a;
+      };
+
+      let pv = this.plannerView;
+      let date = new Date(
+        this.year,
+        this.month,
+        pv == "mnth" ? 1 : this.date - this.mondayFirst
+      );
+      return pv != "d"
+        ? getDays(
+            date.setDate(date.getDate() - date.getDay() + this.mondayFirst),
+            date.setDate(date.getDate() + (pv == "mnth" ? 41 : 6))
+          )
+        : 0;
     },
     isExactlyToday() {
       let d = new Date();
@@ -225,22 +306,24 @@ export default {
         this.date == d.getDate()
       );
     },
-    mealTimesWithRecipes() {
-      return this.mealTimes.filter(
-        (e) => (this.getRecipes[e] && this.getRecipes[e].length) || this.edit
-      );
+    hasRecipes() {
+      return this.mealTypes.filter(
+        (e) => this.getRecipes[e] && this.getRecipes[e].length
+      ).length;
+    },
+    noImg() {
+      return /simple|minimal/.test(this.layout);
+    },
+    noAttr() {
+      return /minimal/.test(this.layout);
     },
   },
   methods: {
-    ...mapActions([
-      "setComponent",
-      "addMealPlanAction",
-      "deleteMealPlanAction",
-    ]),
+    ...mapActions(["addMealPlanAction", "deleteMealPlanAction"]),
     pgLoad({ object }) {
       object.bindingContext = new Observable();
-      this.setComponent("MealPlanner");
       if (!this.date || this.date === new Date().getDate()) this.goToToday();
+      this.showBar();
     },
     abLoad({ object }) {
       this.appbar = object;
@@ -248,7 +331,7 @@ export default {
     sbLoad({ object }) {
       this.snackbar = object;
     },
-    svLoad(args) {
+    svScroll(args) {
       let scrollUp;
       let y = args.scrollY;
       if (y) {
@@ -258,96 +341,143 @@ export default {
         if (!scrollUp && ab == 0) {
           this.appbar.animate({
             translate: { x: 0, y: 64 },
-            duration: 250,
+            duration: 200,
             curve: CoreTypes.AnimationCurve.ease,
           });
         } else if (scrollUp && ab == 64) {
           this.appbar.animate({
             translate: { x: 0, y: 0 },
-            duration: 250,
+            duration: 200,
             curve: CoreTypes.AnimationCurve.ease,
           });
         }
       }
     },
-    // HELPERS
-    showAppBar() {
-      this.appbar.translateY = 0;
+
+    // Helpers
+    centerLabel({ object }, n) {
+      object.android.setGravity(n);
+    },
+    showBar() {
+      // this.appbar.translateY = 0;
+      this.appbar.animate({
+        translate: { x: 0, y: 0 },
+        duration: 200,
+        curve: CoreTypes.AnimationCurve.ease,
+      });
     },
     getrow(i) {
-      return Math.floor(2 + i / 7);
+      return Math.floor(1 + i / 7);
     },
     getDate(index) {
       let date = new Date();
       date.setDate(date.getDate() + index);
       return date.getTime();
     },
+    getRecipeImage(id) {
+      let r = this.recipes.filter((e) => e.id === id)[0];
+      return r && r.image;
+    },
     getRecipeTitle(id) {
-      let recipe = this.recipes.filter((e) => e.id === id)[0];
-      return recipe ? recipe.title : `[ ${this.$options.filters.L("resNF")} ]`;
+      let r = this.recipes.filter((e) => e.id === id)[0];
+      return r ? r.title : `[${this.$options.filters.L("resNF")}]`;
+    },
+    getRecipeTotalTime(id) {
+      let r = this.recipes.filter((e) => e.id === id)[0];
+      return r ? this.totalTime(r.prepTime, r.cookTime).time : "00:00";
+    },
+    getYield(id) {
+      let mp = this.mealPlans.filter((e) => e.id == id)[0];
+      let r = this.recipes.filter((e) => e.id === mp.recipeID)[0];
+      return r ? `${this.getLocaleN(mp.quantity)} ${localize(r.yieldUnit)}` : 1;
     },
 
-    // NAVIGATION HANDLERS
-    viewRecipe(recipeID) {
-      let recipe = this.recipes.filter((e) => e.id === recipeID)[0];
-      if (recipe) {
+    // NavigationHandlers
+    viewRecipe(id) {
+      let mp = this.mealPlans.filter((e) => e.id == id)[0];
+      let r = this.recipes.filter((e) => e.id === mp.recipeID)[0];
+      if (r) {
         this.$navigateTo(ViewRecipe, {
           props: {
-            filterTrylater: true,
-            recipeID,
+            filterTrylater: 1,
+            recipeID: r.id,
+            yieldQuantity: mp.quantity,
           },
         });
       }
     },
-
-    // CALENDAR
-    prevMonth() {
-      if (this.month == 0) {
-        this.year--;
-        this.month = 11;
-      } else this.month--;
-      this.showAppBar();
+    navigateTo() {
+      this.$navigateTo(MPSettings, {
+        transition: {
+          name: this.RTL ? "slideRight" : "slide",
+          duration: 200,
+          curve: "easeOut",
+        },
+      });
     },
-    nextMonth() {
-      if (this.month == 11) {
-        this.year++;
-        this.month = 0;
-      } else this.month++;
-      this.showAppBar();
+    navigateBack() {
+      Frame.topmost().backStack.length
+        ? this.$navigateBack()
+        : this.$navigateTo(EnRecipes, {
+            clearHistory: true,
+          });
+    },
+
+    // Calendar
+    navigate(dir) {
+      if (this.RTL) dir = !dir;
+      let pv = this.plannerView;
+      let date = new Date(this.year, this.month, this.date);
+      let sd =
+        pv == "mnth"
+          ? new Date(this.year, this.month + (dir ? 1 : 0), 0).getDate()
+          : pv == "wk"
+          ? 7
+          : 1;
+      date.setDate(date.getDate() + (dir ? sd : -sd));
+      this.date = date.getDate();
+      this.month = date.getMonth();
+      this.year = date.getFullYear();
+      this.showBar();
     },
     goToToday() {
       let d = new Date();
       this.year = d.getFullYear();
       this.month = d.getMonth();
       this.date = d.getDate();
-      this.showAppBar();
     },
-    isToday(date) {
-      let d = new Date();
-      return (
-        this.year == d.getFullYear() &&
-        this.month == d.getMonth() &&
-        date == d.getDate()
-      );
+    dayClasses({ d, m }) {
+      let classes = "min ";
+      let dt1 = new Date();
+      let dt2 = new Date(this.year, m, d, 0).getTime();
+      if (
+        this.year == dt1.getFullYear() &&
+        this.month == dt1.getMonth() &&
+        m == dt1.getMonth() &&
+        d == dt1.getDate()
+      )
+        classes += "tb ";
+      classes += this.date == d && this.month == m ? "hl " : "fb ";
+      if (!!this.mealPlans.filter((e) => e.date == dt2).length)
+        classes += "accent ";
+      if (this.month != m) classes += "sub";
+      return classes;
     },
-    isActive(date) {
-      return this.date == date;
-    },
-    hasPlans(date) {
-      let d = new Date(this.year, this.month, date, 0).getTime();
-      return this.mealPlans.filter((e) => e.date == d).length;
-    },
-    setToday(date) {
-      if (date) this.date = date;
+    setDate({ d, m, y }) {
+      this.year = y;
+      this.month = m;
+      this.date = d;
+      this.showBar();
     },
     toggleEditMode() {
       this.edit = !this.edit;
     },
     openMonthYearPicker() {
-      this.$showModal(MonthYearPicker, {
+      this.$showModal(DMYPicker, {
         props: {
           title: "gtD",
-          monthNames: this.mNames,
+          monthNames: this.monthNames,
+          currentD: this.date,
           currentM: this.month,
           currentY: this.year,
         },
@@ -355,69 +485,140 @@ export default {
         if (res) {
           this.month = res.month;
           this.year = res.year;
+          this.date = res.date;
         }
       });
     },
+    stSwipe({ direction }) {
+      let date = new Date(this.year, this.month, this.date);
+      if (direction == 1) date.setDate(date.getDate() - 1);
+      else if (direction == 2) date.setDate(date.getDate() + 1);
+      this.date = date.getDate();
+      this.month = date.getMonth();
+      this.year = date.getFullYear();
+    },
+    randomMealPlan() {},
 
-    // DATA HANDLERS
-    newMealPlan({ date, type, title, index, inDB }) {
+    // DataHandlers
+    newMealPlan({ plan, index, inDB }) {
       this.addMealPlanAction({
-        date: date ? date : this.todaysTime,
-        type,
-        title,
+        plan,
         index,
         inDB,
       });
     },
-    addRecipe(type) {
-      let filteredRecipes = this.recipes.filter((e) =>
-        this.getRecipes[type] ? !this.getRecipes[type].includes(e.id) : true
-      );
-      this.$showModal(ActionWithSearch, {
+    addMealPlan() {
+      this.$showModal(Action, {
         props: {
-          title: "selRec",
-          recipes: filteredRecipes,
+          title: "add",
+          list: ["rec", "no"],
         },
-      }).then(
-        (title) =>
-          title &&
-          this.newMealPlan({ date: 0, type, title, index: null, inDB: true })
-      );
+      }).then((type) => {
+        if (type) {
+          this.$showModal(Action, {
+            props: {
+              title: "selMT",
+              list: ["breakfast", "lunch", "dinner", "snacks"],
+            },
+          }).then((mealType) => {
+            if (mealType) {
+              if (type == "rec") {
+                let recipes = this.recipes.filter((e) =>
+                  this.getRecipes[mealType]
+                    ? this.getRecipes[mealType].every((f) => f.recipeID != e.id)
+                    : 1
+                );
+                this.$showModal(ActionWithSearch, {
+                  props: {
+                    title: "selRec",
+                    recipes,
+                    action: "aNBtn",
+                  },
+                }).then((res) => {
+                  if (res == "aNBtn") {
+                    this.$navigateTo(EditRecipe, {
+                      animated: false,
+                    });
+                  } else if (res) {
+                    let r = this.recipes.filter((e) => e.id == res)[0];
+                    this.$showModal(Prompt, {
+                      props: {
+                        title: `${localize("req", localize(r.yieldUnit))}`,
+                        placeholder: Math.abs(parseFloat(r.yieldQuantity)),
+                        action: "SET",
+                      },
+                    }).then((quantity) => {
+                      if (quantity) {
+                        let plan = {
+                          id: utils.getRandomID(),
+                          date: this.todaysTime,
+                          mealType,
+                          recipeID: res,
+                          quantity,
+                          note: null,
+                        };
+                        this.newMealPlan({
+                          plan,
+                          index: null,
+                          inDB: 1,
+                        });
+                      }
+                    });
+                  }
+                });
+              } else if (type == "no") {
+                this.$showModal(Prompt, {
+                  props: {
+                    title: "no",
+                    type: "view",
+                    action: "ADD",
+                  },
+                }).then((note) => {
+                  if (note) {
+                    let plan = {
+                      id: utils.getRandomID(),
+                      date: this.todaysTime,
+                      mealType,
+                      recipeID: null,
+                      quantity: null,
+                      note,
+                    };
+                    this.newMealPlan({
+                      plan,
+                      index: null,
+                      inDB: 1,
+                    });
+                  }
+                });
+              }
+            }
+          });
+        }
+      });
     },
     deleteTempFromDB() {
       if (this.temp) {
-        this.temp.inDB = 1;
-        this.deleteMealPlanAction(this.temp);
+        let { plan, index } = this.temp;
+        this.deleteMealPlanAction({ id: plan.id, index, inDB: 1 });
         this.temp = 0;
       }
     },
-    removeRecipe(type, title) {
+    removeRecipe(id) {
       this.deleteTempFromDB();
-      let date = this.todaysTime;
-      let index = this.mealPlans.findIndex(
-        (e) => e.date == date && e.type == type && e.title == title
-      );
-      let mealPlan = {
-        date,
-        type,
-        title,
-        index,
-      };
-      let temp;
-      this.temp = temp = mealPlan;
-      this.deleteMealPlanAction(mealPlan);
-      this.showUndoBar("recRm")
-        .then(() => this.newMealPlan({ date, type, title, index }))
+      let index = this.mealPlans.findIndex((e) => e.id == id);
+      let plan = this.mealPlans.filter((e) => e.id == id)[0];
+      this.temp = { plan, index };
+      this.deleteMealPlanAction({ id, index });
+      this.showUndoBar(plan.note ? "rmN" : "recRm")
+        .then(() => this.newMealPlan({ plan, index }))
         .catch(() => {
-          temp.inDB = 1;
-          console.log("deleting inDB after catch: ", temp);
-          this.deleteMealPlanAction(temp);
+          this.deleteMealPlanAction({ id, index, inDB: 1 });
         });
     },
     showUndoBar(message) {
       return new Promise((resolve, reject) => {
         this.animateBar(this.appbar, 0).then(() => {
-          this.showUndo = true;
+          this.showUndo = 1;
           this.snackMsg = message;
           this.countdown = 5;
           this.animateBar(this.snackbar, 1).then(() => {
@@ -426,12 +627,12 @@ export default {
             barTimer = setInterval(() => {
               if (this.undo) {
                 this.hideBar();
-                resolve(true);
+                resolve(1);
               }
               this.countdown = Math.round((a -= 0.1));
               if (this.countdown < 1) {
                 this.hideBar();
-                reject(true);
+                reject(1);
               }
             }, 100);
           });
@@ -440,21 +641,75 @@ export default {
     },
     hideBar() {
       clearInterval(barTimer);
+      this.deleteTempFromDB();
       this.animateBar(this.snackbar, 0).then(() => {
-        this.showUndo = this.undo = false;
+        this.showUndo = this.undo = 0;
         this.animateBar(this.appbar, 1);
       });
     },
     undoDel() {
-      this.undo = true;
+      this.undo = 1;
     },
 
-    //HELPERS
-    touchMonthYearPicker({ object, action }) {
-      object.className = action.match(/down|move/)
-        ? "monthName fade"
-        : "monthName";
+    // Helpers
+    formattedDate(v) {
+      let d = new Date(this.year, this.month, this.date, 0, 0, 0);
+      let today = new Date();
+      let myToday = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        0,
+        0,
+        0
+      );
+      let tdy = myToday.getTime();
+      let ystr = myToday.setDate(today.getDate() - 1);
+      let tmrw = myToday.setDate(today.getDate() + 1);
+      let options: {
+        year?: string;
+        month?: string;
+        weekday?: string;
+        day?: string;
+      } = {};
+      if (v) {
+        options.weekday = "long";
+        options.day = "numeric";
+        options.month = "long";
+      } else {
+        options.year = "numeric";
+        options.month = "long";
+      }
+      if (this.plannerView == "d") {
+        options.weekday = "long";
+        options.day = "numeric";
+        options.month = "short";
+      }
+      let date = new Intl.DateTimeFormat(null, options).format(d);
+      let val;
+      switch (d.getTime()) {
+        case ystr:
+          val = "ystr";
+          break;
+        case tdy:
+          val = "tdy";
+          break;
+        case tmrw:
+          val = "tmrw";
+          break;
+      }
+      return v
+        ? [ystr, tdy, tmrw].some((e) => e == d.getTime())
+          ? localize(val)
+          : date
+        : date;
+    },
+    mYPicker({ object, action }) {
+      object.className = action.match(/down|move/) ? "month fade" : "month";
       if (action == "up") this.openMonthYearPicker();
+    },
+    touchRecipe({ object, action }) {
+      object.className = action.match(/down|move/) ? "fade" : "";
     },
   },
 };

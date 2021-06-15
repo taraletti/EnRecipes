@@ -1,45 +1,43 @@
+import Vue from 'nativescript-vue'
+import store from './store'
 import {
   Application,
   AndroidApplication,
   ApplicationSettings,
   Utils,
-  Device,
-  Color,
   Frame,
 } from '@nativescript/core'
-import {
-  localize,
-  androidLaunchEventLocalizationHandler,
-} from '@nativescript/localize'
-import Vue from 'nativescript-vue'
+import { localize } from '@nativescript/localize'
 import EnRecipes from './components/EnRecipes.vue'
 import EditRecipe from './components/EditRecipe.vue'
 import MealPlanner from './components/MealPlanner.vue'
 import CookingTimer from './components/CookingTimer.vue'
-import GroceryList from './components/GroceryList.vue'
-import store from './store'
+
+// import GroceryList from './components/GroceryList.vue'
+
 import * as utils from '~/shared/utils'
 
-export const EventBus = new Vue()
+export const EvtBus = new Vue()
 
-let renderView: any = EnRecipes
+let renderView = EnRecipes
 
 import CollectionView from '@nativescript-community/ui-collectionview/vue'
 Vue.use(CollectionView)
-import { StackLayout, GridLayout, DockLayout } from '@nativescript-rtl/ui'
-Vue.registerElement('RStackLayout', () => StackLayout)
-Vue.registerElement('RGridLayout', () => GridLayout)
-Vue.registerElement('RDockLayout', () => DockLayout)
+
+import { RGridLayout, RStackLayout, RDockLayout, RLabel } from './rtl-ui'
+Vue.registerElement('RGridLayout', () => RGridLayout)
+Vue.registerElement('RStackLayout', () => RStackLayout)
+Vue.registerElement('RDockLayout', () => RDockLayout)
+Vue.registerElement('RLabel', () => RLabel)
 
 import { myMixin } from './shared/mixins'
 Vue.mixin(myMixin)
 
 const initFrame = () => {
   const vm = store
-
-  //MAIN INIT
-  vm.commit('setTheme', ApplicationSettings.getString('appTheme', 'sysDef'))
-  if (!vm.state.recipes.length) vm.commit('initRecipes')
+  // MainInit
+  vm.commit('setTheme', ApplicationSettings.getString('theme', 'sysDef'))
+  vm.commit('initRecipes')
   vm.commit('initMealPlans')
   vm.commit('initListItems')
   vm.commit('initTimerPresets')
@@ -50,42 +48,11 @@ const initFrame = () => {
       hasTimerSound ? JSON.parse(hasTimerSound) : utils.getTones().defaultTone
     )
   }
-
-  // INIT FRAME
-  const View = android.view.View as any
+  // InitFrame
   const window = Application.android.startActivity.getWindow()
   const decorView = window.getDecorView()
-  let sdkv = parseInt(Device.sdkVersion)
-  function setColors(color) {
-    window.setStatusBarColor(new Color(color).android)
-    sdkv >= 27 && window.setNavigationBarColor(new Color(color).android)
-  }
-  switch (vm.state.appTheme) {
-    case 'Light':
-      setColors('#f1f3f5')
-      break
-    case 'Dark':
-      setColors('#212529')
-      break
-    default:
-      setColors('#000000')
-      break
-  }
-  if (sdkv >= 27)
-    decorView.setSystemUiVisibility(
-      vm.state.appTheme == 'Light'
-        ? View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR |
-            View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-        : View.SYSTEM_UI_FLAG_DARK_STATUS_BAR |
-            View.SYSTEM_UI_FLAG_DARK_NAVIGATION_BAR
-    )
-  else
-    decorView.setSystemUiVisibility(
-      vm.state.appTheme == 'Light'
-        ? View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        : View.SYSTEM_UI_FLAG_DARK_STATUS_BAR
-    )
-  Frame.topmost().className = store.state.appTheme
+  utils.setBarColors(window, decorView, vm.state.theme)
+  Frame.topmost().className = vm.state.theme
 }
 const showOverLockscreen = () => {
   let ctx = Utils.ad.getApplicationContext()
@@ -103,12 +70,9 @@ const showOverLockscreen = () => {
   }
 }
 const intentListener = ({ intent, android }: any) => {
-  console.log(intent, android)
   let action = ((intent || android).getStringExtra('action') ||
     (android && android.getAction())) as string
-
   if (action) {
-    console.log(action)
     switch (action) {
       case 'new_recipe':
         renderView = EditRecipe
@@ -118,30 +82,47 @@ const intentListener = ({ intent, android }: any) => {
         break
       case 'timer':
         renderView = CookingTimer
-        Vue.navigateTo(CookingTimer as any, {
-          animated: false,
-        })
+        switch (ApplicationSettings.getNumber('isTimer', 0)) {
+          case 0:
+            // Closing all modals if available before navigation
+            let modals = Frame.topmost()._getRootModalViews()
+            for (let i = modals.length - 1; i >= 0; i--) {
+              Frame.topmost()
+                ._getRootModalViews()
+                [i].closeModal()
+            }
+            Vue.navigateTo(CookingTimer as any, {
+              animated: false,
+            })
+            ApplicationSettings.setNumber('isTimer', 1)
+            break
+          case 2:
+            Vue.navigateBack()
+            break
+        }
         break
-      case 'grocery':
-        renderView = GroceryList
-        break
+      // case 'grocery':
+      //   renderView = GroceryList
+      //   break
     }
   }
 }
 
-Application.on(Application.resumeEvent, (args) => {
-  console.log('App Resume')
+Application.on(Application.resumeEvent, () => {
   showOverLockscreen()
+  if (
+    utils.sysLocale() !==
+    ApplicationSettings.getString('sysLocale', utils.sysLocale())
+  ) {
+    Frame.reloadPage()
+    utils.updateLocale()
+  }
 })
 
 Application.on(Application.launchEvent, (args) => {
-  console.log('App Launch')
-  console.log('RTL', store.state.RTL)
+  utils.updateLocale()
   store.commit('setRTL')
-  if (args.android) {
-    androidLaunchEventLocalizationHandler()
-    intentListener(args)
-  }
+  intentListener(args)
   Application.android.on(
     AndroidApplication.activityNewIntentEvent,
     intentListener
@@ -150,7 +131,6 @@ Application.on(Application.launchEvent, (args) => {
 })
 
 Application.on(Application.exitEvent, () => {
-  console.log('App Exit')
   renderView = EnRecipes
   Application.android.off(
     AndroidApplication.activityNewIntentEvent,

@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="admp">"Poista ateriasuunnitelmat automaattisesti"</string>
+  <string name="otay">"Vuoden jälkeen"</string>
+  <string name="otam">"Kuukauden jälkeen"</string>
+  <string name="otaw">"Viikon jälkeen"</string>
+  <string name="nvr">"Ei koskaan"</string>
+  <string name="plsCrt">"Käytä plus-painiketta luodaksesi yhden"</string>
+  <string name="selMT">"Valitse ateriatyyppi"</string>
+  <string name="ehwmp">"Syö terveellisesti ateriasuunnitelmien avulla!"</string>
+  <string name="oAP">"%1$s käynnissä, %2$s keskeytetty"</string>
+  <string name="calVM">"Kalenterinäkymätila"</string>
+  <string name="sun">"sunnuntai"</string>
+  <string name="mon">"maanantai"</string>
+  <string name="tue">"tiistai"</string>
+  <string name="wed">"keskiviikko"</string>
+  <string name="thu">"torstai"</string>
+  <string name="fri">"perjantai"</string>
+  <string name="sat">"lauantai"</string>
+  <string name="cpy">"kopio"</string>
+  <string name="tdy">"Tänään"</string>
+  <string name="tmrw">"Huomenna"</string>
+  <string name="ystr">"Eilen"</string>
+  <string name="mnth">"Kuukausi"</string>
+  <string name="wk">"Viikko"</string>
+  <string name="d">"Päivä"</string>
+  <string name="dismiss">"Hylkää"</string>
+  <string name="dismissAll">"Hylkää kaikki ajastimet"</string>
+  <string name="ttv">"Napauta nähdäksesi"</string>
+  <string name="prstTU">"Esiasetettu aika päivitetty"</string>
+  <string name="notifSetg">"Ilmoitusasetukset"</string>
+  <string name="random">"Satunnainen"</string>
+  <string name="gtD">"Siirry päivämäärään"</string>
+  <string name="ccwt">"Keitä luottavaisesti ajastimien avulla!"</string>
+  <string name="tmrRm">"Ajastin poistettu"</string>
+  <string name="texp">"%1$s ajastinta on vanhentunut"</string>
+  <string name="prsts">"Esiasetukset"</string>
   <string name="minute">"minuutti"</string>
   <string name="hour">"tunti"</string>
   <string name="minutes">"minuuttia"</string>
@@ -8,7 +43,6 @@
   <string name="dlyDur">"Viiveen kesto"</string>
   <string name="sec">"s"</string>
   <string name="prstBtn">"ESIASETUKSET"</string>
-  <string name="tmrPrsts">"Ajastimen esiasetukset"</string>
   <string name="fwr">"mitä reseptiä varten?"</string>
   <string name="aTPrst">"Lisätty esiasetuksiin"</string>
   <string name="tmrSnd">"Ajastinääni"</string>
@@ -53,7 +87,7 @@
   <string name="sysDef">"Järjestelmän oletus"</string>
   <string name="swm">"Aloita viikko maanantaina"</string>
   <string name="Swedish">"ruotsalainen"</string>
-  <string name="sVwInfo">"Auttaa sinua valitsemaan, mitä valmistaa, kun et osaa päättää."</string>
+  <string name="sVwInfo">"Auttaa sinua valitsemaan, mitä valmistaa, kun et osaa päättää"</string>
   <string name="sVw">"Ravista nähdäksesi satunnainen resepti"</string>
   <string name="SUN">"su"</string>
   <string name="strAdd">""</string>
@@ -235,7 +269,7 @@
   <string name="expSuc">""</string>
   <string name="expip">"Vienti käynnissä"</string>
   <string name="expBu">"Vie koko varmuuskopio"</string>
-  <string name="EnRecipes">""</string>
+  <string name="EnRecipes">"EnRecipes"</string>
   <string name="English">"englantilainen"</string>
   <string name="Egyptian">"egyptiläinen"</string>
   <string name="editRec">"Muokkaa resepti"</string>
@@ -293,9 +327,9 @@
   <string name="appInfo">"EnRecipes on avoimen lähdekoodin, yksityisyyden suojaa kunnioittava digitaalinen keittokirja, jonka avulla voit luoda, hallita ja jakaa reseptejäsi"</string>
   <string name="Appetizers">"Alkupalat"</string>
   <string name="appCrd">"Jaettu EnRecipesin kautta. Lataa se F-Droidista, IzzyOnDroidista tai Play Storesta."</string>
-  <string name="_app_name_1k3Sbz">""</string>
-  <string name="app_name">""</string>
-  <string name="title_activity_kimera">""</string>
+  <string name="_app_name_1k3Sbz">"EnRecipes"</string>
+  <string name="app_name">"EnRecipes"</string>
+  <string name="title_activity_kimera">"EnRecipes"</string>
   <string name="aNoBtn">"LISÄÄ HUOMAUTUS"</string>
   <string name="aNBtn">"LISÄÄ UUSI"</string>
   <string name="American">"amerikkalainen"</string>
@@ -309,10 +343,10 @@
   <string name="aBtn">"LISÄÄ"</string>
   <string name="About">"Tietoja"</string>
   <string name="aap">"Liitä valokuva"</string>
-  <string name="notifSetg">"Notification settings"</string>
-  <string name="tmrRm">"Timer removed"</string>
+  <string name="add">"Add"</string>
+  <string name="wDBy">"%1$s was delayed by %2$s"</string>
   <string name="tmrvbrt">"Timer vibrate"</string>
+  <string name="delPrst">"You are about to delete %1$s from the presets"</string>
   <string name="delay">"Delay"</string>
   <string name="strtBtn">"START"</string>
-  <string name="tmrClr">"tmrClr"</string>
 </resources>

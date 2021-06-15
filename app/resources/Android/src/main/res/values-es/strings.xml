@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="tmrClr">"Temporizador borrado"</string>
+  <string name="tdy">"Hoy"</string>
+  <string name="tmrw">"Mañana"</string>
+  <string name="ystr">"Ayer"</string>
+  <string name="mnth">"Mes"</string>
+  <string name="wk">"Semana"</string>
+  <string name="d">"Día"</string>
+  <string name="sun">"domingo"</string>
+  <string name="mon">"lunes"</string>
+  <string name="tue">"martes"</string>
+  <string name="wed">"miércoles"</string>
+  <string name="thu">"jueves"</string>
+  <string name="fri">"viernes"</string>
+  <string name="sat">"sábado"</string>
+  <string name="cpy">"copia"</string>
+  <string name="prsts">"Preselecciones"</string>
+  <string name="delPrst">"Está a punto de eliminar %1$s de los preajustes"</string>
+  <string name="tmrRm">"Temporizador eliminado"</string>
+  <string name="notifSetg">"Ajustes de notificación"</string>
   <string name="dlyDur">"Duración del retraso"</string>
   <string name="tmrvbrt">"Vibrador del temporizador"</string>
   <string name="tmrSnd">"Sonido del temporizador"</string>
   <string name="aTPrst">"Añadido a los preajustes"</string>
   <string name="fwr">"para qué receta?"</string>
-  <string name="tmrPrsts">"Preselecciones del temporizador"</string>
   <string name="prstBtn">"PRECIPIOS"</string>
   <string name="delay">"Retraso"</string>
   <string name="stop">"Detener"</string>
@@ -313,6 +329,24 @@
   <string name="aBtn">"AÑADIR"</string>
   <string name="About">"Acerca de"</string>
   <string name="aap">"Adjuntar una foto"</string>
-  <string name="notifSetg">"Notification settings"</string>
-  <string name="tmrRm">"Timer removed"</string>
+  <string name="add">"Add"</string>
+  <string name="nvr">"Never"</string>
+  <string name="otaw">"Older than a week"</string>
+  <string name="otam">"Older than a month"</string>
+  <string name="otay">"Older than a year"</string>
+  <string name="admp">"Auto-delete meal plans"</string>
+  <string name="plsCrt">"Use the plus button to create one"</string>
+  <string name="ehwmp">"Eat healthy with meal plans!"</string>
+  <string name="selMT">"Select meal type"</string>
+  <string name="calVM">"Calendar view mode"</string>
+  <string name="oAP">"%1$s ongoing, %2$s paused"</string>
+  <string name="ttv">"Tap to view"</string>
+  <string name="dismissAll">"Dismiss all timers"</string>
+  <string name="dismiss">"Dismiss"</string>
+  <string name="texp">"%1$s timers expired"</string>
+  <string name="wDBy">"%1$s was delayed by %2$s"</string>
+  <string name="prstTU">"Preset time updated"</string>
+  <string name="ccwt">"Cook confidently with timers!"</string>
+  <string name="gtD">"Go to date"</string>
+  <string name="random">"Random"</string>
 </resources>

@@ -1,53 +1,55 @@
 <template>
-  <Page @loaded="onPageLoad" actionBarHidden="true">
+  <Page @loaded="pgLoad" @unloaded="pgUnload" actionBarHidden="true">
     <GridLayout rows="*, auto" columns="*">
       <ScrollView
-        @scroll="onScroll($event)"
+        @scroll="svScroll($event)"
         rowSpan="2"
         scrollBarIndicatorVisible="false"
       >
         <StackLayout>
-          <GridLayout rows="auto" columns="*, auto, 8">
-            <Label class="pageTitle" :text="'timer' | L" />
-            <Button
-              col="1"
-              class="ico"
-              :text="icon.cog"
-              @tap="$navigateTo(CTSettings)"
-            />
-          </GridLayout>
+          <RGridLayout :rtl="RTL" rows="auto" columns="*, auto, 12">
+            <RLabel class="pageTitle" :text="'timer' | L" />
+            <Button col="1" class="ico" :text="icon.cog" @tap="navigateTo" />
+          </RGridLayout>
           <Timer
-            v-for="(timer, i) in activeTimers"
-            :key="timer.id"
+            v-for="timer in activeTimers"
+            :key="timer.id + key"
             :timer="timer"
-            :timerIndex="i"
             :formattedTime="formattedTime"
             :removeTimer="removeTimer"
-            :addToPreset="addToPreset"
             :togglePause="togglePause"
-            :fireTimer="fireTimer"
+            :timerAlert="timerAlert"
+            :showToast="showToast"
           />
           <StackLayout class="listSpace"> </StackLayout>
         </StackLayout>
       </ScrollView>
-      <GridLayout
+      <GridLayout v-if="!activeTimers.length" rows="*, auto">
+        <StackLayout row="1" class="emptyState">
+          <RLabel class="title" :text="'ccwt' | L" />
+          <RLabel :text="'plsAdd' | L" />
+        </StackLayout>
+      </GridLayout>
+      <RGridLayout
+        :rtl="RTL"
         row="1"
-        @loaded="onAppBarLoad"
+        @loaded="abLoad"
         class="appbar"
         :hidden="showUndo"
         columns="auto, *, auto"
       >
-        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
+        <Button class="ico rtl" :text="icon.back" @tap="navigateBack" />
         <Button class="ico fab" :text="icon.plus" @tap="addTimer" col="2" />
-      </GridLayout>
+      </RGridLayout>
       <SnackBar
         :hidden="!showUndo || toast"
         :count="countdown"
         :msg="snackMsg"
         :undo="undoDel"
         :action="hideBar"
+        :onload="sbLoad"
       />
-      <Toast :toast="toast" :action="hideBar" />
+      <Toast :onload="tbLoad" :toast="toast" :action="hideBar" />
     </GridLayout>
   </Page>
 </template>
@@ -58,13 +60,17 @@ import {
   Observable,
   CoreTypes,
   Application,
-  ApplicationSettings,
-  AndroidApplication,
   Utils,
   Device,
+  Frame,
 } from "@nativescript/core";
+import {
+  getNumber,
+  setNumber,
+  remove,
+} from "@nativescript/core/application-settings";
 import { mapState, mapActions } from "vuex";
-
+import EnRecipes from "./EnRecipes.vue";
 import Action from "./modals/Action.vue";
 import CTSettings from "./settings/CTSettings.vue";
 import TimePickerHMS from "./modals/TimePickerHMS.vue";
@@ -72,13 +78,10 @@ import TimerReminder from "./modals/TimerReminder.vue";
 import Timer from "./sub/Timer.vue";
 import Toast from "./sub/Toast.vue";
 import SnackBar from "./sub/SnackBar.vue";
-
 import * as utils from "~/shared/utils";
-import { EventBus } from "~/main";
-let undoTimer,
-  firingTimers = [];
-declare const com: any;
-
+import { EvtBus } from "~/main";
+let barTimer;
+declare const com, android: any;
 export default {
   components: { Timer, Toast, SnackBar },
   props: ["recipeID"],
@@ -86,43 +89,62 @@ export default {
     return {
       scrollPos: 1,
       appbar: null,
+      toastbar: null,
+      snackbar: null,
+      scrollView: null,
       countdown: 5,
       snackMsg: null,
-      showUndo: false,
-      undo: false,
-      CTSettings: CTSettings,
+      showUndo: 0,
+      undo: 0,
       toast: null,
+      key: 99,
     };
   },
   computed: {
     ...mapState([
       "icon",
       "recipes",
-      "currentComponent",
       "timerSound",
       "timerVibrate",
-      "timerDelay",
       "timerPresets",
       "activeTimers",
+      "FGService",
+      "RTL",
     ]),
+    hasBackStack() {
+      return Frame.topmost().backStack.length;
+    },
   },
   methods: {
     ...mapActions([
-      "setComponent",
       "addActiveTimer",
       "removeActiveTimer",
       "clearTimerInterval",
       "addTimerPreset",
       "updateActiveTimer",
+      "setFGService",
     ]),
-    onPageLoad({ object }) {
+    pgLoad({ object }) {
       object.bindingContext = new Observable();
-      this.setComponent("CookingTimer");
+      if (this.activeTimers.filter((e: any) => e.done).length)
+        this.openReminder();
+      this.keepScreenOnCountUp();
+      setNumber("isTimer", 1);
     },
-    onAppBarLoad({ object }) {
+    pgUnload() {
+      utils.keepScreenOn(0);
+    },
+    abLoad({ object }) {
       this.appbar = object;
     },
-    onScroll(args) {
+    tbLoad({ object }) {
+      this.toastbar = object;
+    },
+    sbLoad({ object }) {
+      this.snackbar = object;
+    },
+    svScroll(args) {
+      this.scrollView = args.object;
       let scrollUp;
       let y = args.scrollY;
       if (y) {
@@ -132,18 +154,19 @@ export default {
         if (!scrollUp && ab == 0) {
           this.appbar.animate({
             translate: { x: 0, y: 64 },
-            duration: 250,
+            duration: 200,
             curve: CoreTypes.AnimationCurve.ease,
           });
         } else if (scrollUp && ab == 64) {
           this.appbar.animate({
             translate: { x: 0, y: 0 },
-            duration: 250,
+            duration: 200,
             curve: CoreTypes.AnimationCurve.ease,
           });
         }
       }
     },
+
     // HELPERS
     getRecipeTitle(id) {
       let recipe = this.recipes.filter((e) => e.id === id)[0];
@@ -168,81 +191,111 @@ export default {
     },
 
     // NOTIFICATION HANDLERS
-    notifyTimers() {
+    timerInfo() {
       let activeCount = this.activeTimers.length;
       let pausedCount = this.activeTimers.filter((e) => e.isPaused).length;
       let ongoingCount = activeCount - pausedCount;
-      console.log("notifying");
-      utils.TimerNotif.show({
-        bID: "bringToFront",
-        cID: "cti",
-        cName: "Cooking Timer info",
-        description: `${ongoingCount} ongoing, ${pausedCount} paused`,
-        nID: 777,
-        priority: -2,
-        sound: null,
-        title: localize("timer"),
-      });
-      if (activeCount <= 0) this.foregroundService(false);
+      this.foregroundService(activeCount);
+      function show() {
+        utils.TimerNotif.show({
+          bID: "info",
+          cID: "cti",
+          cName: "Cooking Timer info",
+          description: localize("oAP", ongoingCount + "", pausedCount),
+          nID: 6,
+          priority: -2,
+          sound: null,
+          title: localize("timer"),
+        });
+      }
+      if (this.FGService)
+        setTimeout(() => this.activeTimers.length && show(), 250);
+      this.keepScreenOnCountUp();
+      utils.wakeLock(ongoingCount);
     },
-    fireTimer(timer) {
-      console.log("firing");
-      let description = timer.recipeID
-        ? " - " + this.getRecipeTitle(timer.recipeID)
-        : "";
-      let title = timer.label;
-      let time = this.formattedTime(timer.time);
-      let bID = "timer" + timer.id;
+    timerAlert() {
+      let title, description, bID;
+      let firedTimers = this.activeTimers.filter((e) => e.done);
+      let timer = firedTimers[0];
+      if (firedTimers.length > 1) {
+        title = localize("texp", firedTimers.length);
+        description = localize("ttv");
+        bID = "alerts";
+      } else if (firedTimers.length == 1) {
+        title =
+          timer.label +
+          (timer.recipeID ? " - " + this.getRecipeTitle(timer.recipeID) : "");
+        description = this.formattedTime(timer.time);
+        bID = "timer" + timer.id;
+      } else {
+        utils.TimerNotif.clear(7);
+        return;
+      }
       utils.TimerNotif.show({
-        actions: true,
+        actions: 1,
         bID,
         cID: "cta",
         cName: "Cooking Timer alerts",
-        description: time,
-        nID: timer.id,
+        description,
+        multi: firedTimers.length > 1,
+        nID: 7,
         priority: 1,
         sound: this.timerSound.uri,
-        title: title + description,
+        title,
         vibrate: this.timerVibrate,
       });
-      Application.android.registerBroadcastReceiver(bID, (ctx, intent) => {
-        let action = intent.getStringExtra("action");
-        console.log(action, "firing");
-        EventBus.$emit(bID, action);
+      if (firedTimers.length == 1) {
+        Application.android.registerBroadcastReceiver(bID, (ctx, intent) => {
+          EvtBus.$emit(bID, intent.getStringExtra("action"));
+          Application.android.unregisterBroadcastReceiver(bID);
+        });
+      } else {
+        Application.android.unregisterBroadcastReceiver(bID);
+        Application.android.registerBroadcastReceiver(bID, (ctx, intent) => {
+          if (intent.getStringExtra("action") == "dismissAll") {
+            firedTimers.forEach((t) => this.removeTimer(t.id, 1));
+            Application.android.unregisterBroadcastReceiver(bID);
+          }
+        });
+      }
+    },
+    openReminder() {
+      this.clearTimerInterval();
+      this.$showModal(TimerReminder, {
+        fullscreen: true,
+        props: {
+          formattedTime: this.formattedTime,
+          removeTimer: this.removeTimer,
+          togglePause: this.togglePause,
+          timerAlert: this.timerAlert,
+          showToast: this.showToast,
+        },
+      }).then(() => {
+        this.clearTimerInterval();
+        this.key = Math.floor(Math.random() * 900) + 100;
       });
-      firingTimers.push(timer);
-      // if (firingTimers.length == 1) {
-      //   this.$showModal(TimerReminder, {
-      //     fullscreen: true,
-      //     props: {
-      //       timers: firingTimers,
-      //       stop: this.stopFiringTimers,
-      //       formattedTime: this.formattedTime,
-      //     },
-      //   });
-      // }
     },
-    stopFiringTimers() {
-      firingTimers.forEach((e) => utils.TimerNotif.clear(e.id));
-      firingTimers = [];
-    },
-    openReminder() {},
-    foregroundService(bool) {
+    foregroundService(n) {
       const ctx = Utils.ad.getApplicationContext();
       const intent = new android.content.Intent(
         ctx,
         com.tns.ForegroundService.class
       );
-      if (bool)
+      if (n && !this.FGService) {
         parseInt(Device.sdkVersion) < 26
           ? ctx.startService(intent)
           : ctx.startForegroundService(intent);
-      else ctx.stopService(intent);
+        this.setFGService(1);
+        setNumber("FGService", 1);
+      } else if (!this.activeTimers.length) {
+        ctx.stopService(intent);
+        this.setFGService(0);
+        setNumber("FGService", 0);
+      }
     },
 
     // DATA HANDLERS
     addTimer() {
-      this.foregroundService(true);
       this.$showModal(TimePickerHMS, {
         props: {
           title: "ntmr",
@@ -258,7 +311,7 @@ export default {
             );
             this.$showModal(Action, {
               props: {
-                title: "tmrPrsts",
+                title: "prsts",
                 list,
               },
             }).then((preset) => {
@@ -266,128 +319,155 @@ export default {
                 let timer = JSON.parse(
                   JSON.stringify(this.timerPresets[list.indexOf(preset)])
                 );
-                timer.id = this.getRandomID();
+                timer.id = utils.getRandomID(1);
+                timer.recipeID = this.recipeID;
+                timer.timerInt = timer.isPaused = 0;
+                timer.preset = timer.mode = 1;
                 this.addActiveTimer({
                   timer,
-                  index: this.activeTimers.length,
+                  i: this.activeTimers.length,
                 });
-                this.notifyTimers();
+                this.timerInfo();
               }
             });
           } else {
-            if (res.time != "00:00:00") {
-              this.addActiveTimer({
-                timer: {
-                  id: this.getRandomID(),
-                  label: res.label,
-                  recipeID: this.recipeID,
-                  time: res.time,
-                  timerInterval: null,
-                  isPaused: false,
-                  preset: 0,
-                },
-                index: this.activeTimers.length,
-              });
-              this.notifyTimers();
-            }
+            let mode = res.time != "00:00:00" ? 1 : 0;
+            this.addActiveTimer({
+              timer: {
+                id: utils.getRandomID(1),
+                label: res.label,
+                recipeID: this.recipeID,
+                time: res.time,
+                timerInt: 0,
+                isPaused: 0,
+                preset: 0,
+                done: 0,
+                mode,
+              },
+              i: this.activeTimers.length,
+            });
+            this.timerInfo();
           }
         }
       });
     },
-    removeTimer(id, index, noUndo) {
-      let temp = this.activeTimers[index];
-      this.removeActiveTimer(index);
-      utils.TimerNotif.clear(id);
-      if (!noUndo) {
-        this.showUndoBar("tmrClr")
-          .then(() => {
-            this.foregroundService(true);
-            this.addActiveTimer({
-              timer: temp,
-              index,
-            });
-            this.notifyTimers();
-          })
-          .catch(() => {
-            ApplicationSettings.remove(`${temp.id}progress`);
-          });
+    removeTimer(id, noUndo) {
+      let i = this.activeTimers.findIndex((e) => e.id == id);
+      let temp = this.activeTimers[i];
+      clearInterval(temp.timerInt);
+      temp.timerInt = 0;
+      this.removeActiveTimer(i);
+      let secs = [getNumber(`${temp.id}c`, 0), getNumber(`${temp.id}d`, 0)];
+      function removeSettings() {
+        remove(`${temp.id}c`);
+        remove(`${temp.id}d`);
       }
-      this.notifyTimers();
+      removeSettings();
+      if (!noUndo) {
+        this.showUndoBar("tmrRm")
+          .then(() => {
+            setNumber(`${temp.id}c`, secs[0]),
+              setNumber(`${temp.id}d`, secs[1]),
+              this.addActiveTimer({
+                timer: temp,
+                i,
+              });
+            this.timerInfo();
+          })
+          .catch(() => removeSettings());
+      }
+      this.timerAlert();
+      this.timerInfo();
     },
-    addToPreset(timer) {
-      timer = JSON.parse(JSON.stringify(timer));
-      timer.recipeID = timer.timerInterval = null;
-      timer.preset = 1;
-      this.addTimerPreset(timer);
-      this.showToast("aTPrst");
-    },
-    togglePause(timer, bool) {
-      if (typeof bool === "boolean") timer.isPaused = bool;
-      else timer.isPaused = !timer.isPaused;
+    togglePause(timer, n) {
+      timer.isPaused =
+        typeof n === "number" ? n : (!timer.isPaused as boolean | 0);
       this.updateActiveTimer(timer);
-      this.notifyTimers();
+      n ? 0 : this.timerInfo();
     },
     showToast(data) {
-      this.toast = localize(data);
-      utils.timer(5, (val) => {
-        if (!val) this.toast = val;
+      this.animateBar(this.snackbar, 0);
+      this.animateBar(this.appbar, 0).then(() => {
+        this.showUndo = 0;
+        this.toast = localize(data);
+        this.animateBar(this.toastbar, 1);
+        let a = 5;
+        clearInterval(barTimer);
+        barTimer = setInterval(() => a-- < 1 && this.hideBar(), 1000);
       });
     },
     showUndoBar(message) {
       return new Promise((resolve, reject) => {
-        clearTimeout(undoTimer);
-        this.showUndo = true;
-        this.snackMsg = message;
-        this.countdown = 5;
-        let a = 5;
-        undoTimer = setInterval(() => {
-          if (this.undo) {
-            this.showUndo = this.undo = false;
-            clearTimeout(undoTimer);
-            resolve(true);
-          }
-          this.countdown = Math.round((a -= 0.1));
-          if (this.countdown < 1) {
-            this.showUndo = false;
-            clearTimeout(undoTimer);
-            reject(true);
-          }
-        }, 100);
+        this.animateBar(this.toastbar, 0);
+        this.animateBar(this.appbar, 0).then(() => {
+          this.toast = null;
+          this.showUndo = 1;
+          this.snackMsg = message;
+          this.countdown = 5;
+          this.animateBar(this.snackbar, 1).then(() => {
+            let a = 5;
+            clearInterval(barTimer);
+            barTimer = setInterval(() => {
+              if (this.undo) {
+                this.hideBar();
+                resolve(1);
+              }
+              this.countdown = Math.round((a -= 0.1));
+              if (this.countdown < 1) {
+                this.hideBar();
+                reject(1);
+              }
+            }, 100);
+          });
+        });
       });
     },
-    hideBar({ object }) {
-      this.appbar.translateY = 64;
-      object
-        .animate({
-          opacity: 0,
-          translate: { x: 0, y: 64 },
-          duration: 250,
-          curve: CoreTypes.AnimationCurve.ease,
-        })
-        .then(() => {
-          this.showUndo = false;
+    hideBar() {
+      clearInterval(barTimer);
+      this.animateBar(this.toast ? this.toastbar : this.snackbar, 0).then(
+        () => {
+          this.showUndo = this.undo = 0;
           this.toast = null;
-          this.appbar.animate({
-            translate: { x: 0, y: 0 },
-            duration: 250,
-            curve: CoreTypes.AnimationCurve.ease,
-          });
-          object.opacity = 1;
-          object.translateY = 0;
-          clearTimeout(undoTimer);
-        });
+          this.animateBar(this.appbar, 1);
+        }
+      );
     },
     undoDel() {
-      this.undo = true;
+      this.undo = 1;
+    },
+
+    //NAVIGATION HANDLERS
+    navigateTo() {
+      this.$navigateTo(CTSettings, {
+        transition: {
+          name: this.RTL ? "slideRight" : "slide",
+          duration: 200,
+          curve: "easeOut",
+        },
+      });
+    },
+    navigateBack() {
+      setNumber("isTimer", 0);
+      this.hasBackStack
+        ? this.$navigateBack()
+        : this.$navigateTo(EnRecipes, {
+            clearHistory: true,
+          });
     },
 
     // HELPERS
-    getRandomID() {
-      return Math.floor(Math.random() * 9000000000) + 1000000000;
+    keepScreenOnCountUp() {
+      utils.keepScreenOn(
+        this.activeTimers.filter((e: any) => !e.isPaused).length
+      );
     },
   },
   created() {
     this.clearTimerInterval();
+    this.recipeID && this.addTimer();
+  },
+  destroyed() {
+    setNumber("isTimer", 0);
   },
 };
 </script>

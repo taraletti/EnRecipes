@@ -2,20 +2,25 @@
   <Page
     @loaded="transparentPage"
     backgroundColor="transparent"
-    :class="appTheme"
+    :class="theme"
   >
     <GridLayout rows="auto, auto, auto" class="modal">
-      <Label class="title" :text="title | L" />
+      <RLabel class="title" :text="title | L" />
       <StackLayout row="1">
         <StackLayout class="input">
           <TextField
+            @loaded="setGravity"
             class="modalInput"
             v-model="setLabel"
             :hint="label"
             autocapitalizationType="words"
+            autocorrect="true"
         /></StackLayout>
-        <!-- @loaded="focusField" -->
-        <StackLayout orientation="horizontal" horizontalAlignment="center">
+        <RStackLayout
+          :rtl="RTL"
+          orientation="horizontal"
+          horizontalAlignment="center"
+        >
           <ListPicker
             @loaded="onLPLoad"
             :items="hrsList"
@@ -31,10 +36,15 @@
             :items="secsList"
             @selectedIndexChange="setSec"
           ></ListPicker>
-        </StackLayout>
+        </RStackLayout>
       </StackLayout>
 
-      <GridLayout row="2" columns="auto, *, auto, auto" class="actions">
+      <RGridLayout
+        :rtl="RTL"
+        row="2"
+        columns="auto, *, auto, auto"
+        class="actions r"
+      >
         <Button
           v-if="showPreset"
           class="text sm"
@@ -45,10 +55,10 @@
           col="2"
           class="text sm"
           :text="'cBtn' | L"
-          @tap="$modal.close(false)"
+          @tap="$modal.close(0)"
         />
         <Button col="3" class="text sm" :text="action | L" @tap="sendRespose" />
-      </GridLayout>
+      </RGridLayout>
     </GridLayout>
   </Page>
 </template>
@@ -71,7 +81,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon", "appTheme"]),
+    ...mapState(["icon", "theme", "RTL"]),
     hrsList() {
       let h = [...Array(24).keys()];
       this.hrs = h;

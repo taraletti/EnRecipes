@@ -1,12 +1,7 @@
 <template>
-  <Page @loaded="onPageLoad" actionBarHidden="true">
-    <GridLayout rows="*, auto" columns="auto, *">
-      <ListView
-        rowSpan="2"
-        colSpan="2"
-        class="options-list"
-        for="item in items"
-      >
+  <Page @loaded="pgLoad" actionBarHidden="true">
+    <RGridLayout :rtl="RTL" rows="*, auto" columns="auto, *">
+      <ListView rowSpan="2" colSpan="2" class="options" for="item in items">
         <v-template if="$index == 0">
           <Label class="pageTitle" :text="'About' | L" />
         </v-template>
@@ -23,20 +18,26 @@
           <StackLayout class="listSpace"> </StackLayout>
         </v-template>
         <v-template>
-          <GridLayout
+          <RGridLayout
+            :rtl="RTL"
             columns="auto, *"
             class="option"
             @touch="touch($event, item.url)"
           >
-            <Label class="ico" :text="icon[item.icon]" />
-            <Label col="1" :text="item.title | L" />
-          </GridLayout>
+            <Label
+              class="ico"
+              :class="{ rtl: /help|don/.test(item.icon) }"
+              :text="icon[item.icon]"
+            />
+
+            <Label col="1" class="info" :text="item.title | L" />
+          </RGridLayout>
         </v-template>
       </ListView>
-      <GridLayout row="1" class="appbar" rows="*" columns="auto, *">
+      <GridLayout row="1" class="appbar rtl" rows="*" columns="auto, *">
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
-    </GridLayout>
+    </RGridLayout>
   </Page>
 </template>
 
@@ -46,7 +47,7 @@ import { mapState } from "vuex";
 
 export default {
   computed: {
-    ...mapState(["icon"]),
+    ...mapState(["icon", "RTL"]),
     items() {
       return [
         {},
@@ -69,8 +70,7 @@ export default {
         {
           icon: "priv",
           title: "priv",
-          url:
-            "https://github.com/vishnuraghavb/EnRecipes/blob/main/PRIVACY.md",
+          url: "https://github.com/vishnuraghavb/EnRecipes/blob/main/PRIVACY.md",
         },
         {
           icon: "don",
@@ -95,7 +95,7 @@ export default {
     },
   },
   methods: {
-    onPageLoad({ object }) {
+    pgLoad({ object }) {
       object.bindingContext = new Observable();
     },
     // HELPERS
