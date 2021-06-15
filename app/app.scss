@@ -1,3 +1,4 @@
+// Colours
 $gray0: #f8f9fa;
 $gray1: #f1f3f5;
 $gray2: #e9ecef;
@@ -11,21 +12,29 @@ $gray9: #212529;
 $gray10: #000000;
 $orange: #ff5200;
 
+// FontSizes based on Minor Third
+$t1: 25;
+$t2: 21;
+$t3: 17;
+$t4: 14;
+$t5: 12; // Base size
+$t6: 10;
+
 Page {
-  font-family: 'Inter-Medium';
-  font-size: 14;
+  font-family: 'Inter-Medium', sans-serif;
+  font-size: $t4;
 }
 .ico {
   font-family: 'enrecipes';
   font-size: 24;
   vertical-alignment: center;
   &.sm {
-    font-size: 16;
+    font-size: $t3;
     opacity: 0.5;
   }
 }
 .tb {
-  font-family: 'Inter-Bold';
+  font-family: 'Inter-Bold', sans-serif;
 }
 .tac {
   text-align: center;
@@ -36,7 +45,7 @@ Page {
 .pageTitle {
   @extend .tb;
   @extend .tw;
-  font-size: 25;
+  font-size: $t1;
   padding: 16 16 24;
 }
 .Light {
@@ -60,7 +69,6 @@ Page {
     background: $gray0;
   }
   .fieldLabel,
-  .dayName,
   .sub {
     color: $gray6;
   }
@@ -98,7 +106,6 @@ Page {
     background: $gray8;
   }
   .fieldLabel,
-  .dayName,
   .sub {
     color: $gray5;
   }
@@ -136,7 +143,6 @@ Page {
     background: $gray9;
   }
   .fieldLabel,
-  .dayName,
   .sub {
     color: $gray6;
   }
@@ -169,14 +175,13 @@ TextView {
   line-height: 4;
 }
 #searchBar {
-  padding-left: 0;
-  margin: 0;
+  padding: 13 12;
 }
 .inputField {
   margin-bottom: 24;
 }
 .fieldLabel {
-  font-size: 12;
+  font-size: $t5;
 }
 .progressContainer {
   width: 100%;
@@ -198,25 +203,28 @@ button {
   border-radius: 12;
   min-width: 0;
   min-height: 0;
-  &:active {
-    @extend .fade;
-  }
   &.ico {
     width: 48;
     height: 48;
     padding: 0;
     margin: 0;
+    &:active {
+      @extend .fade;
+    }
   }
   &.text {
     @extend .tb;
     color: $orange;
+    &:active {
+      @extend .fade;
+    }
   }
   &.big {
     margin-top: 8;
     padding: 16 0;
   }
   &.sm {
-    font-size: 12;
+    font-size: $t5;
     padding: 12;
   }
   &.min {
@@ -224,10 +232,16 @@ button {
     height: 40;
     vertical-alignment: center;
   }
+  &.fb:active {
+    @extend .fade;
+  }
   &.rate {
     margin: 0 4 0 0;
     width: 32;
     height: 32;
+    &:active {
+      @extend .fade;
+    }
   }
 }
 ActivityIndicator {
@@ -246,14 +260,15 @@ ActivityIndicator {
   .value {
     padding: 0 0 0 8;
     vertical-alignment: center;
-    &.rtl {
+    &.r {
       padding: 0 8 0 0;
+      transform: scaleX(-1);
     }
   }
-  &.select {
-    color: $orange;
-    @extend .hl;
-  }
+}
+.select {
+  color: $orange;
+  @extend .hl;
 }
 .emptyState {
   padding: 16 16 8;
@@ -262,7 +277,7 @@ ActivityIndicator {
   }
   .title {
     @extend .tb;
-    font-size: 17;
+    font-size: $t3;
   }
 }
 
@@ -272,22 +287,18 @@ ActivityIndicator {
   padding: 8 16;
   .recipeInfo {
     vertical-alignment: center;
-    padding: 0 0 4 8;
-    &.rtl {
-      transform: none;
-      padding: 0 8 4 0;
-    }
+    padding: 0 8 4;
   }
   .title {
     padding: 0 0 4;
   }
-  .attr {
-    font-size: 10;
-    padding: 0 6 1 2;
-    &.rtl {
-      padding: 0 2 1 6;
-    }
-  }
+}
+.attrs {
+  orientation: horizontal;
+}
+.attr {
+  font-size: $t6;
+  padding: 1 4;
 }
 .simple .recipeInfo {
   padding: 8 0;
@@ -343,20 +354,24 @@ ActivityIndicator {
 .group-info {
   padding: 16 16 16 72;
   line-height: 4;
+  &.r {
+    padding: 16 72 16 16;
+  }
 }
 .options {
   .option {
     vertical-align: center;
-    padding: 14 12;
+    padding: 14 16;
     .ico {
-      margin: 0 24 0 12;
+      width: 40;
+      text-align: center;
     }
-    .info,
-    .sub {
+    .info {
+      padding: 0 16;
       @extend .tw;
     }
     .sub {
-      font-size: 12;
+      font-size: $t5;
     }
   }
 }
@@ -371,7 +386,7 @@ ActivityIndicator {
     horizontal-alignment: center;
   }
   .name {
-    font-size: 21;
+    font-size: $t2;
   }
   .info {
     padding: 8 16 24;
@@ -394,9 +409,8 @@ ActivityIndicator {
 }
 .attribute {
   margin: 8 16;
-  .title {
-    margin-right: 8;
-    font-size: 12;
+  .sub {
+    font-size: $t5;
   }
   .value {
     @extend .tb;
@@ -416,7 +430,7 @@ ActivityIndicator {
   padding: 0 16;
   .count {
     @extend .tb;
-    font-size: 17;
+    font-size: $t3;
   }
   .value {
     @extend .tw;
@@ -443,7 +457,7 @@ ActivityIndicator {
 }
 .dateInfo {
   padding: 32 16 16;
-  font-size: 12;
+  font-size: $t5;
   line-height: 4;
 }
 
@@ -459,10 +473,12 @@ ActivityIndicator {
     @extend .tb;
     @extend .tw;
     vertical-align: center;
+    margin: 0 12;
     line-height: 4;
   }
   .msg {
     padding: 14 16;
+    margin: 0;
   }
   .fab {
     margin-left: 8;
@@ -471,21 +487,21 @@ ActivityIndicator {
     margin: 8 8 0;
   }
 }
+.sidebar {
+  margin-bottom: 0;
+}
 .toolbar {
   z-index: 4;
   padding: 4;
   margin: 0 0 52;
-  horizontal-alignment: left;
   .tool {
-    padding: 0 12;
+    padding: 0 8;
     label {
       vertical-alignment: center;
     }
+    .value,
     .ico {
-      padding: 0 8 0 0;
-      &.rtl {
-        padding: 0 0 0 8;
-      }
+      padding: 0 4;
     }
   }
 }
@@ -499,7 +515,7 @@ ActivityIndicator {
 .sectionTitle {
   @extend .tb;
   @extend .tw;
-  font-size: 21;
+  font-size: $t2;
   padding: 0;
   margin: 32 0 16;
 }
@@ -509,49 +525,51 @@ ActivityIndicator {
   margin: 0;
 }
 .countdown {
-  font-size: 17;
+  font-size: $t3;
   color: $orange;
 }
 
 // -----------------------------
 // MealPlanner
-.calendar {
-  padding: 0 8;
-  .navBtn {
-    margin: 0;
-  }
-  .monthName {
-    text-align: center;
+.monthSwitcher {
+  padding: 0 16;
+  .month {
     vertical-alignment: center;
-    font-size: 17;
-  }
-  .dayName {
-    margin: 8 0;
-    font-size: 12;
     text-align: center;
-  }
-  .day {
-    border-radius: 12;
-  }
-  .hasPlans {
-    color: $orange;
-  }
-  .activeDay {
-    @extend .hl;
+    font-size: $t3;
   }
 }
-.dayPlan {
-  padding: 16 16 80;
-  width: 100%;
-  .periodLabel {
-    font-size: 17;
-    text-transform: capitalize;
-    vertical-align: center;
+.calendar {
+  padding: 0 16;
+  .dayName {
+    vertical-alignment: center;
+    text-align: center;
+    font-size: $t5;
   }
-  .recipeTitle {
-    @extend .tw;
-    padding: 16 8;
-    line-height: 4;
+  .accent.sub {
+    color: rgba($orange, 0.5);
+  }
+}
+.plans {
+  padding: 8 16 80;
+  width: 100%;
+  .date {
+    font-size: $t2;
+    padding: 16 0;
+  }
+  .plan {
+    padding: 8 0;
+  }
+  .meal {
+    font-size: $t3;
+    padding: 8 0;
+  }
+  .planContent {
+    min-height: 48;
+    padding: 8;
+  }
+  .attr {
+    padding: 0;
   }
 }
 
@@ -566,7 +584,7 @@ ActivityIndicator {
     @extend .tb;
     @extend .tw;
     padding: 16;
-    font-size: 21;
+    font-size: $t2;
   }
   .input {
     padding: 0 16 8;
@@ -581,13 +599,12 @@ ActivityIndicator {
     margin: 16 0;
   }
   .listItem {
-    @extend .tw;
     letter-spacing: 0;
     text-transform: none;
     line-height: 4;
     padding: 13 16;
     margin: 0;
-    background: transparent;
+    background-color: transparent;
   }
   .shareItem {
     border-radius: 12;
@@ -649,10 +666,10 @@ ActivityIndicator {
 
 // -----------------------------
 // Helpers
-.rtl {
+.f {
   transform: scaleX(-1);
 }
-.clickable {
+.accent {
   color: $orange;
 }
 .hal {

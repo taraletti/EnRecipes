@@ -2,45 +2,43 @@
   <Page
     @loaded="transparentPage"
     backgroundColor="transparent"
-    :class="appTheme"
+    :class="theme"
   >
     <GridLayout rows="auto, auto, auto" class="modal">
-      <Label class="title" :text="title | L" />
-      <StackLayout
+      <RLabel class="title" :text="title | L" />
+      <RStackLayout
+        :rtl="RTL"
         row="1"
-        class="dialogListPicker"
         orientation="horizontal"
         horizontalAlignment="center"
       >
         <ListPicker
           @loaded="onLPLoad"
-          ref="hrPicker"
           :items="hrsList"
           :selectedIndex="hrIndex"
           @selectedIndexChange="setHrs"
         ></ListPicker>
         <ListPicker
           @loaded="onLPLoad"
-          ref="minPicker"
           :items="minsList"
           :selectedIndex="minIndex"
           @selectedIndexChange="setMins"
         ></ListPicker>
-      </StackLayout>
-      <GridLayout row="2" columns="*, auto, auto" class="actions">
+      </RStackLayout>
+      <RGridLayout :rtl="RTL" row="2" columns="*, auto, auto" class="actions">
         <Button
           col="1"
           class="text sm"
           :text="'cBtn' | L"
-          @tap="$modal.close(false)"
+          @tap="$modal.close(0)"
         />
         <Button
           col="2"
           class="text sm"
-          :text="action | L"
+          :text="'SET' | L"
           @tap="$modal.close(selectedTime)"
         />
-      </GridLayout>
+      </RGridLayout>
     </GridLayout>
   </Page>
 </template>
@@ -49,7 +47,7 @@
 import { mapState } from "vuex";
 import { localize } from "@nativescript/localize";
 export default {
-  props: ["title", "selectedHr", "selectedMin", "action"],
+  props: ["title", "selectedHr", "selectedMin"],
   data() {
     return {
       hrs: [],
@@ -59,7 +57,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon", "appTheme"]),
+    ...mapState(["icon", "theme", "RTL"]),
     hrsList() {
       let h = [...Array(24).keys()];
       this.hrs = h;

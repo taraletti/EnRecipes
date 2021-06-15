@@ -1,42 +1,57 @@
 <template>
-  <ListView colSpan="2" rowSpan="2" class="options-list" for="item in items">
+  <ListView colSpan="2" rowSpan="2" class="options" for="item in items">
     <v-template if="$index == 0">
       <Label class="pageTitle" :text="title | L" />
     </v-template>
     <v-template if="item.type == 'switch'">
-      <GridLayout
+      <RGridLayout
+        :rtl="RTL"
         columns="auto, *, auto"
         class="option"
         @touch="touch($event, item.data, item.action)"
       >
-        <Label class="ico" :text="icon[item.icon]" />
-        <StackLayout col="1" verticalAlignment="center">
-          <Label :text="item.title | L" class="info" />
-          <Label v-if="item.subTitle" :text="item.subTitle | L" class="sub" />
+        <Label class="ico rtl" :text="icon[item.icon]" />
+        <StackLayout col="1" class="info">
+          <RLabel :text="item.title | L" class="tw" />
+          <RLabel
+            v-if="item.subTitle"
+            :text="item.subTitle | L"
+            class="sub tw"
+          />
         </StackLayout>
         <Switch
+          @loaded="swLoad"
           isUserInteractionEnabled="false"
           :color="item.checked ? '#ff5200' : '#adb5bd'"
           col="2"
           :checked="item.checked"
         />
-      </GridLayout>
+      </RGridLayout>
     </v-template>
     <v-template if="item.type == 'list'">
-      <GridLayout
+      <RGridLayout
+        :rtl="RTL"
         columns="auto, *"
         class="option"
         @touch="touch($event, item.data, item.action)"
       >
-        <Label class="ico" :text="icon[item.icon]" />
-        <StackLayout col="1">
-          <Label :text="item.title | L" class="info" />
-          <Label v-if="item.subTitle" :text="item.subTitle" class="sub" />
+        <Label class="ico" :class="{ rtl: item.rtl }" :text="icon[item.icon]" />
+        <StackLayout col="1" class="info">
+          <RLabel :text="item.title | L" class="tw" />
+          <RLabel
+            :hidden="!item.subTitle"
+            :text="item.subTitle"
+            class="sub tw"
+          />
         </StackLayout>
-      </GridLayout>
+      </RGridLayout>
     </v-template>
     <v-template if="item.type == 'info'">
-      <Label class="group-info sub tw" :text="item.title | L" />
+      <Label
+        class="group-info sub tw"
+        :class="{ r: RTL }"
+        :text="item.title | L"
+      />
     </v-template>
     <v-template>
       <StackLayout class="listSpace"> </StackLayout>
@@ -46,13 +61,19 @@
 
 <script>
 import { mapState } from "vuex";
+import * as utils from "~/shared/utils";
 
 export default {
   props: ["title", "items", "action"],
   computed: {
-    ...mapState(["icon"]),
+    ...mapState(["icon", "RTL"]),
   },
   methods: {
+    swLoad({ object }) {
+      object.android.setRotation(
+        this.RTL && utils.sysRTL() ? 0 : this.RTL || utils.sysRTL() ? 180 : 0
+      );
+    },
     touch({ object, action }, data, localAction) {
       object.className = action.match(/down|move/) ? "option fade" : "option";
       if (action == "up") localAction ? localAction(data) : this.action(data);

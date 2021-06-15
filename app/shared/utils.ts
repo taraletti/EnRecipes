@@ -6,19 +6,23 @@ import {
   Color,
   path,
   knownFolders,
+  ApplicationSettings,
 } from '@nativescript/core'
 import { localize } from '@nativescript/localize'
 
 let timerOne
 declare const global, android, androidx, com, java, Array: any
 
+const View = android.view.View
 const PowerManager = android.os.PowerManager
 const pm = Utils.android
   .getApplicationContext()
   .getSystemService(android.content.Context.POWER_SERVICE)
 const wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, 'Timers')
 
-export const restartApp = () => {
+const sdkv = parseInt(Device.sdkVersion)
+
+export function restartApp() {
   const ctx = Utils.ad.getApplicationContext()
   let mStartActivity = new android.content.Intent(
     ctx,
@@ -39,7 +43,7 @@ export const restartApp = () => {
   )
   android.os.Process.killProcess(android.os.Process.myPid())
 }
-export const openAppSettingsPage = () => {
+export function openAppSettingsPage() {
   let intent = new android.content.Intent(
     android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
   )
@@ -51,7 +55,7 @@ export const openAppSettingsPage = () => {
   )
   Application.android.foregroundActivity.startActivity(intent)
 }
-export const hasAccelerometer = () => {
+export function hasAccelerometer() {
   let ctx = Utils.ad.getApplicationContext()
   let sensorManager = ctx.getSystemService(
     android.content.Context.SENSOR_SERVICE
@@ -60,21 +64,21 @@ export const hasAccelerometer = () => {
     android.hardware.Sensor.TYPE_ACCELEROMETER
   )
 }
-export const vibrate = (duration) => {
+export function vibrate(duration) {
   let vibratorService = Application.android.context.getSystemService(
     android.content.Context.VIBRATOR_SERVICE
   )
   if (vibratorService.hasVibrator()) vibratorService.vibrate(duration)
 }
-export const timer = (dur, callback) => {
-  callback(true)
+export function timer(dur, callback) {
+  callback(1)
   clearInterval(timerOne)
   timerOne = setInterval(() => {
     dur--
-    callback(true)
+    callback(1)
     if (dur == 0) {
       clearInterval(timerOne)
-      callback(false)
+      callback(0)
     }
   }, 1000)
 }
@@ -95,7 +99,7 @@ function callIntent(ctx, intent, msg, pickerType) {
   })
 }
 // IMAGE PICKER
-export const getRecipePhoto = () => {
+export function getRecipePhoto() {
   const ctx =
     Application.android.foregroundActivity || Application.android.startActivity
   const DIR_CODE = Math.round(Math.random() * 10000)
@@ -110,28 +114,41 @@ export const getRecipePhoto = () => {
     }
   )
 }
-export const copyPhotoToCache = (uri, filepath) => {
+export function copyPhotoToCache(src: string, dest: string) {
   const ContentResolver = Application.android.nativeApp.getContentResolver()
+  const isURI = src.includes('content://')
   return new Promise((resolve) => {
-    const inputStream = ContentResolver.openInputStream(uri)
-    const input = new java.io.BufferedInputStream(inputStream)
-    let size = input.available()
-    let buffer = Array.create('byte', size)
-    const output = new java.io.BufferedOutputStream(
-      new java.io.FileOutputStream(filepath)
-    )
-    input.read(buffer)
-    do {
-      output.write(buffer)
-    } while (input.read(buffer) != -1)
-    input.close()
-    output.close()
-    resolve(filepath)
+    if (isURI) {
+      const input = new java.io.BufferedInputStream(
+        ContentResolver.openInputStream(src)
+      )
+      let size = input.available()
+      let buffer = Array.create('byte', size)
+      const output = new java.io.BufferedOutputStream(
+        new java.io.FileOutputStream(dest)
+      )
+      input.read(buffer)
+      do {
+        output.write(buffer)
+      } while (input.read(buffer) != -1)
+      input.close()
+      output.close()
+      resolve(dest)
+    } else {
+      const input = new java.io.FileInputStream(src)
+      const output = new java.io.FileOutputStream(dest)
+      let buffer = Array.create('byte', 1024)
+      let len
+      while ((len = input.read(buffer)) > 0) {
+        output.write(buffer, 0, len)
+      }
+      resolve(dest)
+    }
   })
 }
 
 // COPY DB FILE
-export const copyDBToExport = () => {
+export function copyDBToExport() {
   const src = path.join(knownFolders.documents().path, 'EnRecipes.db')
   const dst = path.join(
     knownFolders.documents().getFolder('EnRecipes').path,
@@ -151,7 +168,7 @@ export const copyDBToExport = () => {
 }
 
 // BACKUP FOLDER PICKER
-export const getBackupFolder = () => {
+export function getBackupFolder() {
   const ctx =
     Application.android.foregroundActivity || Application.android.startActivity
   const DIR_CODE = Math.round(Math.random() * 10000)
@@ -167,7 +184,7 @@ export const getBackupFolder = () => {
 }
 
 // BACKUP FILE PICKER
-export const getBackupFile = () => {
+export function getBackupFile() {
   const ctx =
     Application.android.foregroundActivity || Application.android.startActivity
   const DIR_CODE = Math.round(Math.random() * 10000)
@@ -187,7 +204,7 @@ export const getBackupFile = () => {
 
 // ZIP OPERATIONS
 export class Zip {
-  static getSubFiles(src: string, isRootFolder?: boolean) {
+  static getSubFiles(src: string, isRootFolder?: number) {
     const fileList = new java.util.ArrayList()
     const sourceFile = new java.io.File(src)
     let tempList = sourceFile.listFiles()
@@ -216,7 +233,7 @@ export class Zip {
         let destFile = uri.createFile('application/zip', filename).getUri()
         const outputStream = ContentResolver.openOutputStream(destFile)
         const zipOutputStream = new java.util.zip.ZipOutputStream(outputStream)
-        const sourceFiles = Zip.getSubFiles(src, true)
+        const sourceFiles = Zip.getSubFiles(src, 1)
         for (let i = 0; i < sourceFiles.size(); i++) {
           let len
           let buffer = Array.create('byte', 4096)
@@ -287,12 +304,12 @@ function getSendIntent(type) {
   intent.setType(type)
   return intent
 }
-export const shareText = (text, subject) => {
+export function shareText(text, subject) {
   const intent = getSendIntent('text/plain')
   intent.putExtra(android.content.Intent.EXTRA_TEXT, text)
   share(intent, subject)
 }
-export const shareImage = (image, subject, title) => {
+export function shareImage(image, subject, title) {
   let ctx = Application.android.context
   const intent = getSendIntent('image/jpeg')
   const baos = new java.io.ByteArrayOutputStream()
@@ -311,7 +328,7 @@ export const shareImage = (image, subject, title) => {
   share(intent, subject)
 }
 
-export const keepScreenOn = (bool) => {
+export function keepScreenOn(bool) {
   let ctx =
     Application.android.foregroundActivity || Application.android.startActivity
   let window = ctx.getWindow()
@@ -351,7 +368,7 @@ export class TimerNotif {
       vibrate,
     }: {
       multi?: boolean
-      actions?: boolean
+      actions?: number
       bID: string
       cID: string
       cName: string
@@ -363,7 +380,6 @@ export class TimerNotif {
     },
     ctx
   ) {
-    let sdkv: number = parseInt(Device.sdkVersion)
     let soundUri: any
     if (sound) soundUri = new android.net.Uri.parse(sound)
     const NotifyMgr = android.app.NotificationManager
@@ -386,7 +402,7 @@ export class TimerNotif {
         importance
       )
       if (description) Channel.setDescription(description)
-      Channel.enableVibration(vibrate)
+      Channel.enableVibration(!!vibrate)
       Channel.enableLights(false)
       if (sound) Channel.setSound(soundUri, audioAttributes)
       else Channel.setSound(null, null)
@@ -443,14 +459,14 @@ export class TimerNotif {
 
     // CREATE NOTIFICATION
 
-    let icon = this.getIcon(ctx, 'notify_icon_sil')
+    let icon = this.getIcon(ctx, 'notify')
     let builder = new NotificationCompat.Builder(ctx, cID)
       .setColor(new Color('#ff5200').android)
       .setContentIntent(mainPInt)
       .setContentTitle(title)
       .setOngoing(true)
       .setPriority(priority)
-      .setShowWhen(actions)
+      .setShowWhen(!!actions)
       .setSmallIcon(icon)
       .setTicker(title)
       .setAutoCancel(false)
@@ -482,37 +498,31 @@ export class TimerNotif {
   }
 }
 export class Printer {
-  static PrintPackage = global.androidx.print
+  static PrintHelper = androidx.print.PrintHelper
   static isSupported() {
-    return this.PrintPackage.PrintHelper.systemSupportsPrint()
+    return this.PrintHelper.systemSupportsPrint()
   }
-  static print(view) {
+  static print(view, fileName) {
+    const ctx =
+      Application.android.foregroundActivity ||
+      Application.android.startActivity
+    const PrintAttributes = android.print.PrintAttributes
+    const PrintManager = ctx.getSystemService(
+      android.content.Context.PRINT_SERVICE
+    )
     return new Promise((resolve, reject) => {
       try {
-        let img: any
-        img = android.graphics.Bitmap.createBitmap(
-          view.getMeasuredWidth(),
-          view.getMeasuredHeight(),
-          android.graphics.Bitmap.Config.ARGB_8888
-        )
-        view.android.draw(new android.graphics.Canvas(img))
-        this.printImage(img).then(resolve, reject)
-      } catch (e) {
-        reject(e)
-      }
-    })
-  }
-  static printImage(img) {
-    return new Promise((resolve, reject) => {
-      try {
-        let callback = (success) => resolve(success)
-        let printHelper = new this.PrintPackage.PrintHelper(
-          Application.android.foregroundActivity
-        )
-        printHelper.setScaleMode(this.PrintPackage.PrintHelper.SCALE_MODE_FIT)
-        let jobName = 'MyPrintJob'
-        printHelper.printBitmap(jobName, img)
-        callback(true)
+        const PrintAdapter = view.android.createPrintDocumentAdapter(fileName)
+        if (PrintManager != null) {
+          let attributes = new PrintAttributes.Builder()
+            .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
+            .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
+            .setResolution(
+              new PrintAttributes.Resolution('pdf', 'pdf', 300, 300)
+            )
+          PrintManager.print(fileName, PrintAdapter, attributes.build())
+          resolve(true)
+        }
       } catch (e) {
         reject(e)
       }
@@ -521,7 +531,7 @@ export class Printer {
 }
 
 // GET RINGTONES LIST
-export const getTones = () => {
+export function getTones() {
   const RingtoneManager = android.media.RingtoneManager
   let ctx = Utils.ad.getApplicationContext()
   const ringtonesMgr = new RingtoneManager(ctx)
@@ -556,14 +566,84 @@ export const getTones = () => {
   return { tones, defaultTone: defaultToneUri ? defaultTone : tones[0] }
 }
 
-//DETECT RTL LANGUAGE
-export const RTL = (): boolean => {
-  const ctx = Utils.android.getApplicationContext()
-  const config = ctx.getResources().getConfiguration()
-  return config.getLayoutDirection() == android.view.View.LAYOUT_DIRECTION_RTL
+//WAKE LOCK
+export function wakeLock(n): void {
+  n ? !wl.isHeld() && wl.acquire() : wl.isHeld() && wl.release()
 }
 
-//WAKE LOCK
-export const wakeLock = (bool) => {
-  bool ? !wl.isHeld() && wl.acquire() : wl.isHeld() && wl.release()
+//RandomId
+export function getRandomID(n?: number) {
+  if (n) return Math.floor(Math.random() * 9000000000) + 1000000000
+  else {
+    let res = ''
+    let chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
+    for (let i = 0; i < 16; i++) {
+      res += chars.charAt(Math.floor(Math.random() * chars.length))
+    }
+    return res
+  }
+}
+
+//LocaleHandlers
+export function updateLocale() {
+  let lang = ApplicationSettings.getString('appLocale', 'none').split('-')
+  const l = lang[0]
+  const c = lang[1]
+  const ctx = Utils.android.getApplicationContext()
+  const res = ctx.getResources()
+  const config = res.getConfiguration()
+  if (l !== 'none') {
+    const locale = c ? new java.util.Locale(l, c) : new java.util.Locale(l)
+    java.util.Locale.setDefault(locale)
+    config.setLocale(locale)
+    config.setLayoutDirection(locale)
+    ctx.createConfigurationContext(config)
+    res.updateConfiguration(config, res.getDisplayMetrics())
+    ApplicationSettings.setNumber('RTL', config.getLayoutDirection() | 0)
+  }
+  ApplicationSettings.setString('sysLocale', sysLocale())
+}
+export function sysRTL() {
+  return android.content.res.Resources.getSystem()
+    .getConfiguration()
+    .getLayoutDirection()
+}
+export function sysLocale() {
+  return android.content.res.Resources.getSystem()
+    .getConfiguration()
+    .locale.toString()
+    .replace('_', '-')
+}
+
+// SetBarColors
+export function setBarColors(w, dv, t) {
+  function setColors(color) {
+    w.setStatusBarColor(new Color(color).android)
+    sdkv >= 27 && w.setNavigationBarColor(new Color(color).android)
+  }
+  switch (t) {
+    case 'Light':
+      setColors('#f1f3f5')
+      break
+    case 'Dark':
+      setColors('#212529')
+      break
+    default:
+      setColors('#000000')
+      break
+  }
+  if (sdkv >= 27)
+    dv.setSystemUiVisibility(
+      t == 'Light'
+        ? View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR |
+            View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        : View.SYSTEM_UI_FLAG_DARK_STATUS_BAR |
+            View.SYSTEM_UI_FLAG_DARK_NAVIGATION_BAR
+    )
+  else
+    dv.setSystemUiVisibility(
+      t == 'Light'
+        ? View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        : View.SYSTEM_UI_FLAG_DARK_STATUS_BAR
+    )
 }

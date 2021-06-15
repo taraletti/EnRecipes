@@ -2,20 +2,25 @@
   <Page
     @loaded="transparentPage"
     backgroundColor="transparent"
-    :class="appTheme"
+    :class="theme"
   >
     <GridLayout columns="*" rows="auto, auto, *, auto" class="modal">
-      <Label class="title" :text="title | L" />
+      <RLabel class="title" :text="title | L" />
       <StackLayout
         row="1"
-        v-if="filteredRecipes.length || searchQuery"
+        :hidden="!filteredRecipes.length && !searchQuery"
         class="input"
       >
-        <TextField class="modalInput" :hint="'ser' | L" v-model="searchQuery" />
+        <TextField
+          @loaded="setGravity"
+          class="modalInput"
+          :hint="'ser' | L"
+          v-model="searchQuery"
+        />
       </StackLayout>
       <ListView row="2" for="recipe in filteredRecipes">
         <v-template>
-          <Label
+          <RLabel
             class="listItem"
             :text="recipe.title"
             @touch="touch($event, recipe)"
@@ -25,18 +30,18 @@
       <Label
         row="2"
         class="noResInfo"
-        v-if="!filteredRecipes.length && !searchQuery"
+        :hidden="recipes.length"
         :text="'recListEmp' | L"
       />
       <Label
         row="2"
         class="noResInfo"
-        v-if="!filteredRecipes.length && searchQuery"
+        :hidden="filteredRecipes.length || !searchQuery"
         :text="'noRecs' | L"
       />
-      <GridLayout row="3" columns="auto, *, auto" class="actions">
+      <RGridLayout :rtl="RTL" row="3" columns="auto, *, auto" class="actions">
         <Button
-          v-if="action"
+          :hidden="!action"
           class="text sm"
           :text="action | L"
           @tap="$modal.close(action)"
@@ -45,9 +50,9 @@
           col="2"
           class="text sm"
           :text="'cBtn' | L"
-          @tap="$modal.close(false)"
+          @tap="$modal.close(0)"
         />
-      </GridLayout>
+      </RGridLayout>
     </GridLayout>
   </Page>
 </template>
@@ -62,7 +67,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon", "appTheme"]),
+    ...mapState(["icon", "theme", "RTL"]),
     filteredRecipes() {
       return this.recipes
         .map((e, i) => {
@@ -82,8 +87,8 @@ export default {
     tapAction(recipe) {
       this.$modal.close(recipe.id);
     },
-    centerLabel(args) {
-      args.object.android.setGravity(16);
+    centerLabel({ object }) {
+      object.android.setGravity(16);
     },
     recipeFilter(e) {
       let searchQuery = this.searchQuery.toLowerCase();
@@ -98,7 +103,7 @@ export default {
     touch({ object, action }, recipe) {
       object.className = action.match(/down|move/)
         ? "listItem fade"
-        : "listItem";
+        : "listItem ";
       if (action == "up") this.tapAction(recipe);
     },
   },

@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="tmrClr">"Kookwekker gewist"</string>
+  <string name="selMT">"Kies het soort maaltijd"</string>
+  <string name="ehwmp">"Eet gezond met maaltijdschema\'s!"</string>
+  <string name="plsCrt">"Druk op de plusknop om een schema toe te voegen"</string>
+  <string name="admp">"Schema\'s automatisch verwijderen"</string>
+  <string name="otay">"Ouder dan een jaar"</string>
+  <string name="otam">"Ouder dan een maand"</string>
+  <string name="otaw">"Ouder dan een week"</string>
+  <string name="nvr">"Nooit"</string>
+  <string name="oAP">"%1$s lopende; %2$s onderbroken"</string>
+  <string name="calVM">"Weergavemodus van kalender"</string>
+  <string name="mnth">"Maand"</string>
+  <string name="wk">"Week"</string>
+  <string name="d">"Dag"</string>
+  <string name="sun">"zondag"</string>
+  <string name="mon">"maandag"</string>
+  <string name="tue">"dinsdag"</string>
+  <string name="wed">"woensdag"</string>
+  <string name="thu">"donderdag"</string>
+  <string name="fri">"vrijdag"</string>
+  <string name="sat">"zaterdag"</string>
+  <string name="cpy">"kopie"</string>
+  <string name="tdy">"Vandaag"</string>
+  <string name="tmrw">"Morgen"</string>
+  <string name="ystr">"Gisteren"</string>
+  <string name="random">"Willekeurig"</string>
+  <string name="gtD">"Ga naar datum"</string>
+  <string name="ccwt">"Kook vol vertrouwen d.m.v. kookwekkers!"</string>
+  <string name="prstTU">"De tijd is bijgewerkt"</string>
+  <string name="wDBy">"%1$s is %2$s vertraagd"</string>
+  <string name="texp">"%1$s kookwekkers zijn afgegaan"</string>
+  <string name="dismiss">"Verwerpen"</string>
+  <string name="dismissAll">"Alle kookwekkers verwerpen"</string>
+  <string name="ttv">"Druk om te bekijken"</string>
+  <string name="prsts">"Voorinstellingen"</string>
+  <string name="delPrst">"Je staat op het punt om %1$s te verwijderen uit de voorinstellingen"</string>
+  <string name="tmrRm">"De kookwekker is verwijderd"</string>
+  <string name="notifSetg">"Meldingsinstellingen"</string>
   <string name="delay">"Vertraging"</string>
   <string name="dlyDur">"Vertragingsduur"</string>
   <string name="minute">"minuut"</string>
@@ -11,7 +47,6 @@
   <string name="tmrvbrt">"Kookwekker laten trillen"</string>
   <string name="stop">"Stoppen"</string>
   <string name="prstBtn">"VOORINSTELLINGEN"</string>
-  <string name="tmrPrsts">"Kookwekker: voorinstellingen"</string>
   <string name="fwr">"bij welk recept?"</string>
   <string name="aTPrst">"Toegevoegd aan voorinstellingen"</string>
   <string name="tmrSnd">"Kookwekkergeluid"</string>
@@ -109,7 +144,7 @@
   <string name="restCatL">"Categorieënlijst herstellen"</string>
   <string name="rest">"Standaardwaarden"</string>
   <string name="resNF">"Recept niet gevonden"</string>
-  <string name="req">"Vereiste %1$s"</string>
+  <string name="req">"%1$s vereist"</string>
   <string name="recU">"Bijgewerkt:"</string>
   <string name="recTitle">"Mijn gezonde recept"</string>
   <string name="recs">"recepten"</string>
@@ -313,6 +348,5 @@
   <string name="aBtn">"TOEVOEGEN"</string>
   <string name="About">"Over"</string>
   <string name="aap">"Foto bijvoegen"</string>
-  <string name="notifSetg">"Notification settings"</string>
-  <string name="tmrRm">"Timer removed"</string>
+  <string name="add">"Add"</string>
 </resources>

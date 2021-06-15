@@ -1,7 +1,8 @@
 import Vue from 'nativescript-vue'
 import Vuex from 'vuex'
+
 Vue.use(Vuex)
-import { openOrCreate } from '@akylas/nativescript-sqlite'
+
 import {
   getFileAccess,
   File,
@@ -15,34 +16,35 @@ import {
   getString,
   setString,
 } from '@nativescript/core/application-settings'
+import { openOrCreate } from '@akylas/nativescript-sqlite'
 import * as utils from '~/shared/utils'
 
-// OPEN DATABASE FILE
+// OpenDatabaseFile
 const db = openOrCreate(
   path.join(knownFolders.documents().path, 'EnRecipes.db')
 )
 
-// CREATE recipes TABLE
+// Create"recipes"Table
 db.execute(
   'CREATE TABLE IF NOT EXISTS recipes (id TEXT PRIMARY KEY, image TEXT, title TEXT, cuisine TEXT, category TEXT, tags TEXT, prepTime TEXT, cookTime TEXT, yieldQuantity TEXT, yieldUnit TEXT, difficulty TEXT, rating INT, ingredients TEXT, instructions TEXT, combinations TEXT, notes TEXT, favorite INT, tried INT, lastTried INT, lastModified INT, created INT)'
 )
 
-// CREATE lists TABLE
+// Create"lists"Table
 db.execute(
   'CREATE TABLE IF NOT EXISTS lists (cuisines TEXT, categories TEXT, yieldUnits TEXT, units TEXT)'
 )
 
-// CREATE mealPlans TABLE
+// Create"mealPlans"Table
 db.execute(
-  'CREATE TABLE IF NOT EXISTS mealPlans (date INT, type TEXT, title TEXT)'
+  'CREATE TABLE IF NOT EXISTS mealPlans (id TEXT PRIMARY KEY, date INT, mealType TEXT, recipeID TEXT, quantity INT, note TEXT)'
 )
 
-// CREATE timerPresets TABLE
+// Create"timerPresets"Table
 db.execute(
   'CREATE TABLE IF NOT EXISTS timerPresets (id INT PRIMARY KEY, label TEXT, time TEXT)'
 )
 
-const defaultCuisines = [
+const defCuisines = [
   'American',
   'Brazilian',
   'British',
@@ -73,7 +75,7 @@ const defaultCuisines = [
   'Turkish',
   'Vietnamese',
 ]
-const defaultCategories = [
+const defCategories = [
   'Appetizers',
   'Barbecue',
   'Beverages',
@@ -99,7 +101,7 @@ const defaultCategories = [
   'Vegan',
   'Vegetarian',
 ]
-const defaultYieldUnits = [
+const defYieldUnits = [
   'Serving',
   'Piece',
   'Teaspoon',
@@ -117,7 +119,7 @@ const defaultYieldUnits = [
   'Patty',
   'Loaf',
 ]
-const defaultUnits = [
+const defUnits = [
   'unit',
   'tsp',
   'dsp',
@@ -151,19 +153,19 @@ const defaultUnits = [
 const listItems = {
   cuisines: {
     sort: 1,
-    defaultItems: defaultCuisines,
+    defs: defCuisines,
   },
   categories: {
     sort: 1,
-    defaultItems: defaultCategories,
+    defs: defCategories,
   },
   yieldUnits: {
     sort: 0,
-    defaultItems: defaultYieldUnits,
+    defs: defYieldUnits,
   },
   units: {
     sort: 0,
-    defaultItems: defaultUnits,
+    defs: defUnits,
   },
 }
 
@@ -240,13 +242,17 @@ export default new Vuex.Store({
       delay: '\ue93d',
       ring: '\ue93e',
       print: '\ue93f',
+      dup: '\ue940',
+      calv: '\ue941',
+      mpd: '\ue942',
+      madd: '\ue943',
     },
-    currentComponent: 'EnRecipes',
     sortType: 'random',
     language: [
       {
         locale: 'ar',
         title: 'العربية',
+        rtl: 1,
       },
       {
         locale: 'da',
@@ -300,14 +306,14 @@ export default new Vuex.Store({
         locale: 'it',
         title: 'Italiano',
       },
-      {
-        locale: 'ja',
-        title: '日本語',
-      },
-      {
-        locale: 'ml',
-        title: 'മലയാളം',
-      },
+      // {
+      //   locale: 'ja',
+      //   title: '日本語',
+      // },
+      // {
+      //   locale: 'ml',
+      //   title: 'മലയാളം',
+      // },
       {
         locale: 'nb-NO',
         title: 'Norsk bokmål',
@@ -337,29 +343,39 @@ export default new Vuex.Store({
         title: 'తెలుగు',
       },
     ],
-    shakeEnabled: getNumber('shakeEnabled', 1),
+    shake: getNumber('shake', 1),
     importSummary: {
       found: 0,
       imported: 0,
       updated: 0,
     },
     layout: getString('layout', 'detailed'),
-    selectedCuisine: null,
-    selectedCategory: null,
-    selectedTag: null,
-    appTheme: 'sysDef',
+    selCuisine: null,
+    selCategory: null,
+    selTag: null,
+    theme: 'sysDef',
     mondayFirst: getNumber('mondayFirst', 0),
-    timerDelay: getString('timerDelay', '1 minute'),
+    timerDelay: getNumber('timerDelay', 1),
     timerSound: {},
     timerVibrate: getNumber('timerVibrate', 0),
     timerPresets: [],
     activeTimers: [],
     FGService: 0,
-    RTL: 0,
+    RTL: getNumber('RTL', 0),
+    plannerView: getString('plannerView', 'wk'),
+    planDeletion: getString('planDeletion', 'nvr'),
   },
   mutations: {
+    setPlanDeletion(state, s) {
+      state.planDeletion = s
+      setString('planDeletion', s)
+    },
+    setPlannerView(state, s) {
+      state.plannerView = s
+      setString('plannerView', s)
+    },
     setRTL(state) {
-      state.RTL = utils.RTL() as any | 0
+      state.RTL = getNumber('RTL', 0)
     },
     setFGService(state, val) {
       state.FGService = val
@@ -427,9 +443,9 @@ export default new Vuex.Store({
     removeActiveTimer(state, i) {
       state.activeTimers.splice(i, 1)
     },
-    setTimerDelay(state, delay) {
-      state.timerDelay = delay
-      setString('timerDelay', delay)
+    setTimerDelay(state, n: number) {
+      state.timerDelay = n
+      setNumber('timerDelay', n)
     },
     setTimerSound(state, sound) {
       state.timerSound = sound
@@ -443,27 +459,27 @@ export default new Vuex.Store({
       for (const key in state.importSummary) state.importSummary[key] = 0
     },
     setFirstDay(state, n) {
-      state.mondayFirst = n | 0
-      setNumber('mondayFirst', n | 0)
+      state.mondayFirst = n
+      setNumber('mondayFirst', n)
     },
     setTheme(state, theme) {
       switch (theme) {
         case 'sysDef':
-          state.appTheme =
+          state.theme =
             Application.systemAppearance() == 'dark' ? 'Dark' : 'Light'
           break
         case 'sysDefB':
-          state.appTheme =
+          state.theme =
             Application.systemAppearance() == 'dark' ? 'Black' : 'Light'
           break
         default:
-          state.appTheme = theme
+          state.theme = theme
           break
       }
-      setString('appTheme', theme)
+      setString('theme', theme)
     },
     clearFilter(state) {
-      state.selectedCuisine = state.selectedCategory = state.selectedTag = null
+      state.selCuisine = state.selCategory = state.selTag = null
     },
     setLayout(state, type) {
       state.layout = type
@@ -472,17 +488,19 @@ export default new Vuex.Store({
       state.sortType = sortType
     },
     initRecipes(state) {
-      db.select('SELECT * FROM recipes').then((res) => {
-        res.forEach((e) => {
-          Object.keys(e).forEach(
-            (f) =>
-              f.match(/tags|ingredients|instructions|combinations|notes/) &&
-              (e[f] = JSON.parse(e[f]))
-          )
-          state.recipes.push(e)
+      if (!state.recipes.length) {
+        db.select('SELECT * FROM recipes').then((res) => {
+          res.forEach((e) => {
+            Object.keys(e).forEach(
+              (f) =>
+                f.match(/tags|ingredients|instructions|combinations|notes/) &&
+                (e[f] = JSON.parse(e[f]))
+            )
+            state.recipes.push(e)
+          })
         })
-      })
-      state.shakeEnabled = getNumber('shakeEnabled', 1)
+      }
+      state.shake = getNumber('shake', 1)
       state.sortType = getString('sortType', 'random')
     },
     importRecipesFromJSON(state, recipes) {
@@ -515,6 +533,8 @@ export default new Vuex.Store({
           r.lastTried = getTime(r.lastTried)
           r.lastModified = getTime(r.lastModified)
           r.created = getTime(r.created)
+          r.favorite = r.favorite | 0
+          r.tried = r.tried | 0
           return r
         })
       }
@@ -542,8 +562,8 @@ export default new Vuex.Store({
               JSON.stringify(r.instructions),
               JSON.stringify(r.combinations),
               JSON.stringify(r.notes),
-              r.favorite ? 1 : 0,
-              r.tried ? 1 : 0,
+              r.favorite,
+              r.tried,
               r.lastTried,
               r.lastModified,
               r.created,
@@ -583,8 +603,8 @@ export default new Vuex.Store({
                 JSON.stringify(r.instructions),
                 JSON.stringify(r.combinations),
                 JSON.stringify(r.notes),
-                r.favorite ? 1 : 0,
-                r.tried ? 1 : 0,
+                r.favorite,
+                r.tried,
                 r.lastTried,
                 r.lastModified,
                 r.created,
@@ -740,16 +760,14 @@ export default new Vuex.Store({
           db.select(`SELECT * FROM lists`).then((res) => {
             Object.keys(res[0]).forEach((list) => {
               let userItems: string[]
-              let defaultItems = listItems[list].defaultItems
+              let defs = listItems[list].defs
               if (res[0][list]) {
                 userItems = JSON.parse(res[0][list])
-                state[list] = userItems.some((e: string) =>
-                  defaultItems.includes(e)
-                )
+                state[list] = userItems.some((e: string) => defs.includes(e))
                   ? userItems
-                  : [...defaultItems, ...userItems]
+                  : [...defs, ...userItems]
               } else {
-                state[list] = defaultItems
+                state[list] = defs
                 listItems[list].sort && state[list].sort()
               }
             })
@@ -784,8 +802,8 @@ export default new Vuex.Store({
       )
     },
     resetListItems(state, listName) {
-      let defaultItems = listItems[listName].defaultItems
-      state[listName] = [...defaultItems]
+      let defs = listItems[listName].defs
+      state[listName] = [...defs]
       if (listItems[listName].sort)
         state[listName].sort((a: string, b: string) =>
           a.toLowerCase().localeCompare(b.toLowerCase())
@@ -795,12 +813,33 @@ export default new Vuex.Store({
       )
     },
     initMealPlans(state) {
-      if (!state.mealPlans.length)
+      if (!state.mealPlans.length) {
+        let c = state.planDeletion
+        let date = new Date()
+        let d = new Date()
+        if (c != 'nvr') {
+          d.setHours(0, 0, 0, 0)
+          let ld =
+            c == 'otay'
+              ? 365
+              : c == 'otam'
+              ? new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
+              : 7
+          d.setDate(d.getDate() - ld)
+        }
+
         db.select(`SELECT * FROM mealPlans`).then((res) =>
-          res.forEach((m: {}) => state.mealPlans.push(m))
+          res.forEach((p: any) => {
+            if (p.date < d.getTime())
+              // DeletingOldMealPlans
+              db.execute(`DELETE FROM mealPlans WHERE id = '${p.id}'`)
+            else state.mealPlans.push(p)
+          })
         )
+      }
     },
     importMealPlansFromJSON(state, mealPlans) {
+      let updatedMealPlans = []
       let newMealPlans = mealPlans.filter((e) => {
         if (e.hasOwnProperty('eventColor')) {
           return !state.mealPlans.some((f) => {
@@ -826,17 +865,21 @@ export default new Vuex.Store({
                 type = 'snacks'
                 break
             }
-            return f.title == e.title && f.date == date && f.type == type
+            return f.recipeID == e.title && f.date == date && f.mealType == type
           })
         } else {
           return !state.mealPlans.some(
-            (f) => f.title == e.title && f.date == e.date && f.type == e.type
+            (f) =>
+              f.recipeID == e.title && f.date == e.date && f.mealType == e.type
           )
         }
       })
-      let updatedMealPlans = []
-      if (newMealPlans[0].hasOwnProperty('eventColor')) {
-        newMealPlans.forEach((p) => {
+      newMealPlans.forEach((p) => {
+        p.id = utils.getRandomID()
+        p.recipeID = p.title
+        p.quantity = 1
+        p.note = null
+        if (p.hasOwnProperty('eventColor')) {
           let d = new Date(p.startDate)
           p.date = new Date(
             d.getFullYear(),
@@ -846,29 +889,34 @@ export default new Vuex.Store({
           ).getTime()
           switch (d.getHours()) {
             case 0:
-              p.type = 'breakfast'
+              p.mealType = 'breakfast'
               break
             case 5:
-              p.type = 'lunch'
+              p.mealType = 'lunch'
               break
             case 10:
-              p.type = 'dinner'
+              p.mealType = 'dinner'
               break
             case 15:
-              p.type = 'snacks'
+              p.mealType = 'snacks'
               break
           }
+          delete p.title
           delete p.startDate
           delete p.endDate
           delete p.eventColor
-          updatedMealPlans.push(p)
-        })
-      }
+        } else {
+          p.mealType = p.type
+          delete p.type
+          delete p.title
+        }
+        updatedMealPlans.push(p)
+      })
       state.mealPlans = [...state.mealPlans, ...updatedMealPlans]
-      updatedMealPlans.forEach((m) => {
+      updatedMealPlans.forEach((p) => {
         db.execute(
-          `INSERT INTO mealPlans (date, type, title) VALUES (?, ?, ?)`,
-          [m.date, m.type, m.title]
+          `INSERT INTO mealPlans (id, date, mealType, recipeID, quantity, note) VALUES (?, ?, ?, ?, ?, ?)`,
+          [p.id, p.date, p.mealType, p.recipeID, p.quantity, p.note]
         )
       })
     },
@@ -880,18 +928,21 @@ export default new Vuex.Store({
           )
       )
       state.mealPlans = [...state.mealPlans, ...newMealPlans]
-      newMealPlans.forEach((m) => {
+      newMealPlans.forEach((p) => {
         db.execute(
-          `INSERT INTO mealPlans (date, type, title) VALUES (?, ?, ?)`,
-          [m.date, m.type, m.title]
+          `INSERT INTO mealPlans (id, date, mealType, recipeID, quantity, note) VALUES (?, ?, ?, ?, ?, ?)`,
+          [p.id, p.date, p.mealType, p.recipeID, p.quantity, p.note]
         )
       })
     },
-    addMealPlan(state, { date, type, title, index, inDB }) {
+    addMealPlan(state, { plan, index, inDB }) {
       let mealPlan = {
-        date,
-        type,
-        title,
+        id: plan.id,
+        date: plan.date,
+        mealType: plan.mealType,
+        recipeID: plan.recipeID,
+        quantity: plan.quantity,
+        note: plan.note,
       }
       if (inDB) {
         const cols = Object.keys(mealPlan).join(', ')
@@ -899,7 +950,7 @@ export default new Vuex.Store({
           .fill('?')
           .join(', ')
         db.execute(
-          `INSERT INTO mealPlans (${cols}) VALUES (${placeholder})`,
+          `REPLACE INTO mealPlans (${cols}) VALUES (${placeholder})`,
           Object.values(mealPlan)
         )
         if (index === null) state.mealPlans.push(mealPlan)
@@ -907,11 +958,9 @@ export default new Vuex.Store({
         state.mealPlans.splice(index, 0, mealPlan)
       }
     },
-    deleteMealPlan(state, { date, type, title, index, inDB }) {
+    deleteMealPlan(state, { id, index, inDB }) {
       if (inDB) {
-        db.execute(
-          `DELETE FROM mealPlans WHERE date = ${date} AND type = '${type}' AND title = '${title}'`
-        )
+        db.execute(`DELETE FROM mealPlans WHERE id = '${id}'`)
       } else {
         state.mealPlans.splice(index, 1)
         state.mealPlans = [...state.mealPlans]
@@ -942,9 +991,9 @@ export default new Vuex.Store({
         }
       })
     },
-    setShake(state, shake) {
-      state.shakeEnabled = shake | 0
-      setNumber('shakeEnabled', shake | 0)
+    setShake(state, n) {
+      state.shake = n
+      setNumber('shake', n)
     },
     setRating(state, { id, rating }) {
       let i = state.recipes.findIndex((e) => e.id == id)
@@ -965,16 +1014,22 @@ export default new Vuex.Store({
       })
     },
     setCuisine(state, value) {
-      state.selectedCuisine = value
+      state.selCuisine = value
     },
     setCategory(state, value) {
-      state.selectedCategory = value
+      state.selCategory = value
     },
     setTag(state, value) {
-      state.selectedTag = value
+      state.selTag = value
     },
   },
   actions: {
+    setPlanDeletion({ commit }, s) {
+      commit('setPlanDeletion', s)
+    },
+    setPlannerView({ commit }, s) {
+      commit('setPlannerView', s)
+    },
     setRTL({ commit }) {
       commit('setRTL')
     },
@@ -1008,8 +1063,8 @@ export default new Vuex.Store({
     removeActiveTimer({ commit }, i) {
       commit('removeActiveTimer', i)
     },
-    setTimerDelay({ commit }, delay) {
-      commit('setTimerDelay', delay)
+    setTimerDelay({ commit }, n) {
+      commit('setTimerDelay', n)
     },
     setTimerSound({ commit }, sound) {
       commit('setTimerSound', sound)
@@ -1086,8 +1141,8 @@ export default new Vuex.Store({
     unSyncCombinationsAction({ commit }, combinations) {
       commit('unSyncCombinations', combinations)
     },
-    setShake({ commit }, shake) {
-      commit('setShake', shake)
+    setShake({ commit }, n) {
+      commit('setShake', n)
     },
     setRatingAction({ commit }, rating) {
       commit('setRating', rating)

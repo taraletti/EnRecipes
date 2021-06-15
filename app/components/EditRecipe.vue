@@ -1,15 +1,11 @@
 <template>
-  <Page @loaded="onPageLoad" @unloaded="onPageUnload" actionBarHidden="true">
-    <GridLayout rows="*, auto" columns="auto, *">
-      <ScrollView
-        rowSpan="2"
-        colSpan="2"
-        @scroll="!showUndo && onScroll($event)"
-      >
+  <Page @loaded="pgLoad" @unloaded="onPageUnload" actionBarHidden="true">
+    <GridLayout rows="*, auto" columns="auto, *, auto">
+      <ScrollView rowSpan="2" colSpan="3" @scroll="!showUndo && svLoad($event)">
         <StackLayout padding="0 16 72">
-          <Label class="pageTitle" padding="16 0" :text="`${title}` | L" />
+          <RLabel class="pageTitle" padding="16 0 24" :text="`${title}` | L" />
           <Image
-            margin="8 0 32"
+            margin="0 0 32"
             v-if="recipe.image"
             :src="recipe.image"
             stretch="aspectFit"
@@ -20,7 +16,7 @@
           />
           <Button
             v-else
-            margin="8 0 32"
+            margin="0 0 32"
             class="ico imgHolder"
             fontSize="128"
             :width="screenWidth - 32"
@@ -37,30 +33,33 @@
               @loaded="setInputTypeText($event, 'words')"
             />
           </StackLayout>
-          <GridLayout columns="*, 8, *">
+          <RGridLayout :rtl="RTL" class="" columns="*, 8, *">
             <StackLayout class="inputField">
               <Label class="fieldLabel" :text="'cui' | L" />
               <TextField
+                @loaded="setGravity"
                 :text="recipe.cuisine | L"
                 editable="false"
-                @focus="!modalOpen && showCuisine(true)"
-                @tap="showCuisine(false)"
+                @focus="!modalOpen && showCuisine(1)"
+                @tap="showCuisine(0)"
               />
             </StackLayout>
             <StackLayout class="inputField" col="2">
               <Label class="fieldLabel" :text="'cat' | L" />
               <TextField
+                @loaded="setGravity"
                 ref="category"
                 :text="recipe.category | L"
                 editable="false"
-                @focus="!modalOpen && showCategories(true)"
-                @tap="showCategories(false)"
+                @focus="!modalOpen && showCategories(1)"
+                @tap="showCategories(0)"
               />
             </StackLayout>
-          </GridLayout>
+          </RGridLayout>
           <StackLayout class="inputField">
             <Label class="fieldLabel" :text="'ts' | L" />
             <TextField
+              @loaded="setGravity"
               :hint="'tsInfo' | L"
               autocapitalizationType="words"
               ref="tags"
@@ -69,31 +68,34 @@
               returnKeyType="next"
             />
           </StackLayout>
-          <GridLayout columns="*, 8, *">
+          <RGridLayout :rtl="RTL" columns="*, 8, *">
             <StackLayout class="inputField">
               <Label class="fieldLabel" :text="'prepT' | L" />
               <TextField
+                @loaded="setGravity"
                 :text="timeRequired('prepTime')"
                 editable="false"
-                @focus="!modalOpen && setTimeRequired(true, 'prepTime')"
-                @tap="setTimeRequired(false, 'prepTime')"
+                @focus="!modalOpen && setTimeRequired(1, 'prepTime')"
+                @tap="setTimeRequired(0, 'prepTime')"
               />
             </StackLayout>
             <StackLayout class="inputField" col="2">
               <Label class="fieldLabel" :text="'cookT' | L" />
               <TextField
+                @loaded="setGravity"
                 ref="cookTime"
                 :text="timeRequired('cookTime')"
                 editable="false"
-                @focus="!modalOpen && setTimeRequired(true, 'cookTime')"
-                @tap="setTimeRequired(false, 'cookTime')"
+                @focus="!modalOpen && setTimeRequired(1, 'cookTime')"
+                @tap="setTimeRequired(0, 'cookTime')"
               />
             </StackLayout>
-          </GridLayout>
-          <GridLayout columns="*, 8, *">
+          </RGridLayout>
+          <RGridLayout :rtl="RTL" columns="*, 8, *">
             <StackLayout class="inputField">
               <Label class="fieldLabel" :text="'yieldQ' | L" />
               <TextField
+                @loaded="setGravity"
                 ref="yieldQuantity"
                 v-model="recipe.yieldQuantity"
                 hint="1"
@@ -104,22 +106,24 @@
             <StackLayout class="inputField" col="2">
               <Label class="fieldLabel" :text="'yieldU' | L" />
               <TextField
+                @loaded="setGravity"
                 :text="`${recipe.yieldUnit}` | L"
                 editable="false"
-                @focus="!modalOpen && showYieldUnits(true)"
-                @tap="showYieldUnits(false)"
+                @focus="!modalOpen && showYieldUnits(1)"
+                @tap="showYieldUnits(0)"
               />
             </StackLayout>
-          </GridLayout>
+          </RGridLayout>
           <GridLayout columns="*, 8, *">
-            <StackLayout class="inputField">
+            <StackLayout class="inputField" :col="RTL ? 2 : 0">
               <Label class="fieldLabel" :text="'Difficulty level' | L" />
               <TextField
+                @loaded="setGravity"
                 ref="difficultyLevel"
                 :text="`${recipe.difficulty}` | L"
                 editable="false"
-                @focus="!modalOpen && showDifficultyLevel(true)"
-                @tap="showDifficultyLevel(false)"
+                @focus="!modalOpen && showDifficultyLevel(1)"
+                @tap="showDifficultyLevel(0)"
               />
             </StackLayout>
           </GridLayout>
@@ -128,7 +132,8 @@
             :text="getTitleCount('ings', 'ingredients')"
             class="sectionTitle"
           />
-          <GridLayout
+          <RGridLayout
+            :rtl="RTL"
             columns="auto,8,auto,8,*,auto"
             v-for="(ingredient, index) in recipe.ingredients"
             :key="'ing' + index"
@@ -147,8 +152,8 @@
               col="2"
               :text="`${recipe.ingredients[index].unit}` | L"
               editable="false"
-              @focus="!modalOpen && showUnits($event, true, index)"
-              @tap="showUnits($event, false, index)"
+              @focus="!modalOpen && showUnits($event, 1, index)"
+              @tap="showUnits($event, 0, index)"
             />
 
             <TextField
@@ -163,13 +168,14 @@
             />
             <Button
               col="5"
-              class="ico x"
+              class="ico min"
               :text="icon.x"
               @tap="removeIngredient(index)"
             />
-          </GridLayout>
+          </RGridLayout>
           <Button
-            class="text big"
+            class="text big hal"
+            :class="{ r: RTL }"
             :text="'aIngBtn' | L"
             @tap="addIngredient()"
           />
@@ -178,7 +184,8 @@
             :text="getTitleCount('inss', 'instructions')"
             class="sectionTitle"
           />
-          <GridLayout
+          <RGridLayout
+            :rtl="RTL"
             columns="*,auto"
             v-for="(instruction, index) in recipe.instructions"
             :key="'ins' + index"
@@ -190,13 +197,14 @@
             />
             <Button
               col="1"
-              class="ico x"
+              class="ico min"
               :text="icon.x"
               @tap="removeInstruction(index)"
             />
-          </GridLayout>
+          </RGridLayout>
           <Button
-            class="text big"
+            class="text big hal"
+            :class="{ r: RTL }"
             :text="'aStpBtn' | L"
             @tap="addInstruction"
           />
@@ -205,32 +213,36 @@
             :text="getTitleCount('cmbs', 'combinations')"
             class="sectionTitle"
           />
-          <GridLayout
+          <RGridLayout
+            :rtl="RTL"
             columns="*,auto"
             v-for="(combination, index) in recipe.combinations"
             :key="'cmbs' + index"
           >
             <TextField
+              @loaded="setGravity"
               class="combField"
               :text="getCombinationTitle(combination)"
               editable="false"
             />
             <Button
               col="1"
-              class="ico x"
+              class="ico min"
               :text="icon.x"
               @tap="removeCombination(combination)"
             />
-          </GridLayout>
+          </RGridLayout>
           <Button
-            class="text big"
+            class="text big hal"
+            :class="{ r: RTL }"
             :text="'addCmbBtn' | L"
             @tap="showCombinations"
           />
           <!-- NOTES -->
           <Label :text="getTitleCount('nos', 'notes')" class="sectionTitle" />
-          <GridLayout
-            columns="*,auto"
+          <RGridLayout
+            :rtl="RTL"
+            columns="*, auto"
             v-for="(note, index) in recipe.notes"
             :key="'nos' + index"
           >
@@ -241,52 +253,53 @@
             />
             <Button
               col="1"
-              class="ico x"
+              class="ico min"
               :text="icon.x"
               @tap="removeNote(index)"
             />
-          </GridLayout>
-          <Button class="text big" :text="'aNoBtn' | L" @tap="addNote" />
+          </RGridLayout>
+          <Button
+            class="text big hal"
+            :class="{ r: RTL }"
+            :text="'aNoBtn' | L"
+            @tap="addNote"
+          />
         </StackLayout>
       </ScrollView>
-      <GridLayout
+      <RGridLayout
+        :rtl="RTL && hasChanges"
         row="1"
-        @loaded="onAppBarLoad"
+        @loaded="abLoad"
         :hidden="showUndo"
         class="appbar"
-        :colSpan="hasChanges ? 2 : 1"
+        :col="RTL ? (hasChanges ? 0 : 2) : 0"
+        :colSpan="hasChanges ? 3 : 1"
         columns="auto, *, auto"
       >
-        <Button class="ico" :text="icon.back" @tap="navigateBack" />
+        <Button
+          class="ico"
+          :class="{ f: RTL }"
+          :text="icon.back"
+          @tap="navigateBack(0)"
+        />
         <Button
           v-if="hasChanges && !saving"
           class="ico fab"
           :text="icon.save"
           col="2"
-          @tap="saveOperation()"
+          @tap="saveOperation"
         />
         <ActivityIndicator col="2" v-if="saving" :busy="saving" />
-      </GridLayout>
+      </RGridLayout>
       <SnackBar
         :hidden="!showUndo"
         colSpan="2"
         :count="countdown"
         :msg="snackMsg"
         :undo="undoDel"
-        :action="hideUndoBar"
+        :action="hideBar"
+        :onload="sbLoad"
       />
-      <!-- <GridLayout
-        row="1"
-        class="appbar snackBar"
-        :hidden="!showUndo"
-        colSpan="2"
-        columns="auto, *, auto"
-        @swipe="hideUndoBar"
-      >
-        <Button :text="countdown" class="ico countdown tb" />
-        <Label class="title" col="1" :text="snackMsg | L" />
-        <Button class="ico fab" :text="icon.undo" @tap="undoDel" col="3" />
-      </GridLayout> -->
     </GridLayout>
   </Page>
 </template>
@@ -294,7 +307,6 @@
 <script>
 import {
   AndroidApplication,
-  ApplicationSettings,
   File,
   getFileAccess,
   ImageSource,
@@ -304,10 +316,15 @@ import {
   Utils,
   Observable,
   CoreTypes,
+  Frame,
+  Application,
+  GridLayout,
 } from "@nativescript/core";
+import { getString, setString } from "@nativescript/core/application-settings";
 import { localize } from "@nativescript/localize";
 import { ImageCropper } from "nativescript-imagecropper";
 import { mapState, mapActions } from "vuex";
+import EnRecipes from "./EnRecipes.vue";
 import Action from "./modals/Action";
 import ActionWithSearch from "./modals/ActionWithSearch";
 import Confirm from "./modals/Confirm";
@@ -315,22 +332,17 @@ import Prompt from "./modals/Prompt";
 import TimePickerHM from "./modals/TimePickerHM";
 import * as utils from "~/shared/utils";
 import SnackBar from "./sub/SnackBar";
-let undoTimer;
+let barTimer;
 export default {
   components: {
     SnackBar,
   },
-  props: [
-    "recipeID",
-    "filterFavourites",
-    "filterTrylater",
-    "navigationFromView",
-  ],
+  props: ["recipeID", "filterFavourites", "filterTrylater", "dupRecipe"],
   data() {
     return {
       title: "newRec",
       recipe: {
-        id: this.recipeID ? this.recipeID : this.getRandomID(),
+        id: this.recipeID || utils.getRandomID(0),
         image: null,
         title: null,
         cuisine: "Undefined",
@@ -354,18 +366,18 @@ export default {
       },
       tempRecipe: {},
       tags: undefined,
-      modalOpen: false,
-      // newRecipeID: null,
-      saving: false,
+      modalOpen: 0,
+      saving: 0,
       cacheImagePath: null,
       unSyncCombinations: [],
       difficultyLevels: ["Easy", "Moderate", "Challenging"],
       appbar: null,
+      snackbar: null,
       scrollPos: 1,
       countdown: 5,
       snackMsg: null,
-      showUndo: false,
-      undo: false,
+      showUndo: 0,
+      undo: 0,
     };
   },
   computed: {
@@ -376,37 +388,42 @@ export default {
       "recipes",
       "cuisines",
       "categories",
-      "currentComponent",
-      "selectedCuisine",
-      "selectedCategory",
-      "selectedTag",
-      "appTheme",
+      "selCuisine",
+      "selCategory",
+      "selTag",
+      "theme",
+      "RTL",
     ]),
     screenWidth() {
       return Screen.mainScreen.widthDIPs;
     },
     hasChanges() {
-      return JSON.stringify(this.recipe) !== JSON.stringify(this.tempRecipe);
+      return JSON.stringify(this.recipe) != JSON.stringify(this.tempRecipe);
+    },
+    hasBackStack() {
+      return Frame.topmost().backStack.length;
     },
   },
   methods: {
     ...mapActions([
-      "setComponent",
       "addRecipeAction",
       "addListItemAction",
       "unSyncCombinationsAction",
     ]),
-    onPageLoad({ object }) {
+    pgLoad({ object }) {
       object.bindingContext = new Observable();
       this.hijackBackEvent();
     },
     onPageUnload() {
       this.releaseBackEvent();
     },
-    onAppBarLoad({ object }) {
-      this.appbar = object;
+    abLoad(args) {
+      this.appbar = args.object;
     },
-    onScroll(args) {
+    sbLoad({ object }) {
+      this.snackbar = object;
+    },
+    svLoad(args) {
       let scrollUp;
       let y = args.scrollY;
       if (y) {
@@ -416,14 +433,14 @@ export default {
         if (!scrollUp && ab == 0) {
           this.appbar.animate({
             translate: { x: 0, y: 64 },
-            duration: 250,
+            duration: 200,
             curve: CoreTypes.AnimationCurve.ease,
           });
         } else if (scrollUp && ab == 64) {
           Utils.ad.dismissSoftInput();
           this.appbar.animate({
             translate: { x: 0, y: 0 },
-            duration: 250,
+            duration: 200,
             curve: CoreTypes.AnimationCurve.ease,
           });
         }
@@ -432,16 +449,16 @@ export default {
 
     // PHOTO HANDLERS
     imageHandler() {
-      this.clearEmptyFields(true);
+      this.clearEmptyFields(1);
       if (this.recipe.image) {
-        this.modalOpen = true;
+        this.modalOpen = 1;
         this.$showModal(Action, {
           props: {
             title: "recPic",
             list: ["aap", "rp"],
           },
         }).then((action) => {
-          this.modalOpen = false;
+          this.modalOpen = 0;
           switch (action) {
             case "aap":
               this.imagePicker();
@@ -454,12 +471,12 @@ export default {
       } else this.imagePicker();
     },
     imagePicker() {
-      let aT = this.appTheme;
+      let aT = this.theme;
       utils.getRecipePhoto().then((uri) => {
         if (uri != null) {
           this.cacheImagePath = path.join(
             knownFolders.temp().path,
-            `${this.getRandomID()}.jpg`
+            `${utils.getRandomID(0)}.jpg`
           );
           utils.copyPhotoToCache(uri, this.cacheImagePath).then((imgPath) => {
             if (imgPath) {
@@ -495,15 +512,27 @@ export default {
         }
       });
     },
+    createDupImage() {
+      if (this.recipe.image) {
+        let cachePath = path.join(
+          knownFolders.temp().path,
+          `${utils.getRandomID(0)}.jpg`
+        );
+        utils.copyPhotoToCache(this.recipe.image, cachePath).then((imgPath) => {
+          if (imgPath) this.recipe.image = imgPath;
+        });
+      }
+    },
 
     // DATA LIST
     showCuisine(focus) {
-      this.modalOpen = true;
+      this.modalOpen = 1;
       this.$showModal(Action, {
         props: {
           title: "cui",
           list: this.cuisines,
           action: "aNBtn",
+          selected: this.recipe.cuisine,
         },
       }).then((action) => {
         if (action == "aNBtn") {
@@ -513,21 +542,21 @@ export default {
               action: "aBtn",
             },
           }).then((item) => {
-            this.modalOpen = false;
+            this.modalOpen = 0;
             if (item.length) {
               this.recipe.cuisine = item;
               this.addListItemAction({
                 item,
                 listName: "cuisines",
               });
-              if (focus) this.autoFocusField("category", false);
+              if (focus) this.autoFocusField("category", 0);
             }
           });
         } else {
-          this.modalOpen = false;
+          this.modalOpen = 0;
           if (action) {
             this.recipe.cuisine = action;
-            if (focus) this.autoFocusField("category", false);
+            if (focus) this.autoFocusField("category", 0);
           } else
             this.cuisines.includes(this.recipe.cuisine)
               ? mull
@@ -536,12 +565,13 @@ export default {
       });
     },
     showCategories(focus) {
-      this.modalOpen = true;
+      this.modalOpen = 1;
       this.$showModal(Action, {
         props: {
           title: "cat",
           list: this.categories,
           action: "aNBtn",
+          selected: this.recipe.category,
         },
       }).then((action) => {
         if (action == "aNBtn") {
@@ -551,21 +581,21 @@ export default {
               action: "aBtn",
             },
           }).then((item) => {
-            this.modalOpen = false;
+            this.modalOpen = 0;
             if (item.length) {
               this.recipe.category = item;
               this.addListItemAction({
                 item,
                 listName: "categories",
               });
-              if (focus) this.autoFocusField("tags", true);
+              if (focus) this.autoFocusField("tags", 1);
             }
           });
         } else {
-          this.modalOpen = false;
+          this.modalOpen = 0;
           if (action) {
             this.recipe.category = action;
-            if (focus) this.autoFocusField("tags", true);
+            if (focus) this.autoFocusField("tags", 1);
           } else
             this.categories.includes(this.recipe.category)
               ? mull
@@ -574,12 +604,13 @@ export default {
       });
     },
     showYieldUnits(focus) {
-      this.modalOpen = true;
+      this.modalOpen = 1;
       this.$showModal(Action, {
         props: {
           title: "yieldU",
           list: this.yieldUnits,
           action: "aNBtn",
+          selected: this.recipe.yieldUnit,
         },
       }).then((action) => {
         if (action == "aNBtn") {
@@ -589,21 +620,21 @@ export default {
               action: "aBtn",
             },
           }).then((item) => {
-            this.modalOpen = false;
+            this.modalOpen = 0;
             if (item.length) {
               this.recipe.yieldUnit = item;
               this.addListItemAction({
                 item,
                 listName: "yieldUnits",
               });
-              if (focus) this.autoFocusField("difficultyLevel", false);
+              if (focus) this.autoFocusField("difficultyLevel", 0);
             }
           });
         } else {
-          this.modalOpen = false;
+          this.modalOpen = 0;
           if (action) {
             this.recipe.yieldUnit = action;
-            if (focus) this.autoFocusField("difficultyLevel", false);
+            if (focus) this.autoFocusField("difficultyLevel", 0);
           } else
             this.yieldUnits.includes(this.recipe.yieldUnit)
               ? mull
@@ -612,14 +643,15 @@ export default {
       });
     },
     showDifficultyLevel(focus) {
-      this.modalOpen = true;
+      this.modalOpen = 1;
       this.$showModal(Action, {
         props: {
           title: "Difficulty level",
           list: this.difficultyLevels,
+          selected: this.recipe.difficulty,
         },
       }).then((action) => {
-        this.modalOpen = false;
+        this.modalOpen = 0;
         if (action) {
           this.recipe.difficulty = action;
           if (focus) this.addIngredient();
@@ -630,12 +662,13 @@ export default {
       });
     },
     showUnits(e, focus, index) {
-      this.modalOpen = true;
+      this.modalOpen = 1;
       this.$showModal(Action, {
         props: {
           title: "Unit",
           list: this.units,
           action: "aNBtn",
+          selected: this.recipe.ingredients[index].unit,
         },
       }).then((action) => {
         if (action == "aNBtn") {
@@ -645,7 +678,7 @@ export default {
               action: "aBtn",
             },
           }).then((item) => {
-            this.modalOpen = false;
+            this.modalOpen = 0;
             if (item.length) {
               this.recipe.ingredients[index].unit = item;
               this.addListItemAction({
@@ -657,7 +690,7 @@ export default {
             }
           });
         } else {
-          this.modalOpen = false;
+          this.modalOpen = 0;
           if (action) {
             this.recipe.ingredients[index].unit = action;
             if (focus && this.recipe.ingredients.length - 1 === index)
@@ -668,7 +701,7 @@ export default {
     },
     showCombinations() {
       Utils.ad.dismissSoftInput();
-      this.modalOpen = true;
+      this.modalOpen = 1;
       let existingCombinations = [...this.recipe.combinations, this.recipe.id];
       let filteredRecipes = this.recipes.filter(
         (e) => !existingCombinations.includes(e.id)
@@ -679,7 +712,7 @@ export default {
           recipes: filteredRecipes,
         },
       }).then((res) => {
-        this.modalOpen = false;
+        this.modalOpen = 0;
         if (res) this.recipe.combinations.push(res);
       });
     },
@@ -697,7 +730,7 @@ export default {
       });
     },
     removeIngredient(index) {
-      this.modalOpen = true;
+      this.modalOpen = 1;
       if (this.recipe.ingredients[index].item.length) {
         let item = this.recipe.ingredients[index];
         this.recipe.ingredients.splice(index, 1);
@@ -707,7 +740,7 @@ export default {
       } else {
         this.recipe.ingredients.splice(index, 1);
       }
-      setTimeout(() => (this.modalOpen = false), 200);
+      setTimeout(() => (this.modalOpen = 0), 200);
     },
     addInstruction() {
       this.recipe.instructions.push("");
@@ -759,17 +792,17 @@ export default {
       clearEmpty("notes");
     },
     saveOperation() {
-      this.saving = this.modalOpen = true;
+      this.saving = this.modalOpen = 1;
       this.clearEmptyFields();
       this.recipe.lastModified = new Date().getTime();
-      ApplicationSettings.setString("previousCuisine", this.recipe.cuisine);
-      ApplicationSettings.setString("previousCategory", this.recipe.category);
-      ApplicationSettings.setString("previousYieldUnit", this.recipe.yieldUnit);
+      setString("previousCuisine", this.recipe.cuisine);
+      setString("previousCategory", this.recipe.category);
+      setString("previousYieldUnit", this.recipe.yieldUnit);
       if (this.cacheImagePath) {
         let recipeImage = path.join(
           knownFolders.documents().getFolder("EnRecipes").getFolder("Images")
             .path,
-          `${this.getRandomID()}.jpg`
+          `${utils.getRandomID(0)}.jpg`
         );
         let binarySource = File.fromPath(this.cacheImagePath).readSync();
         File.fromPath(recipeImage).writeSync(binarySource);
@@ -794,57 +827,49 @@ export default {
     },
     saveRecipe() {
       this.addRecipeAction(this.recipe);
-      setTimeout(() => (this.saving = false), 100);
-      this.$navigateBack();
+      this.saving = 0;
+      this.dupRecipe
+        ? this.$navigateTo(EnRecipes, {
+            clearHistory: true,
+            animated: false,
+          })
+        : this.goBackAction(0);
     },
 
     // UNDO OPERATION
     showUndoBar(message) {
+      clearInterval(barTimer);
       return new Promise((resolve, reject) => {
-        this.showUndo = true;
-        this.appbar.translateY = 0;
-        this.snackMsg = message;
-        this.countdown = 5;
-        let a = 5;
-        clearTimeout(undoTimer);
-        undoTimer = setInterval(() => {
-          if (this.undo) {
-            this.showUndo = this.undo = false;
-            clearTimeout(undoTimer);
-            resolve(true);
-          }
-          this.countdown = Math.round((a -= 0.1));
-          if (this.countdown < 1) {
-            this.showUndo = false;
-            clearTimeout(undoTimer);
-            reject(true);
-          }
-        }, 100);
+        this.animateBar(this.appbar, 0).then(() => {
+          this.showUndo = 1;
+          this.snackMsg = message;
+          this.countdown = 5;
+          this.animateBar(this.snackbar, 1).then(() => {
+            let a = 5;
+            barTimer = setInterval(() => {
+              if (this.undo) {
+                this.hideBar();
+                resolve(1);
+              }
+              this.countdown = Math.round((a -= 0.1));
+              if (this.countdown < 1) {
+                this.hideBar();
+                reject(1);
+              }
+            }, 100);
+          });
+        });
       });
     },
-    hideUndoBar({ object }) {
-      object
-        .animate({
-          opacity: 0,
-          translate: { x: 0, y: 64 },
-          duration: 250,
-          curve: CoreTypes.AnimationCurve.ease,
-        })
-        .then(() => {
-          this.showUndo = false;
-          this.appbar.translateY = 64;
-          this.appbar.animate({
-            translate: { x: 0, y: 0 },
-            duration: 250,
-            curve: CoreTypes.AnimationCurve.ease,
-          });
-          object.opacity = 1;
-          object.translateY = 0;
-          clearTimeout(undoTimer);
-        });
+    hideBar() {
+      clearInterval(barTimer);
+      this.animateBar(this.snackbar, 0).then(() => {
+        this.showUndo = this.undo = 0;
+        this.animateBar(this.appbar, 1);
+      });
     },
     undoDel() {
-      this.undo = true;
+      this.undo = 1;
     },
 
     // HELPERS
@@ -891,29 +916,30 @@ export default {
     },
     focusField(args, type) {
       if (type) this.setInputTypeText(args, type);
+      else this.setGravity(args);
       if (!args.object.text) {
         args.object.focus();
         setTimeout(() => Utils.ad.showSoftInput(args.object.android), 100);
       }
     },
-    setInputTypeText(args, type) {
-      let field = args.object;
+    setInputTypeText({ object }, type) {
+      this.setGravity(object);
       let common =
         android.text.InputType.TYPE_CLASS_TEXT |
         android.text.InputType.TYPE_TEXT_FLAG_AUTO_CORRECT;
       switch (type) {
         case "words":
-          field.android.setInputType(
+          object.android.setInputType(
             android.text.InputType.TYPE_TEXT_FLAG_CAP_WORDS | common
           );
           break;
         case "sentence":
-          field.android.setInputType(
+          object.android.setInputType(
             android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | common
           );
           break;
         case "multiLine":
-          field.android.setInputType(
+          object.android.setInputType(
             android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE |
               android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES |
               common
@@ -921,37 +947,28 @@ export default {
           break;
       }
     },
-    getRandomID() {
-      let res = "";
-      let chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-      for (let i = 0; i < 16; i++) {
-        res += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return res;
-    },
     setTimeRequired(focus, time) {
-      this.modalOpen = true;
+      this.modalOpen = 1;
       let t = this.recipe[time].split(":");
       let hr = t[0];
       let min = t[1];
       this.$showModal(TimePickerHM, {
         props: {
           title: `${time == "prepTime" ? "prepT" : "cookT"}`,
-          action: "SET",
           selectedHr: hr,
           selectedMin: min,
         },
       }).then((result) => {
-        this.modalOpen = false;
+        this.modalOpen = 0;
         if (result) {
           this.recipe[time] = result;
           if (focus) {
             switch (time) {
               case "prepTime":
-                this.autoFocusField("cookTime", false);
+                this.autoFocusField("cookTime", 0);
                 break;
               case "cookTime":
-                this.autoFocusField("yieldQuantity", true);
+                this.autoFocusField("yieldQuantity", 1);
                 break;
             }
           }
@@ -980,12 +997,22 @@ export default {
     backEvent(args) {
       if (!this.modalOpen) {
         args.cancel = true;
-        this.navigateBack();
+        this.navigateBack(1);
       }
     },
-    navigateBack() {
+    goBackAction(exit) {
+      this.hasBackStack || this.recipeID
+        ? this.$navigateBack()
+        : exit
+        ? Application.android.foregroundActivity.finish()
+        : this.$navigateTo(EnRecipes, {
+            clearHistory: true,
+            animated: false,
+          });
+    },
+    navigateBack(hwb) {
       if (this.hasChanges) {
-        this.modalOpen = true;
+        this.modalOpen = 1;
         this.$showModal(Confirm, {
           props: {
             title: "unsaved",
@@ -994,46 +1021,47 @@ export default {
             okButtonText: "kEdit",
           },
         }).then((action) => {
-          this.modalOpen = false;
-          if (action != null && !action) this.$navigateBack();
+          this.modalOpen = 0;
+          if (action != null && !action) {
+            this.goBackAction(1);
+            knownFolders.temp().clear();
+          }
         });
-      } else this.$navigateBack();
+      } else this.goBackAction(hwb);
     },
   },
   created() {
-    setTimeout(() => {
-      this.setComponent("EditRecipe");
-    }, 500);
-    this.title = this.recipeID ? "editRec" : "newRec";
+    this.title = this.recipeID || this.dupRecipe ? "editRec" : "newRec";
     if (this.recipeID) {
       let recipe = this.recipes.filter((e) => e.id === this.recipeID)[0];
       Object.assign(this.recipe, JSON.parse(JSON.stringify(recipe)));
       Object.assign(this.tempRecipe, JSON.parse(JSON.stringify(this.recipe)));
       if (this.recipe.tags.length) this.joinTags();
+    } else if (this.dupRecipe) {
+      this.recipe = Object.assign({}, this.dupRecipe);
+      this.recipe.tried = 1;
+      this.recipe.lastTried = 0;
+      this.createDupImage();
     } else {
-      this.recipe.cuisine = this.selectedCuisine
-        ? /all/.test(this.selectedCuisine)
+      this.recipe.cuisine = this.selCuisine
+        ? /all/.test(this.selCuisine)
           ? "Undefined"
-          : this.selectedCuisine
-        : ApplicationSettings.getString("previousCuisine", "Undefined");
-      this.recipe.category = this.selectedCategory
-        ? /all/.test(this.selectedCategory)
+          : this.selCuisine
+        : getString("previousCuisine", "Undefined");
+      this.recipe.category = this.selCategory
+        ? /all/.test(this.selCategory)
           ? "Undefined"
-          : this.selectedCategory
-        : ApplicationSettings.getString("previousCategory", "Undefined");
-      if (this.selectedTag && !/all/.test(this.selectedTag)) {
-        this.tags = this.selectedTag;
+          : this.selCategory
+        : getString("previousCategory", "Undefined");
+      if (this.selTag && !/all/.test(this.selTag)) {
+        this.tags = this.selTag;
         this.splitTags();
       }
-      this.recipe.yieldUnit = ApplicationSettings.getString(
-        "previousYieldUnit",
-        "Serving"
-      );
-      if (this.filterFavourites) this.recipe.favorite = true;
-      if (this.filterTrylater) this.recipe.tried = false;
+      this.recipe.yieldUnit = getString("previousYieldUnit", "Serving");
+      if (this.filterFavourites) this.recipe.favorite = 1;
+      if (this.filterTrylater) this.recipe.tried = 0;
       this.recipe.created = new Date().getTime();
-      Object.assign(this.tempRecipe, JSON.parse(JSON.stringify(this.recipe)));
-      // this.newRecipeID = this.getRandomID();
+      this.tempRecipe = Object.assign({}, this.recipe);
     }
   },
 };

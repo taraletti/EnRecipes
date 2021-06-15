@@ -1,20 +1,22 @@
 <template>
   <GridLayout
-    v-show="toast"
+    :hidden="!toast"
     row="1"
     colSpan="2"
     class="appbar snackBar"
     columns="*"
     @swipe="action"
+    @tap="action"
+    @loaded="onload"
   >
-    <FlexboxLayout minHeight="48" alignItems="center">
-      <Label class="title msg" :text="toast" />
-    </FlexboxLayout>
+    <StackLayout minHeight="48">
+      <RLabel class="title msg" :text="toast" />
+    </StackLayout>
   </GridLayout>
 </template>
 
 <script>
 export default {
-  props: ["toast", "action"],
+  props: ["toast", "action", "onload"],
 };
 </script>

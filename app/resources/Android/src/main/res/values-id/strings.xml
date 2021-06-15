@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="notifSetg">"Pengaturan notifikasi"</string>
+  <string name="tmrRm">"Timer dihapus"</string>
+  <string name="delPrst">"Anda akan menghapus %1$s dari presets"</string>
+  <string name="prsts">"Preset"</string>
   <string name="stop">"Berhenti"</string>
   <string name="delay">"Menunda"</string>
   <string name="tmr">"Timer %1$s"</string>
   <string name="prstBtn">"PRESET"</string>
-  <string name="tmrPrsts">"Preset timer"</string>
   <string name="fwr">"untuk resep yang mana?"</string>
   <string name="aTPrst">"Ditambahkan ke preset"</string>
   <string name="tmrSnd">"Suara timer"</string>
@@ -15,7 +18,6 @@
   <string name="hour">"jam"</string>
   <string name="hours">"jam"</string>
   <string name="seconds">"detik"</string>
-  <string name="tmrClr">"Timer dibersihkan"</string>
   <string name="timer">"Timer Memasak"</string>
   <string name="ntmr">"Timer baru"</string>
   <string name="strtBtn">"MULAI"</string>
@@ -29,8 +31,8 @@
   <string name="WED">"RAB"</string>
   <string name="wAgo">"%1$s minggu yang lalu"</string>
   <string name="Vietnamese">"Vietnam"</string>
-  <string name="Vegetarian">"Vegetarian"</string>
-  <string name="Vegan">"Vegan"</string>
+  <string name="Vegetarian">"vegetarian"</string>
+  <string name="Vegan">"vegan"</string>
   <string name="untRec">"Resep tanpa judul"</string>
   <string name="unsaved">"Perubahan yang belum disimpan"</string>
   <string name="Unit">"Satuan"</string>
@@ -313,6 +315,38 @@
   <string name="aBtn">"Tambah"</string>
   <string name="About">"Tentang"</string>
   <string name="aap">"Lampirkan foto"</string>
-  <string name="notifSetg">"Notification settings"</string>
-  <string name="tmrRm">"Timer removed"</string>
+  <string name="add">"Add"</string>
+  <string name="nvr">"Never"</string>
+  <string name="otaw">"Older than a week"</string>
+  <string name="otam">"Older than a month"</string>
+  <string name="otay">"Older than a year"</string>
+  <string name="admp">"Auto-delete meal plans"</string>
+  <string name="plsCrt">"Use the plus button to create one"</string>
+  <string name="ehwmp">"Eat healthy with meal plans!"</string>
+  <string name="selMT">"Select meal type"</string>
+  <string name="ystr">"Yesterday"</string>
+  <string name="tmrw">"Tomorrow"</string>
+  <string name="tdy">"Today"</string>
+  <string name="cpy">"copy"</string>
+  <string name="sat">"Saturday"</string>
+  <string name="fri">"Friday"</string>
+  <string name="thu">"Thursday"</string>
+  <string name="wed">"Wednesday"</string>
+  <string name="tue">"Tuesday"</string>
+  <string name="mon">"Monday"</string>
+  <string name="sun">"Sunday"</string>
+  <string name="d">"Day"</string>
+  <string name="wk">"Week"</string>
+  <string name="mnth">"Month"</string>
+  <string name="calVM">"Calendar view mode"</string>
+  <string name="oAP">"%1$s ongoing, %2$s paused"</string>
+  <string name="ttv">"Tap to view"</string>
+  <string name="dismissAll">"Dismiss all timers"</string>
+  <string name="dismiss">"Dismiss"</string>
+  <string name="texp">"%1$s timers expired"</string>
+  <string name="wDBy">"%1$s was delayed by %2$s"</string>
+  <string name="prstTU">"Preset time updated"</string>
+  <string name="ccwt">"Cook confidently with timers!"</string>
+  <string name="gtD">"Go to date"</string>
+  <string name="random">"Random"</string>
 </resources>

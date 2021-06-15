@@ -1,17 +1,17 @@
 <template>
-  <Page @loaded="onPageLoad" actionBarHidden="true">
-    <GridLayout rows="*, auto" columns="auto, *">
+  <Page @loaded="pgLoad" actionBarHidden="true">
+    <RGridLayout :rtl="RTL" rows="*, auto" columns="auto, *">
       <OptionsList title="Settings" :items="items" :action="navigateTo" />
-      <GridLayout row="1" class="appbar" rows="*" columns="auto, *">
+      <GridLayout row="1" class="appbar rtl" rows="*" columns="auto, *">
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
-    </GridLayout>
+    </RGridLayout>
   </Page>
 </template>
 
 <script lang="ts">
 import { Observable } from "@nativescript/core";
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 import Interface from "./Interface.vue";
 import Options from "./Options.vue";
 import Database from "./Database.vue";
@@ -27,30 +27,35 @@ export default {
         {
           type: "list",
           icon: "interface",
+          rtl: 0,
           title: "intf",
           data: Interface,
         },
         {
           type: "list",
           icon: "opts",
+          rtl: 1,
           title: "opts",
           data: Options,
         },
         {
           type: "list",
           icon: "db",
+          rtl: 0,
           title: "db",
           data: Database,
         },
         {
           type: "list",
           icon: "reset",
+          rtl: 1,
           title: "rest",
           data: Reset,
         },
         {
           type: "list",
           icon: "info",
+          rtl: 0,
           title: "About",
           data: About,
         },
@@ -59,22 +64,16 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon"]),
+    ...mapState(["icon", "RTL"]),
   },
   methods: {
-    ...mapActions(["setComponent"]),
-    onPageLoad({ object }) {
+    pgLoad({ object }) {
       object.bindingContext = new Observable();
-      this.setComponent("Settings");
     },
     // HELPERS
     navigateTo(view) {
       this.$navigateTo(view, {
-        transition: {
-          name: "slide",
-          duration: 200,
-          curve: "easeOut",
-        },
+        animated: false,
       });
     },
   },

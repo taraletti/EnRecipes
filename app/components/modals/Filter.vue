@@ -1,28 +1,32 @@
 <template>
-  <Page @loaded="onPageLoad" backgroundColor="transparent" :class="appTheme">
+  <Page @loaded="pgLoad" backgroundColor="transparent" :class="theme">
     <GridLayout rows="auto, auto, *, auto" columns="*" class="modal">
-      <Label class="title" :text="`fltr` | L" />
+      <RLabel class="title a" :text="`fltr` | L" />
       <ScrollView orientation="horizontal" row="1" @loaded="onScrollLoad">
-        <StackLayout class="filters" orientation="horizontal">
+        <RStackLayout :rtl="RTL" class="filters" orientation="horizontal">
           <GridLayout
             rows="48"
             columns="auto, auto"
-            class="segment"
+            class="segment rtl"
             v-for="(item, index) in pathList"
             :key="index"
-            :class="{
-              select: filterType === item.type,
-            }"
+            :class="{ select: filterType === item.type }"
             @touch="touchSelector($event, item.type)"
           >
             <Label class="ico" :text="icon[item.type]" />
-            <Label v-if="item.title" class="value" :text="item.title" col="1" />
+            <Label
+              :hidden="!item.title"
+              class="value"
+              :class="{ r: RTL }"
+              :text="item.title"
+              col="1"
+            />
           </GridLayout>
-        </StackLayout>
+        </RStackLayout>
       </ScrollView>
-      <ListView row="2" class="options-list" for="item in filterList">
+      <ListView row="2" class="options" for="item in filterList">
         <v-template>
-          <Label
+          <RLabel
             class="listItem"
             verticalAlignment="center"
             col="1"
@@ -31,7 +35,12 @@
           />
         </v-template>
       </ListView>
-      <GridLayout row="3" columns="auto, *, auto, auto" class="actions">
+      <RGridLayout
+        :rtl="RTL"
+        row="3"
+        columns="auto, *, auto, auto"
+        class="actions"
+      >
         <Button class="text sm" :text="'rest' | L" @tap="resetFilter" />
         <Button
           col="2"
@@ -45,7 +54,7 @@
           :text="'apply' | L"
           @tap="applyFilter"
         />
-      </GridLayout>
+      </RGridLayout>
     </GridLayout>
   </Page>
 </template>
@@ -61,7 +70,7 @@ export default {
       localCuisine: null,
       localCategory: null,
       localTag: null,
-      reset: false,
+      reset: 0,
     };
   },
   computed: {
@@ -70,10 +79,11 @@ export default {
       "recipes",
       "cuisines",
       "categories",
-      "selectedCuisine",
-      "selectedCategory",
-      "selectedTag",
-      "appTheme",
+      "selCuisine",
+      "selCategory",
+      "selTag",
+      "theme",
+      "RTL",
     ]),
     pathList() {
       let arr = [
@@ -163,18 +173,12 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      "setComponent",
-      "setCuisine",
-      "setCategory",
-      "setTag",
-      "clearFilter",
-    ]),
-    onPageLoad(args) {
+    ...mapActions(["setCuisine", "setCategory", "setTag", "clearFilter"]),
+    pgLoad(args) {
       this.transparentPage(args);
-      this.localCuisine = this.selectedCuisine;
-      this.localCategory = this.selectedCategory;
-      this.localTag = this.selectedTag;
+      this.localCuisine = this.selCuisine;
+      this.localCategory = this.selCategory;
+      this.localTag = this.selTag;
       if (this.localCuisine) this.filterType = "category";
       if (this.localCategory && this.localTag) this.filterType = "tag";
       this.scrollToRight();
@@ -198,14 +202,14 @@ export default {
       setTimeout(
         () =>
           this.scrollview.scrollToHorizontalOffset(
-            this.scrollview.scrollableWidth,
+            this.RTL ? 0 : this.scrollview.scrollableWidth,
             true
           ),
         10
       );
     },
     setRecipeFilter(item) {
-      this.reset = false;
+      this.reset = 0;
       switch (this.filterType) {
         case "cuisine":
           this.localCuisine = item;
@@ -225,27 +229,26 @@ export default {
       this.setCuisine(this.localCuisine);
       this.setCategory(this.localCategory);
       this.setTag(this.localTag);
-      this.filterFavourites = this.filterTrylater = false;
-      if (this.reset) this.setComponent("EnRecipes");
-      else this.setComponent("Filtered recipes");
-      this.$modal.close();
+      this.filterFavourites = this.filterTrylater = 0;
+      this.$modal.close(this.reset);
     },
     resetFilter() {
       this.filterType = "cuisine";
       this.localCuisine = this.localCategory = this.localTag = null;
-      this.reset = true;
+      this.reset = 1;
     },
     touch({ object, action }, item) {
       object.className = action.match(/down|move/)
         ? "listItem fade"
-        : "listItem";
+        : "listItem ";
       if (action == "up") this.setRecipeFilter(item);
     },
     touchSelector({ object, action }, type) {
       let selected = this.filterType == type;
+      let classes = `segment ${this.RTL ? "rtl" : ""} `;
       object.className = action.match(/down|move/)
-        ? `segment ${selected ? "select" : "fade"}`
-        : `segment ${selected && "select"}`;
+        ? `${classes}${selected ? "select" : "fade"}`
+        : `${classes}${selected && "select"}`;
       if (action == "up") this.setFilterType(type);
     },
   },

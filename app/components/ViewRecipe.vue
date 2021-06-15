@@ -1,16 +1,21 @@
 <template>
-  <Page @loaded="onPageLoad" @unloaded="onPageUnload" actionBarHidden="true">
-    <GridLayout rows="*, auto" columns="*">
-      <DockLayout stretchLastChild="true" rowSpan="2">
-        <GridLayout
+  <Page @loaded="pgLoad" @unloaded="onPageUnload" actionBarHidden="true">
+    <GridLayout rows="*, auto, auto" columns="auto, *, auto">
+      <DockLayout stretchLastChild="true" rowSpan="3" colSpan="3">
+        <RGridLayout
+          :rtl="RTL"
           dock="top"
           rows="auto,auto"
           columns="*, auto"
           paddingBottom="24"
         >
           <StackLayout>
-            <Label class="pageTitle" paddingBottom="8" :text="recipe.title" />
-            <StackLayout marginLeft="12" orientation="horizontal">
+            <RLabel class="pageTitle" paddingBottom="8" :text="recipe.title" />
+            <StackLayout
+              :class="{ f: RTL }"
+              margin="0 12"
+              orientation="horizontal"
+            >
               <Button
                 class="ico rate"
                 :class="{ rated: recipe.rating >= n }"
@@ -34,72 +39,82 @@
             decodeHeight="96"
             @tap="viewPhoto"
           />
-        </GridLayout>
+        </RGridLayout>
         <AbsoluteLayout dock="bottom">
           <ScrollView
             dock="bottom"
             width="100%"
             height="100%"
             @loaded="onScrollLoad"
-            @scroll="onScroll($event)"
+            @scroll="svScroll($event)"
           >
             <StackLayout>
-              <GridLayout rows="auto" columns="*, *">
+              <RGridLayout :rtl="RTL" rows="auto" columns="*, *">
                 <StackLayout class="attribute">
-                  <Label class="title sub" :text="'cui' | L" />
-                  <Label class="value" :text="recipe.cuisine | L" />
+                  <RLabel class="sub" :text="'cui' | L" />
+                  <RLabel class="value" :text="recipe.cuisine | L" />
                 </StackLayout>
                 <StackLayout class="attribute" col="1">
-                  <Label class="title sub" :text="'cat' | L" />
-                  <Label class="value" :text="recipe.category | L" />
+                  <RLabel class="sub" :text="'cat' | L" />
+                  <RLabel class="value" :text="recipe.category | L" />
                 </StackLayout>
-              </GridLayout>
-              <StackLayout :hidden="!recipe.tags.length" class="attribute">
-                <Label class="title sub" :text="'ts' | L" />
-                <Label class="value" :text="getTags(recipe.tags)" />
+              </RGridLayout>
+              <StackLayout
+                :hidden="!recipe.tags.length"
+                class="attribute hal"
+                :class="{ r: RTL }"
+              >
+                <RLabel class="sub" :text="'ts' | L" />
+                <RLabel class="value" :text="getTags(recipe.tags)" />
               </StackLayout>
-              <GridLayout rows="auto" columns="*, *">
+              <RGridLayout :rtl="RTL" rows="auto" columns="*, *">
                 <StackLayout
                   class="attribute"
                   :hidden="!hasTime(recipe.prepTime)"
                 >
-                  <Label class="title sub" :text="'prepT' | L" />
-                  <Label class="value" :text="formattedTime(recipe.prepTime)" />
+                  <RLabel class="sub" :text="'prepT' | L" />
+                  <RLabel
+                    class="value"
+                    :text="formattedTime(recipe.prepTime)"
+                  />
                 </StackLayout>
                 <StackLayout
                   :col="hasTime(recipe.prepTime) ? 1 : 0"
                   class="attribute"
                   :hidden="!hasTime(recipe.cookTime)"
                 >
-                  <Label class="title sub" :text="'cookT' | L" />
-                  <Label class="value" :text="formattedTime(recipe.cookTime)" />
+                  <RLabel class="title sub" :text="'cookT' | L" />
+                  <RLabel
+                    class="value"
+                    :text="formattedTime(recipe.cookTime)"
+                  />
                 </StackLayout>
-              </GridLayout>
-              <GridLayout rows="auto" columns="*, *">
+              </RGridLayout>
+              <RGridLayout :rtl="RTL" rows="auto" columns="*, *">
                 <StackLayout class="attribute">
-                  <Label class="title sub" :text="'yld' | L" />
-                  <Label
+                  <RLabel class="title sub" :text="'yld' | L" />
+                  <RLabel
                     @touch="touchYield"
-                    class="value clickable"
-                    horizontalAlignment="left"
+                    class="value accent"
                     :text="`${tempYieldQuantity} ${$options.filters.L(
                       recipe.yieldUnit
                     )}`"
                   />
                 </StackLayout>
                 <StackLayout class="attribute" col="1">
-                  <Label class="title sub" :text="'Difficulty level' | L" />
-                  <Label class="value" :text="recipe.difficulty | L" />
+                  <RLabel class="title sub" :text="'Difficulty level' | L" />
+                  <RLabel class="value" :text="recipe.difficulty | L" />
                 </StackLayout>
-              </GridLayout>
+              </RGridLayout>
               <StackLayout @loaded="onIngsLoad">
-                <Label
+                <RLabel
                   padding="0 16"
                   class="sectionTitle"
                   :hidden="!recipe.ingredients.length"
                   :text="getTitleCount('ings', 'ingredients')"
                 />
-                <StackLayout
+                <RStackLayout
+                  :rtl="RTL"
                   orientation="horizontal"
                   v-for="(item, index) in recipe.ingredients"
                   :key="index + 'ing'"
@@ -107,39 +122,29 @@
                   @touch="touchIngredient($event, index)"
                 >
                   <Button class="ico min" :text="icon.uncheck" />
-                  <Label
-                    class="value tw"
-                    :text="`${
-                      roundedQuantity(item.quantity)
-                        ? roundedQuantity(item.quantity) + ' '
-                        : ''
-                    }${
-                      roundedQuantity(item.quantity)
-                        ? $options.filters.L(item.unit) + ' '
-                        : ''
-                    }${item.item}`"
-                  />
-                </StackLayout>
+                  <RLabel class="value tw" :text="getIngredientItem(item)" />
+                </RStackLayout>
               </StackLayout>
               <StackLayout @loaded="onInsLoad">
-                <Label
+                <RLabel
                   padding="0 16"
                   :hidden="!recipe.instructions.length"
                   class="sectionTitle"
                   :text="getTitleCount('inss', 'instructions')"
                 />
-                <StackLayout
+                <RStackLayout
+                  :rtl="RTL"
                   orientation="horizontal"
                   @touch="touchInstruction"
                   v-for="(instruction, index) in recipe.instructions"
                   :key="index + 'ins'"
                   class="instruction"
                 >
-                  <Button class="count ico min" :text="index + 1" />
-                  <Label class="value tw" :text="instruction" />
-                </StackLayout>
+                  <Button class="count ico min" :text="getLocaleN(index + 1)" />
+                  <RLabel class="value tw" :text="instruction" />
+                </RStackLayout>
               </StackLayout>
-              <Label
+              <RLabel
                 @loaded="onCmbLoad"
                 padding="0 16"
                 :hidden="!recipe.combinations.length"
@@ -153,7 +158,7 @@
                 :text="getCombinationTitle(combination)"
                 @tap="viewCombination(combination)"
               />
-              <Label
+              <RLabel
                 @loaded="onNosTLoad"
                 padding="0 16"
                 :hidden="!recipe.notes.length"
@@ -161,17 +166,10 @@
                 :text="getTitleCount('nos', 'notes')"
               />
               <StackLayout @loaded="onNosLoad" padding="0 16"> </StackLayout>
-              <Label
-                class="dateInfo sub tw"
-                :text="`${$options.filters.L('Last updated')}: ${formattedDate(
-                  recipe.lastModified
-                )}\n${$options.filters.L('Created')}: ${formattedDate(
-                  recipe.created
-                )}`"
-              />
+              <Label class="dateInfo sub tw" :text="getDates().uc" />
             </StackLayout>
           </ScrollView>
-          <Label
+          <RLabel
             @loaded="onStickyLoad"
             class="sectionTitle sticky"
             :hidden="!stickyTitle"
@@ -181,61 +179,85 @@
       </DockLayout>
       <GridLayout
         row="1"
-        @loaded="onAppBarLoad"
-        class="appbar"
-        v-show="!toast"
-        columns="auto, *, auto, auto, auto, auto, auto"
+        @loaded="sbload"
+        class="appbar sidebar"
+        :col="RTL ? 0 : 2"
+        rows="auto, auto, auto"
       >
+        <Button class="ico" :text="icon.timer" @tap="openCookingTimer" />
         <Button
+          row="1"
+          :hidden="busyDup"
           class="ico"
-          :text="photoOpen ? icon.x : icon.back"
-          @tap="navigateBack"
+          :class="{ f: RTL }"
+          :text="icon.dup"
+          @tap="duplicateRecipe"
         />
+        <ActivityIndicator row="1" :hidden="!busyDup" :busy="busyDup" />
+        <Button
+          :hidden="!hasPrinterSupport"
+          row="2"
+          class="ico"
+          :text="icon.print"
+          @tap="printView"
+        />
+      </GridLayout>
+      <RGridLayout
+        :rtl="RTL"
+        row="2"
+        colSpan="3"
+        @loaded="abLoad"
+        class="appbar"
+        :hidden="toast"
+        columns="auto, *, auto, auto, auto, auto"
+        @touch="() => null"
+      >
+        <Button class="ico rtl" :text="icon.back" @tap="$navigateBack()" />
         <Button
           col="2"
-          class="ico"
-          :text="icon.timer"
-          @tap="openCookingTimer"
-        />
-        <Button
-          col="3"
           v-if="!filterTrylater"
           class="ico"
           :text="recipe.tried ? icon.try : icon.tried"
           @tap="toggle('tried')"
         />
         <Button
-          col="3"
+          col="2"
           v-else
           class="ico"
           :text="icon.done"
-          @tap="toggle('tried', true)"
+          @tap="toggle('tried', 1)"
         />
         <Button
-          col="4"
+          col="3"
           class="ico"
           :text="recipe.favorite ? icon.faved : icon.fav"
           @tap="toggle('favorite')"
         />
         <Button
-          col="5"
-          v-if="!busy"
+          col="4"
+          :hidden="busyEdit"
           class="ico"
           :text="icon.edit"
           @tap="editRecipe"
         />
-        <ActivityIndicator col="5" v-else :busy="busy" />
+        <ActivityIndicator col="4" :hidden="!busyEdit" :busy="busyEdit" />
         <Button
-          col="6"
+          col="5"
           class="ico fab"
           :text="icon.share"
           @tap="shareHandler"
         />
-      </GridLayout>
-      <Toast :toast="toast" :action="hideLastTried" />
-      <AbsoluteLayout rowSpan="2">
+      </RGridLayout>
+      <Toast
+        row="2"
+        colSpan="3"
+        :onload="tbLoad"
+        :toast="toast"
+        :action="hideBar"
+      />
+      <AbsoluteLayout rowSpan="3" colSpan="3">
         <Image
-          @tap="({ object }) => (object.cancel = true)"
+          @tap="closePhoto"
           backgroundColor="black"
           stretch="aspectFit"
           @loaded="onImgViewLoad"
@@ -243,6 +265,7 @@
           class="photoviewer"
         />
       </AbsoluteLayout>
+      <WebView @loaded="wvLoad" hidden />
     </GridLayout>
   </Page>
 </template>
@@ -255,13 +278,13 @@ import {
   Utils,
   Span,
   FormattedString,
-  Label,
   Observable,
   Screen,
   CoreTypes,
+  WebView,
 } from "@nativescript/core";
+import { RLabel } from "~/rtl-ui";
 import { localize } from "@nativescript/localize";
-const intl = require("nativescript-intl");
 import { mapActions, mapState } from "vuex";
 import CookingTimer from "./CookingTimer.vue";
 import EditRecipe from "./EditRecipe.vue";
@@ -269,17 +292,24 @@ import Action from "./modals/Action.vue";
 import Toast from "./sub/Toast.vue";
 import Prompt from "./modals/Prompt.vue";
 import * as utils from "~/shared/utils";
+const Intl = require("nativescript-intl");
+let barTimer;
+declare const android: any;
+
 export default {
   components: { Toast },
-  props: ["filterTrylater", "recipeID"],
+  props: ["filterTrylater", "recipeID", "yieldQuantity"],
   data() {
     return {
-      busy: false,
+      busyEdit: 0,
+      busyDup: 0,
       yieldMultiplier: 1,
       recipe: null,
       currentRecipeID: this.recipeID,
       scrollview: null,
       appbar: null,
+      sidebar: null,
+      toastbar: null,
       ingcon: null,
       inscon: null,
       cmbcon: null,
@@ -290,13 +320,15 @@ export default {
       checked: 0,
       stepsDid: 0,
       toast: null,
-      photoOpen: false,
-      showTitleArr: [false, false, false, false],
+      photoOpen: 0,
+      showTitleArr: [0, 0, 0, 0],
       sticky: null,
+      view: null,
+      wv: null,
     };
   },
   computed: {
-    ...mapState(["icon", "recipes"]),
+    ...mapState(["icon", "recipes", "RTL"]),
     tempYieldQuantity() {
       return Math.abs(this.yieldMultiplier) > 0
         ? Math.abs(parseFloat(this.yieldMultiplier))
@@ -320,28 +352,37 @@ export default {
       }
       return val;
     },
+    hasPrinterSupport() {
+      return utils.Printer.isSupported();
+    },
   },
   methods: {
-    ...mapActions([
-      "toggleStateAction",
-      "setComponent",
-      "setRatingAction",
-      "toggleCartAction",
-    ]),
-    onPageLoad({ object }) {
+    ...mapActions(["toggleStateAction", "setRatingAction", "toggleCartAction"]),
+    pgLoad({ object }) {
+      this.busyDup = this.busyEdit = this.photoOpen = 0;
       object.bindingContext = new Observable();
-      this.busy = this.photoOpen = false;
-      this.setComponent("ViewRecipe");
       if (this.yieldMultiplier == this.recipe.yieldQuantity)
         this.yieldMultiplier = this.recipe.yieldQuantity;
-      this.keepScreenOn(true);
+      utils.keepScreenOn(1);
       this.syncCombinations();
+      this.view = object.page.getViewById("printview");
     },
     onPageUnload() {
-      this.keepScreenOn(false);
+      utils.keepScreenOn(0);
     },
-    onAppBarLoad({ object }) {
+    sbload({ object }) {
+      this.sidebar = object;
+    },
+    abLoad({ object }) {
       this.appbar = object;
+    },
+    tbLoad({ object }) {
+      this.toastbar = object;
+      this.recipe.tried && this.recipe.lastTried && this.showLastTried();
+    },
+    wvLoad({ object }) {
+      this.wv = object;
+      utils.updateLocale();
     },
     onIngsLoad({ object }) {
       this.ingcon = object;
@@ -366,24 +407,22 @@ export default {
       this.imgView = object;
       this.imgView.visibility = "collapsed";
       this.imgView.top = 24;
-      this.imgView.left = Screen.mainScreen.widthDIPs - 112;
+      this.imgView.left = this.RTL ? 16 : Screen.mainScreen.widthDIPs - 112;
     },
     onStickyLoad({ object }) {
       this.sticky = object;
     },
-    fixTitle({ object }, swipeUp: boolean): void {
+    fixTitle(object, swipeUp: boolean): void {
       let ingL = this.recipe.ingredients.length;
       let insL = this.recipe.instructions.length;
       let cmbL = this.recipe.combinations.length;
       let notL = this.recipe.notes.length;
-
       const isTop = (label): boolean => {
         let pos = label.getLocationRelativeTo(object).y;
         return label === this.cmbcon || label === this.notesT
           ? pos < 0
           : pos + 32 < 0;
       };
-
       const setVisibleTitle = (n: number): void => {
         let arr = [ingL, insL, cmbL, notL];
         this.showTitleArr = Array.from(
@@ -391,7 +430,6 @@ export default {
           (v, i) => (v = arr[i] ? i < n : false)
         );
       };
-
       if (swipeUp) {
         if (ingL && !this.showTitleArr[0] && isTop(this.ingcon))
           setVisibleTitle(1);
@@ -412,44 +450,70 @@ export default {
           setVisibleTitle(0);
       }
     },
-    onScroll(args) {
+    svScroll({ object, scrollY }) {
       let swipeUp: boolean;
-      let y = args.scrollY;
+      let y = scrollY;
       if (y) {
         swipeUp = y > this.scrollPos;
         this.scrollPos = Math.abs(y);
-        this.fixTitle(args, swipeUp);
+        this.fixTitle(object, swipeUp);
         if (!this.toast) {
           let ab = this.appbar.translateY;
-          if (swipeUp && ab == 0)
-            this.appbar.animate({
-              translate: { x: 0, y: 64 },
-              duration: 250,
-              curve: CoreTypes.AnimationCurve.ease,
-            });
-          else if (!swipeUp && ab == 64)
-            this.appbar.animate({
-              translate: { x: 0, y: 0 },
-              duration: 250,
-              curve: CoreTypes.AnimationCurve.ease,
-            });
+          if (swipeUp && ab == 0) this.hideBars();
+          else if (!swipeUp && ab == 64) this.showBars();
         }
       }
     },
-    // HELPERS
+    showBars() {
+      this.appbar.animate({
+        translate: { x: 0, y: 0 },
+        duration: 200,
+        curve: CoreTypes.AnimationCurve.ease,
+      });
+      this.sidebar.animate({
+        translate: { x: 0, y: 0 },
+        duration: 200,
+        curve: CoreTypes.AnimationCurve.ease,
+      });
+    },
+    hideBars() {
+      this.appbar.animate({
+        translate: { x: 0, y: 64 },
+        duration: 200,
+        curve: CoreTypes.AnimationCurve.ease,
+      });
+      this.sidebar.animate({
+        translate: { x: this.RTL ? -64 : 64, y: 0 },
+        duration: 200,
+        curve: CoreTypes.AnimationCurve.ease,
+      });
+    },
+
+    // Helpers
     getTitleCount(title, type) {
-      let count = this.recipe[type].length;
-      let selected = null;
+      let c = this.recipe[type].length;
+      let s = null;
       switch (title) {
         case "ings":
-          selected = this.checked;
+          s = this.checked;
           break;
         case "inss":
-          selected = this.stepsDid;
+          s = this.stepsDid;
           break;
       }
-      let text = selected ? ` (${selected}/${count})` : ` (${count})`;
+      c = this.getLocaleN(c);
+      s = s && this.getLocaleN(s);
+      let text = s ? ` (${s}/${c})` : ` (${c})`;
       return localize(title) + text;
+    },
+    getIngredientItem(item) {
+      return `${
+        this.roundedQuantity(item.quantity)
+          ? this.roundedQuantity(item.quantity) + " "
+          : ""
+      }${this.roundedQuantity(item.quantity) ? localize(item.unit) + " " : ""}${
+        item.item
+      }`;
     },
     changeYield() {
       this.$showModal(Prompt, {
@@ -485,31 +549,25 @@ export default {
       );
     },
     showLastTried() {
-      this.toast = localize("triedInfo", this.niceDate(this.recipe.lastTried));
-      utils.timer(10, (val) => {
-        if (!val) this.toast = val;
+      this.animateBar(this.appbar, 0).then(() => {
+        this.toast = localize(
+          "triedInfo",
+          this.niceDate(this.recipe.lastTried)
+        );
+        this.animateBar(this.toastbar, 1);
+        let a = 10;
+        clearInterval(barTimer);
+        barTimer = setInterval(() => a-- < 1 && this.hideBar(), 1000);
       });
     },
-    hideLastTried({ object }) {
-      object
-        .animate({
-          opacity: 0,
-          translate: { x: 0, y: 64 },
-          duration: 250,
-          curve: CoreTypes.AnimationCurve.ease,
-        })
-        .then(() => {
-          this.showUndo = false;
-          this.appbar.translateY = 64;
-          this.appbar.animate({
-            translate: { x: 0, y: 0 },
-            duration: 250,
-            curve: CoreTypes.AnimationCurve.ease,
-          });
-          object.opacity = 1;
-          object.translateY = 0;
-          this.toast = null;
-        });
+    hideBar() {
+      clearInterval(barTimer);
+      this.animateBar(this.toastbar, 0).then(() => {
+        this.toast = null;
+        this.photoOpen
+          ? (this.appbar.opacity = 1)
+          : this.animateBar(this.appbar, 1);
+      });
     },
     // getMeasure(value: number, unit: string) {
     //   let vm = this;
@@ -560,14 +618,6 @@ export default {
         ) / 100
       );
     },
-    keepScreenOn(boolean) {
-      let activity =
-        Application.android.foregroundActivity ||
-        Application.android.startActivity;
-      let window = activity.getWindow();
-      let flag = android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
-      boolean ? window.addFlags(flag) : window.clearFlags(flag);
-    },
     formattedTime(time) {
       let t = time.split(":");
       let h = parseInt(t[0]);
@@ -577,15 +627,13 @@ export default {
       return h ? (m ? `${h} ${hr} ${m} ${min}` : `${h} ${hr}`) : `${m} ${min}`;
     },
     formattedDate(date) {
-      let d = new Date(date);
-      var dateFormat = new intl.DateTimeFormat(null, {
+      return new Intl.DateTimeFormat(null, {
         year: "numeric",
         month: "long",
         day: "numeric",
         hour: "numeric",
         minute: "numeric",
-      }).format(d);
-      return `${dateFormat}`;
+      }).format(new Date(date));
     },
     isValidURL(string) {
       let pattern = new RegExp("^https?|^www", "ig");
@@ -654,26 +702,38 @@ export default {
         this.inscon.getChildAt(i).className = "instruction";
       }
     },
+    getDates() {
+      let u = `${localize("Last updated")}: ${this.formattedDate(
+        this.recipe.lastModified
+      )}`;
+      let c = `${localize("Created")}: ${this.formattedDate(
+        this.recipe.created
+      )}`;
+      return {
+        u,
+        c,
+        uc: u + "\n" + c,
+      };
+    },
 
-    // NAVIGATION HANDLERS
+    // NavigationHandlers
     editRecipe() {
-      this.busy = true;
+      this.busyEdit = 1;
       this.$navigateTo(EditRecipe, {
         props: {
-          navigationFromView: true,
           filterTrylater: this.filterTrylater,
           recipeID: this.currentRecipeID,
         },
-        // backstackVisible: false,
+        animated: false,
       });
     },
     viewCombination(combination) {
       this.scrollview.scrollToVerticalOffset(0, true);
       this.recipe = this.recipes.filter((e) => e.id === combination)[0];
-      this.showTitleArr = new Array(4).fill(false);
+      this.showTitleArr = new Array(4).fill(0);
       this.clearChecks();
       this.clearSteps();
-      this.recipe.ingredients.forEach(() => this.checks.push(false));
+      this.recipe.ingredients.forEach(() => this.checks.push(0));
       this.currentRecipeID = combination;
       this.syncCombinations();
       this.createNotes();
@@ -681,7 +741,7 @@ export default {
       this.recipe.tried && this.recipe.lastTried && this.showLastTried();
     },
 
-    // SHARE ACTION
+    // ShareAction
     shareHandler() {
       if (this.recipe.image) {
         this.$showModal(Action, {
@@ -696,7 +756,7 @@ export default {
               break;
             case "pht":
               ImageSource.fromFile(this.recipe.image).then((res) =>
-                utils.shareImage(res, localize("srpu"))
+                utils.shareImage(res, localize("srpu"), this.recipe.title)
               );
               break;
           }
@@ -769,7 +829,7 @@ export default {
       utils.shareText(shareContent, localize("sru"));
     },
 
-    // DATA HANDLERS
+    // DataHandlers
     toggle(key: string, setDate: boolean) {
       this.toggleStateAction({
         id: this.currentRecipeID,
@@ -787,7 +847,7 @@ export default {
       }
     },
 
-    // SHOPPINGLIST
+    // ShoppingList
     toggleCart() {
       if (!this.recipe.inBag) {
       } else {
@@ -797,10 +857,10 @@ export default {
       });
     },
 
-    // NOTES
+    // Notes
     createNote(note) {
       let regex = /(https?:\/\/[^\s]+)/g;
-      const lbl = new Label();
+      const lbl = new RLabel();
       lbl.className = "note";
       lbl.textWrap = true;
       let fString = new FormattedString();
@@ -851,7 +911,8 @@ export default {
       } else this.$navigateBack();
     },
     viewPhoto() {
-      this.photoOpen = true;
+      this.hideBars();
+      this.photoOpen = 1;
       this.hijackBackEvent();
       let pv = this.imgView;
       pv.visibility = "visible";
@@ -865,16 +926,16 @@ export default {
           pv.animate({
             width: sw,
             height: sw,
-            translate: { x: 112 - sw, y: (sh - sw) / 3 },
-            duration: 250,
+            translate: { x: this.RTL ? -16 : 112 - sw, y: (sh - sw) / 3 },
+            duration: 200,
             curve: CoreTypes.AnimationCurve.ease,
           })
         )
         .then(() =>
           pv.animate({
             height: sh,
-            translate: { x: -sw + 112, y: -((sh - sw) / 6) },
-            duration: 250,
+            translate: { x: this.RTL ? -16 : 112 - sw, y: -((sh - sw) / 6) },
+            duration: 200,
             curve: CoreTypes.AnimationCurve.ease,
           })
         );
@@ -886,8 +947,8 @@ export default {
       pv.animate({
         width: sw,
         height: sw,
-        translate: { x: 112 - sw, y: (sh - sw) / 3 },
-        duration: 250,
+        translate: { x: this.RTL ? -16 : 112 - sw, y: (sh - sw) / 3 },
+        duration: 200,
         curve: CoreTypes.AnimationCurve.ease,
       })
         .then(() =>
@@ -895,7 +956,7 @@ export default {
             width: 96,
             height: 96,
             translate: { x: 0, y: 0 },
-            duration: 250,
+            duration: 200,
             curve: CoreTypes.AnimationCurve.ease,
           })
         )
@@ -907,37 +968,162 @@ export default {
         )
         .then(() => {
           pv.visibility = "collapsed";
-          this.photoOpen = false;
+          this.photoOpen = 0;
           this.releaseBackEvent();
+          this.showBars();
         });
     },
-    navigateBack() {
-      this.photoOpen ? this.closePhoto() : this.$navigateBack();
-    },
 
-    //TIMERS
+    // Timers
     openCookingTimer() {
       this.$navigateTo(CookingTimer, {
         props: {
           recipeID: this.recipe.id,
         },
+        animated: false,
       });
     },
-    //HELPERS
+
+    //DuplicateRecipe
+    duplicateRecipe() {
+      this.busyDup = 1;
+      let dupRecipe = Object.assign({}, this.recipe);
+      dupRecipe.id = utils.getRandomID(0);
+      dupRecipe.title = dupRecipe.title + " " + localize("cpy");
+      this.$navigateTo(EditRecipe, {
+        props: {
+          dupRecipe,
+        },
+        animated: false,
+      });
+    },
+
+    // Print
+    prepareHTML() {
+      let r = this.recipe;
+      const head = `<head><meta charset=UTF-8><meta content="IE=edge"http-equiv=X-UA-Compatible><meta content="width=device-width,initial-scale=1"name=viewport><title>EnRecipes - Recipe for Print</title><style>a,body,div,html,img,ol,p,span,ul{border:0;font-size:100%;font:inherit;margin:0;padding:0;vertical-align:baseline}@font-face{font-family:Inter-Medium;src:url(../app/fonts/Inter-Medium.otf)}@font-face{font-family:Inter-Bold;src:url(../app/fonts/Inter-Bold.otf)}body{font-family:Inter-Medium,sans-serif;line-height:1.5;max-width:45rem;padding:1.5rem}body>p{padding:.5rem 0}.attr>div>p:last-child,h1,h2{font-family:Inter-Bold,sans-serif}#header{display:grid;grid-column-gap:2rem;grid-template-columns:1fr auto;margin-bottom:2.5rem;width:100%}img{border-radius:1rem;height:8rem;object-fit:cover;width:8rem}h1{font-size:2.25rem;line-height:1.25;margin:0;padding-bottom:1rem}svg{width:2rem;height:2rem;padding:0 .5rem 0 0}h2{margin:2rem 0 1rem}.attr{display:grid;grid-column-gap:2rem;grid-template-columns:1fr 1fr;margin-top:1rem}.attr>div>p:first-child{font-size:.9rem;opacity:.5}ol,ul{padding:0 1.5rem}li{padding:.5rem}a{color:inherit}.sub{font-size:.9rem;margin-top:2rem;opacity:.5}</style></head>`;
+      const getStarRating = () => {
+        let rate = `<svg width="100%" height="100%" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2"><path d="M10.756 2.826 8.419 7.98l-5.624.63c-.533.06-.982.425-1.147.935-.166.51-.018 1.07.378 1.431l4.179 3.816-1.138 5.543c-.108.525.101 1.065.535 1.38.434.315 1.012.348 1.478.083L12 19.002l4.92 2.796c.466.265 1.044.232 1.478-.083.434-.315.643-.855.535-1.38l-1.138-5.543 4.179-3.816c.396-.361.544-.921.378-1.431-.165-.51-.614-.875-1.147-.935l-5.624-.63-2.337-5.154c-.221-.489-.708-.802-1.244-.802s-1.023.313-1.244.802z"/></svg>`;
+        let unrate = `<svg width="100%" height="100%" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2"><path d="M10.756 2.826 8.419 7.98l-5.624.63c-.533.06-.982.425-1.147.935-.166.51-.018 1.07.378 1.431l4.179 3.816-1.138 5.543c-.108.525.101 1.065.535 1.38.434.315 1.012.348 1.478.083L12 19.002l4.92 2.796c.466.265 1.044.232 1.478-.083.434-.315.643-.855.535-1.38l-1.138-5.543 4.179-3.816c.396-.361.544-.921.378-1.431-.165-.51-.614-.875-1.147-.935l-5.624-.63-2.337-5.154c-.221-.489-.708-.802-1.244-.802s-1.023.313-1.244.802zM12 4.925l1.994 4.398c.146.321.45.542.8.581l4.799.538-3.567 3.256c-.26.237-.376.594-.305.94l.972 4.73-4.199-2.386c-.306-.174-.682-.174-.988.0l-4.199 2.386.972-4.73c.071-.346-.045-.703-.305-.94l-3.567-3.256 4.799-.538c.35-.039.654-.26.8-.581L12 4.925z"/></svg>`;
+        return rate.repeat(r.rating) + unrate.repeat(5 - r.rating);
+      };
+      const img = r.image ? `<img src="${r.image}" alt="${r.title}" />` : "";
+      const getIngs = () => {
+        let ing = [];
+        r.ingredients.forEach((e) => {
+          ing.push(`<li>${this.getIngredientItem(e)}</li>`);
+        });
+        return ing.join("");
+      };
+      const getIns = () => {
+        let ins = [];
+        r.instructions.forEach((e) => {
+          ins.push(`<li>${e}</li>`);
+        });
+        return ins.join("");
+      };
+      const getCmbs = () => {
+        let cmb = [];
+        r.combinations.forEach((e) => {
+          cmb.push(`<p>${this.getCombinationTitle(e)}</p>`);
+        });
+        return cmb.join("");
+      };
+      const getNotes = () => {
+        let regex = /(https?:\/\/[^\s]+)/g;
+        let n = [];
+        const createSpan = (val, isUrl) => {
+          return isUrl
+            ? `<a href="${val}" target="_blank" rel="noopener noreferrer">${val}</a>`
+            : val;
+        };
+        r.notes.forEach((e) => {
+          let arr = e.split(regex);
+          let single = [];
+          arr.forEach((f) => {
+            single.push(createSpan(f, regex.test(f)));
+          });
+          n.push(`<p>${single.join("")}</p>`);
+        });
+        return n.join("");
+      };
+      return `<html dir="${
+        this.RTL ? "rtl" : "ltr"
+      }">${head}<body><div id=header><div class=title><h1>${
+        r.title
+      }</h1><div class=rating>${getStarRating()}</div></div>${img}</div><div class=attr><div><p>${localize(
+        "cui"
+      )}<p>${r.cuisine}</div><div><p>${localize("cat")}<p>${
+        r.category
+      }</div></div>${
+        r.tags.length
+          ? `<div class=attr><div style="grid-column:span 2"><p>${localize(
+              "ts"
+            )}<p>${this.getTags(r.tags)}</div></div>`
+          : ""
+      } ${
+        this.hasTime(r.prepTime) || this.hasTime(r.cookTime)
+          ? `<div class=attr>${
+              this.hasTime(r.prepTime)
+                ? `<div><p>${localize("prepT")}<p>${this.formattedTime(
+                    r.prepTime
+                  )}</div>`
+                : ""
+            } ${
+              this.hasTime(r.cookTime)
+                ? `<div><p>${localize("cookT")}<p>${this.formattedTime(
+                    r.cookTime
+                  )}</div>`
+                : ""
+            }</div>`
+          : ""
+      }<div class=attr><div><p>${localize("yld")}<p>${
+        this.tempYieldQuantity
+      } ${localize(r.yieldUnit)}</div><div><p>${localize(
+        "Difficulty level"
+      )}<p>${r.difficulty}</div></div>${
+        r.ingredients.length
+          ? `<h2>${this.getTitleCount("ings", "ingredients")}</h2>`
+          : ""
+      }<ul>${getIngs()}</ul>${
+        r.instructions.length
+          ? `<h2>${this.getTitleCount("inss", "instructions")}</h2>`
+          : ""
+      }<ol>${getIns()}</ol>${
+        r.combinations.length
+          ? `<h2>${this.getTitleCount("cmbs", "combinations")}</h2>`
+          : ""
+      } ${getCmbs()} ${
+        r.notes.length ? `<h2>${this.getTitleCount("nos", "notes")}</h2>` : ""
+      } ${getNotes()}<div class=sub><p>${this.getDates().u}<p>${
+        this.getDates().c
+      }</div>
+  </body>
+</html>`;
+    },
+    printView() {
+      let wv = this.wv as WebView;
+      const fileName = `${this.recipe.title} - ${localize("EnRecipes")}`;
+      wv.src = this.prepareHTML();
+      wv.once("loadFinished", () =>
+        utils.Printer.print(wv, fileName).then(() => (wv.src = null))
+      );
+    },
+
+    // Helpers
     touchYield({ object, action }) {
       object.className = action.match(/down|move/)
-        ? "value clickable fade"
-        : "value clickable";
+        ? "value accent fade"
+        : "value accent";
       if (action == "up") this.changeYield();
     },
   },
   created() {
     this.recipe = this.recipes.filter((e) => e.id === this.currentRecipeID)[0];
-    this.recipe.ingredients.forEach((e) => this.checks.push(false));
+    this.recipe.ingredients.forEach((e) => this.checks.push(0));
   },
   mounted() {
-    this.yieldMultiplier = this.recipe.yieldQuantity;
-    this.recipe.tried && this.recipe.lastTried && this.showLastTried();
+    this.yieldMultiplier = this.yieldQuantity || this.recipe.yieldQuantity;
   },
 };
 </script>
