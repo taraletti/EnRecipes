@@ -19,10 +19,8 @@
   "private": "true",
   "dependencies": {
     "@akylas/nativescript-sqlite": "^3.3.12",
-    "@nativescript-community/ui-collectionview": "^4.0.29",
-    "@nativescript-rtl/ui": "^0.1.8",
+    "@nativescript-community/ui-collectionview": "^4.0.32",
     "@nativescript/core": "^8.0.7",
-    "@nativescript/local-notifications": "^5.0.3",
     "@nativescript/localize": "^5.0.4",
     "@triniwiz/nativescript-accelerometer": "^4.0.3",
     "nativescript-imagecropper": "^4.0.1",
@@ -33,8 +31,8 @@
   "devDependencies": {
     "@nativescript/android": "8.0.0",
     "@nativescript/types": "^8.0.1",
-    "@nativescript/webpack": "^5.0.0-beta.12",
-    "@types/node": "^15.9.0",
+    "@nativescript/webpack": "^5.0.0-beta.14",
+    "@types/node": "^15.12.2",
     "nativescript-vue-template-compiler": "~2.9.0",
     "sass": "^1.34.1",
     "typescript": "^4.2.4",

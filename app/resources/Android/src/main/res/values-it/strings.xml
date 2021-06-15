@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="tmrClr">"Contaminuti cancellato"</string>
+  <string name="selMT">"Seleziona il tipo di pasto"</string>
+  <string name="ehwmp">"Mangia sano con i piani dei pasti!"</string>
+  <string name="plsCrt">"Usa il pulsante più per crearne uno"</string>
+  <string name="admp">"Elimina automaticamente i piani pasto"</string>
+  <string name="nvr">"Mai"</string>
+  <string name="otay">"Dopo un anno"</string>
+  <string name="otam">"Dopo un mese"</string>
+  <string name="otaw">"Dopo una settimana"</string>
+  <string name="oAP">"%1$s in corso, %2$s in pausa"</string>
+  <string name="calVM">"Modalità di visualizzazione calendario"</string>
+  <string name="mnth">"Mese"</string>
+  <string name="wk">"Settimana"</string>
+  <string name="d">"Giorno"</string>
+  <string name="sun">"domenica"</string>
+  <string name="mon">"lunedì"</string>
+  <string name="tue">"martedì"</string>
+  <string name="wed">"mercoledì"</string>
+  <string name="thu">"giovedì"</string>
+  <string name="fri">"venerdì"</string>
+  <string name="sat">"sabato"</string>
+  <string name="cpy">"copia"</string>
+  <string name="tdy">"Oggi"</string>
+  <string name="tmrw">"Domani"</string>
+  <string name="ystr">"Ieri"</string>
+  <string name="random">"Casuale"</string>
+  <string name="gtD">"Vai alla data"</string>
+  <string name="ccwt">"Cucina con fiducia con i contaminuti!"</string>
+  <string name="prstTU">"Tempo preimpostato aggiornato"</string>
+  <string name="wDBy">"%1$s è stato ritardato di %2$s"</string>
+  <string name="texp">"%1$s contaminuti scaduti"</string>
+  <string name="dismiss">"Diattiva"</string>
+  <string name="dismissAll">"Disattiva tutti i contaminuti"</string>
+  <string name="ttv">"Tocca per visualizzare"</string>
+  <string name="prsts">"Preimpostazioni"</string>
+  <string name="delPrst">"Stai per eliminare %1$s dalle preimpostazioni"</string>
+  <string name="tmrRm">"Contaminuti rimosso"</string>
+  <string name="notifSetg">"Impostazioni di notifica"</string>
   <string name="delay">"Ritardo"</string>
   <string name="dlyDur">"Durata del ritardo"</string>
   <string name="minute">"minuto"</string>
@@ -11,7 +47,6 @@
   <string name="sec">"s"</string>
   <string name="stop">"Ferma"</string>
   <string name="prstBtn">"Preimpostazioni"</string>
-  <string name="tmrPrsts">"Preimpostazioni del contaminuti"</string>
   <string name="fwr">"per quale ricetta?"</string>
   <string name="aTPrst">"Aggiunto alle preimpostazioni"</string>
   <string name="tmrSnd">"Suono del contaminuti"</string>
@@ -109,7 +144,7 @@
   <string name="restCatL">"Reimposta l\'elenco delle categorie"</string>
   <string name="rest">"Ripristina"</string>
   <string name="resNF">"Ricetta non trovata"</string>
-  <string name="req">"%1$s richiesto"</string>
+  <string name="req">"%1$s necessario"</string>
   <string name="recU">"Aggiornate:"</string>
   <string name="recTitle">"La mia ricetta sana"</string>
   <string name="recs">"ricette"</string>
@@ -313,6 +348,5 @@
   <string name="aBtn">"AGGIUNGI"</string>
   <string name="About">"Informazioni"</string>
   <string name="aap">"Allega una foto"</string>
-  <string name="notifSetg">"Notification settings"</string>
-  <string name="tmrRm">"Timer removed"</string>
+  <string name="add">"Add"</string>
 </resources>

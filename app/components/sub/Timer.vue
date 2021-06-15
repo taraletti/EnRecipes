@@ -1,193 +1,280 @@
 <template>
-  <GridLayout
+  <RGridLayout
+    :rtl="RTL"
     rows="auto, auto"
     columns="auto, *, auto, auto, auto"
-    class="singleTimer"
+    class="timer"
   >
-      <!-- :class="{ blink: done }" -->
     <Button
-      class="ico"
+      class="ico min rtl"
       :text="done ? icon.ring : timer.isPaused ? icon.start : icon.pause"
       @tap="!done && toggleProgress()"
     />
-    <StackLayout col="1" class="info" :colSpan="timer.isPaused ? 1 : 2">
-      <Label :text="timer.label" class="tb title tw" />
-      <Label
-        @touch="!timer.recipeID && touch($event)"
+    <StackLayout
+      col="1"
+      class="info"
+      :colSpan="timer.isPaused || !timer.preset ? 1 : 2"
+    >
+      <RLabel :text="timer.label" class="tb title tw a" />
+      <RLabel
+        :hidden="!timer.recipeID && done"
+        @touch="!done && touch($event)"
         :text="getRecipeTitle"
-        class="recipeTitle"
-        :class="timer.recipeID ? 'sub' : 'clickable'"
+        class="a"
+        :class="timer.recipeID ? 'sub' : 'accent'"
       />
-      <Label :text="formattedTime(timer.time)" />
+      <RLabel
+        :text="
+          progress == 0
+            ? countUp
+              ? getCount
+              : formattedTime(timer.time)
+            : getCount
+        "
+      />
     </StackLayout>
     <Button
       col="2"
-      class="ico"
-      :hidden="(!timer.isPaused || progress == 0) && !done"
-      :text="icon.reset"
-      @tap="resetTimer"
+      class="ico rtl"
+      :hidden="(!timer.isPaused && timer.preset) || done || countUp"
+      :text="isReset || timer.preset ? icon.reset : icon.addTo"
+      @tap="isReset || timer.preset ? resetTimer() : addPreset()"
     />
     <Button
       col="3"
       class="ico"
-      :hidden="timer.preset && !done"
-      @tap="done ? delay() : addPreset()"
-      :text="done ? icon.delay : icon.addTo"
+      @tap="countUp ? addPreset() : addDelay()"
+      :text="countUp ? icon.addTo : icon.delay"
     />
     <Button
       col="4"
-      class="ico x"
+      class="ico min"
       :text="icon.x"
-      @tap="removeTimerItem(timerIndex, false)"
+      @tap="removeTimer(timer.id, done)"
     />
-    <Progress row="1" colSpan="5" :value="progress" />
-  </GridLayout>
+    <Progress @loaded="pLoaded" row="1" colSpan="5" />
+  </RGridLayout>
 </template>
 
 <script>
-import { ApplicationSettings, Application } from "@nativescript/core";
+import { ApplicationSettings } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
 import { mapState, mapActions } from "vuex";
 import ActionWithSearch from "../modals/ActionWithSearch";
+import ViewRecipe from "../ViewRecipe";
 import * as utils from "~/shared/utils";
-import { EventBus } from "~/main";
-
+import { EvtBus } from "~/main";
 export default {
   props: [
     "timer",
-    "timerIndex",
     "formattedTime",
     "removeTimer",
-    "addToPreset",
     "togglePause",
-    "fireTimer",
+    "timerAlert",
+    "showToast",
   ],
   data() {
     return {
+      pBar: 0,
+      count: 0,
+      delay: 0,
       progress: 0,
-      timerInt: this.timer.timerInterval,
     };
   },
   computed: {
-    ...mapState(["icon", "recipes", "timerDelay"]),
+    ...mapState(["icon", "recipes", "timerDelay", "timerPresets", "RTL"]),
     getRecipeTitle() {
       let { recipeID } = this.timer;
       if (recipeID) {
-        let recipe = this.recipes.filter(
-          (e) => e.id === this.timer.recipeID
-        )[0];
-        return recipe
-          ? recipe.title
-          : `[ ${this.$options.filters.L("resNF")} ]`;
+        let recipe = this.recipes.filter((e) => e.id == this.timer.recipeID)[0];
+        if (recipe) return recipe.title;
+        else {
+          this.timer.recipeID = null;
+          return localize("fwr");
+        }
       } else return localize("fwr");
     },
     done() {
-      return this.progress >= 100;
+      return this.timer.done;
     },
-    getTimeInSec() {
+    countUp() {
+      return this.timer.mode == 0;
+    },
+    isReset() {
+      return this.timer.isPaused && this.progress != 0;
+    },
+    getTotalTime() {
+      return this.delay + this.actualTime;
+    },
+    actualTime() {
       let t = this.timer.time.split(":");
       return +t[0] * 60 * 60 + +t[1] * 60 + +t[2];
     },
+    getCount() {
+      let c = this.count;
+      let s = Math.abs(c);
+      return (
+        (c < 0 ? "-" : "") +
+        new Date(s * 1000)
+          .toISOString()
+          .slice(
+            s < 10
+              ? 18
+              : s < 60
+              ? 17
+              : s < 600
+              ? 15
+              : s < 3600
+              ? 14
+              : s < 36000
+              ? 12
+              : s < 86400
+              ? 11
+              : 0,
+            19
+          )
+      );
+    },
   },
   methods: {
-    ...mapActions(["removeActiveTimer", "updateActiveTimer", "addTimerPreset"]),
+    ...mapActions([
+      "removeActiveTimer",
+      "addTimerPreset",
+      "deleteTimerPreset",
+      "sortActiveTimers",
+    ]),
+    pLoaded({ object }) {
+      this.pBar = object.android;
+      this.pBar.setRotation(
+        this.RTL && utils.sysRTL() ? 0 : this.RTL || utils.sysRTL() ? 180 : 0
+      );
+      this.initTimer();
+    },
+    viewRecipe(recipeID) {
+      this.$navigateTo(ViewRecipe, {
+        props: {
+          recipeID,
+        },
+      });
+    },
     attachRecipe() {
       this.$showModal(ActionWithSearch, {
         props: {
           title: "selRec",
           recipes: this.recipes,
+          action: "aNBtn",
         },
-      }).then((recipeID) => {
-        let timer = this.timer;
-        timer.recipeID = recipeID;
-        this.updateActiveTimer(timer);
+      }).then((res) => {
+        if (res == "aNBtn") {
+          this.$navigateTo(EditRecipe, {
+            animated: false,
+          });
+        } else if (res) {
+          let timer = this.timer;
+          timer.recipeID = res;
+          this.sortActiveTimers();
+        }
       });
     },
-    setProgress(progress, delay) {
-      this.progress = progress;
-      let timer = this.timer;
-      if (progress <= 100 && !timer.timerInterval) {
-        timer.timerInterval = setInterval(() => {
+    setNum(type, val) {
+      ApplicationSettings.setNumber(`${this.timer.id}${type}`, val);
+    },
+    setProgress() {
+      this.progress = 100 - (this.count / this.getTotalTime) * 100;
+      this.pBar.setProgress(this.progress, true);
+    },
+    initTimer() {
+      this.resetInterval();
+      this.setProgress();
+      !this.timer.isPaused && this.pBar.setIndeterminate(this.countUp);
+      if (this.progress < 100 || !this.timer.timerInt) {
+        this.timer.timerInt = setInterval(() => {
           if (!this.timer.isPaused) {
-            this.progress += 100 / (delay + this.getTimeInSec);
-            ApplicationSettings.setNumber(
-              `${this.timer.id}progress`,
-              this.progress
-            );
-          }
-          if (this.progress >= 100) {
-            if (progress < 100) this.fireTimer(timer);
-            clearInterval(timer.timerInterval);
-            ApplicationSettings.remove(`${this.timer.id}delay`);
+            this.setNum("c", this.countUp ? this.count++ : --this.count);
+            this.setProgress();
+          } else this.resetInterval();
+          if (this.progress >= 100 && this.count >= 0) {
+            this.timer.done = 1;
+            this.timerAlert();
           }
         }, 1000);
-        this.updateActiveTimer(timer);
       }
     },
     resetInterval() {
-      let timer = this.timer;
-      clearInterval(this.timer.timerInterval);
-      timer.timerInterval = null;
-      this.updateActiveTimer(timer);
+      clearInterval(this.timer.timerInt);
+      this.timer.timerInt = 0;
+      this.pBar.setIndeterminate(false);
     },
     resetTimer() {
-      this.resetInterval();
-      this.togglePause(this.timer, true);
-      ApplicationSettings.remove(`${this.timer.id}delay`);
-      this.setProgress(0, 0);
-      ApplicationSettings.setNumber(`${this.timer.id}progress`, 0);
-      this.clearNotification();
+      this.count = this.actualTime;
+      this.progress = this.delay = this.timer.done = 0;
+      ApplicationSettings.remove(`${this.timer.id}d`);
+      this.setNum("c", this.count);
+      this.toggleProgress(1);
+      this.pBar.setProgress(0, true);
     },
-    clearNotification() {
-      Application.android.unregisterBroadcastReceiver("timer" + this.timer.id);
-      utils.TimerNotif.clear(this.timer.id);
-    },
-    toggleProgress(bool) {
-      this.togglePause(this.timer, bool);
-      this.timer.isPaused
-        ? this.resetInterval()
-        : this.setProgress(
-            ApplicationSettings.getNumber(`${this.timer.id}progress`, 0),
-            ApplicationSettings.getNumber(`${this.timer.id}delay`, 0)
-          );
-    },
-    removeTimerItem(index, noUndo) {
-      this.resetInterval();
-      this.removeTimer(this.timer.id, index, noUndo);
+    toggleProgress(n) {
+      this.togglePause(this.timer, n);
+      this.timer.isPaused ? this.resetInterval() : this.initTimer();
     },
     addPreset() {
+      let exist = this.timerPresets.some((e) => e.id == this.timer.id);
       this.timer.preset = 1;
-      this.addToPreset(this.timer);
+      if (this.countUp) {
+        this.timer.time = new Date(this.count * 1000)
+          .toISOString()
+          .substr(11, 8);
+      }
+      let timer = JSON.parse(JSON.stringify(this.timer));
+      let { recipeID, timerInt, isPaused, preset, done, mode, ...presetTimer } =
+        timer;
+      this.addTimerPreset(presetTimer);
+      exist ? this.showToast("prstTU") : this.showToast("aTPrst");
     },
-    delay() {
-      let delayInS = this.timerDelay.split(" ")[0] * 60;
-      ApplicationSettings.setNumber(`${this.timer.id}delay`, delayInS);
-      let progress = (100 / delayInS) * this.getTimeInSec;
+    addDelay() {
+      this.timer.done = 0;
+      let td = this.timerDelay;
+      let delayDur =
+        this.getLocaleN(td) + " " + localize(td > 1 ? "minutes" : "minute");
+      this.showToast(localize("wDBy", this.timer.label, delayDur));
+      let delay = td * 60;
+      if (this.done) this.delay = delay;
+      else this.delay += delay;
+      if (this.count >= 0) this.count += delay;
+      else this.count = this.delay;
+      this.setNum("d", this.delay);
+      this.setNum("c", this.count);
       this.resetInterval();
-      this.setProgress(progress, delayInS);
-      this.clearNotification();
+      this.initTimer();
+      this.timerAlert();
     },
 
     // HELPERS
     touch({ object, action }) {
-      object.className = action.match(/down|move/)
-        ? "recipeTitle clickable fade"
-        : "recipeTitle clickable";
+      let classes = object.className;
+      classes = action.match(/down|move/)
+        ? !classes.includes("fade")
+          ? classes + " fade"
+          : classes
+        : classes.replace(/ fade/g, "");
       if (action == "up") this.attachRecipe();
     },
   },
-  mounted() {
-    this.setProgress(
-      ApplicationSettings.getNumber(`${this.timer.id}progress`, 0),
-      ApplicationSettings.getNumber(`${this.timer.id}delay`, 0)
+  created() {
+    this.delay = ApplicationSettings.getNumber(`${this.timer.id}d`, 0);
+    this.count = ApplicationSettings.getNumber(
+      `${this.timer.id}c`,
+      this.actualTime
     );
-    EventBus.$on("timer" + this.timer.id, (e) => {
+    let bID = "timer" + this.timer.id;
+    EvtBus.$off(bID);
+    EvtBus.$on(bID, (e) => {
       switch (e) {
-        case "stop":
-          this.resetTimer();
-          break;
         case "delay":
-          this.delay();
+          this.addDelay();
+          break;
+        case "dismiss":
+          this.removeTimer(this.timer.id, 1);
           break;
       }
     });

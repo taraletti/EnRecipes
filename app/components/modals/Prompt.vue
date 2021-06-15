@@ -2,24 +2,35 @@
   <Page
     @loaded="transparentPage"
     backgroundColor="transparent"
-    :class="appTheme"
+    :class="theme"
   >
     <GridLayout rows="auto, auto, auto" class="modal">
-      <Label class="title" :text="title | L" />
+      <RLabel class="title" :text="title | L" />
       <StackLayout row="1" class="input">
+        <TextView
+          v-if="type == 'view'"
+          autocorrect="true"
+          autocapitalizationType="sentences"
+          class="modalInput"
+          @loaded="focusField"
+          v-model="text"
+        />
         <TextField
+          autocapitalizationType="sentences"
+          autocorrect="true"
+          v-else
           class="modalInput"
           @loaded="focusField"
           v-model="text"
           @returnPress="$modal.close(text)"
         />
       </StackLayout>
-      <GridLayout row="2" columns="*, auto, auto" class="actions">
+      <RGridLayout :rtl="RTL" row="2" columns="*, auto, auto" class="actions">
         <Button
           col="1"
           class="text sm"
           :text="'cBtn' | L"
-          @tap="$modal.close(false)"
+          @tap="$modal.close(0)"
         />
         <Button
           col="2"
@@ -27,7 +38,7 @@
           :text="action | L"
           @tap="$modal.close(text)"
         />
-      </GridLayout>
+      </RGridLayout>
     </GridLayout>
   </Page>
 </template>
@@ -37,20 +48,23 @@ import { Utils } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
 import { mapState } from "vuex";
 export default {
-  props: ["title", "hint", "placeholder", "action"],
+  props: ["title", "type", "hint", "placeholder", "action"],
   data() {
     return {
       text: null,
     };
   },
   computed: {
-    ...mapState(["icon", "appTheme"]),
+    ...mapState(["icon", "theme", "RTL"]),
   },
   methods: {
     focusField({ object }) {
+      this.setGravity(object);
       let a = this.placeholder;
       typeof a == "number"
         ? (object.keyboardType = "number")
+        : this.type
+        ? ""
         : (object.autocapitalizationType = "words");
       object.hint = this.hint;
       object.focus();

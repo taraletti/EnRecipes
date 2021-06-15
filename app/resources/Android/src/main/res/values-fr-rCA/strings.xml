@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="tmrClr">"Minuterie effacée"</string>
+  <string name="selMT">"Sélectionnez le type de repas"</string>
+  <string name="ehwmp">"Mangez sainement grâce aux planifications de repas!"</string>
+  <string name="plsCrt">"Utilisez le bouton plus pour en créer une"</string>
+  <string name="nvr">"Jamais"</string>
+  <string name="admp">"Supprimer automatiquement les planifications de repas"</string>
+  <string name="otay">"Après un an"</string>
+  <string name="otam">"Après un mois"</string>
+  <string name="otaw">"Après une semaine"</string>
+  <string name="oAP">"%1$s en cours, %2$s en pause"</string>
+  <string name="calVM">"Mode d’affichage du calendrier"</string>
+  <string name="mnth">"Mois"</string>
+  <string name="wk">"Semaine"</string>
+  <string name="d">"Jour"</string>
+  <string name="sun">"dimanche"</string>
+  <string name="mon">"lundi"</string>
+  <string name="tue">"mardi"</string>
+  <string name="wed">"mercredi"</string>
+  <string name="thu">"jeudi"</string>
+  <string name="fri">"vendredi"</string>
+  <string name="sat">"samedi"</string>
+  <string name="cpy">"copie"</string>
+  <string name="tdy">"Aujourd’hui"</string>
+  <string name="tmrw">"Demain"</string>
+  <string name="ystr">"Hier"</string>
+  <string name="random">"Aléatoire"</string>
+  <string name="gtD">"Aller à la date"</string>
+  <string name="ccwt">"Cuisinez avec confiance avec des minuteries!"</string>
+  <string name="prstTU">"Temps du préréglage mis à jour"</string>
+  <string name="wDBy">"%1$s a été retardée de %2$s"</string>
+  <string name="texp">"%1$s minuteries ont expiré"</string>
+  <string name="dismiss">"Rejeter"</string>
+  <string name="dismissAll">"Rejeter toutes les minuteries"</string>
+  <string name="ttv">"Appuyez pour voir"</string>
+  <string name="prsts">"Préréglages"</string>
+  <string name="delPrst">"Vous êtes sur le point de supprimer %1$s des préréglages"</string>
+  <string name="tmrRm">"Minuterie retirée"</string>
+  <string name="notifSetg">"Paramètres de notification"</string>
   <string name="delay">"Retard"</string>
   <string name="dlyDur">"Durée du retard"</string>
   <string name="minute">"minute"</string>
@@ -15,7 +51,6 @@
   <string name="stop">"Arrêter"</string>
   <string name="tmr">"Minuterie %1$s"</string>
   <string name="prstBtn">"PRÉRÉGLAGES"</string>
-  <string name="tmrPrsts">"Préréglages de la minuterie"</string>
   <string name="fwr">"pour quelle recette?"</string>
   <string name="aTPrst">"Ajouté aux préréglages"</string>
   <string name="tmrSnd">"Son de la minuterie"</string>
@@ -109,7 +144,7 @@
   <string name="restCatL">"Réinitialiser la liste des catégories"</string>
   <string name="rest">"Réinitialiser"</string>
   <string name="resNF">"Recette introuvable"</string>
-  <string name="req">"%1$s requis(e)"</string>
+  <string name="req">"%1$s nécessaire"</string>
   <string name="recU">"mise à jour :"</string>
   <string name="recTitle">"Ma recette saine"</string>
   <string name="recs">"recettes"</string>
@@ -175,7 +210,7 @@
   <string name="May">"mai"</string>
   <string name="March">"mars"</string>
   <string name="_Main_dishes_u6RGQ">"Plats principaux"</string>
-  <string name="mAgo">"Il y a %1$s mois"</string>
+  <string name="mAgo">"il y a %1$s mois"</string>
   <string name="lunch">"Dîner"</string>
   <string name="ltAgo">"il y a longtemps"</string>
   <string name="Loaf">"Miche"</string>
@@ -313,6 +348,5 @@
   <string name="aBtn">"AJOUTER"</string>
   <string name="About">"À propos"</string>
   <string name="aap">"Joindre une photo"</string>
-  <string name="notifSetg">"Notification settings"</string>
-  <string name="tmrRm">"Timer removed"</string>
+  <string name="add">"Add"</string>
 </resources>

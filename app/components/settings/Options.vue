@@ -1,18 +1,19 @@
 <template>
-  <Page @loaded="onPageLoad" actionBarHidden="true">
-    <GridLayout rows="*, auto" columns="auto, *">
+  <Page @loaded="pgLoad" actionBarHidden="true">
+    <RGridLayout :rtl="RTL" rows="*, auto" columns="auto, *">
       <OptionsList title="opts" :items="items" />
       <GridLayout
-        v-show="!toast"
+        :hidden="toast"
+        @loaded="abLoad"
         row="1"
-        class="appbar"
+        class="appbar rtl"
         rows="*"
         columns="auto, *"
       >
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
-      <Toast :toast="toast" :action="(toast = null)" />
-    </GridLayout>
+      <Toast :onload="tbLoad" :toast="toast" :action="hideBar" />
+    </RGridLayout>
   </Page>
 </template>
 
@@ -28,11 +29,13 @@ export default {
   components: { OptionsList, Toast },
   data() {
     return {
+      appbar: null,
+      toastbar: null,
       toast: null,
     };
   },
   computed: {
-    ...mapState(["icon", "shakeEnabled"]),
+    ...mapState(["icon", "shake", "RTL"]),
     items() {
       return [
         {},
@@ -40,8 +43,8 @@ export default {
           type: "switch",
           icon: "shuf",
           title: "sVw",
-          subTitle: "sVwInfo",
-          checked: this.shakeEnabled,
+          subTitle: localize("sVwInfo"),
+          checked: !!this.shake,
           action: this.toggleShake,
         },
         {},
@@ -50,19 +53,35 @@ export default {
   },
   methods: {
     ...mapActions(["setShake"]),
-    onPageLoad({ object }) {
+    pgLoad({ object }) {
       object.bindingContext = new Observable();
+    },
+    abLoad({ object }) {
+      this.appbar = object;
+    },
+    tbLoad({ object }) {
+      this.toastbar = object;
     },
 
     // SHAKE VIEW RANDOM RECIPE
     toggleShake() {
-      let checked = this.shakeEnabled;
-      if (checked && !utils.hasAccelerometer()) {
-        this.toast = localize("noAccSensor");
-        utils.timer(5, (val) => {
-          if (!val) this.toast = val;
-        });
-      } else this.setShake(!checked);
+      let checked = this.shake;
+      if (checked && !utils.hasAccelerometer())
+        this.showToast(localize("noAccSensor"));
+      else this.setShake(!checked | 0);
+    },
+    showToast(data) {
+      this.animateBar(this.appbar, 0).then(() => {
+        this.toast = data;
+        this.animateBar(this.toastbar, 1);
+        utils.timer(5, (val) => !val && this.hideBar());
+      });
+    },
+    hideBar() {
+      this.animateBar(this.toastbar, 0).then(() => {
+        this.toast = null;
+        this.animateBar(this.appbar, 1);
+      });
     },
   },
 };

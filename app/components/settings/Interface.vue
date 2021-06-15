@@ -1,14 +1,8 @@
 <template>
   <Page @loaded="pgLoad" actionBarHidden="true">
-    <RGridLayout :isRtl="RTL" rows="*, auto" columns="auto, *">
+    <RGridLayout :rtl="RTL" rows="*, auto" columns="auto, *">
       <OptionsList title="intf" :items="items" />
-      <GridLayout
-        :isRtl="RTL"
-        row="1"
-        class="appbar"
-        rows="*"
-        columns="auto, *"
-      >
+      <GridLayout row="1" class="appbar rtl" rows="*" columns="auto, *">
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
     </RGridLayout>
@@ -16,18 +10,12 @@
 </template>
 
 <script>
-import {
-  ApplicationSettings,
-  Observable,
-  Device,
-  Frame,
-} from "@nativescript/core";
-import { localize } from "@nativescript/localize";
+import { ApplicationSettings, Observable, Frame } from "@nativescript/core";
 import Action from "../modals/Action";
-import Confirm from "../modals/Confirm";
 import OptionsList from "../sub/OptionsList";
 import { mapState, mapActions } from "vuex";
 import * as utils from "~/shared/utils";
+import { localize } from "@nativescript/localize";
 
 export default {
   components: { OptionsList },
@@ -37,29 +25,34 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon", "language", "appTheme", "layout", "RTL"]),
+    ...mapState(["icon", "language", "theme", "layout", "RTL"]),
     items() {
       return [
         {},
         {
           type: "list",
           icon: "lang",
+          rtl: 0,
           title: "lang",
-          subTitle: this.applang,
+          subTitle: localize(this.applang),
           action: this.setAppLang,
         },
         {
           type: "list",
           icon: "theme",
+          rtl: 0,
           title: "Theme",
-          subTitle: ApplicationSettings.getString("appTheme", "sysDef"),
+          subTitle: localize(
+            ApplicationSettings.getString("theme", "sysDef")
+          ),
           action: this.selectThemes,
         },
         {
           type: "list",
           icon: "layout",
+          rtl: 1,
           title: "listVM",
-          subTitle: this.layout,
+          subTitle: localize(this.layout),
           action: this.setLayoutMode,
         },
         {},
@@ -93,6 +86,7 @@ export default {
             ApplicationSettings.setString("appLocale", locale);
             utils.updateLocale();
             this.setRTL();
+            Frame.reloadPage();
           }
         }
       });
@@ -107,9 +101,9 @@ export default {
       }).then((action) => {
         if (
           action &&
-          (ApplicationSettings.getString("appTheme") != this.appTheme
+          (ApplicationSettings.getString("theme") != this.theme
             ? 1
-            : this.appTheme != action)
+            : this.theme != action)
         ) {
           this.setTheme(action);
           Frame.reloadPage();

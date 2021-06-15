@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="add">"Add"</string>
+  <string name="nvr">"Never"</string>
+  <string name="otaw">"Older than a week"</string>
+  <string name="otam">"Older than a month"</string>
+  <string name="otay">"Older than a year"</string>
+  <string name="admp">"Auto-delete meal plans"</string>
+  <string name="plsCrt">"Use the plus button to create one"</string>
+  <string name="ehwmp">"Eat healthy with meal plans!"</string>
+  <string name="selMT">"Select meal type"</string>
+  <string name="ystr">"Yesterday"</string>
+  <string name="tmrw">"Tomorrow"</string>
+  <string name="tdy">"Today"</string>
+  <string name="cpy">"copy"</string>
+  <string name="sat">"Saturday"</string>
+  <string name="fri">"Friday"</string>
+  <string name="thu">"Thursday"</string>
+  <string name="wed">"Wednesday"</string>
+  <string name="tue">"Tuesday"</string>
+  <string name="mon">"Monday"</string>
+  <string name="sun">"Sunday"</string>
+  <string name="d">"Day"</string>
+  <string name="wk">"Week"</string>
+  <string name="mnth">"Month"</string>
+  <string name="calVM">"Calendar view mode"</string>
+  <string name="oAP">"%1$s ongoing, %2$s paused"</string>
+  <string name="ttv">"Tap to view"</string>
+  <string name="dismissAll">"Dismiss all timers"</string>
+  <string name="dismiss">"Dismiss"</string>
+  <string name="texp">"%1$s timers expired"</string>
+  <string name="wDBy">"%1$s was delayed by %2$s"</string>
+  <string name="prstTU">"Preset time updated"</string>
+  <string name="ccwt">"Cook confidently with timers!"</string>
+  <string name="gtD">"Go to date"</string>
+  <string name="random">"Random"</string>
   <string name="notifSetg">"Notification settings"</string>
   <string name="tmrRm">"Timer removed"</string>
   <string name="seconds">"seconds"</string>
@@ -12,7 +46,8 @@
   <string name="tmrSnd">"Timer sound"</string>
   <string name="aTPrst">"Added to presets"</string>
   <string name="fwr">"for which recipe?"</string>
-  <string name="tmrPrsts">"Timer presets"</string>
+  <string name="delPrst">"You are about to delete %1$s from the presets"</string>
+  <string name="prsts">"Presets"</string>
   <string name="prstBtn">"PRESETS"</string>
   <string name="tmr">"Timer %1$s"</string>
   <string name="delay">"Delay"</string>
@@ -314,5 +349,4 @@
   <string name="aBtn">"ADD"</string>
   <string name="About">"About"</string>
   <string name="aap">"Attach a photo"</string>
-  <string name="tmrClr">"tmrClr"</string>
 </resources>

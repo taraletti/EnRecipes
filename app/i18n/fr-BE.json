@@ -323,7 +323,7 @@
     "random": "Aléatoire",
     "ystr": "Hier",
     "tmrw": "Demain",
-    "tdy": "Oggi",
+    "tdy": "Aujourd’hui",
     "cpy": "copie",
     "sat": "samedi",
     "fri": "vendredi",
@@ -332,6 +332,17 @@
     "tue": "mardi",
     "mon": "lundi",
     "sun": "dimanche",
+    "d": "Jour",
+    "wk": "Semaine",
+    "mnth": "Mois",
     "calVM": "Mode d’affichage du calendrier",
-    "oAP": "%1$s en cours, %2$s en pause"
+    "oAP": "%1$s en cours, %2$s en pause",
+    "otaw": "Après une semaine",
+    "otam": "Après un mois",
+    "otay": "Après un an",
+    "admp": "Supprimer automatiquement les planifications de repas",
+    "nvr": "Jamais",
+    "plsCrt": "Utilisez le bouton plus pour en créer une",
+    "ehwmp": "Mangez sainement grâce aux planifications de repas !",
+    "selMT": "Sélectionnez le type de repas"
 }

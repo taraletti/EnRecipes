@@ -1,8 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="tmrClr">"Temporizador a zero"</string>
-  <string name="prstBtn">"PRIMEIROS"</string>
-  <string name="tmrPrsts">"Predefinições temporizadas"</string>
+  <string name="oAP">"%1$s a decorrer, %2$s em pausa"</string>
+  <string name="calVM">"Modo de vista tipo calendário"</string>
+  <string name="mnth">"Mês"</string>
+  <string name="wk">"Semana"</string>
+  <string name="d">"Dia"</string>
+  <string name="sun">"Domingo"</string>
+  <string name="mon">"Segunda-feira"</string>
+  <string name="tue">"Terça-feira"</string>
+  <string name="wed">"Quarta-feira"</string>
+  <string name="thu">"Quinta-feira"</string>
+  <string name="fri">"Sexta-feira"</string>
+  <string name="sat">"Sábado"</string>
+  <string name="cpy">"cópia"</string>
+  <string name="tdy">"Hoje"</string>
+  <string name="tmrw">"Amanhã"</string>
+  <string name="ystr">"Ontem"</string>
+  <string name="selMT">"Selecionar tipo de refeição"</string>
+  <string name="ehwmp">"Coma saudavelmente com planificações de refeições!"</string>
+  <string name="plsCrt">"Use o botão + para criar uma"</string>
+  <string name="admp">"Eliminar automaticamente planos de refeições"</string>
+  <string name="otay">"Mais antigas que 1 ano"</string>
+  <string name="otam">"Mais antigas que 1 mês"</string>
+  <string name="otaw">"Mais antigas que 1 semana"</string>
+  <string name="nvr">"Nunca"</string>
+  <string name="random">"Aleatória"</string>
+  <string name="gtD">"Ir à data"</string>
+  <string name="ccwt">"Cozinhe com segurança com temporizadores!"</string>
+  <string name="prstTU">"Tempo predefinido atualizado"</string>
+  <string name="wDBy">"%1$s foi adiado por %2$s"</string>
+  <string name="texp">"%1$s temporizadores expiraram"</string>
+  <string name="dismiss">"Rejeitar"</string>
+  <string name="dismissAll">"Rejeitar todos os temporizadores"</string>
+  <string name="ttv">"Tocar para ver"</string>
+  <string name="prsts">"Predefinições"</string>
+  <string name="delPrst">"Está prestes a eliminar %1$s das predefinições"</string>
+  <string name="tmrRm">"Temporizador removido"</string>
+  <string name="notifSetg">"Definições de notificação"</string>
+  <string name="prstBtn">"PREDEFINIÇÕES"</string>
   <string name="fwr">"para que receita?"</string>
   <string name="aTPrst">"Adicionado às predefinições"</string>
   <string name="tmrSnd">"Som temporizador"</string>
@@ -120,7 +155,7 @@
   <string name="recs">"receitas"</string>
   <string name="recTitle">"A minha receita saudável"</string>
   <string name="recU">"Atualizado:"</string>
-  <string name="req">"Necessárias %1$s"</string>
+  <string name="req">"Necessário %1$s"</string>
   <string name="resNF">"Receita não encontrada"</string>
   <string name="rest">"Reiniciar"</string>
   <string name="restCatL">"Reiniciar lista de categorias"</string>
@@ -139,7 +174,7 @@
   <string name="cmbs">"Combinações"</string>
   <string name="conf">"Confirme"</string>
   <string name="cookT">"Tempo de cozedura"</string>
-  <string name="cPic">"Foto do corte"</string>
+  <string name="cPic">"Recortar fotografia"</string>
   <string name="cui">"Cozinha"</string>
   <string name="dAgo">"%1$s dias atrás"</string>
   <string name="db">"Base de dados"</string>
@@ -150,7 +185,7 @@
   <string name="disc">"Esta receita tem alterações não guardadas. O que gostaria de fazer?"</string>
   <string name="donate">"Doação"</string>
   <string name="editRec">"Editar receita"</string>
-  <string name="expBu">"Exportar apoio total"</string>
+  <string name="expBu">"Exportar cópia de segurança completa"</string>
   <string name="expip">"Exportação em curso"</string>
   <string name="expSuc">"Exportado com sucesso"</string>
   <string name="February">"Fevereiro"</string>
@@ -313,6 +348,5 @@
   <string name="American">"Americana"</string>
   <string name="About">"Sobre"</string>
   <string name="aap">"Anexar uma fotografia"</string>
-  <string name="notifSetg">"Notification settings"</string>
-  <string name="tmrRm">"Timer removed"</string>
+  <string name="add">"Add"</string>
 </resources>
