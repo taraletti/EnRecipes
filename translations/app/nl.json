@@ -109,7 +109,6 @@
     "Japanese": "Japans",
     "Jewish": "Joods",
     "joinTG": "Word lid van de Telegram-groep",
-    "June": "juni",
     "kEdit": "DOORGAAN MET BEWERKEN",
     "Kenyan": "Keniaans",
     "kg": "kg",
@@ -129,7 +128,6 @@
     "lunch": "Lunch",
     "mAgo": "%s maanden geleden",
     "Main dishes": "Hoofdgerechten",
-    "May": "mei",
     "Meat": "Vlees",
     "medium": "middelgroot",
     "Mexican": "Mexicaans",
@@ -308,9 +306,7 @@
     "tmrw": "Morgen",
     "tdy": "Vandaag",
     "cpy": "kopie",
-    "fri": "vrijdag",
     "wed": "woensdag",
-    "mon": "maandag",
     "d": "Dag",
     "wk": "Week",
     "mnth": "Maand",
@@ -323,5 +319,7 @@
     "admp": "Schema's automatisch verwijderen",
     "plsCrt": "Druk op de plusknop om een schema toe te voegen",
     "ehwmp": "Eet gezond met maaltijdschema's!",
-    "selMT": "Kies het soort maaltijd"
+    "selMT": "Kies het soort maaltijd",
+    "rstBtn": "STANDAARDWAARDEN",
+    "add": "Toevoegen"
 }
