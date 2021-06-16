@@ -109,7 +109,6 @@
     "Japanese": "giapponese",
     "Jewish": "ebraica",
     "joinTG": "Unisciti al gruppo Telegram",
-    "June": "giugno",
     "kEdit": "CONTINUA A MODIFICARE",
     "Kenyan": "keniota",
     "kg": "kg",
@@ -129,7 +128,6 @@
     "lunch": "Pranzo",
     "mAgo": "%s mesi fa",
     "Main dishes": "Piatti principali",
-    "May": "maggio",
     "Meat": "Carne",
     "medium": "medio",
     "Mexican": "messicana",
@@ -290,7 +288,7 @@
     "minutes": "minuti",
     "minute": "minuto",
     "dlyDur": "Durata del ritardo",
-    "delay": "Ritardo",
+    "delay": "Ritarda",
     "notifSetg": "Impostazioni di notifica",
     "tmrRm": "Contaminuti rimosso",
     "delPrst": "Stai per eliminare %s dalle preimpostazioni",
@@ -308,9 +306,7 @@
     "tmrw": "Domani",
     "tdy": "Oggi",
     "cpy": "copia",
-    "fri": "venerdì",
     "wed": "mercoledì",
-    "mon": "lunedì",
     "d": "Giorno",
     "wk": "Settimana",
     "mnth": "Mese",
@@ -323,5 +319,7 @@
     "admp": "Elimina automaticamente i piani pasto",
     "plsCrt": "Usa il pulsante più per crearne uno",
     "ehwmp": "Mangia sano con i piani dei pasti!",
-    "selMT": "Seleziona il tipo di pasto"
+    "selMT": "Seleziona il tipo di pasto",
+    "rstBtn": "RIPRISTINA",
+    "add": "Aggiungi"
 }
