@@ -109,7 +109,6 @@
     "Japanese": "Japanisch",
     "Jewish": "Jüdisch",
     "joinTG": "Tritt der Telegram-Gruppe bei",
-    "June": "Juni",
     "kEdit": "WEITER BEARBEITEN",
     "Kenyan": "Kenianisch",
     "kg": "kg",
@@ -129,7 +128,6 @@
     "lunch": "Mittagessen",
     "mAgo": "%s Monate zuvor",
     "Main dishes": "Hauptspeisen",
-    "May": "Mai",
     "Meat": "Fleisch",
     "medium": "medium",
     "Mexican": "Mexikanisch",
@@ -290,7 +288,7 @@
     "minutes": "Minuten",
     "minute": "Minute",
     "dlyDur": "Verzögerungsdauer",
-    "delay": "Verzögerung",
+    "delay": "Verzögern",
     "tmrRm": "Kurzzeitwecker entfernt",
     "notifSetg": "Benachrichtigungseinstellungen",
     "delPrst": "Du bist dabei, %s aus den Voreinstellungen zu löschen",
@@ -309,9 +307,7 @@
     "tmrw": "Morgen",
     "tdy": "Heute",
     "cpy": "Kopie",
-    "fri": "Freitag",
     "wed": "Mittwoch",
-    "mon": "Montag",
     "calVM": "Modus der Kalenderansicht",
     "d": "Tag",
     "wk": "Woche",
@@ -323,5 +319,7 @@
     "admp": "Mahlzeitenpläne automatisch löschen",
     "plsCrt": "Verwende die Plus-Taste, um einen zu erstellen",
     "ehwmp": "Iss gesund mit Essensplänen!",
-    "selMT": "Mahlzeitentyp auswählen"
+    "selMT": "Mahlzeitentyp auswählen",
+    "rstBtn": "ZURÜCKSETZEN",
+    "add": "Hinzufügen"
 }
