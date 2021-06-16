@@ -109,7 +109,6 @@
     "Japanese": "japonaise",
     "Jewish": "juive",
     "joinTG": "Rejoignez le groupe Telegram",
-    "June": "juin",
     "kEdit": "CONTINUER",
     "Kenyan": "kényane",
     "kg": "kg",
@@ -129,7 +128,6 @@
     "lunch": "Dîner",
     "mAgo": "il y a %s mois",
     "Main dishes": "Plats principaux",
-    "May": "mai",
     "Meat": "Viande",
     "medium": "moyen",
     "Mexican": "mexicaine",
@@ -290,7 +288,7 @@
     "minutes": "minutes",
     "minute": "minute",
     "dlyDur": "Durée du retard",
-    "delay": "Retard",
+    "delay": "Retarder",
     "notifSetg": "Paramètres de notification",
     "tmrRm": "Minuterie retirée",
     "delPrst": "Vous êtes sur le point de supprimer %s des préréglages",
@@ -308,9 +306,7 @@
     "tmrw": "Demain",
     "tdy": "Aujourd’hui",
     "cpy": "copie",
-    "fri": "vendredi",
     "wed": "mercredi",
-    "mon": "lundi",
     "d": "Jour",
     "wk": "Semaine",
     "mnth": "Mois",
@@ -323,5 +319,7 @@
     "nvr": "Jamais",
     "plsCrt": "Utilisez le bouton plus pour en créer une",
     "ehwmp": "Mangez sainement grâce aux planifications de repas!",
-    "selMT": "Sélectionnez le type de repas"
+    "selMT": "Sélectionnez le type de repas",
+    "rstBtn": "RÉINITIALISER",
+    "add": "Ajouter"
 }
