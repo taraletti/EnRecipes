@@ -109,7 +109,6 @@
     "Japanese": "japanilainen",
     "Jewish": "juutalainen",
     "joinTG": "",
-    "June": "kesäkuu",
     "kEdit": "",
     "Kenyan": "",
     "kg": "kg",
@@ -129,7 +128,6 @@
     "lunch": "",
     "mAgo": "",
     "Main dishes": "",
-    "May": "",
     "Meat": "",
     "medium": "",
     "Mexican": "",
@@ -306,9 +304,7 @@
     "tmrw": "Huomenna",
     "tdy": "Tänään",
     "cpy": "kopio",
-    "fri": "perjantai",
     "wed": "keskiviikko",
-    "mon": "maanantai",
     "calVM": "Kalenterinäkymätila",
     "oAP": "%1$s käynnissä, %2$s keskeytetty",
     "ehwmp": "Syö terveellisesti ateriasuunnitelmien avulla!",
@@ -318,5 +314,8 @@
     "otaw": "Viikon jälkeen",
     "otam": "Kuukauden jälkeen",
     "otay": "Vuoden jälkeen",
-    "admp": "Poista ateriasuunnitelmat automaattisesti"
+    "admp": "Poista ateriasuunnitelmat automaattisesti",
+    "delPrst": "Olet poistamassa %s esiasetuksista",
+    "rstBtn": "NOLLAA",
+    "add": "Lisää"
 }
