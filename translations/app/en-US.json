@@ -320,5 +320,9 @@
     "ehwmp": "Eat healthy with meal plans!",
     "selMT": "Select meal type",
     "rstBtn": "RESET",
-    "add": "Add"
+    "add": "Add",
+    "esgbInfo": "Disable this option if you have any navigation issues",
+    "esgb": "Edge swipe to go back",
+    "ksavrInfo": "Prevents the screen from turning off while viewing a recipe",
+    "ksavr": "Keep screen awake while viewing recipe"
 }
