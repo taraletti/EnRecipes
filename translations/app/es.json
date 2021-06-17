@@ -313,5 +313,10 @@
     "prstTU": "Tiempo preestablecido actualizado",
     "rstBtn": "RESTABLECER",
     "add": "Añadir",
-    "nvr": "Nunca"
+    "nvr": "Nunca",
+    "otaw": "Más de una semana",
+    "otam": "Más de un mes",
+    "otay": "Más de un año",
+    "plsCrt": "Usa el botón + para crear una",
+    "ccwt": "¡Cocine con confianza con los temporizadores!"
 }
