@@ -166,7 +166,7 @@
     "Piece": "Morceau",
     "pinch": "pincée",
     "planner": "Planificateur de repas",
-    "plsAdd": "Utilisez le bouton plus pour en ajouter une",
+    "plsAdd": "Utilisez le bouton + pour en ajouter une",
     "Portuguese": "portugaise",
     "Poultry": "Volaille",
     "Pound": "Livre",
@@ -316,9 +316,13 @@
     "otay": "Après un an",
     "admp": "Supprimer automatiquement les planifications de repas",
     "nvr": "Jamais",
-    "plsCrt": "Utilisez le bouton plus pour en créer une",
+    "plsCrt": "Utilisez le bouton + pour en créer une",
     "ehwmp": "Mangez sainement grâce aux planifications de repas !",
     "selMT": "Sélectionnez le type de repas",
     "rstBtn": "RÉINITIALISER",
-    "add": "Ajouter"
+    "add": "Ajouter",
+    "esgbInfo": "Désactivez cette option si vous avez des problèmes de navigation",
+    "esgb": "Balayer le bord pour revenir en arrière",
+    "ksavrInfo": "Empêche l’écran de s’éteindre durant la visualisation d’une recette",
+    "ksavr": "Garder l’écran allumé durant l’affichage d’une recette"
 }
