@@ -320,5 +320,9 @@
     "ehwmp": "Eet gezond met maaltijdschema's!",
     "selMT": "Kies het soort maaltijd",
     "rstBtn": "STANDAARDWAARDEN",
-    "add": "Toevoegen"
+    "add": "Toevoegen",
+    "esgbInfo": "Schakel deze optie uit als je problemen ervaart tijdens het navigeren",
+    "esgb": "Vegen vanaf schermrand om terug te gaan",
+    "ksavrInfo": "Voorkomt dat het scherm wordt uitgeschakeld tijdens het bekijken van een recept",
+    "ksavr": "Scherm niet uitschakelen tijdens bekijken van recept"
 }
