@@ -320,5 +320,9 @@
   "otaw": "Older than a week",
   "nvr": "Never",
   "add": "Add",
-  "rstBtn": "RESET"
+  "rstBtn": "RESET",
+  "sawvr": "Stay awake when viewing recipe",
+  "sawvrInfo": "Prevents the screen from sleeping while viewing a recipe",
+  "esgb": "Edge swipe to go back",
+  "esgbInfo": "Disable this option if you face any issues with navigation"
 }
