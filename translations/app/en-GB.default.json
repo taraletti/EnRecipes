@@ -321,7 +321,7 @@
   "nvr": "Never",
   "add": "Add",
   "rstBtn": "RESET",
-  "ksavr": "Keep screen awake when viewing recipe",
+  "ksavr": "Keep screen awake while viewing recipe",
   "ksavrInfo": "Prevents the screen from turning off while viewing a recipe",
   "esgb": "Edge swipe to go back",
   "esgbInfo": "Disable this option if you have any navigation issues"
