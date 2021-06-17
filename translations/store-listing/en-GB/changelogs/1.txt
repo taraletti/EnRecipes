@@ -6,3 +6,4 @@
 - Print recipe
 - Duplicate recipe
 - Revamped Meal planner UI
+- Edge swipe to navigate back
