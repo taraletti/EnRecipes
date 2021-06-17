@@ -166,7 +166,7 @@
     "Piece": "Stück",
     "pinch": "Prise",
     "planner": "Essensplaner",
-    "plsAdd": "Verwende das Plus-Symbol, um eins hinzuzufügen",
+    "plsAdd": "Verwende das +-Schaltfläche, um eins hinzuzufügen",
     "Portuguese": "Portugiesisch",
     "Poultry": "Geflügel",
     "Pound": "Pfund",
@@ -316,9 +316,13 @@
     "otam": "Älter als ein Monat",
     "otay": "Älter als ein Jahr",
     "admp": "Mahlzeitenpläne automatisch löschen",
-    "plsCrt": "Verwende die Plus-Taste, um einen zu erstellen",
+    "plsCrt": "Verwende die Plus-Schaltfläche, um einen zu erstellen",
     "ehwmp": "Iss gesund mit Essensplänen!",
     "selMT": "Mahlzeitentyp auswählen",
     "rstBtn": "ZURÜCKSETZEN",
-    "add": "Hinzufügen"
+    "add": "Hinzufügen",
+    "ksavr": "Bildschirm während der Rezeptanzeige eingeschaltet halten",
+    "esgbInfo": "Deaktiviere diese Option, wenn du Probleme mit der Navigation hast",
+    "esgb": "Randwischen zum Zurückgehen",
+    "ksavrInfo": "Verhindert, dass sich der Bildschirm während der Anzeige eines Rezepts ausschaltet"
 }
