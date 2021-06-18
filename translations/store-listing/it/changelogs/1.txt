@@ -3,6 +3,6 @@
 - Pagina di impostazioni individuali per ogni strumento
 - Le ricette possono ora essere ordinate in modo casuale
 - Supporto delle lingue scritte da destra a sinistra
-- Si possono stampare le ricette
-- Si possono duplicare le ricette
+- Si possono stampare e duplicare le ricette
 - Interfaccia utente rinnovata del pianificatore pasti
+- Scorri sul bordo per tornare indietro
