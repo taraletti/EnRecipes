@@ -42,7 +42,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon", "shake", "RTL", "edgeSwipe", "awakeViewer"]),
+    ...mapState(["icon", "shake", "RTL", "edgeS", "awakeV"]),
     items() {
       return [
         {},
@@ -59,7 +59,7 @@ export default {
           icon: "awake",
           title: "ksavr",
           subTitle: localize("ksavrInfo"),
-          checked: !!this.awakeViewer,
+          checked: !!this.awakeV,
           action: this.toggleAwake,
         },
         {
@@ -67,7 +67,7 @@ export default {
           icon: "edge",
           title: "esgb",
           subTitle: localize("esgbInfo"),
-          checked: !!this.edgeSwipe,
+          checked: !!this.edgeS,
           action: this.toggleSwipe,
         },
         {},
@@ -75,7 +75,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["setShake", "toggleEdgeSwipe", "toggleAwakeViewer"]),
+    ...mapActions(["setS", "toggleEdgeS", "toggleAwakeV"]),
     pgLoad({ object }) {
       object.bindingContext = new Observable();
     },
@@ -90,13 +90,13 @@ export default {
       let checked = this.shake;
       if (checked && !utils.hasAccelerometer())
         this.showToast(localize("noAccSensor"));
-      else this.setShake(+!checked);
+      else this.setS(+!checked);
     },
     toggleSwipe() {
-      this.toggleEdgeSwipe(+!this.edgeSwipe);
+      this.toggleEdgeS(+!this.edgeS);
     },
     toggleAwake() {
-      this.toggleAwakeViewer(+!this.awakeViewer);
+      this.toggleAwakeV(+!this.awakeV);
     },
 
     showToast(data) {

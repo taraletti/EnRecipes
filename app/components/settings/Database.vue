@@ -75,7 +75,7 @@ export default {
       "yieldUnits",
       "units",
       "mealPlans",
-      "importSummary",
+      "impSum",
       "RTL",
     ]),
     items() {
@@ -108,14 +108,14 @@ export default {
   },
   methods: {
     ...mapActions([
-      "importListItems",
-      "importRecipesFromJSON",
-      "importRecipesFromDB",
-      "importMealPlansFromJSON",
-      "importMealPlansFromDB",
-      "importTimerPresets",
-      "unlinkBrokenImages",
-      "clearImportSummary",
+      "importLIs",
+      "importRsJSON",
+      "importRsDB",
+      "importMPsJSON",
+      "importMPsDB",
+      "importTPs",
+      "unLinkBIs",
+      "clearIS",
     ]),
     pgLoad({ object }) {
       object.bindingContext = new Observable();
@@ -144,10 +144,8 @@ export default {
         android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION |
         android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
       utils.getBackupFolder().then((uri) => {
-        console.log(uri.toString());
         if (uri != null) {
           // ReleaseExistingPermissions
-
           if (this.backupFolder && this.backupFolder != uri.toString())
             ContentResolver.releasePersistableUriPermission(
               new android.net.Uri.parse(this.backupFolder),
@@ -256,7 +254,7 @@ export default {
       function importImages() {
         const timer = setInterval(() => {
           if (!vm.progress) clearInterval(timer);
-          if (vm.progress && vm.importSummary.found) {
+          if (vm.progress && vm.impSum.found) {
             Folder.exists(images)
               ? vm.importImages(uri)
               : vm.showImportSummary();
@@ -270,8 +268,6 @@ export default {
           importImages();
         } else if (File.exists(recipes)) {
           // IMPORT FROM JSON FILES
-          console.log("import from json");
-
           this.isFileDataValid([
             {
               path: recipes,
@@ -309,7 +305,6 @@ export default {
       } else this.failedImport(localize("buInc"));
     },
     isFileDataValid(file) {
-      console.log("isFileDataValid");
       const files = file.filter((e) => File.exists(e.path));
       if (files.length) {
         let isValid = files.map(() => 0);
@@ -362,7 +357,7 @@ export default {
 
       // Import recipes
       db.select("SELECT * FROM recipes").then((res) => {
-        this.importRecipesFromDB(res);
+        this.importRsDB(res);
       });
 
       // Import listitems
@@ -370,7 +365,7 @@ export default {
         `SELECT cuisines, categories, yieldUnits, units FROM lists`
       ).then((res) =>
         Object.keys(res[0]).forEach((listName) =>
-          this.importListItems({
+          this.importLIs({
             data: JSON.parse(res[0][listName]),
             listName,
           })
@@ -379,46 +374,45 @@ export default {
 
       // Import mealPlans
       db.select(`SELECT * FROM mealPlans`).then((res) =>
-        this.importMealPlansFromDB(res)
+        this.importMPsDB(res)
       );
 
-      // Import timerPresets
+      // Import timerPs
       db.select(`SELECT * FROM timerPresets`).then((res) =>
-        this.importTimerPresets(res)
+        this.importTPs(res)
       );
     },
     importData(data, db) {
-      console.log("importing");
       switch (db) {
         case "recipes":
-          this.importRecipesFromJSON(data);
+          this.importRsJSON(data);
           break;
         case "userCuisines":
-          this.importListItems({
+          this.importLIs({
             data,
             listName: "cuisines",
           });
           break;
         case "userCategories":
-          this.importListItems({
+          this.importLIs({
             data,
             listName: "categories",
           });
           break;
         case "userYieldUnits":
-          this.importListItems({
+          this.importLIs({
             data,
             listName: "yieldUnits",
           });
           break;
         case "userUnits":
-          this.importListItems({
+          this.importLIs({
             data,
             listName: "units",
           });
           break;
         case "mealPlans":
-          this.importMealPlansFromJSON(data);
+          this.importMPsJSON(data);
           break;
       }
     },
@@ -437,14 +431,14 @@ export default {
               });
             });
           this.showImportSummary();
-          this.unlinkBrokenImages();
+          this.unLinkBIs();
         }
       });
     },
     showImportSummary() {
       this.progress = null;
       this.releaseBackEvent();
-      let { found, imported, updated } = this.importSummary;
+      let { found, imported, updated } = this.impSum;
       let exists = Math.abs(found - imported - updated) + updated;
       let importedNote = `\n${localize("recI")} ${imported}`;
       let existsNote = `\n${localize("recE")} ${exists}`;
@@ -457,7 +451,7 @@ export default {
           )}\n${importedNote}${existsNote}${updatedNote}`,
           okButtonText: "OK",
         },
-      }).then(() => this.clearImportSummary());
+      }).then(() => this.clearIS());
     },
 
     // NAVIGATION HANDLERS

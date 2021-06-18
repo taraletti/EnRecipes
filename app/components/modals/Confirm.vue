@@ -1,15 +1,11 @@
 <template>
-  <Page
-    @loaded="mLoad"
-    backgroundColor="transparent"
-    :class="theme"
-  >
+  <Page @loaded="mLoad" backgroundColor="transparent" :class="theme">
     <GridLayout rows="auto, auto, auto" class="modal">
       <RLabel class="title" :text="title | L" />
       <Label
         row="1"
         v-if="description"
-        class="description tw"
+        class="desc input tw lh4"
         :text="description"
       />
       <RGridLayout :rtl="RTL" row="2" columns="*, auto, auto" class="actions">

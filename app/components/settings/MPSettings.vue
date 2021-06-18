@@ -26,7 +26,7 @@ import { localize } from "@nativescript/localize";
 export default {
   components: { OptionsList },
   computed: {
-    ...mapState(["icon", "mondayFirst", "RTL", "plannerView", "planDeletion"]),
+    ...mapState(["icon", "startMon", "RTL", "plannerV", "planDel"]),
     items() {
       return [
         {},
@@ -34,21 +34,21 @@ export default {
           type: "list",
           icon: "calv",
           title: "calVM",
-          subTitle: localize(this.plannerView),
+          subTitle: localize(this.plannerV),
           action: this.selectPlannerView,
         },
         {
           type: "switch",
           icon: "week",
           title: "swm",
-          checked: !!this.mondayFirst,
+          checked: !!this.startMon,
           action: this.toggleFirstDay,
         },
         {
           type: "list",
           icon: "mpd",
           title: "admp",
-          subTitle: localize(this.planDeletion),
+          subTitle: localize(this.planDel),
           action: this.selectDeletionTime,
         },
         {},
@@ -56,22 +56,22 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["setFirstDay", "setPlannerView", "setPlanDeletion"]),
+    ...mapActions(["setFD", "setPlannerV", "setPlanDel"]),
     pgLoad({ object }) {
       object.bindingContext = new Observable();
     },
     toggleFirstDay() {
-      this.setFirstDay(!this.mondayFirst | 0);
+      this.setFD(!this.startMon | 0);
     },
     selectPlannerView() {
       this.$showModal(Action, {
         props: {
           title: "calVM",
           list: ["d", "wk", "mnth"],
-          selected: this.plannerView,
+          selected: this.plannerV,
         },
       }).then((res) => {
-        if (res && this.plannerView != res) this.setPlannerView(res);
+        if (res && this.plannerV != res) this.setPlannerV(res);
       });
     },
     selectDeletionTime() {
@@ -79,10 +79,10 @@ export default {
         props: {
           title: "admp",
           list: ["otaw", "otam", "otay", "nvr"],
-          selected: this.planDeletion,
+          selected: this.planDel,
         },
       }).then((res) => {
-        if (res && this.planDeletion != res) this.setPlanDeletion(res);
+        if (res && this.planDel != res) this.setPlanDel(res);
       });
     },
   },

@@ -6,16 +6,16 @@
           <Label class="pTitle tw tb" :text="'About' | L" />
         </v-template>
         <v-template if="$index == 1">
-          <StackLayout class="app-info">
-            <Image class="icon" src="res://logo" stretch="none" />
+          <StackLayout class="appInfo">
+            <Image class="logo" src="res://logo" stretch="none" />
             <Label class="name tb tc" :text="'EnRecipes' | L" />
-            <Label :text="getVersion" class="version tb tc" />
+            <Label :text="getVersion" class="tb tc" />
 
-            <Label class="info tc tw" :text="'appInfo' | L" />
+            <Label class="info tc tw lh4" :text="'appInfo' | L" />
           </StackLayout>
         </v-template>
         <v-template if="$index == 8">
-          <StackLayout class="listSpace"> </StackLayout>
+          <StackLayout class="ls"> </StackLayout>
         </v-template>
         <v-template>
           <RGridLayout
@@ -105,13 +105,9 @@ export default {
     pgLoad({ object }) {
       object.bindingContext = new Observable();
     },
-    // HELPERS
-    openURL(url) {
-      Utils.openUrl(url);
-    },
     touch({ object, action }, url) {
       this.touchFade(object, action);
-      if (action == "up") this.openURL(url);
+      if (action == "up") Utils.openUrl(url);
     },
   },
 };

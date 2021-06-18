@@ -63,7 +63,7 @@
               <v-template if="item.type == 1">
                 <Label
                   class="type t3"
-                  :class="{ tb: plannerView == 'd' }"
+                  :class="{ tb: plannerV == 'd' }"
                   :text="item.mealType | L"
                 />
               </v-template>
@@ -132,7 +132,7 @@
                 </RGridLayout>
               </v-template>
               <v-template>
-                <StackLayout class="listSpace"> </StackLayout>
+                <StackLayout class="ls"> </StackLayout>
               </v-template>
             </CollectionView>
           </StackLayout>
@@ -246,9 +246,9 @@ export default {
       "recipes",
       "layout",
       "mealPlans",
-      "mondayFirst",
+      "startMon",
       "RTL",
-      "plannerView",
+      "plannerV",
     ]),
     todaysTime() {
       return new Date(this.year, this.month, this.date, 0).getTime();
@@ -269,12 +269,12 @@ export default {
     calRows() {
       let h = (Screen.mainScreen.widthDIPs - 32) / 8;
       if (h < 48) h = 48;
-      let pv = this.plannerView;
+      let pv = this.plannerV;
       return pv != "d" ? `${h}, `.repeat(pv == "wk" ? 1 : 6) + h : 0;
     },
     getDayNames() {
       let dNames =
-        this.plannerView != "d" &&
+        this.plannerV != "d" &&
         this.getCal.slice(0, 7).map((d) => {
           let date = new Date(d.y, d.m, d.d);
           return new Intl.DateTimeFormat(null, {
@@ -293,7 +293,7 @@ export default {
         ) {
           a.push({
             d: d.getDate(),
-            ld: this.getLocaleN(d.getDate()),
+            ld: this.localeN(d.getDate()),
             m: d.getMonth(),
             y: d.getFullYear(),
           });
@@ -301,15 +301,15 @@ export default {
         return a;
       };
 
-      let pv = this.plannerView;
+      let pv = this.plannerV;
       let date = new Date(
         this.year,
         this.month,
-        pv == "mnth" ? 1 : this.date - this.mondayFirst
+        pv == "mnth" ? 1 : this.date - this.startMon
       );
       return pv != "d"
         ? getDays(
-            date.setDate(date.getDate() - date.getDay() + this.mondayFirst),
+            date.setDate(date.getDate() - date.getDay() + this.startMon),
             date.setDate(date.getDate() + (pv == "mnth" ? 41 : 6))
           )
         : [];
@@ -332,7 +332,7 @@ export default {
       return /minimal/.test(this.layout);
     },
     mpItems() {
-      let pv = this.plannerView;
+      let pv = this.plannerV;
       let days =
         pv == "wk"
           ? this.getCal.slice(0, 7)
@@ -387,7 +387,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["addMealPlanAction", "deleteMealPlanAction"]),
+    ...mapActions(["addMP", "deleteMP"]),
     pgLoad({ object }) {
       object.bindingContext = new Observable();
       this.showBar();
@@ -439,7 +439,7 @@ export default {
     getYield(id) {
       let mp = this.mealPlans.filter((e) => e.id == id)[0];
       let r = this.recipes.filter((e) => e.id === mp.recipeID)[0];
-      return r ? `${this.getLocaleN(mp.quantity)} ${localize(r.yieldUnit)}` : 0;
+      return r ? `${this.localeN(mp.quantity)} ${localize(r.yieldUnit)}` : 0;
     },
 
     // NavigationHandlers
@@ -476,7 +476,7 @@ export default {
     // Calendar
     navigate(dir) {
       if (this.RTL) dir = !dir;
-      let pv = this.plannerView;
+      let pv = this.plannerV;
       let date = new Date(this.year, this.month, this.date);
       let sd =
         pv == "mnth"
@@ -557,7 +557,7 @@ export default {
 
     // DataHandlers
     newMealPlan({ plan, index, inDB }) {
-      this.addMealPlanAction({
+      this.addMP({
         plan,
         index,
         inDB,
@@ -655,7 +655,7 @@ export default {
     deleteTempFromDB() {
       if (this.temp) {
         let { plan, index } = this.temp;
-        this.deleteMealPlanAction({ id: plan.id, index, inDB: 1 });
+        this.deleteMP({ id: plan.id, index, inDB: 1 });
         this.temp = 0;
       }
     },
@@ -664,11 +664,11 @@ export default {
       let index = this.mealPlans.findIndex((e) => e.id == id);
       let plan = this.mealPlans.filter((e) => e.id == id)[0];
       this.temp = { plan, index };
-      this.deleteMealPlanAction({ id, index });
+      this.deleteMP({ id, index });
       this.showUndoBar(plan.note ? "rmN" : "recRm")
         .then(() => this.newMealPlan({ plan, index }))
         .catch(() => {
-          this.deleteMealPlanAction({ id, index, inDB: 1 });
+          this.deleteMP({ id, index, inDB: 1 });
         });
     },
     showUndoBar(message) {
@@ -750,7 +750,7 @@ export default {
         options.year = "numeric";
         options.month = "long";
       }
-      if (this.plannerView == "d") {
+      if (this.plannerV == "d") {
         options.weekday = "long";
         options.day = "numeric";
         options.month = "short";

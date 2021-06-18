@@ -1,7 +1,7 @@
 <template>
   <Page @loaded="pgLoad" actionBarHidden="true">
     <RGridLayout :rtl="RTL" rows="*, auto" columns="auto, *">
-      <OptionsList title="rest" :items="items" :action="resetListItems" />
+      <OptionsList title="rest" :items="items" :action="reset" />
       <GridLayout
         :hidden="toast"
         row="1"
@@ -83,7 +83,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["resetListItemsAction"]),
+    ...mapActions(["resetLIs"]),
     pgLoad({ object }) {
       object.bindingContext = new Observable();
     },
@@ -93,9 +93,8 @@ export default {
     tbLoad({ object }) {
       this.toastbar = object;
     },
-    // RESET
-    resetListItems(listName) {
-      this.resetListItemsAction(listName);
+    reset(list) {
+      this.resetLIs(list);
       this.showToast();
     },
     showToast() {

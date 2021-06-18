@@ -40,15 +40,15 @@ Vue.filter('L', localize)
 const initFrame = () => {
   const s = store
   // MainInit
-  s.commit('setTheme', getString('theme', 'sysDef'))
-  s.commit('initRecipes')
-  s.commit('initMealPlans')
-  s.commit('initListItems')
-  s.commit('initTimerPresets')
-  if (!Object.keys(s.state.timerSound).length) {
-    let hasTimerSound = getString('timerSound', null)
+  s.commit('setT', getString('theme', 'sysDef'))
+  s.commit('initRs')
+  s.commit('initMPs')
+  s.commit('initLIs')
+  s.commit('initTPs')
+  if (!Object.keys(s.state.timerS).length) {
+    let hasTimerSound = getString('timerS', null)
     s.commit(
-      'setTimerSound',
+      'setTS',
       hasTimerSound ? JSON.parse(hasTimerSound) : utils.getTones().defaultTone
     )
   }

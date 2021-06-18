@@ -51,60 +51,57 @@
           >
             <StackLayout>
               <RGridLayout :rtl="RTL" rows="auto" columns="*, *">
-                <StackLayout class="attribute">
+                <StackLayout class="attrT">
                   <RLabel class="sub" :text="'cui' | L" />
-                  <RLabel class="value" :text="recipe.cuisine | L" />
+                  <RLabel class="v" :text="recipe.cuisine | L" />
                 </StackLayout>
-                <StackLayout class="attribute" col="1">
+                <StackLayout class="attrT" col="1">
                   <RLabel class="sub" :text="'cat' | L" />
-                  <RLabel class="value" :text="recipe.category | L" />
+                  <RLabel class="v" :text="recipe.category | L" />
                 </StackLayout>
               </RGridLayout>
               <StackLayout
                 :hidden="!recipe.tags.length"
-                class="attribute hal"
+                class="attrT hal"
                 :class="{ r: RTL }"
               >
                 <RLabel class="sub" :text="'ts' | L" />
-                <RLabel class="value" :text="getTags(recipe.tags)" />
+                <RLabel class="v" :text="getTags(recipe.tags)" />
               </StackLayout>
               <RGridLayout :rtl="RTL" rows="auto" columns="*, *">
-                <StackLayout
-                  class="attribute"
-                  :hidden="!hasTime(recipe.prepTime)"
-                >
+                <StackLayout class="attrT" :hidden="!hasTime(recipe.prepTime)">
                   <RLabel class="sub" :text="'prepT' | L" />
                   <RLabel
-                    class="value"
+                    class="v"
                     :text="formattedTime(recipe.prepTime)"
                   />
                 </StackLayout>
                 <StackLayout
                   :col="hasTime(recipe.prepTime) ? 1 : 0"
-                  class="attribute"
+                  class="attrT"
                   :hidden="!hasTime(recipe.cookTime)"
                 >
                   <RLabel class="title sub" :text="'cookT' | L" />
                   <RLabel
-                    class="value"
+                    class="v"
                     :text="formattedTime(recipe.cookTime)"
                   />
                 </StackLayout>
               </RGridLayout>
               <RGridLayout :rtl="RTL" rows="auto" columns="*, *">
-                <StackLayout class="attribute">
+                <StackLayout class="attrT">
                   <RLabel class="title sub" :text="'yld' | L" />
                   <RLabel
                     @touch="touchYield"
-                    class="value accent"
+                    class="v accent"
                     :text="`${tempYieldQuantity} ${$options.filters.L(
                       recipe.yieldUnit
                     )}`"
                   />
                 </StackLayout>
-                <StackLayout class="attribute" col="1">
+                <StackLayout class="attrT" col="1">
                   <RLabel class="title sub" :text="'Difficulty level' | L" />
-                  <RLabel class="value" :text="recipe.difficulty | L" />
+                  <RLabel class="v" :text="recipe.difficulty | L" />
                 </StackLayout>
               </RGridLayout>
               <StackLayout @loaded="onIngsLoad">
@@ -139,7 +136,7 @@
                   :key="index + 'ins'"
                   class="check"
                 >
-                  <Button class="tb t3 ico si" :text="getLocaleN(index + 1)" />
+                  <Button class="tb t3 ico si" :text="localeN(index + 1)" />
                   <RLabel class="v tw" :text="instruction" />
                 </RStackLayout>
               </StackLayout>
@@ -152,7 +149,7 @@
               <Button
                 v-for="(combination, index) in recipe.combinations"
                 :key="index + 'comb'"
-                class="comb tw hal lh4 fb"
+                class="note tw hal lh4 fb"
                 :class="{ r: RTL }"
                 :text="getCombinationTitle(combination)"
                 @tap="viewCombination(combination)"
@@ -264,7 +261,7 @@
           stretch="aspectFit"
           @loaded="onImgViewLoad"
           :src="recipe.image"
-          class="imgViewer"
+          class="imgV"
         />
       </AbsoluteLayout>
       <WebView @loaded="wvLoad" hidden />
@@ -343,7 +340,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon", "recipes", "RTL", "awakeViewer"]),
+    ...mapState(["icon", "recipes", "RTL", "awakeV"]),
     tempYieldQuantity() {
       return Math.abs(this.yieldMultiplier) > 0
         ? Math.abs(parseFloat(this.yieldMultiplier))
@@ -372,13 +369,13 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["toggleStateAction", "setRatingAction", "toggleCartAction"]),
+    ...mapActions(["toggleState", "setR"]),
     pgLoad({ object }) {
       this.busyDup = this.busyEdit = this.photoOpen = 0;
       object.bindingContext = new Observable();
       if (this.yieldMultiplier == this.recipe.yieldQuantity)
         this.yieldMultiplier = this.recipe.yieldQuantity;
-      if (this.awakeViewer) utils.keepScreenOn(1);
+      if (this.awakeV) utils.keepScreenOn(1);
       this.syncCombinations();
       this.view = object.page.getViewById("printview");
     },
@@ -504,8 +501,8 @@ export default {
           s = this.stepsDid;
           break;
       }
-      c = this.getLocaleN(c);
-      s = s && this.getLocaleN(s);
+      c = this.localeN(c);
+      s = s && this.localeN(s);
       let text = s ? ` (${s}/${c})` : ` (${c})`;
       return localize(title) + text;
     },
@@ -572,48 +569,6 @@ export default {
           : this.animateBar(this.appbar, 1);
       });
     },
-    // getMeasure(value: number, unit: string) {
-    //   let vm = this;
-    //   function roundedQ(val: number) {
-    //     return Math.abs(
-    //       Math.round(
-    //         (val / vm.recipe.yieldQuantity) * vm.tempYieldQuantity * 100
-    //       ) / 100
-    //     );
-    //   }
-    //   if (value) {
-    //     let rounded = Math.abs(
-    //       Math.round(
-    //         (value / this.recipe.yieldQuantity) * this.tempYieldQuantity * 100
-    //       ) / 100
-    //     );
-    //     let lUnit = localize(unit);
-
-    //     switch (unit) {
-    //       //IMPERIAL
-    //       case "g":
-    //         return rounded < 1000
-    //           ? `${rounded} ${lUnit} `
-    //           : `${roundedQ(rounded / 1000)} ${localize("kg")} `;
-    //       case "ml":
-    //         return rounded < 1000
-    //           ? `${rounded} ${lUnit} `
-    //           : `${roundedQ(rounded / 1000)} ${localize("l")} `;
-
-    //       //METRIC
-    //       case "tsp":
-    //         return rounded < 3
-    //           ? `${rounded} ${lUnit} `
-    //           : `${roundedQ(rounded / 3)} ${localize("tbsp")} `;
-    //       case "in":
-    //         return rounded < 12
-    //           ? `${rounded} ${lUnit} `
-    //           : `${roundedQ(rounded / 12)} ${localize("ft")} `;
-    //       default:
-    //         return `${rounded} ${lUnit} `;
-    //     }
-    //   } else return "";
-    // },
     roundedQuantity(quantity: number) {
       return Math.abs(
         Math.round(
@@ -830,7 +785,7 @@ export default {
 
     // DataHandlers
     toggle(key: string, setDate: boolean) {
-      this.toggleStateAction({
+      this.toggleState({
         id: this.currentRecipeID,
         key,
         setDate,
@@ -844,22 +799,14 @@ export default {
     setRating(r) {
       if (r !== this.recipe.rating || r === 1) {
         if (this.recipe.rating == 1 && r == 1) r = 0;
-        this.setRatingAction({
+        this.setR({
           id: this.currentRecipeID,
-          rating: r,
+          r,
         });
       }
     },
 
     // ShoppingList
-    toggleCart() {
-      if (!this.recipe.inBag) {
-      } else {
-      }
-      this.toggleCartAction({
-        id: this.currentRecipeID,
-      });
-    },
 
     // Notes
     createNote(note) {

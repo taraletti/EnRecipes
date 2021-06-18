@@ -1051,7 +1051,7 @@ export default new Vuex.Store({
     // DeleteMealPlan
     deleteMP(
       state,
-      { id, index, inDB }: { id: string; index: number; inDB: number }
+      { id, index, inDB }: { id: string; index: number; inDB?: number }
     ) {
       if (inDB) {
         db.execute(`DELETE FROM mealPlans WHERE id = '${id}'`)
@@ -1074,9 +1074,9 @@ export default new Vuex.Store({
       }
     },
     // UnLinkCombinations
-    unLinkCs(state, { id, a }) {
+    unLinkCs(state, { id, combs }) {
       state.recipes.forEach((e, i) => {
-        if (a.includes(e.id)) {
+        if (combs.includes(e.id)) {
           state.recipes[i].combinations.splice(e.combinations.indexOf(id), 1)
           db.execute(
             `UPDATE recipes SET combinations = '${JSON.stringify(
@@ -1092,10 +1092,10 @@ export default new Vuex.Store({
       setNumber('shake', n)
     },
     // SetRating
-    setR(state, { id, rating }) {
+    setR(state, { id, r }) {
       let i = state.recipes.findIndex((e) => e.id == id)
-      state.recipes[i].rating = rating
-      db.execute(`UPDATE recipes SET rating = ${rating} WHERE id = '${id}'`)
+      state.recipes[i].rating = r
+      db.execute(`UPDATE recipes SET rating = ${r} WHERE id = '${id}'`)
     },
     // UnLinkBrokenImages
     unLinkBIs(state) {

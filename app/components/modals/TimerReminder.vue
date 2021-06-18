@@ -21,7 +21,7 @@
               :timerAlert="timerAlert"
               :showToast="showToast"
             />
-            <StackLayout class="listSpace"> </StackLayout>
+            <StackLayout class="ls"> </StackLayout>
           </StackLayout>
         </ScrollView>
         <GridLayout col="1" row="1" class="appbar">
@@ -42,10 +42,9 @@
 import { Application, Screen, Device, Color, Utils } from "@nativescript/core";
 import Timer from "../sub/Timer.vue";
 import * as utils from "~/shared/utils";
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 const windowMgr = android.view.WindowManager;
-const View = android.view.View as any;
-const ViewGroup = android.view.ViewGroup;
+
 export default {
   components: { Timer },
   props: [
@@ -56,12 +55,12 @@ export default {
     "showToast",
   ],
   computed: {
-    ...mapState(["icon", "theme", "activeTimers"]),
+    ...mapState(["icon", "theme", "activeTs"]),
     screenWidth() {
       return Screen.mainScreen.widthDIPs;
     },
     timers() {
-      let timers = this.activeTimers.filter((e) => e.done);
+      let timers = this.activeTs.filter((e) => e.done);
       if (!timers.length) {
         this.$modal.close(1);
         this.isScreenLocked && this.turnOffScreen();
@@ -81,7 +80,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["clearTimerInterval"]),
     pgLoad({ object }) {
       let dialog = object._dialogFragment.getDialog();
       let dialogWindow = dialog.getWindow();

@@ -82,7 +82,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon", "recipes", "timerDelay", "timerPresets", "RTL"]),
+    ...mapState(["icon", "recipes", "timerD", "timerPs", "RTL"]),
     getRecipeTitle() {
       let { recipeID } = this.timer;
       if (recipeID) {
@@ -137,12 +137,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      "removeActiveTimer",
-      "addTimerPreset",
-      "deleteTimerPreset",
-      "sortActiveTimers",
-    ]),
+    ...mapActions(["addTP", "sortATs"]),
     pLoaded({ object }) {
       this.pBar = object.android;
       this.pBar.setRotation(
@@ -165,7 +160,7 @@ export default {
         } else if (res) {
           let timer = this.timer;
           timer.recipeID = res;
-          this.sortActiveTimers();
+          this.sortATs();
         }
       });
     },
@@ -211,7 +206,7 @@ export default {
       this.timer.isPaused ? this.resetInterval() : this.initTimer();
     },
     addPreset() {
-      let exist = this.timerPresets.some((e) => e.id == this.timer.id);
+      let exist = this.timerPs.some((e) => e.id == this.timer.id);
       this.timer.preset = 1;
       if (this.countUp) {
         this.timer.time = new Date(this.count * 1000)
@@ -221,14 +216,14 @@ export default {
       let timer = JSON.parse(JSON.stringify(this.timer));
       let { recipeID, timerInt, isPaused, preset, done, mode, ...presetTimer } =
         timer;
-      this.addTimerPreset(presetTimer);
+      this.addTP(presetTimer);
       exist ? this.showToast("prstTU") : this.showToast("aTPrst");
     },
     addDelay() {
       this.timer.done = 0;
-      let td = this.timerDelay;
+      let td = this.timerD;
       let delayDur =
-        this.getLocaleN(td) + " " + localize(td > 1 ? "minutes" : "minute");
+        this.localeN(td) + " " + localize(td > 1 ? "minutes" : "minute");
       this.showToast(localize("wDBy", this.timer.label, delayDur));
       let delay = td * 60;
       if (this.done) this.delay = delay;

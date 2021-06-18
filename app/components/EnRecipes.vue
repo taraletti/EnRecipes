@@ -111,7 +111,7 @@
               </RStackLayout>
               <RStackLayout :rtl="RTL" class="oh">
                 <Label class="ico s vc" :text="icon.star" />
-                <Label class="attr" :text="getLocaleN(recipe.rating)" />
+                <Label class="attr" :text="localeN(recipe.rating)" />
                 <Label class="ico s vc" :text="icon.time" />
                 <Label
                   class="attr"
@@ -383,7 +383,7 @@
           class="ico fab"
           :text="icon.plus"
           col="5"
-          @tap="addRecipe"
+          @tap="addR"
         />
         <Button
           :hidden="!selectMode"
@@ -468,7 +468,7 @@ export default {
   computed: {
     ...mapState([
       "icon",
-      "sortType",
+      "sortT",
       "recipes",
       "cuisines",
       "categories",
@@ -479,7 +479,7 @@ export default {
       "selCuisine",
       "selCategory",
       "selTag",
-      "timerSound",
+      "timerS",
       "RTL",
     ]),
     filteredRecipes() {
@@ -586,20 +586,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      "initListItems",
-      "initRecipes",
-      "initMealPlans",
-      "initTimerPresets",
-      "setShake",
-      "setFirstDay",
-      "setLayout",
-      "setSortType",
-      "deleteRecipes",
-      "clearFilter",
-      "setTheme",
-      "setTimerSound",
-    ]),
+    ...mapActions(["setS", "setST", "deleteRs", "clearF"]),
     setComp(comp) {
       this.currentComp = comp;
     },
@@ -615,7 +602,7 @@ export default {
       if (this.shake) {
         if (utils.hasAccelerometer())
           startAccelerometerUpdates((data) => this.onSensorData(data));
-        else this.setShake(0);
+        else this.setS(0);
       }
       this.hijackBackEvent();
       setTimeout(() => {
@@ -695,12 +682,12 @@ export default {
             "Newest first",
             "Oldest first",
           ],
-          selected: this.sortType,
+          selected: this.sortT,
         },
       }).then((action) => {
-        if (action && this.sortType !== action) {
-          this.setSortType(action);
-          ApplicationSettings.setString("sortType", action);
+        if (action && this.sortT !== action) {
+          this.setST(action);
+          ApplicationSettings.setString("sortT", action);
           this.updateSort();
         }
         this.hijackBackEvent();
@@ -782,7 +769,7 @@ export default {
         },
       }).then((action) => {
         if (action) {
-          this.deleteRecipes(this.selection);
+          this.deleteRs(this.selection);
           if (!this.filteredRecipes.length) this.goToHome();
           this.clearSelection();
         }
@@ -883,7 +870,7 @@ export default {
           }).length;
           break;
       }
-      return count && this.getLocaleN(count);
+      return count && this.localeN(count);
     },
     centerLabel({ object }) {
       object.android.setGravity(17);
@@ -904,7 +891,6 @@ export default {
     },
 
     randomRecipeID() {
-      // TODO: show only from selected filter
       let min = 0;
       let max = this.filteredRecipes.length - 1;
       let randomIndex = Math.round(Math.random() * (max - min));
@@ -952,7 +938,7 @@ export default {
       }
       let dl1 = difficultyLevel(a.difficulty);
       let dl2 = difficultyLevel(b.difficulty);
-      switch (this.sortType) {
+      switch (this.sortT) {
         case "random":
           return 0.5 - Math.random();
         case "title":
@@ -989,7 +975,7 @@ export default {
               id == this.filteredRecipes[length - 2].id)
           ? "lastItem"
           : "";
-      let selection = this.selection.includes(id) ? "selected" : "unselected";
+      let selection = this.selection.includes(id) ? "select" : "deselect";
       let classes = itemPos + " " + selection;
       return l2 ? classes + oddOrEven : classes;
     },
@@ -1034,7 +1020,7 @@ export default {
     goToHome() {
       this.setComp("EnRecipes");
       this.filterFavourites = this.filterTrylater = null;
-      this.clearFilter();
+      this.clearF();
     },
     navigateTo(to, title, page) {
       this.showTools && this.toggleTools();
@@ -1056,7 +1042,7 @@ export default {
         this.setComp(title);
         this.filterFavourites = to == "favourites";
         this.filterTrylater = to == "trylater";
-        this.clearFilter();
+        this.clearF();
       }
     },
     stSwipe({ direction }) {
@@ -1070,7 +1056,7 @@ export default {
             this.setComp(comps[index - 1]);
             this.filterFavourites = comps[index - 1] == "favourites";
             this.filterTrylater = comps[index - 1] == "trylater";
-            this.clearFilter();
+            this.clearF();
           }
           break;
         case 2:
@@ -1084,7 +1070,7 @@ export default {
           break;
       }
     },
-    addRecipe() {
+    addR() {
       this.showTools && this.toggleTools();
       this.$navigateTo(EditRecipe, {
         props: {

@@ -57,7 +57,7 @@
           col="3"
           class="text tb st fb"
           :text="action | L"
-          @tap="sendRespose"
+          @tap="respond"
         />
       </RGridLayout>
     </GridLayout>
@@ -122,7 +122,7 @@ export default {
       object.focus();
       setTimeout(() => Utils.ad.showSoftInput(object.android), 100);
     },
-    sendRespose() {
+    respond() {
       this.$modal.close({
         label: this.setLabel ? this.setLabel : this.label,
         time: this.selectedTime,

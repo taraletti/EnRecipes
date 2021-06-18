@@ -32,7 +32,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon", "language", "theme", "layout", "RTL"]),
+    ...mapState(["icon", "langs", "theme", "layout", "RTL"]),
     items() {
       return [
         {},
@@ -65,13 +65,13 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["setTheme", "setLayout", "setRTL"]),
+    ...mapActions(["setT", "setL", "setRTL"]),
     pgLoad({ object }) {
       object.bindingContext = new Observable();
     },
-    // LANGUAGE SELECTION
+    // LanguageSelection
     setAppLang() {
-      let languages = this.language.map((e) => e.title);
+      let languages = this.langs.map((e) => e.title);
       this.$showModal(Action, {
         props: {
           title: "lang",
@@ -84,8 +84,7 @@ export default {
             "appLocale",
             "none"
           ).split("-");
-          let locale = this.language.filter((e) => e.title === action)[0]
-            .locale;
+          let locale = this.langs.filter((e) => e.title === action)[0].locale;
           if (currentLocale !== locale) {
             this.applang = action;
             ApplicationSettings.setString("applang", action);
@@ -97,7 +96,7 @@ export default {
         }
       });
     },
-    // THEME SELECTION
+    // ThemeSelection
     selectThemes() {
       this.$showModal(Action, {
         props: {
@@ -112,12 +111,12 @@ export default {
             ? 1
             : this.theme != action)
         ) {
-          this.setTheme(action);
+          this.setT(action);
           Frame.reloadPage();
         }
       });
     },
-    // LAYOUT MODE
+    // LayoutMode
     setLayoutMode() {
       this.$showModal(Action, {
         props: {
@@ -126,7 +125,7 @@ export default {
           selected: this.layout,
         },
       }).then((mode) => {
-        if (mode && this.layout !== mode) this.setLayout(mode.toLowerCase());
+        if (mode && this.layout !== mode) this.setL(mode.toLowerCase());
       });
     },
   },

@@ -173,7 +173,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["setCuisine", "setCategory", "setTag", "clearFilter"]),
+    ...mapActions(["setCuisine", "setCategory", "setTag"]),
     pgLoad(args) {
       this.mLoad(args);
       this.localCuisine = this.selCuisine;

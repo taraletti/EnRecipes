@@ -77,7 +77,6 @@ export default {
     pgLoad({ object }) {
       object.bindingContext = new Observable();
     },
-    // HELPERS
     navigateTo(view) {
       this.$navigateTo(view, {
         animated: false,

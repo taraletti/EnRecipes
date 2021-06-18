@@ -52,13 +52,13 @@
     </v-template>
     <v-template if="item.type == 'info'">
       <Label
-        class="group-info sub tw"
+        class="groupInfo sub tw lh4"
         :class="{ r: RTL }"
         :text="item.title | L"
       />
     </v-template>
     <v-template>
-      <StackLayout class="listSpace"> </StackLayout>
+      <StackLayout class="ls"> </StackLayout>
     </v-template>
   </ListView>
 </template>

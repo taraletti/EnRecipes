@@ -391,7 +391,7 @@ export default {
       modalOpen: 0,
       saving: 0,
       cacheImagePath: null,
-      unSyncCombinations: [],
+      unLinkCombs: [],
       difficultyLevels: ["Easy", "Moderate", "Challenging"],
       appbar: null,
       snackbar: null,
@@ -427,11 +427,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      "addRecipeAction",
-      "addListItemAction",
-      "unSyncCombinationsAction",
-    ]),
+    ...mapActions(["addR", "addLI", "unLinkCs"]),
     pgLoad({ object }) {
       object.bindingContext = new Observable();
       this.hijackBackEvent();
@@ -491,37 +487,39 @@ export default {
             knownFolders.temp().path,
             `${utils.getRandomID(0)}.jpg`
           );
-          utils.copyPhotoToCache(uri, this.cacheImagePath).then((imgPath) => {
-            if (imgPath) {
-              ImageSource.fromFile(imgPath).then((image) => {
-                ImageCropper.prototype
-                  .show(
-                    image,
-                    {
-                      width: 1080,
-                      height: 1080,
-                    },
-                    {
-                      hideBottomControls: true,
-                      toolbarTitle: localize("cPic"),
-                      statusBarColor: "#ff5200",
-                      toolbarTextColor: aT == "Light" ? "#212529" : "#f1f3f5",
-                      toolbarColor:
-                        aT == "Light"
-                          ? "#f1f3f5"
-                          : aT == "Dark"
-                          ? "#212529"
-                          : "#000000",
-                      cropFrameColor: "#ff5200",
-                    }
-                  )
-                  .then((cropped) => {
-                    cropped.image.saveToFile(this.cacheImagePath, "jpg", 75);
-                    this.recipe.image = this.cacheImagePath;
-                  });
-              });
-            }
-          });
+          utils
+            .copyPhotoToCache(uri.toString(), this.cacheImagePath)
+            .then((imgPath) => {
+              if (imgPath) {
+                ImageSource.fromFile(imgPath).then((image) => {
+                  ImageCropper.prototype
+                    .show(
+                      image,
+                      {
+                        width: 1080,
+                        height: 1080,
+                      },
+                      {
+                        hideBottomControls: true,
+                        toolbarTitle: localize("cPic"),
+                        statusBarColor: "#ff5200",
+                        toolbarTextColor: aT == "Light" ? "#212529" : "#f1f3f5",
+                        toolbarColor:
+                          aT == "Light"
+                            ? "#f1f3f5"
+                            : aT == "Dark"
+                            ? "#212529"
+                            : "#000000",
+                        cropFrameColor: "#ff5200",
+                      }
+                    )
+                    .then((cropped) => {
+                      cropped.image.saveToFile(this.cacheImagePath, "jpg", 75);
+                      this.recipe.image = this.cacheImagePath;
+                    });
+                });
+              }
+            });
         }
       });
     },
@@ -558,7 +556,7 @@ export default {
             this.modalOpen = 0;
             if (item.length) {
               this.recipe.cuisine = item;
-              this.addListItemAction({
+              this.addLI({
                 item,
                 listName: "cuisines",
               });
@@ -572,7 +570,7 @@ export default {
             if (focus) this.autoFocusField("category", 0);
           } else
             this.cuisines.includes(this.recipe.cuisine)
-              ? mull
+              ? null
               : (this.recipe.cuisine = "Undefined");
         }
       });
@@ -597,7 +595,7 @@ export default {
             this.modalOpen = 0;
             if (item.length) {
               this.recipe.category = item;
-              this.addListItemAction({
+              this.addLI({
                 item,
                 listName: "categories",
               });
@@ -611,7 +609,7 @@ export default {
             if (focus) this.autoFocusField("tags", 1);
           } else
             this.categories.includes(this.recipe.category)
-              ? mull
+              ? null
               : (this.recipe.category = "Undefined");
         }
       });
@@ -636,7 +634,7 @@ export default {
             this.modalOpen = 0;
             if (item.length) {
               this.recipe.yieldUnit = item;
-              this.addListItemAction({
+              this.addLI({
                 item,
                 listName: "yieldUnits",
               });
@@ -650,7 +648,7 @@ export default {
             if (focus) this.autoFocusField("difficultyLevel", 0);
           } else
             this.yieldUnits.includes(this.recipe.yieldUnit)
-              ? mull
+              ? null
               : (this.recipe.yieldUnit = "Serving");
         }
       });
@@ -670,7 +668,7 @@ export default {
           if (focus) this.addIngredient();
         } else
           this.difficultyLevels.includes(this.recipe.difficulty)
-            ? mull
+            ? null
             : (this.recipe.difficulty = "Easy");
       });
     },
@@ -694,7 +692,7 @@ export default {
             this.modalOpen = 0;
             if (item.length) {
               this.recipe.ingredients[index].unit = item;
-              this.addListItemAction({
+              this.addLI({
                 item,
                 listName: "units",
               });
@@ -785,7 +783,7 @@ export default {
     removeCombination(id) {
       let index = this.recipe.combinations.indexOf(id);
       this.recipe.combinations.splice(index, 1);
-      this.unSyncCombinations.push(id);
+      this.unLinkCombs.push(id);
       this.showUndoBar("rmCmb").then((res) =>
         this.recipe.combinations.splice(index, 0, id)
       );
@@ -832,14 +830,14 @@ export default {
       } else if (this.tempRecipe.image) {
         getFileAccess().deleteFile(this.tempRecipe.image);
       }
-      this.unSyncCombinationsAction({
+      this.unLinkCs({
         id: this.recipeID,
-        combinations: this.unSyncCombinations,
+        combs: this.unLinkCombs,
       });
       this.saveRecipe();
     },
     saveRecipe() {
-      this.addRecipeAction(this.recipe);
+      this.addR(this.recipe);
       this.saving = 0;
       this.dupRecipe
         ? this.$navigateTo(EnRecipes, {

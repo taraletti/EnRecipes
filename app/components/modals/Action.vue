@@ -80,10 +80,10 @@ export default {
     };
   },
   computed: {
-    ...mapState(["sortType", "icon", "theme", "RTL"]),
+    ...mapState(["icon", "theme", "RTL"]),
   },
   methods: {
-    ...mapActions(["removeListItemAction", "deleteTimerPreset"]),
+    ...mapActions(["removeLI", "deleteTP"]),
     localized(item: string): string {
       return this.title !== "lang" ? localize(item) : item;
     },
@@ -114,22 +114,22 @@ export default {
       let vm = this;
       let index = this.newList.findIndex((e) => e === item);
       let localizedItem = `"${localize(item)}"`;
-      function removeListItem(listName: string, desc: string): void {
+      function removeLI(listName: string, desc: string): void {
         vm.removeConfirmation(`${localize(desc, localizedItem)}`).then(
           (action: boolean) => {
             if (action)
-              vm.removeListItemAction({
+              vm.removeLI({
                 item,
                 listName,
               });
           }
         );
       }
-      function deleteTimerPreset(): void {
+      function deleteTP(): void {
         vm.deletionConfirmation(`${localize("delPrst", `"${item}"`)}`).then(
           (action: boolean) => {
             if (action) {
-              vm.deleteTimerPreset(index);
+              vm.deleteTP(index);
               vm.newList.splice(index, 1);
             }
           }
@@ -137,19 +137,19 @@ export default {
       }
       switch (this.title) {
         case "cui":
-          removeListItem("cuisines", "rmCuiInfo");
+          removeLI("cuisines", "rmCuiInfo");
           break;
         case "cat":
-          removeListItem("categories", "rmCatInfo");
+          removeLI("categories", "rmCatInfo");
           break;
         case "yieldU":
-          removeListItem("yieldUnits", "rmYUInfo");
+          removeLI("yieldUnits", "rmYUInfo");
           break;
         case "Unit":
-          removeListItem("units", "rmUInfo");
+          removeLI("units", "rmUInfo");
           break;
         case "prsts":
-          deleteTimerPreset();
+          deleteTP();
           break;
       }
     },
