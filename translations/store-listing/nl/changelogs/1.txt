@@ -5,4 +5,5 @@
 [NIEUW] Ondersteuning voor van-links-naar-rechtstalen;
 [NIEUW] Afdrukondersteuning;
 [NIEUW] Maaltijden kunnen voortaan worden gekloond;
+[NIEUW] Optie om te vegen vanaf de schermrand om terug te gaan;
 [VERBETERD] Vormgeving van maaltijdschema's.

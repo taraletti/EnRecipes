@@ -1,3 +1,10 @@
+To continue receiving updates, please update your EnRecipes to this version.
+
+There are some significant changes in this version. So, in order to continue, you must do the following:
+1. Export a full backup.
+2. Uninstall EnRecipes.
+3. Install this version and Import your data.
+
 EnRecipes is an open source, privacy-friendly digital cookbook that lets you create, manage and share your recipes.
 
 Features:
@@ -10,16 +17,17 @@ Features:
 - Scale your recipe ingredients to serve more or less people
 - Get notified of the last time you tried a recipe
 - Share your recipe to anyone by any means as a nicely formatted message. You can share the recipe photo too.
-- Shake device to view random recipe
+- Shake your device to view a random recipe
 - Create meal plans
-- Import/Export recipes
-- Light, Dark and Black themes
+- Set cooking timers
+- You can Import or Export your data
+- Has Light, Dark and Black themes
 
 Highlights:
 
 - 100% free and open-source
 - Private by Design
-- No permissions required
+- No special permissions required
 - No annoying ads or pop-ups
 
 Credits:
