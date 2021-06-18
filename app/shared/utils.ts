@@ -21,16 +21,12 @@ const wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, 'Timers')
 const sdkv = parseInt(Device.sdkVersion)
 
 export function hasAccelerometer() {
-  // let ctx = Utils.ad.getApplicationContext()
-  let sensorManager = ctx.getSystemService(
-    android.content.Context.SENSOR_SERVICE
-  )
-  return sensorManager.getDefaultSensor(
-    android.hardware.Sensor.TYPE_ACCELEROMETER
-  )
+  return ctx
+    .getSystemService(android.content.Context.SENSOR_SERVICE)
+    .getDefaultSensor(android.hardware.Sensor.TYPE_ACCELEROMETER)
 }
 export function vibrate(duration) {
-  let vibratorService = Application.android.context.getSystemService(
+  let vibratorService = ctx.getSystemService(
     android.content.Context.VIBRATOR_SERVICE
   )
   if (vibratorService.hasVibrator()) vibratorService.vibrate(duration)
@@ -83,10 +79,13 @@ export function getRecipePhoto() {
 export function copyPhotoToCache(src: string, dest: string) {
   const ContentResolver = Application.android.nativeApp.getContentResolver()
   const isURI = src.includes('content://')
+  console.log(src, dest, isURI)
+
   return new Promise((resolve) => {
     if (isURI) {
+      const uri = new android.net.Uri.parse(src)
       const input = new java.io.BufferedInputStream(
-        ContentResolver.openInputStream(src)
+        ContentResolver.openInputStream(uri)
       )
       let size = input.available()
       let buffer = Array.create('byte', size)
@@ -260,7 +259,6 @@ export class Zip {
 // ShareOperations
 
 function share(intent, subject) {
-  // const ctx = Application.android.context
   const shareIntent = android.content.Intent.createChooser(intent, subject)
   shareIntent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
   ctx.startActivity(shareIntent)
@@ -276,7 +274,6 @@ export function shareText(text, subject) {
   share(intent, subject)
 }
 export function shareImage(image, subject, title) {
-  // let ctx = Application.android.context
   const intent = getSendIntent('image/jpeg')
   const baos = new java.io.ByteArrayOutputStream()
   image.android.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, baos)
@@ -295,7 +292,7 @@ export function shareImage(image, subject, title) {
 }
 
 export function keepScreenOn(n: number) {
-  let ctx =
+  const ctx =
     Application.android.foregroundActivity || Application.android.startActivity
   let window = ctx.getWindow()
   let flag = android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
@@ -327,28 +324,23 @@ export class TimerNotif {
     )
   }
   static clear(nID) {
-    // let ctx = Utils.ad.getApplicationContext()
     const NotifySrv = ctx.getSystemService(
       android.content.Context.NOTIFICATION_SERVICE
     )
-    // nID ? NotifySrv.cancel(nID) : NotifySrv.cancelAll()
     NotifySrv.cancel(nID)
   }
-  static getNotification(
-    {
-      multi,
-      actions,
-      bID,
-      cID,
-      cName,
-      description,
-      priority,
-      sound,
-      title,
-      vibrate,
-    }: INotification,
-    ctx
-  ) {
+  static getNotification({
+    multi,
+    actions,
+    bID,
+    cID,
+    cName,
+    description,
+    priority,
+    sound,
+    title,
+    vibrate,
+  }: INotification) {
     let soundUri: any
     if (sound) soundUri = new android.net.Uri.parse(sound)
     const NotifyMgr = android.app.NotificationManager
@@ -458,11 +450,10 @@ export class TimerNotif {
     return notification
   }
   static show(data: INotification) {
-    // const ctx = Utils.ad.getApplicationContext()
     const NotifySrv = ctx.getSystemService(
       android.content.Context.NOTIFICATION_SERVICE
     )
-    NotifySrv.notify(data.nID, this.getNotification(data, ctx))
+    NotifySrv.notify(data.nID, this.getNotification(data))
   }
 }
 export class Printer {
@@ -501,7 +492,6 @@ export class Printer {
 // GetRingtonesList
 export function getTones() {
   const RingtoneManager = android.media.RingtoneManager
-  // let ctx = Utils.ad.getApplicationContext()
   const ringtonesMgr = new RingtoneManager(ctx)
   ringtonesMgr.setType(RingtoneManager.TYPE_ALARM)
   const cursor = ringtonesMgr.getCursor()
@@ -557,7 +547,6 @@ export function updateLocale() {
   let lang = ApplicationSettings.getString('appLocale', 'none').split('-')
   const l = lang[0]
   const c = lang[1]
-  // const ctx = Utils.android.getApplicationContext()
   const res = ctx.getResources()
   const config = res.getConfiguration()
   if (l !== 'none') {

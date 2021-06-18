@@ -34,8 +34,8 @@ export const myMixin = {
       let hr = localize('hr')
       let min = localize('min')
       let mins = h * 60 + m
-      h = h && this.getLocaleN(h)
-      m = m && this.getLocaleN(m)
+      h = h && this.localeN(h)
+      m = m && this.localeN(m)
       return {
         time: h ? (m ? `${h} ${hr} ${m} ${min}` : `${h} ${hr}`) : `${m} ${min}`,
         duration: `${mins}`,
@@ -44,7 +44,7 @@ export const myMixin = {
     setGravity(args) {
       ;(args.object || args).android.setGravity(this.RTL ? 5 : 3)
     },
-    getLocaleN(n) {
+    localeN(n) {
       return new Intl.NumberFormat(null).format(Number(n))
     },
     touchFade(object, action) {
@@ -56,7 +56,7 @@ export const myMixin = {
         : c.replace(/ fade/g, '')
     },
     swipeBack({ direction }, method) {
-      if (this.$store.state.edgeSwipe)
+      if (this.$store.state.edgeS)
         if (direction == 1) method ? method(0) : this.$navigateBack()
     },
   },
