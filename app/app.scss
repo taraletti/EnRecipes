@@ -257,10 +257,6 @@ ActivityIndicator {
     padding: 0 4;
   }
 }
-.select {
-  color: $orange;
-  @extend .hl;
-}
 .t3 {
   font-size: $t3;
 }
@@ -313,12 +309,6 @@ ActivityIndicator {
 .lastItem {
   margin-bottom: 128;
 }
-.selected {
-  @extend .hl;
-}
-.unselected {
-  background-color: transparent;
-}
 .imgHolder {
   border-radius: 12;
 }
@@ -340,9 +330,8 @@ ActivityIndicator {
 
 // -----------------------------
 // Settings
-.group-info {
+.groupInfo {
   padding: 16 16 16 72;
-  line-height: 4;
   &.r {
     padding: 16 72 16 16;
   }
@@ -364,14 +353,11 @@ ActivityIndicator {
     }
   }
 }
-.listSpace {
-  height: 72;
-}
 
 // -----------------------------
 // About
-.app-info {
-  .icon {
+.appInfo {
+  .logo {
     horizontal-alignment: center;
   }
   .name {
@@ -390,18 +376,18 @@ ActivityIndicator {
   margin: 24 16 0 0;
   vertical-align: top;
 }
-.imgViewer {
+.imgV {
   width: 96;
   height: 96;
   opacity: 0;
   background: #000;
 }
-.attribute {
+.attrT {
   margin: 8 16;
   .sub {
     font-size: $t5;
   }
-  .value {
+  .v {
     @extend .tb;
     @extend .tw;
   }
@@ -418,10 +404,6 @@ ActivityIndicator {
   .v {
     text-decoration: line-through;
   }
-}
-.comb {
-  padding: 16 24;
-  line-height: 4;
 }
 .note {
   padding: 16 24;
@@ -519,34 +501,15 @@ ActivityIndicator {
   .input {
     padding: 0 16 8;
   }
-  .description {
-    line-height: 4;
-    padding: 0 16 8;
-  }
   ListPicker {
     width: 30%;
     height: 144;
     margin: 16 0;
   }
   .listItem {
-    letter-spacing: 0;
-    text-transform: none;
     line-height: 4;
     padding: 13 16;
-    margin: 0;
     background-color: transparent;
-  }
-  .shareItem {
-    border-radius: 12;
-    margin: 0 8 8;
-    text-align: center;
-    .ico {
-      padding: 16 0 0;
-    }
-    .item {
-      @extend .tw;
-      padding: 8 16 16;
-    }
   }
   .actions {
     padding: 4;
@@ -559,13 +522,17 @@ ActivityIndicator {
 
 // -----------------------------
 // Transitions
-.hl {
-  animation-name: hl;
+.select {
+  color: $orange;
+  animation-name: select;
   animation-duration: 0.2s;
   animation-fill-mode: forwards;
   animation-timing-function: ease;
 }
-@keyframes hl {
+.deselect {
+  background-color: transparent;
+}
+@keyframes select {
   0% {
     background-color: transparent;
   }
@@ -610,4 +577,10 @@ ActivityIndicator {
 }
 .edge {
   width: 16;
+}
+.ls {
+  height: 72;
+}
+.lh4 {
+  line-height: 4;
 }
