@@ -3,6 +3,6 @@
 - Individuelle Einstellungsseite für jedes Werkzeug
 - Die Rezepte können nun in zufälliger Reihenfolge sortiert werden
 - Sprachunterstützung, die von rechts zu links geschrieben werden
-- Rezept ausdrucken
-- Rezept duplizieren
+- Rezept ausdrucken und duplizieren
 - Überarbeitete Benutzeroberfläche des Mahlzeitenplaners
+- Randwischen zum Zurückgehen
