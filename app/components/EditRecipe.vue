@@ -3,7 +3,11 @@
     <GridLayout rows="*, auto" columns="auto, *, auto">
       <ScrollView rowSpan="2" colSpan="3" @scroll="!showUndo && svLoad($event)">
         <StackLayout padding="0 16 72">
-          <RLabel class="pageTitle" padding="16 0 24" :text="`${title}` | L" />
+          <RLabel
+            class="pTitle tw tb"
+            padding="16 0 24"
+            :text="`${title}` | L"
+          />
           <Image
             margin="0 0 32"
             v-if="recipe.image"
@@ -25,8 +29,8 @@
             @tap="imageHandler"
           />
           <!-- OVERVIEW -->
-          <StackLayout class="inputField">
-            <Label class="fieldLabel" :text="'title' | L" />
+          <StackLayout class="inputC">
+            <Label class="fLabel" :text="'title' | L" />
             <TextField
               :hint="'recTitle' | L"
               v-model="recipe.title"
@@ -34,8 +38,8 @@
             />
           </StackLayout>
           <RGridLayout :rtl="RTL" class="" columns="*, 8, *">
-            <StackLayout class="inputField">
-              <Label class="fieldLabel" :text="'cui' | L" />
+            <StackLayout class="inputC">
+              <Label class="fLabel" :text="'cui' | L" />
               <TextField
                 @loaded="setGravity"
                 :text="recipe.cuisine | L"
@@ -44,8 +48,8 @@
                 @tap="showCuisine(0)"
               />
             </StackLayout>
-            <StackLayout class="inputField" col="2">
-              <Label class="fieldLabel" :text="'cat' | L" />
+            <StackLayout class="inputC" col="2">
+              <Label class="fLabel" :text="'cat' | L" />
               <TextField
                 @loaded="setGravity"
                 ref="category"
@@ -56,8 +60,8 @@
               />
             </StackLayout>
           </RGridLayout>
-          <StackLayout class="inputField">
-            <Label class="fieldLabel" :text="'ts' | L" />
+          <StackLayout class="inputC">
+            <Label class="fLabel" :text="'ts' | L" />
             <TextField
               @loaded="setGravity"
               :hint="'tsInfo' | L"
@@ -69,8 +73,8 @@
             />
           </StackLayout>
           <RGridLayout :rtl="RTL" columns="*, 8, *">
-            <StackLayout class="inputField">
-              <Label class="fieldLabel" :text="'prepT' | L" />
+            <StackLayout class="inputC">
+              <Label class="fLabel" :text="'prepT' | L" />
               <TextField
                 @loaded="setGravity"
                 :text="timeRequired('prepTime')"
@@ -79,8 +83,8 @@
                 @tap="setTimeRequired(0, 'prepTime')"
               />
             </StackLayout>
-            <StackLayout class="inputField" col="2">
-              <Label class="fieldLabel" :text="'cookT' | L" />
+            <StackLayout class="inputC" col="2">
+              <Label class="fLabel" :text="'cookT' | L" />
               <TextField
                 @loaded="setGravity"
                 ref="cookTime"
@@ -92,8 +96,8 @@
             </StackLayout>
           </RGridLayout>
           <RGridLayout :rtl="RTL" columns="*, 8, *">
-            <StackLayout class="inputField">
-              <Label class="fieldLabel" :text="'yieldQ' | L" />
+            <StackLayout class="inputC">
+              <Label class="fLabel" :text="'yieldQ' | L" />
               <TextField
                 @loaded="setGravity"
                 ref="yieldQuantity"
@@ -103,8 +107,8 @@
                 returnKeyType="next"
               />
             </StackLayout>
-            <StackLayout class="inputField" col="2">
-              <Label class="fieldLabel" :text="'yieldU' | L" />
+            <StackLayout class="inputC" col="2">
+              <Label class="fLabel" :text="'yieldU' | L" />
               <TextField
                 @loaded="setGravity"
                 :text="`${recipe.yieldUnit}` | L"
@@ -115,8 +119,8 @@
             </StackLayout>
           </RGridLayout>
           <GridLayout columns="*, 8, *">
-            <StackLayout class="inputField" :col="RTL ? 2 : 0">
-              <Label class="fieldLabel" :text="'Difficulty level' | L" />
+            <StackLayout class="inputC" :col="RTL ? 2 : 0">
+              <Label class="fLabel" :text="'Difficulty level' | L" />
               <TextField
                 @loaded="setGravity"
                 ref="difficultyLevel"
@@ -130,7 +134,8 @@
           <!-- INGREDIENTS -->
           <Label
             :text="getTitleCount('ings', 'ingredients')"
-            class="sectionTitle"
+            padding="0"
+            class="section t2 tb tw"
           />
           <RGridLayout
             :rtl="RTL"
@@ -168,13 +173,13 @@
             />
             <Button
               col="5"
-              class="ico min"
+              class="ico si"
               :text="icon.x"
               @tap="removeIngredient(index)"
             />
           </RGridLayout>
           <Button
-            class="text big hal"
+            class="text tb big hal fb"
             :class="{ r: RTL }"
             :text="'aIngBtn' | L"
             @tap="addIngredient()"
@@ -182,7 +187,8 @@
           <!-- INSTRUCTIONS -->
           <Label
             :text="getTitleCount('inss', 'instructions')"
-            class="sectionTitle"
+            padding="0"
+            class="section t2 tb tw"
           />
           <RGridLayout
             :rtl="RTL"
@@ -197,13 +203,13 @@
             />
             <Button
               col="1"
-              class="ico min"
+              class="ico si"
               :text="icon.x"
               @tap="removeInstruction(index)"
             />
           </RGridLayout>
           <Button
-            class="text big hal"
+            class="text tb big hal fb"
             :class="{ r: RTL }"
             :text="'aStpBtn' | L"
             @tap="addInstruction"
@@ -211,7 +217,8 @@
           <!-- COMBINATIONS -->
           <Label
             :text="getTitleCount('cmbs', 'combinations')"
-            class="sectionTitle"
+            padding="0"
+            class="section t2 tb tw"
           />
           <RGridLayout
             :rtl="RTL"
@@ -227,19 +234,23 @@
             />
             <Button
               col="1"
-              class="ico min"
+              class="ico si"
               :text="icon.x"
               @tap="removeCombination(combination)"
             />
           </RGridLayout>
           <Button
-            class="text big hal"
+            class="text tb big hal fb"
             :class="{ r: RTL }"
             :text="'addCmbBtn' | L"
             @tap="showCombinations"
           />
           <!-- NOTES -->
-          <Label :text="getTitleCount('nos', 'notes')" class="sectionTitle" />
+          <Label
+            :text="getTitleCount('nos', 'notes')"
+            padding="0"
+            class="section t2 tb tw"
+          />
           <RGridLayout
             :rtl="RTL"
             columns="*, auto"
@@ -253,13 +264,13 @@
             />
             <Button
               col="1"
-              class="ico min"
+              class="ico si"
               :text="icon.x"
               @tap="removeNote(index)"
             />
           </RGridLayout>
           <Button
-            class="text big hal"
+            class="text tb big hal fb"
             :class="{ r: RTL }"
             :text="'aNoBtn' | L"
             @tap="addNote"
@@ -300,6 +311,19 @@
         :action="hideBar"
         :onload="sbLoad"
       />
+      <Label
+        rowSpan="2"
+        colSpan="3"
+        class="edge hal"
+        :class="{ 'f r': RTL }"
+        @swipe="swipeBack($event, navigateBack)"
+      />
+      <Label
+        rowSpan="2"
+        colSpan="3"
+        class="edge har rtl f"
+        @swipe="swipeBack($event, navigateBack)"
+      />
     </GridLayout>
   </Page>
 </template>
@@ -315,10 +339,8 @@ import {
   Screen,
   Utils,
   Observable,
-  CoreTypes,
   Frame,
   Application,
-  GridLayout,
 } from "@nativescript/core";
 import { getString, setString } from "@nativescript/core/application-settings";
 import { localize } from "@nativescript/localize";
@@ -430,19 +452,10 @@ export default {
         scrollUp = y < this.scrollPos;
         this.scrollPos = Math.abs(y);
         let ab = this.appbar.translateY;
-        if (!scrollUp && ab == 0) {
-          this.appbar.animate({
-            translate: { x: 0, y: 64 },
-            duration: 200,
-            curve: CoreTypes.AnimationCurve.ease,
-          });
-        } else if (scrollUp && ab == 64) {
+        if (!scrollUp && ab == 0) this.animateBar(this.appbar, 0);
+        else if (scrollUp && ab == 64) {
           Utils.ad.dismissSoftInput();
-          this.appbar.animate({
-            translate: { x: 0, y: 0 },
-            duration: 200,
-            curve: CoreTypes.AnimationCurve.ease,
-          });
+          this.animateBar(this.appbar, 1);
         }
       }
     },
@@ -844,7 +857,7 @@ export default {
           this.showUndo = 1;
           this.snackMsg = message;
           this.countdown = 5;
-          this.animateBar(this.snackbar, 1).then(() => {
+          this.animateBar(this.snackbar, 1, 1).then(() => {
             let a = 5;
             barTimer = setInterval(() => {
               if (this.undo) {

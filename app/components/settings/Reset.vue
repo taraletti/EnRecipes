@@ -12,6 +12,13 @@
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
       <Toast :onload="tbLoad" :toast="toast" :action="hideToast" />
+      <Label rowSpan="2" class="edge hal rtl" @swipe="swipeBack" />
+      <Label
+        rowSpan="2"
+        colSpan="2"
+        class="edge har rtl f"
+        @swipe="swipeBack"
+      />
     </RGridLayout>
   </Page>
 </template>
@@ -94,7 +101,7 @@ export default {
     showToast() {
       this.animateBar(this.appbar, 0).then(() => {
         this.toast = localize("restDone");
-        this.animateBar(this.toastbar, 1);
+        this.animateBar(this.toastbar, 1, 1);
       });
       utils.timer(5, (val) => !val && this.hideToast());
     },

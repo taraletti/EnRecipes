@@ -10,7 +10,7 @@
     @loaded="onload"
   >
     <StackLayout minHeight="48">
-      <RLabel class="title msg" :text="toast" />
+      <RLabel padding="14 20" :text="toast" />
     </StackLayout>
   </GridLayout>
 </template>

@@ -246,6 +246,8 @@ export default new Vuex.Store({
       calv: '\ue941',
       mpd: '\ue942',
       madd: '\ue943',
+      awake: '\ue944',
+      edge: '\ue945',
     },
     sortType: 'random',
     language: [
@@ -264,15 +266,15 @@ export default new Vuex.Store({
       },
       {
         locale: 'en-IN',
-        title: 'English (IN)',
+        title: 'English (India)',
       },
       {
         locale: 'en-GB',
-        title: 'English (UK)',
+        title: 'English (United Kingdom)',
       },
       {
         locale: 'en-US',
-        title: 'English (US)',
+        title: 'English (United States)',
       },
       {
         locale: 'es',
@@ -284,15 +286,15 @@ export default new Vuex.Store({
       },
       {
         locale: 'fr-BE',
-        title: 'Français (BE)',
+        title: 'Français (Belgium)',
       },
       {
         locale: 'fr-CA',
-        title: 'Français (CA)',
+        title: 'Français (Canada)',
       },
       {
         locale: 'fr-CH',
-        title: 'Français (CH)',
+        title: 'Français (Switzerland)',
       },
       {
         locale: 'hi',
@@ -306,14 +308,14 @@ export default new Vuex.Store({
         locale: 'it',
         title: 'Italiano',
       },
-      // {
-      //   locale: 'ja',
-      //   title: '日本語',
-      // },
-      // {
-      //   locale: 'ml',
-      //   title: 'മലയാളം',
-      // },
+      {
+        locale: 'ja',
+        title: '日本語',
+      },
+      {
+        locale: 'ml',
+        title: 'മലയാളം',
+      },
       {
         locale: 'nb-NO',
         title: 'Norsk bokmål',
@@ -328,7 +330,7 @@ export default new Vuex.Store({
       },
       {
         locale: 'pt-BR',
-        title: 'Português (BR)',
+        title: 'Português (Brazil)',
       },
       {
         locale: 'ru',
@@ -364,8 +366,18 @@ export default new Vuex.Store({
     RTL: getNumber('RTL', 0),
     plannerView: getString('plannerView', 'wk'),
     planDeletion: getString('planDeletion', 'nvr'),
+    edgeSwipe: getNumber('edgeSwipe', 1),
+    awakeViewer: getNumber('awakeViewer', 1),
   },
   mutations: {
+    toggleAwakeViewer(state) {
+      state.awakeViewer = +!state.awakeViewer
+      setNumber('awakeViewer', state.awakeViewer)
+    },
+    toggleEdgeSwipe(state) {
+      state.edgeSwipe = +!state.edgeSwipe
+      setNumber('edgeSwipe', state.edgeSwipe)
+    },
     setPlanDeletion(state, s) {
       state.planDeletion = s
       setString('planDeletion', s)
@@ -483,6 +495,7 @@ export default new Vuex.Store({
     },
     setLayout(state, type) {
       state.layout = type
+      setString('layout', type)
     },
     setSortType(state, sortType) {
       state.sortType = sortType
@@ -817,24 +830,21 @@ export default new Vuex.Store({
         let c = state.planDeletion
         let date = new Date()
         let d = new Date()
-        if (c != 'nvr') {
-          d.setHours(0, 0, 0, 0)
-          let ld =
-            c == 'otay'
-              ? 365
-              : c == 'otam'
-              ? new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
-              : 7
-          d.setDate(d.getDate() - ld)
-        }
+        d.setHours(0, 0, 0, 0)
+        let ld =
+          c == 'otay'
+            ? 365
+            : c == 'otam'
+            ? new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
+            : 7
+        d.setDate(d.getDate() - ld)
 
         db.select(`SELECT * FROM mealPlans`).then((res) =>
-          res.forEach((p: any) => {
-            if (p.date < d.getTime())
-              // DeletingOldMealPlans
-              db.execute(`DELETE FROM mealPlans WHERE id = '${p.id}'`)
-            else state.mealPlans.push(p)
-          })
+          res.forEach((p: any) =>
+            c !== 'nvr' && p.date < d.getTime()
+              ? db.execute(`DELETE FROM mealPlans WHERE id = '${p.id}'`)
+              : state.mealPlans.push(p)
+          )
         )
       }
     },
@@ -1024,6 +1034,12 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    toggleAwakeViewer({ commit }) {
+      commit('toggleAwakeViewer')
+    },
+    toggleEdgeSwipe({ commit }) {
+      commit('toggleEdgeSwipe')
+    },
     setPlanDeletion({ commit }, s) {
       commit('setPlanDeletion', s)
     },

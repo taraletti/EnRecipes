@@ -10,7 +10,11 @@
           paddingBottom="24"
         >
           <StackLayout>
-            <RLabel class="pageTitle" paddingBottom="8" :text="recipe.title" />
+            <RLabel
+              class="pTitle tw tb"
+              paddingBottom="8"
+              :text="recipe.title"
+            />
             <StackLayout
               :class="{ f: RTL }"
               margin="0 12"
@@ -22,10 +26,7 @@
                 v-for="n in 5"
                 :key="n"
                 :text="recipe.rating < n ? icon.star : icon.starred"
-                @tap="
-                  recipe.rating == 1 && n == 1 ? setRating(0) : setRating(n)
-                "
-                @longPress="setRating(n)"
+                @touch="touchRate($event, n)"
               />
             </StackLayout>
           </StackLayout>
@@ -108,8 +109,7 @@
               </RGridLayout>
               <StackLayout @loaded="onIngsLoad">
                 <RLabel
-                  padding="0 16"
-                  class="sectionTitle"
+                  class="section t2 tb tw"
                   :hidden="!recipe.ingredients.length"
                   :text="getTitleCount('ings', 'ingredients')"
                 />
@@ -118,18 +118,17 @@
                   orientation="horizontal"
                   v-for="(item, index) in recipe.ingredients"
                   :key="index + 'ing'"
-                  class="ingredient"
+                  class="check"
                   @touch="touchIngredient($event, index)"
                 >
-                  <Button class="ico min" :text="icon.uncheck" />
-                  <RLabel class="value tw" :text="getIngredientItem(item)" />
+                  <Button class="ico si" :text="icon.uncheck" />
+                  <RLabel class="v tw" :text="getIngredientItem(item)" />
                 </RStackLayout>
               </StackLayout>
               <StackLayout @loaded="onInsLoad">
                 <RLabel
-                  padding="0 16"
                   :hidden="!recipe.instructions.length"
-                  class="sectionTitle"
+                  class="section t2 tb tw"
                   :text="getTitleCount('inss', 'instructions')"
                 />
                 <RStackLayout
@@ -138,40 +137,43 @@
                   @touch="touchInstruction"
                   v-for="(instruction, index) in recipe.instructions"
                   :key="index + 'ins'"
-                  class="instruction"
+                  class="check"
                 >
-                  <Button class="count ico min" :text="getLocaleN(index + 1)" />
-                  <RLabel class="value tw" :text="instruction" />
+                  <Button class="tb t3 ico si" :text="getLocaleN(index + 1)" />
+                  <RLabel class="v tw" :text="instruction" />
                 </RStackLayout>
               </StackLayout>
               <RLabel
                 @loaded="onCmbLoad"
-                padding="0 16"
                 :hidden="!recipe.combinations.length"
-                class="sectionTitle"
+                class="section t2 tb tw"
                 :text="getTitleCount('cmbs', 'combinations')"
               />
               <Button
                 v-for="(combination, index) in recipe.combinations"
                 :key="index + 'comb'"
-                class="combination"
+                class="comb tw hal lh4 fb"
+                :class="{ r: RTL }"
                 :text="getCombinationTitle(combination)"
                 @tap="viewCombination(combination)"
               />
               <RLabel
                 @loaded="onNosTLoad"
-                padding="0 16"
                 :hidden="!recipe.notes.length"
-                class="sectionTitle"
+                class="section t2 tb tw"
                 :text="getTitleCount('nos', 'notes')"
               />
-              <StackLayout @loaded="onNosLoad" padding="0 16"> </StackLayout>
-              <Label class="dateInfo sub tw" :text="getDates().uc" />
+              <StackLayout @loaded="onNosLoad"> </StackLayout>
+              <Label
+                padding="32 16 16"
+                class="lh4 t5 sub tw"
+                :text="getDates().uc"
+              />
             </StackLayout>
           </ScrollView>
           <RLabel
             @loaded="onStickyLoad"
-            class="sectionTitle sticky"
+            class="t2 tb tw sticky"
             :hidden="!stickyTitle"
             :text="stickyTitle"
           />
@@ -262,10 +264,23 @@
           stretch="aspectFit"
           @loaded="onImgViewLoad"
           :src="recipe.image"
-          class="photoviewer"
+          class="imgViewer"
         />
       </AbsoluteLayout>
       <WebView @loaded="wvLoad" hidden />
+      <Label
+        rowSpan="3"
+        colSpan="3"
+        class="edge hal"
+        :class="{ 'f r': RTL }"
+        @swipe="swipeBack"
+      />
+      <Label
+        rowSpan="3"
+        colSpan="3"
+        class="edge har rtl f"
+        @swipe="swipeBack"
+      />
     </GridLayout>
   </Page>
 </template>
@@ -328,7 +343,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon", "recipes", "RTL"]),
+    ...mapState(["icon", "recipes", "RTL", "awakeViewer"]),
     tempYieldQuantity() {
       return Math.abs(this.yieldMultiplier) > 0
         ? Math.abs(parseFloat(this.yieldMultiplier))
@@ -363,7 +378,7 @@ export default {
       object.bindingContext = new Observable();
       if (this.yieldMultiplier == this.recipe.yieldQuantity)
         this.yieldMultiplier = this.recipe.yieldQuantity;
-      utils.keepScreenOn(1);
+      if (this.awakeViewer) utils.keepScreenOn(1);
       this.syncCombinations();
       this.view = object.page.getViewById("printview");
     },
@@ -465,27 +480,15 @@ export default {
       }
     },
     showBars() {
-      this.appbar.animate({
-        translate: { x: 0, y: 0 },
-        duration: 200,
-        curve: CoreTypes.AnimationCurve.ease,
-      });
-      this.sidebar.animate({
-        translate: { x: 0, y: 0 },
-        duration: 200,
-        curve: CoreTypes.AnimationCurve.ease,
-      });
+      this.animateBar(this.appbar, 1);
+      this.animateBar(this.sidebar, 1);
     },
     hideBars() {
-      this.appbar.animate({
-        translate: { x: 0, y: 64 },
-        duration: 200,
-        curve: CoreTypes.AnimationCurve.ease,
-      });
+      this.animateBar(this.appbar, 0);
       this.sidebar.animate({
         translate: { x: this.RTL ? -64 : 64, y: 0 },
         duration: 200,
-        curve: CoreTypes.AnimationCurve.ease,
+        curve: CoreTypes.AnimationCurve.easeIn,
       });
     },
 
@@ -554,7 +557,7 @@ export default {
           "triedInfo",
           this.niceDate(this.recipe.lastTried)
         );
-        this.animateBar(this.toastbar, 1);
+        this.animateBar(this.toastbar, 1, 1);
         let a = 10;
         clearInterval(barTimer);
         barTimer = setInterval(() => a-- < 1 && this.hideBar(), 1000);
@@ -657,9 +660,7 @@ export default {
       // });
     },
     touchIngredient({ object, action }, index) {
-      object.className = action.match(/down|move/)
-        ? "ingredient fade"
-        : "ingredient";
+      this.touchFade(object, action);
       if (action == "up") this.checkChange(object, index);
     },
     checkChange(obj, index) {
@@ -681,25 +682,23 @@ export default {
     },
     touchInstruction({ object, action }) {
       let hasDone = object.className.includes("done");
-      object.className = action.match(/down|move/)
-        ? `instruction ${hasDone ? "done" : "fade"}`
-        : `instruction ${hasDone ? "done" : ""}`;
+      if (!hasDone) this.touchFade(object, action);
       if (action == "up") this.stepDone(object);
     },
     stepDone(object) {
       let a = object;
       if (a.className.includes("done")) {
-        a.className = "instruction";
+        a.className = "check";
         this.stepsDid--;
       } else {
-        a.className = "instruction done";
+        a.className = "check done";
         this.stepsDid++;
       }
     },
     clearSteps() {
       this.stepsDid = 0;
       for (let i = 1; i < this.inscon.getChildrenCount(); i++) {
-        this.inscon.getChildAt(i).className = "instruction";
+        this.inscon.getChildAt(i).className = "check";
       }
     },
     getDates() {
@@ -838,11 +837,16 @@ export default {
       });
       if (setDate) this.$navigateBack();
     },
-    setRating(rating) {
-      if (rating !== this.recipe.rating || rating === 1) {
+    touchRate({ object, action }, r) {
+      this.touchFade(object, action);
+      if (action == "up") this.setRating(r);
+    },
+    setRating(r) {
+      if (r !== this.recipe.rating || r === 1) {
+        if (this.recipe.rating == 1 && r == 1) r = 0;
         this.setRatingAction({
           id: this.currentRecipeID,
-          rating,
+          rating: r,
         });
       }
     },
@@ -861,7 +865,7 @@ export default {
     createNote(note) {
       let regex = /(https?:\/\/[^\s]+)/g;
       const lbl = new RLabel();
-      lbl.className = "note";
+      lbl.className = "note tw";
       lbl.textWrap = true;
       let fString = new FormattedString();
       let arr = note.split(regex);
@@ -928,7 +932,7 @@ export default {
             height: sw,
             translate: { x: this.RTL ? -16 : 112 - sw, y: (sh - sw) / 3 },
             duration: 200,
-            curve: CoreTypes.AnimationCurve.ease,
+            curve: CoreTypes.AnimationCurve.easeOut,
           })
         )
         .then(() =>
@@ -936,7 +940,7 @@ export default {
             height: sh,
             translate: { x: this.RTL ? -16 : 112 - sw, y: -((sh - sw) / 6) },
             duration: 200,
-            curve: CoreTypes.AnimationCurve.ease,
+            curve: CoreTypes.AnimationCurve.easeOut,
           })
         );
     },
@@ -949,7 +953,7 @@ export default {
         height: sw,
         translate: { x: this.RTL ? -16 : 112 - sw, y: (sh - sw) / 3 },
         duration: 200,
-        curve: CoreTypes.AnimationCurve.ease,
+        curve: CoreTypes.AnimationCurve.easeIn,
       })
         .then(() =>
           pv.animate({
@@ -957,7 +961,7 @@ export default {
             height: 96,
             translate: { x: 0, y: 0 },
             duration: 200,
-            curve: CoreTypes.AnimationCurve.ease,
+            curve: CoreTypes.AnimationCurve.easeIn,
           })
         )
         .then(() =>
@@ -1112,9 +1116,8 @@ export default {
 
     // Helpers
     touchYield({ object, action }) {
-      object.className = action.match(/down|move/)
-        ? "value accent fade"
-        : "value accent";
+      this.touchFade(object, action);
+
       if (action == "up") this.changeYield();
     },
   },

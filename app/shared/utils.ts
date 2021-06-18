@@ -328,12 +328,12 @@ export function shareImage(image, subject, title) {
   share(intent, subject)
 }
 
-export function keepScreenOn(bool) {
+export function keepScreenOn(n: number) {
   let ctx =
     Application.android.foregroundActivity || Application.android.startActivity
   let window = ctx.getWindow()
   let flag = android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-  bool ? window.addFlags(flag) : window.clearFlags(flag)
+  n ? window.addFlags(flag) : window.clearFlags(flag)
 }
 
 // TIMER NOTIFICATION
@@ -600,6 +600,8 @@ export function updateLocale() {
     ctx.createConfigurationContext(config)
     res.updateConfiguration(config, res.getDisplayMetrics())
     ApplicationSettings.setNumber('RTL', config.getLayoutDirection() | 0)
+  } else {
+    ApplicationSettings.setNumber('RTL', sysRTL() | 0)
   }
   ApplicationSettings.setString('sysLocale', sysLocale())
 }

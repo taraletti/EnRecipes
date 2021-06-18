@@ -1,9 +1,5 @@
 <template>
-  <Page
-    @loaded="transparentPage"
-    backgroundColor="transparent"
-    :class="theme"
-  >
+  <Page @loaded="mLoad" backgroundColor="transparent" :class="theme">
     <GridLayout rows="auto, auto, auto" class="modal">
       <RLabel class="title" :text="title | L" />
       <StackLayout row="1">
@@ -47,17 +43,22 @@
       >
         <Button
           v-if="showPreset"
-          class="text sm"
+          class="text tb st fb"
           :text="'prstBtn' | L"
           @tap="$modal.close('presets')"
         />
         <Button
           col="2"
-          class="text sm"
+          class="text tb st fb"
           :text="'cBtn' | L"
           @tap="$modal.close(0)"
         />
-        <Button col="3" class="text sm" :text="action | L" @tap="sendRespose" />
+        <Button
+          col="3"
+          class="text tb st fb"
+          :text="action | L"
+          @tap="sendRespose"
+        />
       </RGridLayout>
     </GridLayout>
   </Page>

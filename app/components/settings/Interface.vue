@@ -5,6 +5,13 @@
       <GridLayout row="1" class="appbar rtl" rows="*" columns="auto, *">
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
+      <Label rowSpan="2" class="edge hal rtl" @swipe="swipeBack" />
+      <Label
+        rowSpan="2"
+        colSpan="2"
+        class="edge har rtl f"
+        @swipe="swipeBack"
+      />
     </RGridLayout>
   </Page>
 </template>
@@ -42,9 +49,7 @@ export default {
           icon: "theme",
           rtl: 0,
           title: "Theme",
-          subTitle: localize(
-            ApplicationSettings.getString("theme", "sysDef")
-          ),
+          subTitle: localize(ApplicationSettings.getString("theme", "sysDef")),
           action: this.selectThemes,
         },
         {
@@ -71,6 +76,7 @@ export default {
         props: {
           title: "lang",
           list: [...languages],
+          selected: this.applang,
         },
       }).then((action) => {
         if (action && this.applang !== action) {
@@ -97,6 +103,7 @@ export default {
         props: {
           title: "Theme",
           list: ["Light", "Dark", "Black", "sysDef", "sysDefB"],
+          selected: ApplicationSettings.getString("theme", "sysDef"),
         },
       }).then((action) => {
         if (
@@ -116,13 +123,10 @@ export default {
         props: {
           title: "listVM",
           list: ["detailed", "grid", "photogrid", "simple", "minimal"],
+          selected: this.layout,
         },
-      }).then((action) => {
-        if (action && this.layoutMode !== action) {
-          let act = action.toLowerCase();
-          ApplicationSettings.setString("layout", act);
-          this.setLayout(act);
-        }
+      }).then((mode) => {
+        if (mode && this.layout !== mode) this.setLayout(mode.toLowerCase());
       });
     },
   },

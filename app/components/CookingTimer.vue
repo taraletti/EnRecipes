@@ -1,5 +1,5 @@
 <template>
-  <Page @loaded="pgLoad" @unloaded="pgUnload" actionBarHidden="true">
+  <Page @loaded="pgLoad" actionBarHidden="true">
     <GridLayout rows="*, auto" columns="*">
       <ScrollView
         @scroll="svScroll($event)"
@@ -8,7 +8,7 @@
       >
         <StackLayout>
           <RGridLayout :rtl="RTL" rows="auto" columns="*, auto, 12">
-            <RLabel class="pageTitle" :text="'timer' | L" />
+            <RLabel class="pTitle tw tb" :text="'timer' | L" />
             <Button col="1" class="ico" :text="icon.cog" @tap="navigateTo" />
           </RGridLayout>
           <Timer
@@ -25,9 +25,9 @@
         </StackLayout>
       </ScrollView>
       <GridLayout v-if="!activeTimers.length" rows="*, auto">
-        <StackLayout row="1" class="emptyState">
-          <RLabel class="title" :text="'ccwt' | L" />
-          <RLabel :text="'plsAdd' | L" />
+        <StackLayout row="1" class="empty">
+          <RLabel class="tb t3 tw" :text="'ccwt' | L" />
+          <RLabel class="tw" :text="'plsAdd' | L" />
         </StackLayout>
       </GridLayout>
       <RGridLayout
@@ -50,6 +50,18 @@
         :onload="sbLoad"
       />
       <Toast :onload="tbLoad" :toast="toast" :action="hideBar" />
+      <Label
+        rowSpan="2"
+        class="edge hal"
+        :class="{ 'f r': RTL }"
+        @swipe="swipeBack($event, navigateBack)"
+      />
+      <Label
+        rowSpan="2"
+        class="edge har rtl"
+        :class="{ r: RTL, f: !RTL }"
+        @swipe="swipeBack($event, navigateBack)"
+      />
     </GridLayout>
   </Page>
 </template>
@@ -58,7 +70,6 @@
 import { localize } from "@nativescript/localize";
 import {
   Observable,
-  CoreTypes,
   Application,
   Utils,
   Device,
@@ -128,11 +139,7 @@ export default {
       object.bindingContext = new Observable();
       if (this.activeTimers.filter((e: any) => e.done).length)
         this.openReminder();
-      this.keepScreenOnCountUp();
       setNumber("isTimer", 1);
-    },
-    pgUnload() {
-      utils.keepScreenOn(0);
     },
     abLoad({ object }) {
       this.appbar = object;
@@ -151,19 +158,8 @@ export default {
         scrollUp = y < this.scrollPos;
         this.scrollPos = Math.abs(y);
         let ab = this.appbar.translateY;
-        if (!scrollUp && ab == 0) {
-          this.appbar.animate({
-            translate: { x: 0, y: 64 },
-            duration: 200,
-            curve: CoreTypes.AnimationCurve.ease,
-          });
-        } else if (scrollUp && ab == 64) {
-          this.appbar.animate({
-            translate: { x: 0, y: 0 },
-            duration: 200,
-            curve: CoreTypes.AnimationCurve.ease,
-          });
-        }
+        if (!scrollUp && ab == 0) this.animateBar(this.appbar, 0);
+        else if (scrollUp && ab == 64) this.animateBar(this.appbar, 1);
       }
     },
 
@@ -210,7 +206,6 @@ export default {
       }
       if (this.FGService)
         setTimeout(() => this.activeTimers.length && show(), 250);
-      this.keepScreenOnCountUp();
       utils.wakeLock(ongoingCount);
     },
     timerAlert() {
@@ -390,7 +385,7 @@ export default {
       this.animateBar(this.appbar, 0).then(() => {
         this.showUndo = 0;
         this.toast = localize(data);
-        this.animateBar(this.toastbar, 1);
+        this.animateBar(this.toastbar, 1, 1);
         let a = 5;
         clearInterval(barTimer);
         barTimer = setInterval(() => a-- < 1 && this.hideBar(), 1000);
@@ -404,7 +399,7 @@ export default {
           this.showUndo = 1;
           this.snackMsg = message;
           this.countdown = 5;
-          this.animateBar(this.snackbar, 1).then(() => {
+          this.animateBar(this.snackbar, 1, 1).then(() => {
             let a = 5;
             clearInterval(barTimer);
             barTimer = setInterval(() => {
@@ -456,11 +451,6 @@ export default {
     },
 
     // HELPERS
-    keepScreenOnCountUp() {
-      utils.keepScreenOn(
-        this.activeTimers.filter((e: any) => !e.isPaused).length
-      );
-    },
   },
   created() {
     this.clearTimerInterval();

@@ -3,15 +3,15 @@
     <RGridLayout :rtl="RTL" rows="*, auto" columns="auto, *">
       <ListView rowSpan="2" colSpan="2" class="options" for="item in items">
         <v-template if="$index == 0">
-          <Label class="pageTitle" :text="'About' | L" />
+          <Label class="pTitle tw tb" :text="'About' | L" />
         </v-template>
         <v-template if="$index == 1">
           <StackLayout class="app-info">
             <Image class="icon" src="res://logo" stretch="none" />
-            <Label class="name tb tac" :text="'EnRecipes' | L" />
-            <Label :text="getVersion" class="version tb tac" />
+            <Label class="name tb tc" :text="'EnRecipes' | L" />
+            <Label :text="getVersion" class="version tb tc" />
 
-            <Label class="info tac tw" :text="'appInfo' | L" />
+            <Label class="info tc tw" :text="'appInfo' | L" />
           </StackLayout>
         </v-template>
         <v-template if="$index == 8">
@@ -37,6 +37,13 @@
       <GridLayout row="1" class="appbar rtl" rows="*" columns="auto, *">
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
+      <Label rowSpan="2" class="edge hal rtl" @swipe="swipeBack" />
+      <Label
+        rowSpan="2"
+        colSpan="2"
+        class="edge har rtl f"
+        @swipe="swipeBack"
+      />
     </RGridLayout>
   </Page>
 </template>
@@ -103,7 +110,7 @@ export default {
       Utils.openUrl(url);
     },
     touch({ object, action }, url) {
-      object.className = action.match(/down|move/) ? "option fade" : "option";
+      this.touchFade(object, action);
       if (action == "up") this.openURL(url);
     },
   },

@@ -6,7 +6,7 @@
     class="timer"
   >
     <Button
-      class="ico min rtl"
+      class="ico si rtl"
       :text="done ? icon.ring : timer.isPaused ? icon.start : icon.pause"
       @tap="!done && toggleProgress()"
     />
@@ -18,7 +18,7 @@
       <RLabel :text="timer.label" class="tb title tw a" />
       <RLabel
         :hidden="!timer.recipeID && done"
-        @touch="!done && touch($event)"
+        @touch="!timer.recipeID && !done && touch($event)"
         :text="getRecipeTitle"
         class="a"
         :class="timer.recipeID ? 'sub' : 'accent'"
@@ -48,7 +48,7 @@
     />
     <Button
       col="4"
-      class="ico min"
+      class="ico si"
       :text="icon.x"
       @tap="removeTimer(timer.id, done)"
     />
@@ -61,7 +61,7 @@ import { ApplicationSettings } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
 import { mapState, mapActions } from "vuex";
 import ActionWithSearch from "../modals/ActionWithSearch";
-import ViewRecipe from "../ViewRecipe";
+import EditRecipe from "../EditRecipe";
 import * as utils from "~/shared/utils";
 import { EvtBus } from "~/main";
 export default {
@@ -149,13 +149,6 @@ export default {
         this.RTL && utils.sysRTL() ? 0 : this.RTL || utils.sysRTL() ? 180 : 0
       );
       this.initTimer();
-    },
-    viewRecipe(recipeID) {
-      this.$navigateTo(ViewRecipe, {
-        props: {
-          recipeID,
-        },
-      });
     },
     attachRecipe() {
       this.$showModal(ActionWithSearch, {
@@ -251,12 +244,7 @@ export default {
 
     // HELPERS
     touch({ object, action }) {
-      let classes = object.className;
-      classes = action.match(/down|move/)
-        ? !classes.includes("fade")
-          ? classes + " fade"
-          : classes
-        : classes.replace(/ fade/g, "");
+      this.touchFade(object, action);
       if (action == "up") this.attachRecipe();
     },
   },

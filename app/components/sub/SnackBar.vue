@@ -7,8 +7,8 @@
     @swipe="action"
     @loaded="onload"
   >
-    <Button @tap="action" :text="count" class="ico countdown tb" />
-    <RLabel @tap="action" class="title" col="1" :text="msg | L" />
+    <Button @tap="action" :text="count" class="ico t3 accent tb" />
+    <RLabel @tap="action" margin="0 4" class="tb tw vc lh4" col="1" :text="msg | L" />
     <Button class="ico fab rtl" :text="icon.undo" @tap="undo" col="3" />
   </RGridLayout>
 </template>

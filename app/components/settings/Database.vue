@@ -22,8 +22,15 @@
         columns="auto, *"
       >
         <ActivityIndicator :busy="!!progress" />
-        <RLabel col="1" class="title" :text="progress" />
+        <RLabel margin="0 12" col="1" class="tb tw vc lh4" :text="progress" />
       </RGridLayout>
+      <Label rowSpan="2" class="edge hal rtl" @swipe="swipeBack" />
+      <Label
+        rowSpan="2"
+        colSpan="2"
+        class="edge har rtl f"
+        @swipe="swipeBack"
+      />
     </RGridLayout>
   </Page>
 </template>
@@ -474,7 +481,7 @@ export default {
     showToast(data) {
       this.animateBar(this.appbar, 0).then(() => {
         this.toast = data;
-        this.animateBar(this.toastbar, 1);
+        this.animateBar(this.toastbar, 1, 1);
         utils.timer(5, (val) => !val && this.hideBar());
       });
     },

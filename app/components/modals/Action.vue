@@ -1,9 +1,5 @@
 <template>
-  <Page
-    @loaded="transparentPage"
-    backgroundColor="transparent"
-    :class="theme"
-  >
+  <Page @loaded="mLoad" backgroundColor="transparent" :class="theme">
     <GridLayout
       columns="*"
       :rows="`auto, auto, ${stretch ? '*' : 'auto'}, auto`"
@@ -30,13 +26,13 @@
       <RGridLayout :rtl="RTL" row="3" columns="auto, *, auto" class="actions">
         <Button
           :hidden="!action"
-          class="text sm"
+          class="text tb st fb"
           :text="action | L"
           @tap="$modal.close(action)"
         />
         <Button
           col="2"
-          class="text sm"
+          class="text tb st fb"
           :text="'cBtn' | L"
           @tap="$modal.close(0)"
         />
@@ -158,12 +154,7 @@ export default {
       }
     },
     touch({ object, action }): void {
-      let classes = object.className;
-      object.className = action.match(/down|move/)
-        ? !classes.includes("fade")
-          ? classes + " fade"
-          : classes
-        : classes.replace(/ fade/g, "");
+      this.touchFade(object, action);
     },
   },
   created() {

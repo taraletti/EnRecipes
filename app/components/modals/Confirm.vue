@@ -1,6 +1,6 @@
 <template>
   <Page
-    @loaded="transparentPage"
+    @loaded="mLoad"
     backgroundColor="transparent"
     :class="theme"
   >
@@ -16,13 +16,13 @@
         <Button
           v-if="cancelButtonText"
           col="1"
-          class="text sm"
+          class="text tb st fb"
           :text="cancelButtonText | L"
           @tap="$modal.close(0)"
         />
         <Button
           col="2"
-          class="text sm"
+          class="text tb st fb"
           :text="okButtonText | L"
           @tap="$modal.close(1)"
         />

@@ -5,6 +5,13 @@
       <GridLayout row="1" class="appbar rtl" rows="*" columns="auto, *">
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
+      <Label rowSpan="2" class="edge hal rtl" @swipe="swipeBack" />
+      <Label
+        rowSpan="2"
+        colSpan="2"
+        class="edge har rtl f"
+        @swipe="swipeBack"
+      />
     </RGridLayout>
   </Page>
 </template>
@@ -60,7 +67,8 @@ export default {
       this.$showModal(Action, {
         props: {
           title: "calVM",
-          list: ["mnth", "wk", "d"],
+          list: ["d", "wk", "mnth"],
+          selected: this.plannerView,
         },
       }).then((res) => {
         if (res && this.plannerView != res) this.setPlannerView(res);
@@ -70,7 +78,8 @@ export default {
       this.$showModal(Action, {
         props: {
           title: "admp",
-          list: ["otay", "otam", "otaw", "nvr"],
+          list: ["otaw", "otam", "otay", "nvr"],
+          selected: this.planDeletion,
         },
       }).then((res) => {
         if (res && this.planDeletion != res) this.setPlanDeletion(res);

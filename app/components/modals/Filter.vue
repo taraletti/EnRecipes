@@ -5,19 +5,19 @@
       <ScrollView orientation="horizontal" row="1" @loaded="onScrollLoad">
         <RStackLayout :rtl="RTL" class="filters" orientation="horizontal">
           <GridLayout
-            rows="48"
-            columns="auto, auto"
+            rows="32"
+            columns="32, auto"
             class="segment rtl"
             v-for="(item, index) in pathList"
             :key="index"
-            :class="{ select: filterType === item.type }"
+            :class="{ select: filter === item.type }"
             @touch="touchSelector($event, item.type)"
           >
-            <Label class="ico" :text="icon[item.type]" />
+            <Label class="ico tc vc" :text="icon[item.type]" />
             <Label
               :hidden="!item.title"
-              class="value"
-              :class="{ r: RTL }"
+              class="v vc"
+              :class="{ f: RTL }"
               :text="item.title"
               col="1"
             />
@@ -41,16 +41,16 @@
         columns="auto, *, auto, auto"
         class="actions"
       >
-        <Button class="text sm" :text="'rest' | L" @tap="resetFilter" />
+        <Button class="text tb st fb" :text="'rstBtn' | L" @tap="resetFilter" />
         <Button
           col="2"
-          class="text sm"
+          class="text tb st fb"
           :text="'cBtn' | L"
           @tap="$modal.close()"
         />
         <Button
           col="3"
-          class="text sm"
+          class="text tb st fb"
           :text="'apply' | L"
           @tap="applyFilter"
         />
@@ -66,7 +66,7 @@ let filterTimer;
 export default {
   data() {
     return {
-      filterType: "cuisine",
+      filter: "cuisine",
       localCuisine: null,
       localCategory: null,
       localTag: null,
@@ -100,7 +100,7 @@ export default {
           title: localize(this.localTag),
         },
       ];
-      switch (this.filterType) {
+      switch (this.filter) {
         case "cuisine":
           return arr.slice(0, -2);
         case "category":
@@ -109,7 +109,7 @@ export default {
       return arr;
     },
     filterList() {
-      switch (this.filterType) {
+      switch (this.filter) {
         case "cuisine":
           return this.cuisineList;
         case "category":
@@ -175,19 +175,19 @@ export default {
   methods: {
     ...mapActions(["setCuisine", "setCategory", "setTag", "clearFilter"]),
     pgLoad(args) {
-      this.transparentPage(args);
+      this.mLoad(args);
       this.localCuisine = this.selCuisine;
       this.localCategory = this.selCategory;
       this.localTag = this.selTag;
-      if (this.localCuisine) this.filterType = "category";
-      if (this.localCategory && this.localTag) this.filterType = "tag";
+      if (this.localCuisine) this.filter = "category";
+      if (this.localCategory && this.localTag) this.filter = "tag";
       this.scrollToRight();
     },
     onScrollLoad(args) {
       this.scrollview = args.object;
     },
     setFilterType(type) {
-      this.filterType = type;
+      this.filter = type;
       switch (type) {
         case "cuisine":
           this.localCategory = null;
@@ -210,14 +210,14 @@ export default {
     },
     setRecipeFilter(item) {
       this.reset = 0;
-      switch (this.filterType) {
+      switch (this.filter) {
         case "cuisine":
           this.localCuisine = item;
-          this.filterType = "category";
+          this.filter = "category";
           break;
         case "category":
           this.localCategory = item;
-          if (this.tagList.length) this.filterType = "tag";
+          if (this.tagList.length) this.filter = "tag";
           break;
         default:
           this.localTag = item;
@@ -233,23 +233,19 @@ export default {
       this.$modal.close(this.reset);
     },
     resetFilter() {
-      this.filterType = "cuisine";
+      this.filter = "cuisine";
       this.localCuisine = this.localCategory = this.localTag = null;
       this.reset = 1;
     },
     touch({ object, action }, item) {
-      object.className = action.match(/down|move/)
-        ? "listItem fade"
-        : "listItem ";
+      this.touchFade(object, action);
       if (action == "up") this.setRecipeFilter(item);
     },
     touchSelector({ object, action }, type) {
-      let selected = this.filterType == type;
-      let classes = `segment ${this.RTL ? "rtl" : ""} `;
-      object.className = action.match(/down|move/)
-        ? `${classes}${selected ? "select" : "fade"}`
-        : `${classes}${selected && "select"}`;
-      if (action == "up") this.setFilterType(type);
+      if (this.filter != type) {
+        this.touchFade(object, action);
+        if (action == "up") this.setFilterType(type);
+      }
     },
   },
 };
