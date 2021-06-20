@@ -1,5 +1,8 @@
-- Du kannst jetzt ein Standarddesign für das System auswählen, das den Einstellungen des dunklen Modus deines Geräts folgt (für Android 10 und höher)
-- Eieruhr-Funktion wurde hinzugefügt
+- Du kannst jetzt ein Standardthema für das System auswählen, das den Einstellungen des dunklen Modus Ihres Geräts folgt (für Android 10 und höher)
+- Kurzzeitwecker-Werkzeug wurde hinzugefügt
 - Individuelle Einstellungsseite für jedes Werkzeug
 - Die Rezepte können nun in zufälliger Reihenfolge sortiert werden
-- Unterstützung der Sprachen, die von rechts nach links geschrieben werden
+- Sprachunterstützung, die von rechts zu links geschrieben werden
+- Rezept ausdrucken und duplizieren
+- Überarbeitete Benutzeroberfläche des Mahlzeitenplaners
+- Randwischen zum Zurückgehen

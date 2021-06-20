@@ -10,9 +10,16 @@
         rows="*"
         columns="auto, *"
       >
-        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
+        <Button class="ico end" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
       <Toast :onload="tbLoad" :toast="toast" :action="hideBar" />
+      <Label rowSpan="2" class="edge hal rtl" @swipe="swipeBack" />
+      <Label
+        rowSpan="2"
+        colSpan="2"
+        class="edge har rtl f"
+        @swipe="swipeBack"
+      />
     </RGridLayout>
   </Page>
 </template>
@@ -35,7 +42,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon", "shake", "RTL"]),
+    ...mapState(["icon", "shake", "RTL", "edgeS", "awakeV"]),
     items() {
       return [
         {},
@@ -47,12 +54,28 @@ export default {
           checked: !!this.shake,
           action: this.toggleShake,
         },
+        {
+          type: "switch",
+          icon: "awake",
+          title: "ksavr",
+          subTitle: localize("ksavrInfo"),
+          checked: !!this.awakeV,
+          action: this.toggleAwake,
+        },
+        {
+          type: "switch",
+          icon: "edge",
+          title: "esgb",
+          subTitle: localize("esgbInfo"),
+          checked: !!this.edgeS,
+          action: this.toggleSwipe,
+        },
         {},
       ];
     },
   },
   methods: {
-    ...mapActions(["setShake"]),
+    ...mapActions(["setS", "toggleEdgeS", "toggleAwakeV"]),
     pgLoad({ object }) {
       object.bindingContext = new Observable();
     },
@@ -63,17 +86,23 @@ export default {
       this.toastbar = object;
     },
 
-    // SHAKE VIEW RANDOM RECIPE
     toggleShake() {
       let checked = this.shake;
       if (checked && !utils.hasAccelerometer())
         this.showToast(localize("noAccSensor"));
-      else this.setShake(!checked | 0);
+      else this.setS(+!checked);
     },
+    toggleSwipe() {
+      this.toggleEdgeS(+!this.edgeS);
+    },
+    toggleAwake() {
+      this.toggleAwakeV(+!this.awakeV);
+    },
+
     showToast(data) {
       this.animateBar(this.appbar, 0).then(() => {
         this.toast = data;
-        this.animateBar(this.toastbar, 1);
+        this.animateBar(this.toastbar, 1, 1);
         utils.timer(5, (val) => !val && this.hideBar());
       });
     },

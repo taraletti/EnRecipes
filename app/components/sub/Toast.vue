@@ -3,14 +3,14 @@
     :hidden="!toast"
     row="1"
     colSpan="2"
-    class="appbar snackBar"
+    class="appbar snackbar"
     columns="*"
     @swipe="action"
     @tap="action"
     @loaded="onload"
   >
     <StackLayout minHeight="48">
-      <RLabel class="title msg" :text="toast" />
+      <RLabel padding="16 20" :text="toast" />
     </StackLayout>
   </GridLayout>
 </template>

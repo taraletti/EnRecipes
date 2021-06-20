@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="ksavr">"Mantieni lo schermo attivo durante la visualizzazione di una ricetta"</string>
+  <string name="ksavrInfo">"Impedisce che lo schermo si spenga durante la visualizzazione di una ricetta"</string>
+  <string name="esgb">"Scorri sul bordo per tornare indietro"</string>
+  <string name="esgbInfo">"Disabilita questa opzione se hai problemi di navigazione"</string>
+  <string name="add">"Aggiungi"</string>
+  <string name="rstBtn">"RIPRISTINA"</string>
   <string name="selMT">"Seleziona il tipo di pasto"</string>
   <string name="ehwmp">"Mangia sano con i piani dei pasti!"</string>
-  <string name="plsCrt">"Usa il pulsante più per crearne uno"</string>
+  <string name="plsCrt">"Usa il pulsante + per crearne uno"</string>
   <string name="admp">"Elimina automaticamente i piani pasto"</string>
   <string name="nvr">"Mai"</string>
   <string name="otay">"Dopo un anno"</string>
@@ -13,13 +19,6 @@
   <string name="mnth">"Mese"</string>
   <string name="wk">"Settimana"</string>
   <string name="d">"Giorno"</string>
-  <string name="sun">"domenica"</string>
-  <string name="mon">"lunedì"</string>
-  <string name="tue">"martedì"</string>
-  <string name="wed">"mercoledì"</string>
-  <string name="thu">"giovedì"</string>
-  <string name="fri">"venerdì"</string>
-  <string name="sat">"sabato"</string>
   <string name="cpy">"copia"</string>
   <string name="tdy">"Oggi"</string>
   <string name="tmrw">"Domani"</string>
@@ -37,7 +36,7 @@
   <string name="delPrst">"Stai per eliminare %1$s dalle preimpostazioni"</string>
   <string name="tmrRm">"Contaminuti rimosso"</string>
   <string name="notifSetg">"Impostazioni di notifica"</string>
-  <string name="delay">"Ritardo"</string>
+  <string name="delay">"Ritarda"</string>
   <string name="dlyDur">"Durata del ritardo"</string>
   <string name="minute">"minuto"</string>
   <string name="minutes">"minuti"</string>
@@ -61,7 +60,6 @@
   <string name="yieldU">"Unità di resa"</string>
   <string name="yieldQ">"Quantità di resa"</string>
   <string name="yesterday">"ieri"</string>
-  <string name="WED">"mer"</string>
   <string name="wAgo">"%1$s settimane fa"</string>
   <string name="Vietnamese">"vietnamita"</string>
   <string name="Vegetarian">"Vegetariano"</string>
@@ -72,7 +70,6 @@
   <string name="unit">"unità"</string>
   <string name="Undefined">"Indefinito"</string>
   <string name="Turkish">"turca"</string>
-  <string name="TUE">"mar"</string>
   <string name="tsp">"cucchiaino"</string>
   <string name="tsInfo">"separa con spazi"</string>
   <string name="ts">"Etichette"</string>
@@ -83,7 +80,6 @@
   <string name="today">"oggi"</string>
   <string name="tLInfo">"Le ricette che vuoi provare in seguito sono elencate qui"</string>
   <string name="title">"Titolo"</string>
-  <string name="THU">"gio"</string>
   <string name="Theme">"Tema"</string>
   <string name="Thai">"tailandese"</string>
   <string name="Teaspoon">"Cucchiaino"</string>
@@ -94,7 +90,6 @@
   <string name="Swedish">"svedese"</string>
   <string name="sVwInfo">"Ti aiuta a scegliere cosa cucinare quando non puoi decidere"</string>
   <string name="sVw">"Scuoti per visualizzare una ricetta casuale"</string>
-  <string name="SUN">"dom"</string>
   <string name="strAdd">"Inizia ad aggiungere le tue ricette!"</string>
   <string name="stp">"Passo"</string>
   <string name="stick">"bastone"</string>
@@ -116,32 +111,30 @@
   <string name="SET">"IMPOSTA"</string>
   <string name="Serving">"Porzione"</string>
   <string name="ser">"Cerca"</string>
-  <string name="September">"settembre"</string>
   <string name="selRec">"Seleziona una ricetta"</string>
   <string name="Seafood">"Frutti di mare"</string>
   <string name="Scottish">"scozzese"</string>
   <string name="Sauces">"Salse"</string>
-  <string name="SAT">"sab"</string>
   <string name="Salads">"Insalate"</string>
   <string name="Russian">"russa"</string>
   <string name="rst">"RIAVVIA"</string>
   <string name="rp">"Rimuovi la foto"</string>
   <string name="Roll">"Rotolo"</string>
-  <string name="rmYUInfo">"Stai per rimuovere %1$s dall\'elenco delle unità di rendimento"</string>
-  <string name="rmUInfo">"Stai per rimuovere %1$s dall\'elenco delle unità"</string>
+  <string name="rmYUInfo">"Stai per rimuovere %1$s dall’elenco delle unità di rendimento"</string>
+  <string name="rmUInfo">"Stai per rimuovere %1$s dall’elenco delle unità"</string>
   <string name="rmN">"Nota rimossa"</string>
   <string name="rmIns">"Istruzione rimossa"</string>
   <string name="rmIng">"Ingrediente rimosso"</string>
-  <string name="rmCuiInfo">"Stai per rimuovere %1$s dall\'elenco della cucina"</string>
+  <string name="rmCuiInfo">"Stai per rimuovere %1$s dall’elenco della cucina"</string>
   <string name="rmCmb">"Combinazione rimossa"</string>
-  <string name="rmCatInfo">"Stai per rimuovere %1$s dall\'elenco delle categorie"</string>
+  <string name="rmCatInfo">"Stai per rimuovere %1$s dall’elenco delle categorie"</string>
   <string name="Rice">"Riso"</string>
-  <string name="restYUL">"Reimposta l\'elenco delle unità di resa"</string>
-  <string name="restUL">"Reimposta l\'elenco delle unità"</string>
-  <string name="restInfo">"Il ripristino di un elenco eliminerà le voci create dall\'utente e ripristinerà le voci predefinite. Le ricette esistenti non saranno interessate."</string>
+  <string name="restYUL">"Reimposta l’elenco delle unità di resa"</string>
+  <string name="restUL">"Reimposta l’elenco delle unità"</string>
+  <string name="restInfo">"Il ripristino di un elenco eliminerà le voci create dall’utente e ripristinerà le voci predefinite. Le ricette esistenti non saranno interessate."</string>
   <string name="restDone">"Reimpostazione eseguito"</string>
-  <string name="restCuiL">"Reimposta l\'elenco cucina"</string>
-  <string name="restCatL">"Reimposta l\'elenco delle categorie"</string>
+  <string name="restCuiL">"Reimposta l’elenco cucina"</string>
+  <string name="restCatL">"Reimposta l’elenco delle categorie"</string>
   <string name="rest">"Ripristina"</string>
   <string name="resNF">"Ricetta non trovata"</string>
   <string name="req">"%1$s necessario"</string>
@@ -165,7 +158,7 @@
   <string name="Pound">"Libbra"</string>
   <string name="Poultry">"Pollame"</string>
   <string name="Portuguese">"portoghese"</string>
-  <string name="plsAdd">"Usa il pulsante più per aggiungerne uno"</string>
+  <string name="plsAdd">"Usa il pulsante + per aggiungerne uno"</string>
   <string name="planner">"Pianificatore di pasti"</string>
   <string name="pinch">"pizzico"</string>
   <string name="Piece">"Pezzo"</string>
@@ -179,10 +172,8 @@
   <string name="opts">"Opzioni"</string>
   <string name="_Oldest_first_Z6cq4h">"Prima la più vecchia"</string>
   <string name="OK">"OK"</string>
-  <string name="October">"ottobre"</string>
   <string name="nwYiU">"Nuova unità di resa"</string>
   <string name="nwCat">"Nuova categoria"</string>
-  <string name="November">"novembre"</string>
   <string name="nos">"Note"</string>
   <string name="noRecsInL">"Nessuna delle ricette qui corrisponde alla tua ricerca"</string>
   <string name="noRecs">"Nessuna ricetta corrisponde alla tua ricerca"</string>
@@ -197,7 +188,6 @@
   <string name="newRec">"Nuova ricetta"</string>
   <string name="_Newest_first_2Sb3c">"Prima la più ricente"</string>
   <string name="newCui">"Nuova cucina"</string>
-  <string name="MON">"lun"</string>
   <string name="Moderate">"Moderato"</string>
   <string name="ml">"ml"</string>
   <string name="minimal">"Minima"</string>
@@ -207,8 +197,6 @@
   <string name="Mexican">"messicana"</string>
   <string name="medium">"medio"</string>
   <string name="Meat">"Carne"</string>
-  <string name="May">"maggio"</string>
-  <string name="March">"marzo"</string>
   <string name="_Main_dishes_u6RGQ">"Piatti principali"</string>
   <string name="mAgo">"%1$s mesi fa"</string>
   <string name="lunch">"Pranzo"</string>
@@ -228,12 +216,9 @@
   <string name="kg">"kg"</string>
   <string name="Kenyan">"keniota"</string>
   <string name="kEdit">"CONTINUA A MODIFICARE"</string>
-  <string name="June">"giugno"</string>
-  <string name="July">"luglio"</string>
   <string name="joinTG">"Unisciti al gruppo Telegram"</string>
   <string name="Jewish">"ebraica"</string>
   <string name="Japanese">"giapponese"</string>
-  <string name="January">"gennaio"</string>
   <string name="Jamaican">"giamaicana"</string>
   <string name="Italian">"italiana"</string>
   <string name="it">"Voce"</string>
@@ -262,14 +247,12 @@
   <string name="gal">"gal"</string>
   <string name="g">"g"</string>
   <string name="fsList">"Le tue ricette preferite sono elencate qui"</string>
-  <string name="FRI">"ven"</string>
   <string name="French">"francese"</string>
   <string name="_Fluid_Ounce_bd10L">"Oncia liquida"</string>
   <string name="fltr">"Filtro"</string>
   <string name="_fl_oz_72kqu">"fl oz"</string>
   <string name="_Filtered_recipes_Z1alhhu">"Ricette filtrate"</string>
   <string name="Filipino">"filippina"</string>
-  <string name="February">"febbraio"</string>
   <string name="favourites">"Preferiti"</string>
   <string name="expSuc">"Exportation réussie"</string>
   <string name="expip">"Esportazione in corso"</string>
@@ -291,7 +274,6 @@
   <string name="Desserts">"Dolci"</string>
   <string name="delRecsInfo">"Stai per eliminare definitivamente %1$s"</string>
   <string name="delRecInfo">"Stai per eliminare definitivamente la ricetta %1$s"</string>
-  <string name="December">"dicembre"</string>
   <string name="dBtn">"ELIMINA"</string>
   <string name="db">"Banca dati"</string>
   <string name="Dark">"Scuro"</string>
@@ -324,10 +306,8 @@
   <string name="Black">"Nero"</string>
   <string name="Beverages">"Bevande"</string>
   <string name="Barbecue">"Grigliata"</string>
-  <string name="August">"agosto"</string>
   <string name="aStpBtn">"AGGIUNGI UN PASSO"</string>
-  <string name="April">"aprile"</string>
-  <string name="appRst">"Riavvio dell\'app necessario"</string>
+  <string name="appRst">"Riavvio dell’app necessario"</string>
   <string name="apply">"APPLICA"</string>
   <string name="appInfo">"EnRecipes è un ricettario digitale a codice aperto e rispettoso della riservatezza che ti consente di creare, gestire e condividere le tue ricette"</string>
   <string name="Appetizers">"Antipasti"</string>
@@ -348,5 +328,4 @@
   <string name="aBtn">"AGGIUNGI"</string>
   <string name="About">"Informazioni"</string>
   <string name="aap">"Allega una foto"</string>
-  <string name="add">"Add"</string>
 </resources>

@@ -3,8 +3,15 @@
     <RGridLayout :rtl="RTL" rows="*, auto" columns="auto, *">
       <OptionsList title="intf" :items="items" />
       <GridLayout row="1" class="appbar rtl" rows="*" columns="auto, *">
-        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
+        <Button class="ico end" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
+      <Label rowSpan="2" class="edge hal rtl" @swipe="swipeBack" />
+      <Label
+        rowSpan="2"
+        colSpan="2"
+        class="edge har rtl f"
+        @swipe="swipeBack"
+      />
     </RGridLayout>
   </Page>
 </template>
@@ -25,7 +32,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon", "language", "theme", "layout", "RTL"]),
+    ...mapState(["icon", "langs", "theme", "layout", "RTL"]),
     items() {
       return [
         {},
@@ -42,9 +49,7 @@ export default {
           icon: "theme",
           rtl: 0,
           title: "Theme",
-          subTitle: localize(
-            ApplicationSettings.getString("theme", "sysDef")
-          ),
+          subTitle: localize(ApplicationSettings.getString("theme", "sysDef")),
           action: this.selectThemes,
         },
         {
@@ -60,17 +65,18 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["setTheme", "setLayout", "setRTL"]),
+    ...mapActions(["setT", "setL", "setRTL"]),
     pgLoad({ object }) {
       object.bindingContext = new Observable();
     },
-    // LANGUAGE SELECTION
+    // LanguageSelection
     setAppLang() {
-      let languages = this.language.map((e) => e.title);
+      let languages = this.langs.map((e) => e.title);
       this.$showModal(Action, {
         props: {
           title: "lang",
           list: [...languages],
+          selected: this.applang,
         },
       }).then((action) => {
         if (action && this.applang !== action) {
@@ -78,8 +84,7 @@ export default {
             "appLocale",
             "none"
           ).split("-");
-          let locale = this.language.filter((e) => e.title === action)[0]
-            .locale;
+          let locale = this.langs.filter((e) => e.title === action)[0].locale;
           if (currentLocale !== locale) {
             this.applang = action;
             ApplicationSettings.setString("applang", action);
@@ -91,12 +96,13 @@ export default {
         }
       });
     },
-    // THEME SELECTION
+    // ThemeSelection
     selectThemes() {
       this.$showModal(Action, {
         props: {
           title: "Theme",
           list: ["Light", "Dark", "Black", "sysDef", "sysDefB"],
+          selected: ApplicationSettings.getString("theme", "sysDef"),
         },
       }).then((action) => {
         if (
@@ -105,24 +111,21 @@ export default {
             ? 1
             : this.theme != action)
         ) {
-          this.setTheme(action);
+          this.setT(action);
           Frame.reloadPage();
         }
       });
     },
-    // LAYOUT MODE
+    // LayoutMode
     setLayoutMode() {
       this.$showModal(Action, {
         props: {
           title: "listVM",
           list: ["detailed", "grid", "photogrid", "simple", "minimal"],
+          selected: this.layout,
         },
-      }).then((action) => {
-        if (action && this.layoutMode !== action) {
-          let act = action.toLowerCase();
-          ApplicationSettings.setString("layout", act);
-          this.setLayout(act);
-        }
+      }).then((mode) => {
+        if (mode && this.layout !== mode) this.setL(mode.toLowerCase());
       });
     },
   },

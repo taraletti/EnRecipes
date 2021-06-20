@@ -169,6 +169,44 @@ const listItems = {
   },
 }
 
+interface IRecipe {
+  id: string
+  image: string
+  title: string
+  cuisine: string
+  category: string
+  tags: string[]
+  prepTime: string
+  cookTime: string
+  yieldQuantity: number
+  yieldUnit: string
+  difficulty: string
+  rating: number
+  ingredients: string[]
+  instructions: string[]
+  combinations: string[]
+  notes: string[]
+  favorite: 0 | 1
+  tried: 0 | 1
+  lastTried: number | null
+  lastModified: number | null
+  created: number | null
+}
+interface IMealPlan {
+  id: string
+  date: number
+  mealType: string
+  recipeID: string
+  quantity: number
+  note: string
+}
+interface IMealPlanOld {
+  title: string
+  startDate: number
+  type: string
+  eventColor: string
+}
+
 export default new Vuex.Store({
   state: {
     recipes: [],
@@ -246,9 +284,13 @@ export default new Vuex.Store({
       calv: '\ue941',
       mpd: '\ue942',
       madd: '\ue943',
+      awake: '\ue944',
+      edge: '\ue945',
+      more: '\ue946',
+      less: '\ue947',
     },
-    sortType: 'random',
-    language: [
+    sortT: 'random', // SortType
+    langs: [
       {
         locale: 'ar',
         title: 'العربية',
@@ -264,15 +306,15 @@ export default new Vuex.Store({
       },
       {
         locale: 'en-IN',
-        title: 'English (IN)',
+        title: 'English (India)',
       },
       {
         locale: 'en-GB',
-        title: 'English (UK)',
+        title: 'English (United Kingdom)',
       },
       {
         locale: 'en-US',
-        title: 'English (US)',
+        title: 'English (United States)',
       },
       {
         locale: 'es',
@@ -284,15 +326,15 @@ export default new Vuex.Store({
       },
       {
         locale: 'fr-BE',
-        title: 'Français (BE)',
+        title: 'Français (Belgium)',
       },
       {
         locale: 'fr-CA',
-        title: 'Français (CA)',
+        title: 'Français (Canada)',
       },
       {
         locale: 'fr-CH',
-        title: 'Français (CH)',
+        title: 'Français (Switzerland)',
       },
       {
         locale: 'hi',
@@ -306,14 +348,14 @@ export default new Vuex.Store({
         locale: 'it',
         title: 'Italiano',
       },
-      // {
-      //   locale: 'ja',
-      //   title: '日本語',
-      // },
-      // {
-      //   locale: 'ml',
-      //   title: 'മലയാളം',
-      // },
+      {
+        locale: 'ja',
+        title: '日本語',
+      },
+      {
+        locale: 'ml',
+        title: 'മലയാളം',
+      },
       {
         locale: 'nb-NO',
         title: 'Norsk bokmål',
@@ -328,7 +370,7 @@ export default new Vuex.Store({
       },
       {
         locale: 'pt-BR',
-        title: 'Português (BR)',
+        title: 'Português (Brazil)',
       },
       {
         locale: 'ru',
@@ -343,60 +385,80 @@ export default new Vuex.Store({
         title: 'తెలుగు',
       },
     ],
-    shake: getNumber('shake', 1),
-    importSummary: {
+    shake: getNumber('shake', 1), // ShakeViewRandomRecipe
+    impSum: {
+      // ImportSummary
       found: 0,
       imported: 0,
       updated: 0,
     },
     layout: getString('layout', 'detailed'),
-    selCuisine: null,
-    selCategory: null,
-    selTag: null,
+    selCuisine: null, // SelectedCuisine
+    selCategory: null, // SelectedCategory
+    selTag: null, // SelectedTag
     theme: 'sysDef',
-    mondayFirst: getNumber('mondayFirst', 0),
-    timerDelay: getNumber('timerDelay', 1),
-    timerSound: {},
-    timerVibrate: getNumber('timerVibrate', 0),
-    timerPresets: [],
-    activeTimers: [],
-    FGService: 0,
+    startMon: getNumber('startMon', 0), // StartWithMonday
+    timerD: getNumber('timerD', 1), // TimerDelay
+    timerS: {}, // TimerSound
+    timerV: getNumber('timerV', 0), // TimerVibrate
+    timerPs: [], // TimerPresets
+    activeTs: [], // ActiveTimers
+    FGS: 0, // ForeGroundService
     RTL: getNumber('RTL', 0),
-    plannerView: getString('plannerView', 'wk'),
-    planDeletion: getString('planDeletion', 'nvr'),
+    plannerV: getString('plannerV', 'wk'), // PlannerViewMode
+    planDel: getString('planDel', 'nvr'), // PlanDeletionCriteria
+    edgeS: getNumber('edgeS', 1), // EdgeSwipe
+    awakeV: getNumber('awakeV', 1), // AwakeViewer
   },
   mutations: {
-    setPlanDeletion(state, s) {
-      state.planDeletion = s
-      setString('planDeletion', s)
+    // ToggleKeepAwakeOnRecipeViewer
+    toggleAwakeV(state) {
+      state.awakeV = +!state.awakeV
+      setNumber('awakeV', state.awakeV)
     },
-    setPlannerView(state, s) {
-      state.plannerView = s
-      setString('plannerView', s)
+    // ToggleEdgeSwipe
+    toggleEdgeS(state) {
+      state.edgeS = +!state.edgeS
+      setNumber('edgeS', state.edgeS)
     },
+    // SetPlanDeletionCriteria
+    setPlanDel(state, s: string) {
+      state.planDel = s
+      setString('planDel', s)
+    },
+    // SetPlannerViewMode
+    setPlannerV(state, s: string) {
+      state.plannerV = s
+      setString('plannerV', s)
+    },
+    // SetRTLLayout
     setRTL(state) {
       state.RTL = getNumber('RTL', 0)
     },
-    setFGService(state, val) {
-      state.FGService = val
+    // SetForegroundService
+    setFgS(state, n: number) {
+      state.FGS = n
     },
-    addTimerPreset(state, timer) {
-      let i = state.timerPresets.findIndex((e) => e.id == timer.id)
-      if (state.timerPresets.some((e) => e.id == timer.id)) {
-        state.timerPresets.splice(i, 1, timer)
-      } else state.timerPresets.push(timer)
+    // AddTimerPreset
+    addTP(state, o) {
+      let i = state.timerPs.findIndex((e) => e.id == o.id)
+      if (state.timerPs.some((e) => e.id == o.id)) {
+        state.timerPs.splice(i, 1, o)
+      } else state.timerPs.push(o)
       db.execute(
         `REPLACE INTO timerPresets (id, label, time) VALUES (?, ?, ?)`,
-        [timer.id, timer.label, timer.time]
+        [o.id, o.label, o.time]
       )
     },
-    deleteTimerPreset(state, i) {
-      let id = state.timerPresets[i]
-      state.timerPresets.splice(i, 1)
+    // DeleteTimerPreset
+    deleteTP(state, n: number) {
+      let id = state.timerPs[n]
+      state.timerPs.splice(n, 1)
       db.execute(`DELETE FROM timerPresets WHERE id = ${id}`)
     },
-    initTimerPresets(state) {
-      if (!state.timerPresets.length)
+    // InitialiseTimerPreset
+    initTPs(state) {
+      if (!state.timerPs.length)
         db.select(`SELECT * FROM timerPresets`).then((res) => {
           res.forEach((t) => {
             t.recipeID = 0
@@ -404,66 +466,78 @@ export default new Vuex.Store({
             t.isPaused = 0
             t.preset = 1
             t.done = 0
-            state.timerPresets.push(t)
+            state.timerPs.push(t)
           })
         })
     },
-    importTimerPresets(state, timers) {
-      let newPresets = timers.filter(
-        (e) => !state.timerPresets.some((f) => f.id === e.id)
+    // ImportTimerPresets
+    importTPs(state, ao) {
+      let newPresets = ao.filter(
+        (e) => !state.timerPs.some((f) => f.id === e.id)
       )
       newPresets.forEach((t) => {
         db.execute(
           `INSERT INTO timerPresets (id, label, time) VALUES (?, ?, ?)`,
           [t.id, t.label, t.time]
         )
-        state.timerPresets.push(t)
+        state.timerPs.push(t)
       })
     },
-    clearTimerInterval(state) {
-      state.activeTimers.forEach((e) => {
+    // ClearActiveTimerInterval
+    clearATIs(state) {
+      state.activeTs.forEach((e) => {
         clearInterval(e.timerInt)
         e.timerInt = 0
       })
     },
-    addActiveTimer(state, { timer, i }) {
-      state.activeTimers.splice(i, 0, timer)
+    // AddActiveTimer
+    addAT(state, { timer, i }) {
+      state.activeTs.splice(i, 0, timer)
     },
-    sortActiveTimers(state) {
-      let a = state.activeTimers.reduce((acc, e) => {
+    // SortActiveTimers
+    sortATs(state) {
+      let a = state.activeTs.reduce((acc, e) => {
         ;(acc[e.recipeID] = acc[e.recipeID] || []).push(e)
         return acc
       }, {})
-      state.activeTimers = [...(<any>Object).values(a).flat(2)]
+      state.activeTs = [...(<any>Object).values(a).flat(2)]
     },
-    updateActiveTimer(state, timer) {
-      let i = state.activeTimers.findIndex((e) => e.id == timer.id)
-      state.activeTimers.splice(i, 1, timer)
+    // UpdateActiveTimer
+    updateAT(state, o) {
+      let i = state.activeTs.findIndex((e) => e.id == o.id)
+      state.activeTs.splice(i, 1, o)
     },
-    removeActiveTimer(state, i) {
-      state.activeTimers.splice(i, 1)
+    // RemoveActiveTimer
+    removeAT(state, n: number) {
+      state.activeTs.splice(n, 1)
     },
-    setTimerDelay(state, n: number) {
-      state.timerDelay = n
-      setNumber('timerDelay', n)
+    // SetTimerDelay
+    setTD(state, n: number) {
+      state.timerD = n
+      setNumber('timerD', n)
     },
-    setTimerSound(state, sound) {
-      state.timerSound = sound
-      setString('timerSound', JSON.stringify(sound))
+    // SetTimerSound
+    setTS(state, s: string) {
+      state.timerS = s
+      setString('timerS', JSON.stringify(s))
     },
-    setTimerVibrate(state, n) {
-      state.timerVibrate = n
-      setNumber('timerVibrate', n)
+    // SetTimerVibrate
+    setTV(state, n: number) {
+      state.timerV = n
+      setNumber('timerV', n)
     },
-    clearImportSummary(state) {
-      for (const key in state.importSummary) state.importSummary[key] = 0
+    // ClearImportSummary
+    clearIS(state) {
+      for (const key in state.impSum) state.impSum[key] = 0
     },
-    setFirstDay(state, n) {
-      state.mondayFirst = n
-      setNumber('mondayFirst', n)
+    // SetFirstDayMonday
+    setFD(state, n: number) {
+      state.startMon = n
+      setNumber('startMon', n)
     },
-    setTheme(state, theme) {
-      switch (theme) {
+    // SetTheme
+    setT(state, s: string) {
+      switch (s) {
         case 'sysDef':
           state.theme =
             Application.systemAppearance() == 'dark' ? 'Dark' : 'Light'
@@ -473,21 +547,26 @@ export default new Vuex.Store({
             Application.systemAppearance() == 'dark' ? 'Black' : 'Light'
           break
         default:
-          state.theme = theme
+          state.theme = s
           break
       }
-      setString('theme', theme)
+      setString('theme', s)
     },
-    clearFilter(state) {
+    // ClearFilter
+    clearF(state) {
       state.selCuisine = state.selCategory = state.selTag = null
     },
-    setLayout(state, type) {
-      state.layout = type
+    // SetLayout
+    setL(state, s: string) {
+      state.layout = s
+      setString('layout', s)
     },
-    setSortType(state, sortType) {
-      state.sortType = sortType
+    // SetSortType
+    setST(state, s: string) {
+      state.sortT = s
     },
-    initRecipes(state) {
+    // InitialiseRecipes
+    initRs(state) {
       if (!state.recipes.length) {
         db.select('SELECT * FROM recipes').then((res) => {
           res.forEach((e) => {
@@ -501,9 +580,10 @@ export default new Vuex.Store({
         })
       }
       state.shake = getNumber('shake', 1)
-      state.sortType = getString('sortType', 'random')
+      state.sortT = getString('sortT', 'random')
     },
-    importRecipesFromJSON(state, recipes) {
+    // ImportRecipesFromJSON
+    importRsJSON(state, ao) {
       let localRecipesIDs, partition
       let imported = 0
       let updated = 0
@@ -615,7 +695,7 @@ export default new Vuex.Store({
       }
       if (state.recipes.length) {
         localRecipesIDs = state.recipes.map((e) => e.id)
-        partition = recipes.reduce(
+        partition = ao.reduce(
           (result, recipe) => {
             localRecipesIDs.indexOf(recipe.id) < 0
               ? result[0].push(recipe) // create candidates
@@ -627,13 +707,14 @@ export default new Vuex.Store({
         if (partition[0].length) createDocuments(partition[0])
         if (partition[1].length) updateDocuments(partition[1])
       } else {
-        createDocuments(recipes)
+        createDocuments(ao)
       }
-      state.importSummary.found = recipes.length
-      state.importSummary.imported = imported
-      state.importSummary.updated = updated
+      state.impSum.found = ao.length
+      state.impSum.imported = imported
+      state.impSum.updated = updated
     },
-    importRecipesFromDB(state, recipes) {
+    // ImportRecipesFromDB
+    importRsDB(state, ao) {
       let localRecipesIDs: string[], partition: any[]
       let imported = 0
       let updated = 0
@@ -686,7 +767,7 @@ export default new Vuex.Store({
       }
       if (state.recipes.length) {
         localRecipesIDs = state.recipes.map((e) => e.id)
-        partition = recipes.reduce(
+        partition = ao.reduce(
           (result, recipe) => {
             localRecipesIDs.indexOf(recipe.id) < 0
               ? result[0].push(recipe) // create candidates
@@ -697,20 +778,21 @@ export default new Vuex.Store({
         )
         if (partition[0].length) createDocuments(partition[0])
         if (partition[1].length) updateDocuments(partition[1])
-      } else createDocuments(recipes)
-      state.importSummary.found = recipes.length
-      state.importSummary.imported = imported
-      state.importSummary.updated = updated
+      } else createDocuments(ao)
+      state.impSum.found = ao.length
+      state.impSum.imported = imported
+      state.impSum.updated = updated
     },
-    addRecipe(state, recipe) {
-      let r = JSON.parse(JSON.stringify(recipe))
-      Object.keys(recipe).forEach((e) => {
+    // AddRecipe
+    addR(state, o: IRecipe) {
+      let r = JSON.parse(JSON.stringify(o))
+      Object.keys(o).forEach((e) => {
         if (e.match(/tags|ingredients|instructions|combinations|notes/))
           r[e] = JSON.stringify(r[e])
         if (e.match(/favorite|tried/)) r[e] = r[e] ? 1 : 0
       })
-      const cols = Object.keys(recipe).join(', ')
-      const placeholder = Object.keys(recipe)
+      const cols = Object.keys(o).join(', ')
+      const placeholder = Object.keys(o)
         .fill('?')
         .join(', ')
       db.execute(
@@ -719,18 +801,19 @@ export default new Vuex.Store({
       )
       let i: number
       function exist({ id }, index: number) {
-        if (id === recipe.id) {
+        if (id === o.id) {
           i = index
           return 1
         }
         return 0
       }
       state.recipes.some(exist)
-        ? Object.assign(state.recipes[i], recipe)
-        : state.recipes.push(recipe)
+        ? Object.assign(state.recipes[i], o)
+        : state.recipes.push(o)
     },
-    deleteRecipes(state, ids) {
-      ids.forEach((id: string) => {
+    // DeleteRecipes
+    deleteRs(state, a) {
+      a.forEach((id: string) => {
         let i = state.recipes.findIndex((e) => e.id === id)
         getFileAccess().deleteFile(state.recipes[i].image)
         state.recipes.splice(i, 1)
@@ -747,7 +830,8 @@ export default new Vuex.Store({
         })
       })
     },
-    initListItems(state) {
+    // InitialiseListItems
+    initLIs(state) {
       if (!state.cuisines.length) {
         db.select(`SELECT * FROM lists`).then((res) => {
           if (!res.length) {
@@ -775,14 +859,16 @@ export default new Vuex.Store({
         })
       }
     },
-    importListItems(state, { data, listName }) {
+    // ImportListItems
+    importLIs(state, { data, listName }) {
       state[listName] = [...new Set([...state[listName], ...data])]
       if (listItems[listName].sort) state[listName].sort()
       db.execute(
         `UPDATE lists SET ${listName} = '${JSON.stringify(state[listName])}'`
       )
     },
-    addListItem(state, { item, listName }) {
+    // AddListItem
+    addLI(state, { item, listName }) {
       let lowercase = state[listName].map((e: string) => e.toLowerCase())
       if (lowercase.indexOf(item.toLowerCase()) == -1) {
         state[listName].push(item)
@@ -795,13 +881,15 @@ export default new Vuex.Store({
         )
       }
     },
-    removeListItem(state, { item, listName }) {
+    // RemoveListItem
+    removeLI(state, { item, listName }) {
       state[listName].splice(state[listName].indexOf(item), 1)
       db.execute(
         `UPDATE lists SET ${listName} = '${JSON.stringify(state[listName])}'`
       )
     },
-    resetListItems(state, listName) {
+    // ResetListItems
+    resetLIs(state, listName) {
       let defs = listItems[listName].defs
       state[listName] = [...defs]
       if (listItems[listName].sort)
@@ -812,35 +900,34 @@ export default new Vuex.Store({
         `UPDATE lists SET ${listName} = '${JSON.stringify(state[listName])}'`
       )
     },
-    initMealPlans(state) {
+    // InitialiseMealPlans
+    initMPs(state) {
       if (!state.mealPlans.length) {
-        let c = state.planDeletion
+        let c = state.planDel
         let date = new Date()
         let d = new Date()
-        if (c != 'nvr') {
-          d.setHours(0, 0, 0, 0)
-          let ld =
-            c == 'otay'
-              ? 365
-              : c == 'otam'
-              ? new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
-              : 7
-          d.setDate(d.getDate() - ld)
-        }
+        d.setHours(0, 0, 0, 0)
+        let ld =
+          c == 'otay'
+            ? 365
+            : c == 'otam'
+            ? new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
+            : 7
+        d.setDate(d.getDate() - ld)
 
         db.select(`SELECT * FROM mealPlans`).then((res) =>
-          res.forEach((p: any) => {
-            if (p.date < d.getTime())
-              // DeletingOldMealPlans
-              db.execute(`DELETE FROM mealPlans WHERE id = '${p.id}'`)
-            else state.mealPlans.push(p)
-          })
+          res.forEach((p: any) =>
+            c !== 'nvr' && p.date < d.getTime()
+              ? db.execute(`DELETE FROM mealPlans WHERE id = '${p.id}'`)
+              : state.mealPlans.push(p)
+          )
         )
       }
     },
-    importMealPlansFromJSON(state, mealPlans) {
+    // ImportMealPlansFromJSON
+    importMPsJSON(state, ao) {
       let updatedMealPlans = []
-      let newMealPlans = mealPlans.filter((e) => {
+      let newMealPlans = ao.filter((e) => {
         if (e.hasOwnProperty('eventColor')) {
           return !state.mealPlans.some((f) => {
             let d = new Date(e.startDate)
@@ -920,8 +1007,9 @@ export default new Vuex.Store({
         )
       })
     },
-    importMealPlansFromDB(state, mealPlans) {
-      let newMealPlans = mealPlans.filter(
+    // ImportMealPlansFromDB
+    importMPsDB(state, ao: IMealPlan[]) {
+      let newMealPlans = ao.filter(
         (e) =>
           !state.mealPlans.some((f) =>
             Object.keys(f).every((key) => f[key] == e[key])
@@ -935,7 +1023,11 @@ export default new Vuex.Store({
         )
       })
     },
-    addMealPlan(state, { plan, index, inDB }) {
+    // AddMealPlan
+    addMP(
+      state,
+      { plan, index, inDB }: { plan: IMealPlan; index: number; inDB: number }
+    ) {
       let mealPlan = {
         id: plan.id,
         date: plan.date,
@@ -958,7 +1050,11 @@ export default new Vuex.Store({
         state.mealPlans.splice(index, 0, mealPlan)
       }
     },
-    deleteMealPlan(state, { id, index, inDB }) {
+    // DeleteMealPlan
+    deleteMP(
+      state,
+      { id, index, inDB }: { id: string; index: number; inDB?: number }
+    ) {
       if (inDB) {
         db.execute(`DELETE FROM mealPlans WHERE id = '${id}'`)
       } else {
@@ -979,9 +1075,10 @@ export default new Vuex.Store({
         )
       }
     },
-    unSyncCombinations(state, { id, combinations }) {
+    // UnLinkCombinations
+    unLinkCs(state, { id, combs }) {
       state.recipes.forEach((e, i) => {
-        if (combinations.includes(e.id)) {
+        if (combs.includes(e.id)) {
           state.recipes[i].combinations.splice(e.combinations.indexOf(id), 1)
           db.execute(
             `UPDATE recipes SET combinations = '${JSON.stringify(
@@ -991,20 +1088,19 @@ export default new Vuex.Store({
         }
       })
     },
-    setShake(state, n) {
+    // SetShake
+    setS(state, n: number) {
       state.shake = n
       setNumber('shake', n)
     },
-    setRating(state, { id, rating }) {
+    // SetRating
+    setR(state, { id, r }) {
       let i = state.recipes.findIndex((e) => e.id == id)
-      state.recipes[i].rating = rating
-      db.execute(`UPDATE recipes SET rating = ${rating} WHERE id = '${id}'`)
+      state.recipes[i].rating = r
+      db.execute(`UPDATE recipes SET rating = ${r} WHERE id = '${id}'`)
     },
-    toggleCart(state, { id }) {
-      let i = state.recipes.indexOf(state.recipes.filter((e) => e.id === id)[0])
-      state.recipes[i].inBag = !state.recipes[i].inBag
-    },
-    unlinkBrokenImages(state) {
+    // UnLinkBrokenImages
+    unLinkBIs(state) {
       state.recipes.forEach((r, i) => {
         if (r.image && !File.exists(r.image)) {
           r.image = null
@@ -1013,154 +1109,157 @@ export default new Vuex.Store({
         }
       })
     },
-    setCuisine(state, value) {
-      state.selCuisine = value
+    setCuisine(state, s: string) {
+      state.selCuisine = s
     },
-    setCategory(state, value) {
-      state.selCategory = value
+    setCategory(state, s: string) {
+      state.selCategory = s
     },
-    setTag(state, value) {
-      state.selTag = value
+    setTag(state, s: string) {
+      state.selTag = s
     },
   },
   actions: {
-    setPlanDeletion({ commit }, s) {
-      commit('setPlanDeletion', s)
+    toggleAwakeV({ commit }) {
+      commit('toggleAwakeV')
     },
-    setPlannerView({ commit }, s) {
-      commit('setPlannerView', s)
+    toggleEdgeS({ commit }) {
+      commit('toggleEdgeS')
+    },
+    setPlanDel({ commit }, s: string) {
+      commit('setPlanDel', s)
+    },
+    setPlannerV({ commit }, s: string) {
+      commit('setPlannerV', s)
     },
     setRTL({ commit }) {
       commit('setRTL')
     },
-    sortActiveTimers({ commit }) {
-      commit('sortActiveTimers')
+    sortATs({ commit }) {
+      commit('sortATs')
     },
-    setFGService({ commit }, val) {
-      commit('setFGService', val)
+    setFgS({ commit }, n: number) {
+      commit('setFgS', n)
     },
-    addTimerPreset({ commit }, timer) {
-      commit('addTimerPreset', timer)
+    addTP({ commit }, o) {
+      commit('addTP', o)
     },
-    deleteTimerPreset({ commit }, timer) {
-      commit('deleteTimerPreset', timer)
+    deleteTP({ commit }, o) {
+      commit('deleteTP', o)
     },
-    initTimerPresets({ commit }) {
-      commit('initTimerPresets')
+    initTPs({ commit }) {
+      commit('initTPs')
     },
-    importTimerPresets({ commit }, timers) {
-      commit('importTimerPresets', timers)
+    importTPs({ commit }, ao) {
+      commit('importTPs', ao)
     },
-    clearTimerInterval({ commit }) {
-      commit('clearTimerInterval')
+    clearATIs({ commit }) {
+      commit('clearATIs')
     },
-    addActiveTimer({ commit }, timer) {
-      commit('addActiveTimer', timer)
+    addAT({ commit }, o) {
+      commit('addAT', o)
     },
-    updateActiveTimer({ commit }, timer) {
-      commit('updateActiveTimer', timer)
+    updateAT({ commit }, o) {
+      commit('updateAT', o)
     },
-    removeActiveTimer({ commit }, i) {
-      commit('removeActiveTimer', i)
+    removeAT({ commit }, n: number) {
+      commit('removeAT', n)
     },
-    setTimerDelay({ commit }, n) {
-      commit('setTimerDelay', n)
+    setTD({ commit }, n: number) {
+      commit('setTD', n)
     },
-    setTimerSound({ commit }, sound) {
-      commit('setTimerSound', sound)
+    setTS({ commit }, s: string) {
+      commit('setTS', s)
     },
-    setTimerVibrate({ commit }, n) {
-      commit('setTimerVibrate', n)
+    setTV({ commit }, n: number) {
+      commit('setTV', n)
     },
-    clearImportSummary({ commit }) {
-      commit('clearImportSummary')
+    clearIS({ commit }) {
+      commit('clearIS')
     },
-    setFirstDay({ commit }, n) {
-      commit('setFirstDay', n)
+    setFD({ commit }, n: number) {
+      commit('setFD', n)
     },
-    setTheme({ commit }, theme) {
-      commit('setTheme', theme)
+    setT({ commit }, s: string) {
+      commit('setT', s)
     },
-    clearFilter({ commit }) {
-      commit('clearFilter')
+    clearF({ commit }) {
+      commit('clearF')
     },
-    setLayout({ commit }, type) {
-      commit('setLayout', type)
+    setL({ commit }, s: string) {
+      commit('setL', s)
     },
-    setSortType({ commit }, sortType) {
-      commit('setSortType', sortType)
+    setST({ commit }, s: string) {
+      commit('setST', s)
     },
-    initRecipes({ commit }) {
-      commit('initRecipes')
+    initRs({ commit }) {
+      commit('initRs')
     },
-    importRecipesFromJSON({ commit }, recipes) {
-      commit('importRecipesFromJSON', recipes)
+    importRsJSON({ commit }, ao) {
+      commit('importRsJSON', ao)
     },
-    importRecipesFromDB({ commit }, recipes) {
-      commit('importRecipesFromDB', recipes)
+    importRsDB({ commit }, ao) {
+      commit('importRsDB', ao)
     },
-    addRecipeAction({ commit }, recipe) {
-      commit('addRecipe', recipe)
+    addR({ commit }, o) {
+      commit('addR', o)
     },
-    deleteRecipes({ commit }, ids) {
-      commit('deleteRecipes', ids)
+    deleteRs({ commit }, a) {
+      commit('deleteRs', a)
     },
-    initListItems({ commit }) {
-      commit('initListItems')
+    initLIs({ commit }) {
+      commit('initLIs')
     },
-    importListItems({ commit }, data) {
-      commit('importListItems', data)
+    importLIs({ commit }, ao) {
+      commit('importLIs', ao)
     },
-    addListItemAction({ commit }, item) {
-      commit('addListItem', item)
+    addLI({ commit }, s: string) {
+      commit('addLI', s)
     },
-    removeListItemAction({ commit }, item) {
-      commit('removeListItem', item)
+    removeLI({ commit }, s: string) {
+      commit('removeLI', s)
     },
-    resetListItemsAction({ commit }, listName) {
-      commit('resetListItems', listName)
+    resetLIs({ commit }, s: string) {
+      commit('resetLIs', s)
     },
-    initMealPlans({ commit }) {
-      commit('initMealPlans')
+    initMPs({ commit }) {
+      commit('initMPs')
     },
-    importMealPlansFromJSON({ commit }, mealPlans) {
-      commit('importMealPlansFromJSON', mealPlans)
+    importMPsJSON({ commit }, ao) {
+      commit('importMPsJSON', ao)
     },
-    importMealPlansFromDB({ commit }, mealPlans) {
-      commit('importMealPlansFromDB', mealPlans)
+    importMPsDB({ commit }, ao) {
+      commit('importMPsDB', ao)
     },
-    addMealPlanAction({ commit }, mealPlan) {
-      commit('addMealPlan', mealPlan)
+    addMP({ commit }, o) {
+      commit('addMP', o)
     },
-    deleteMealPlanAction({ commit }, mealPlan) {
-      commit('deleteMealPlan', mealPlan)
+    deleteMP({ commit }, o) {
+      commit('deleteMP', o)
     },
-    toggleStateAction({ commit }, toggledRecipe) {
-      commit('toggleState', toggledRecipe)
+    toggleState({ commit }, o) {
+      commit('toggleState', o)
     },
-    unSyncCombinationsAction({ commit }, combinations) {
-      commit('unSyncCombinations', combinations)
+    unLinkCs({ commit }, a) {
+      commit('unLinkCs', a)
     },
-    setShake({ commit }, n) {
-      commit('setShake', n)
+    setS({ commit }, n: number) {
+      commit('setS', n)
     },
-    setRatingAction({ commit }, rating) {
-      commit('setRating', rating)
+    setR({ commit }, n: number) {
+      commit('setR', n)
     },
-    toggleCartAction({ commit }, recipe) {
-      commit('toggleCart', recipe)
+    unLinkBIs({ commit }) {
+      commit('unLinkBIs')
     },
-    unlinkBrokenImages({ commit }) {
-      commit('unlinkBrokenImages')
+    setCuisine({ commit }, s: string) {
+      commit('setCuisine', s)
     },
-    setCuisine({ commit }, value) {
-      commit('setCuisine', value)
+    setCategory({ commit }, s: string) {
+      commit('setCategory', s)
     },
-    setCategory({ commit }, value) {
-      commit('setCategory', value)
-    },
-    setTag({ commit }, value) {
-      commit('setTag', value)
+    setTag({ commit }, s: string) {
+      commit('setTag', s)
     },
   },
 })

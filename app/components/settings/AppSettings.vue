@@ -3,8 +3,15 @@
     <RGridLayout :rtl="RTL" rows="*, auto" columns="auto, *">
       <OptionsList title="Settings" :items="items" :action="navigateTo" />
       <GridLayout row="1" class="appbar rtl" rows="*" columns="auto, *">
-        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
+        <Button class="ico end" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
+      <Label rowSpan="2" class="edge hal rtl" @swipe="swipeBack" />
+      <Label
+        rowSpan="2"
+        colSpan="2"
+        class="edge har rtl f"
+        @swipe="swipeBack"
+      />
     </RGridLayout>
   </Page>
 </template>
@@ -70,7 +77,6 @@ export default {
     pgLoad({ object }) {
       object.bindingContext = new Observable();
     },
-    // HELPERS
     navigateTo(view) {
       this.$navigateTo(view, {
         animated: false,

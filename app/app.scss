@@ -17,7 +17,7 @@ $t1: 25;
 $t2: 21;
 $t3: 17;
 $t4: 14;
-$t5: 12; // Base size
+$t5: 12; // Base
 $t6: 10;
 
 Page {
@@ -25,34 +25,35 @@ Page {
   font-size: $t4;
 }
 .ico {
-  font-family: 'enrecipes';
-  font-size: 24;
-  vertical-alignment: center;
-  &.sm {
+  font-family: 'EnRecipes';
+  font-size: 23;
+  &.s {
     font-size: $t3;
     opacity: 0.5;
   }
 }
+.vc {
+  vertical-align: center;
+}
 .tb {
   font-family: 'Inter-Bold', sans-serif;
 }
-.tac {
+.tc {
   text-align: center;
 }
 .tw {
   text-wrap: true;
 }
-.pageTitle {
-  @extend .tb;
-  @extend .tw;
+
+.pTitle {
   font-size: $t1;
   padding: 16 16 24;
 }
+
 .Light {
   color: $gray9;
   background: $gray1;
   Page,
-  .filters,
   .sticky {
     background: $gray1;
   }
@@ -67,8 +68,9 @@ Page {
   .appbar,
   .modal {
     background: $gray0;
+    box-shadow: 0 2 rgba($gray10, 0.1);
   }
-  .fieldLabel,
+  .fLabel,
   .sub {
     color: $gray6;
   }
@@ -76,7 +78,7 @@ Page {
     color: $gray3;
     background: $gray2;
   }
-  .snackBar {
+  .snackbar {
     color: $gray1;
     background: $gray9;
   }
@@ -88,7 +90,6 @@ Page {
   color: $gray1;
   background: $gray9;
   Page,
-  .filters,
   .sticky {
     background: $gray9;
   }
@@ -105,7 +106,7 @@ Page {
     color: $gray0;
     background: $gray8;
   }
-  .fieldLabel,
+  .fLabel,
   .sub {
     color: $gray5;
   }
@@ -113,7 +114,7 @@ Page {
     color: $gray9;
     background: $gray10;
   }
-  .snackBar {
+  .snackbar {
     color: $gray9;
     background: $gray1;
   }
@@ -125,7 +126,6 @@ Page {
   color: $gray2;
   background: $gray10;
   Page,
-  .filters,
   .sticky {
     background: $gray10;
   }
@@ -142,7 +142,7 @@ Page {
     color: $gray1;
     background: $gray9;
   }
-  .fieldLabel,
+  .fLabel,
   .sub {
     color: $gray6;
   }
@@ -150,7 +150,7 @@ Page {
     color: $gray10;
     background: $gray9;
   }
-  .snackBar {
+  .snackbar {
     color: $gray10;
     background: $gray2;
   }
@@ -158,8 +158,9 @@ Page {
     color: $gray10;
   }
 }
+
 TextField.combField,
-#searchBar {
+#search {
   border-color: transparent;
 }
 
@@ -167,28 +168,24 @@ TextField.combField,
 // Elements
 TextField,
 TextView {
-  width: 100%;
+  // width: 100%;
   padding: 14 8;
   border-bottom-width: 1;
 }
 TextView {
   line-height: 4;
 }
-#searchBar {
-  padding: 13 12;
+#search {
+  padding: 13 8;
 }
-.inputField {
+.inputC {
   margin-bottom: 24;
 }
-.fieldLabel {
+.fLabel {
   font-size: $t5;
-}
-.progressContainer {
-  width: 100%;
 }
 progress {
   color: $orange;
-  width: 100%;
   height: 2;
   background-color: $gray5;
 }
@@ -197,12 +194,17 @@ Switch {
   off-background-color: $gray5;
 }
 button {
-  background-color: transparent;
   z-index: 0;
   padding: 8;
   border-radius: 12;
   min-width: 0;
   min-height: 0;
+  text-transform: none;
+  background-color: transparent;
+  &.sst {
+    width: 48;
+    height: 48;
+  }
   &.ico {
     width: 48;
     height: 48;
@@ -212,36 +214,28 @@ button {
       @extend .fade;
     }
   }
+  &.si {
+    width: 40;
+    height: 40;
+  }
   &.text {
-    @extend .tb;
     color: $orange;
-    &:active {
-      @extend .fade;
-    }
+  }
+  &.st {
+    font-size: $t5;
+    padding: 12;
   }
   &.big {
     margin-top: 8;
     padding: 16 0;
   }
-  &.sm {
-    font-size: $t5;
-    padding: 12;
-  }
-  &.min {
-    width: 40;
-    height: 40;
-    vertical-alignment: center;
-  }
-  &.fb:active {
-    @extend .fade;
-  }
   &.rate {
     margin: 0 4 0 0;
     width: 32;
     height: 32;
-    &:active {
-      @extend .fade;
-    }
+  }
+  &.fb:active {
+    @extend .fade;
   }
 }
 ActivityIndicator {
@@ -255,52 +249,40 @@ ActivityIndicator {
 // Home
 .segment {
   border-radius: 12;
-  margin: 0 4 0 0;
-  padding: 0 12;
-  .value {
-    padding: 0 0 0 8;
-    vertical-alignment: center;
-    &.r {
-      padding: 0 8 0 0;
-      transform: scaleX(-1);
-    }
+  padding: 8;
+  .v {
+    padding: 0 4;
   }
 }
-.select {
-  color: $orange;
-  @extend .hl;
+.t3 {
+  font-size: $t3;
 }
-.emptyState {
+.empty {
   padding: 16 16 8;
-  label {
-    @extend .tw;
-  }
-  .title {
-    @extend .tb;
-    font-size: $t3;
-  }
 }
 
 // -----------------------------
 // Recipe Item
-.recipeItem {
+.recipe {
   padding: 8 16;
-  .recipeInfo {
-    vertical-alignment: center;
+  .info {
     padding: 0 8 4;
   }
   .title {
     padding: 0 0 4;
   }
 }
-.attrs {
+.oh {
   orientation: horizontal;
+}
+.t6 {
+  font-size: $t6;
 }
 .attr {
   font-size: $t6;
-  padding: 1 4;
+  padding: 0 4 2;
 }
-.simple .recipeInfo {
+.simple .info {
   padding: 8 0;
 }
 .minimal .title {
@@ -308,7 +290,7 @@ ActivityIndicator {
 }
 .grid {
   padding: 8;
-  .recipeInfo {
+  .info {
     padding: 8 0 4;
   }
   &.odd {
@@ -318,17 +300,11 @@ ActivityIndicator {
     padding: 8 16 8 8;
   }
 }
-.photogrid .recipeInfo {
+.photogrid .info {
   padding: 8 0 0;
 }
 .lastItem {
   margin-bottom: 128;
-}
-.selected {
-  @extend .hl;
-}
-.unselected {
-  background-color: transparent;
 }
 .imgHolder {
   border-radius: 12;
@@ -351,9 +327,8 @@ ActivityIndicator {
 
 // -----------------------------
 // Settings
-.group-info {
+.groupInfo {
   padding: 16 16 16 72;
-  line-height: 4;
   &.r {
     padding: 16 72 16 16;
   }
@@ -375,14 +350,11 @@ ActivityIndicator {
     }
   }
 }
-.listSpace {
-  height: 72;
-}
 
 // -----------------------------
 // About
-.app-info {
-  .icon {
+.appInfo {
+  .logo {
     horizontal-alignment: center;
   }
   .name {
@@ -401,108 +373,62 @@ ActivityIndicator {
   margin: 24 16 0 0;
   vertical-align: top;
 }
-.photoviewer {
+.imgV {
   width: 96;
   height: 96;
   opacity: 0;
   background: #000;
 }
-.attribute {
+.attrT {
   margin: 8 16;
   .sub {
     font-size: $t5;
   }
-  .value {
+  .v {
     @extend .tb;
     @extend .tw;
   }
 }
-.ingredient {
+.check {
   padding: 0 16;
-  .value {
-    @extend .tw;
-    vertical-align: center;
-    padding: 14 16;
-    line-height: 4;
-  }
-}
-.instruction {
-  padding: 0 16;
-  .count {
-    @extend .tb;
-    font-size: $t3;
-  }
-  .value {
-    @extend .tw;
+  .v {
     padding: 14 16;
     line-height: 4;
   }
 }
 .done {
   opacity: 0.5;
-  .value {
+  .v {
     text-decoration: line-through;
   }
 }
-.combination {
-  @extend .tw;
-  text-align: left;
-  padding: 16;
-  line-height: 4;
-}
 .note {
-  @extend .tw;
-  line-height: 4;
-  padding: 16 0;
-}
-.dateInfo {
-  padding: 32 16 16;
-  font-size: $t5;
+  padding: 16 24;
   line-height: 4;
 }
 
 // -----------------------------
 // AppBar
+
 .appbar {
-  z-index: 4;
-  min-height: 56;
-  margin: 8;
-  padding: 4;
+  margin: 0 8 8;
   border-radius: 16;
-  .title {
-    @extend .tb;
-    @extend .tw;
-    vertical-align: center;
-    margin: 0 12;
-    line-height: 4;
+  padding: 2;
+  .ico {
+    margin: 2;
   }
-  .msg {
-    padding: 14 16;
-    margin: 0;
-  }
-  .fab {
-    margin-left: 8;
-  }
-  &.home {
-    margin: 8 8 0;
-  }
-}
-.sidebar {
-  margin-bottom: 0;
 }
 .toolbar {
-  z-index: 4;
-  padding: 4;
-  margin: 0 0 52;
+  height: 1;
+  vertical-align: bottom;
+  transform: translateY(48);
+  padding: 4 2;
   .tool {
+    orientation: horizontal;
     padding: 0 8;
-    label {
-      vertical-alignment: center;
-    }
-    .value,
-    .ico {
-      padding: 0 4;
-    }
+  }
+  .v {
+    padding: 0 4;
   }
 }
 .fab {
@@ -512,64 +438,44 @@ ActivityIndicator {
 
 // -----------------------------
 // EditRecipe
-.sectionTitle {
-  @extend .tb;
-  @extend .tw;
-  font-size: $t2;
-  padding: 0;
+.section {
+  padding: 0 16;
   margin: 32 0 16;
+}
+.t2 {
+  font-size: $t2;
 }
 .sticky {
   width: 100%;
   padding: 0 16 16;
-  margin: 0;
-}
-.countdown {
-  font-size: $t3;
-  color: $orange;
 }
 
 // -----------------------------
 // MealPlanner
-.monthSwitcher {
-  padding: 0 16;
-  .month {
-    vertical-alignment: center;
-    text-align: center;
-    font-size: $t3;
-  }
-}
 .calendar {
-  padding: 0 16;
-  .dayName {
-    vertical-alignment: center;
-    text-align: center;
-    font-size: $t5;
-  }
+  padding: 0 16 16;
   .accent.sub {
-    color: rgba($orange, 0.5);
+    color: rgba($orange, 0.6);
   }
 }
 .plans {
-  padding: 8 16 80;
-  width: 100%;
+  margin: 0 16;
   .date {
-    font-size: $t2;
-    padding: 16 0;
+    padding: 16 0 8;
+  }
+  .type {
+    padding: 8 0;
   }
   .plan {
-    padding: 8 0;
-  }
-  .meal {
-    font-size: $t3;
-    padding: 8 0;
-  }
-  .planContent {
     min-height: 48;
-    padding: 8;
+    padding: 4 0;
   }
-  .attr {
-    padding: 0;
+  .info {
+    min-height: 40;
+    padding: 0 8;
+  }
+  .note {
+    padding: 4 0;
   }
 }
 
@@ -589,34 +495,15 @@ ActivityIndicator {
   .input {
     padding: 0 16 8;
   }
-  .description {
-    line-height: 4;
-    padding: 0 16 8;
-  }
   ListPicker {
     width: 30%;
     height: 144;
     margin: 16 0;
   }
   .listItem {
-    letter-spacing: 0;
-    text-transform: none;
     line-height: 4;
     padding: 13 16;
-    margin: 0;
     background-color: transparent;
-  }
-  .shareItem {
-    border-radius: 12;
-    margin: 0 8 8;
-    text-align: center;
-    .ico {
-      padding: 16 0 0;
-    }
-    .item {
-      @extend .tw;
-      padding: 8 16 16;
-    }
   }
   .actions {
     padding: 4;
@@ -626,27 +513,25 @@ ActivityIndicator {
     margin: 0 0 8;
   }
 }
-.noResInfo {
-  @extend .tac;
-  @extend .tw;
-  padding: 16;
-  line-height: 4;
-}
 
 // -----------------------------
 // Transitions
-.hl {
-  animation-name: hl;
+.select {
+  color: $orange;
+  animation-name: select;
   animation-duration: 0.2s;
   animation-fill-mode: forwards;
   animation-timing-function: ease;
 }
-@keyframes hl {
+.deselect {
+  background-color: transparent;
+}
+@keyframes select {
   0% {
     background-color: transparent;
   }
   100% {
-    background-color: rgba($orange, 0.2);
+    background-color: rgba($orange, 0.1);
   }
 }
 .fade {
@@ -660,7 +545,7 @@ ActivityIndicator {
     opacity: 1;
   }
   100% {
-    opacity: 0.5;
+    opacity: 0.75;
   }
 }
 
@@ -677,4 +562,19 @@ ActivityIndicator {
   &.r {
     horizontal-alignment: right;
   }
+}
+.har {
+  horizontal-alignment: right;
+  &.r {
+    horizontal-alignment: left;
+  }
+}
+.edge {
+  width: 16;
+}
+.ls {
+  height: 72;
+}
+.lh4 {
+  line-height: 4;
 }

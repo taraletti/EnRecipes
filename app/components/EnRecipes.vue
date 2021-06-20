@@ -1,6 +1,6 @@
 <template>
-  <Page @loaded="pgLoad" @unloaded="onPageUnload" actionBarHidden="true">
-    <GridLayout rows="*, auto, 64, 8" columns="*">
+  <Page @loaded="pgLoad" @unloaded="pgUnload" actionBarHidden="true">
+    <GridLayout rows="*, auto, auto" columns="*">
       <CollectionView
         rowSpan="4"
         :spanSize="getSpanSize"
@@ -12,7 +12,7 @@
       >
         <v-template name="header">
           <RGridLayout :rtl="RTL" rows="auto" columns="*, auto, 12">
-            <RLabel class="pageTitle" :text="`${currentComp}` | L" />
+            <RLabel class="pTitle tw tb" :text="`${currentComp}` | L" />
             <Button
               col="1"
               class="ico"
@@ -24,39 +24,39 @@
         <v-template name="lists">
           <RStackLayout :rtl="RTL" orientation="horizontal" padding="0 16 24">
             <GridLayout
-              rows="48"
-              columns="auto, auto"
+              rows="32"
+              columns="32, auto"
               class="segment rtl"
               v-for="(item, index) in topmenu"
               :key="index"
               :class="{
-                select: currentComp === item.title,
+                select: currentComp == item.title,
               }"
               @touch="touchSelector($event, item.title, item.title)"
             >
-              <Label class="ico" :text="icon[item.icon]" />
+              <Label class="ico tc vc" :text="icon[item.icon]" />
               <Label
                 col="1"
-                class="value"
-                :class="{ r: RTL }"
+                class="v vc"
+                :class="{ f: RTL }"
                 :hidden="!getRecipeCount(item.title)"
                 :text="getRecipeCount(item.title)"
               />
             </GridLayout>
             <GridLayout
               :hidden="currentComp !== 'Filtered recipes'"
-              rows="48"
-              columns="auto, auto"
+              rows="32"
+              columns="32, auto"
               class="segment rtl"
               :class="{
                 select: currentComp === 'Filtered recipes',
               }"
             >
-              <Label class="ico" :text="icon.filter" />
+              <Label class="ico tc vc" :text="icon.filter" />
               <Label
                 col="1"
-                class="value"
-                :class="{ r: RTL }"
+                class="v vc"
+                :class="{ f: RTL }"
                 :text="getRecipeCount('filtered')"
               />
             </GridLayout>
@@ -65,7 +65,7 @@
         <v-template name="detailed">
           <RGridLayout
             :rtl="RTL"
-            class="recipeItem"
+            class="recipe"
             :class="getItemPos(recipe.id)"
             rows="auto"
             columns="96, *"
@@ -81,7 +81,7 @@
               :hidden="recipe.image"
               verticalAlignment="center"
               class="ico imgHolder"
-              @loaded="centerLabel"
+              @loaded="centerLVH"
               width="96"
               height="96"
               fontSize="48"
@@ -97,31 +97,27 @@
               decodeHeight="96"
               loadMode="async"
             />
-            <StackLayout class="recipeInfo" col="1">
+            <StackLayout class="info vc" col="1">
               <RLabel :text="recipe.title" class="tb title tw" />
-              <RStackLayout :rtl="RTL" class="attrs"
-                ><Label class="ico sm rtl" :text="icon.cuisine" />
+              <RStackLayout :rtl="RTL" class="oh"
+                ><Label class="ico s rtl vc" :text="icon.cuisine" />
                 <Label class="attr" :text="recipe.cuisine | L" />
-                <Label class="ico sm" :text="icon.category" />
+                <Label class="ico s vc" :text="icon.category" />
                 <Label class="attr" :text="recipe.category | L" />
               </RStackLayout>
-              <RStackLayout
-                :rtl="RTL"
-                :hidden="!recipe.tags.length"
-                class="attrs"
-              >
-                <Label class="ico sm rtl" :text="icon.tag" />
+              <RStackLayout :rtl="RTL" :hidden="!recipe.tags.length" class="oh">
+                <Label class="ico s rtl vc" :text="icon.tag" />
                 <Label class="attr" :text="getTags(recipe.tags)" />
               </RStackLayout>
-              <RStackLayout :rtl="RTL" class="attrs">
-                <Label class="ico sm" :text="icon.star" />
-                <Label class="attr" :text="getLocaleN(recipe.rating)" />
-                <Label class="ico sm" :text="icon.time" />
+              <RStackLayout :rtl="RTL" class="oh">
+                <Label class="ico s vc" :text="icon.star" />
+                <Label class="attr" :text="localeN(recipe.rating)" />
+                <Label class="ico s vc" :text="icon.time" />
                 <Label
                   class="attr"
                   :text="`${totalTime(recipe.prepTime, recipe.cookTime).time}`"
                 />
-                <Label class="ico sm" :text="icon.diff" />
+                <Label class="ico s vc" :text="icon.diff" />
                 <Label class="attr" :text="recipe.difficulty | L" />
               </RStackLayout>
             </StackLayout>
@@ -129,7 +125,7 @@
         </v-template>
         <v-template name="grid">
           <GridLayout
-            class="recipeItem grid"
+            class="recipe grid"
             :class="getItemPos(recipe.id)"
             rows="auto, auto"
             columns="*"
@@ -154,33 +150,29 @@
               v-else
               width="100%"
               :height="imgWidth"
-              @loaded="centerLabel"
+              @loaded="centerLVH"
               class="ico imgHolder"
               :fontSize="imgWidth / 2"
               :text="icon.img"
             />
-            <StackLayout class="recipeInfo" row="1">
+            <StackLayout class="info" row="1">
               <RLabel :text="recipe.title" class="tb title tw" />
 
               <FlexboxLayout
                 flexWrap="wrap"
                 :justifyContent="RTL ? 'flex-end' : 'flex-start'"
               >
-                <RStackLayout :rtl="RTL" class="attrs">
-                  <Label class="ico sm rtl" :text="icon.cuisine" />
+                <RStackLayout :rtl="RTL" class="oh">
+                  <Label class="ico s rtl vc" :text="icon.cuisine" />
                   <Label class="attr" :text="recipe.cuisine | L" />
                 </RStackLayout>
-                <RStackLayout :rtl="RTL" class="attrs">
-                  <Label class="ico sm" :text="icon.category" />
+                <RStackLayout :rtl="RTL" class="oh">
+                  <Label class="ico s vc" :text="icon.category" />
                   <Label class="attr" :text="recipe.category | L" />
                 </RStackLayout>
               </FlexboxLayout>
-              <RStackLayout
-                :rtl="RTL"
-                :hidden="!recipe.tags.length"
-                class="attrs"
-              >
-                <Label class="ico sm rtl" :text="icon.tag" />
+              <RStackLayout :rtl="RTL" :hidden="!recipe.tags.length" class="oh">
+                <Label class="ico s rtl vc" :text="icon.tag" />
                 <Label class="attr" :text="getTags(recipe.tags)" />
               </RStackLayout>
             </StackLayout>
@@ -189,7 +181,7 @@
         <v-template name="photogrid">
           <RGridLayout
             :rtl="RTL"
-            class="recipeItem grid photogrid"
+            class="recipe grid photogrid"
             :class="getItemPos(recipe.id)"
             rows="auto, auto"
             columns="*"
@@ -214,12 +206,12 @@
               v-else
               width="100%"
               :height="imgWidth"
-              @loaded="centerLabel"
+              @loaded="centerLVH"
               class="ico imgHolder"
               :fontSize="imgWidth / 2"
               :text="icon.img"
             />
-            <StackLayout class="recipeInfo" row="1">
+            <StackLayout class="info" row="1">
               <RLabel :text="recipe.title" class="tb title tw" />
             </StackLayout>
           </RGridLayout>
@@ -227,7 +219,7 @@
         <v-template name="simple">
           <RGridLayout
             :rtl="RTL"
-            class="recipeItem simple"
+            class="recipe simple"
             :class="getItemPos(recipe.id)"
             columns="*"
             @longPress="
@@ -238,20 +230,16 @@
               selectMode ? addToSelection(recipe.id) : viewRecipe(recipe.id)
             "
           >
-            <StackLayout class="recipeInfo">
+            <StackLayout class="info">
               <RLabel :text="recipe.title" class="tb title tw" />
-              <RStackLayout :rtl="RTL" class="attrs">
-                <Label class="ico sm rtl" :text="icon.cuisine" />
+              <RStackLayout :rtl="RTL" class="oh">
+                <Label class="ico s rtl vc" :text="icon.cuisine" />
                 <Label class="attr" :text="recipe.cuisine | L" />
-                <Label class="ico sm" :text="icon.category" />
+                <Label class="ico s vc" :text="icon.category" />
                 <Label class="attr" :text="recipe.category | L" />
               </RStackLayout>
-              <RStackLayout
-                :rtl="RTL"
-                :hidden="!recipe.tags.length"
-                class="attrs"
-              >
-                <Label class="ico sm rtl" :text="icon.tag" />
+              <RStackLayout :rtl="RTL" :hidden="!recipe.tags.length" class="oh">
+                <Label class="ico s rtl vc" :text="icon.tag" />
                 <Label class="attr" :text="getTags(recipe.tags)" />
               </RStackLayout>
             </StackLayout>
@@ -259,7 +247,7 @@
         </v-template>
         <v-template name="minimal">
           <GridLayout
-            class="recipeItem simple minimal"
+            class="recipe simple minimal"
             :class="getItemPos(recipe.id)"
             columns="*"
             @longPress="
@@ -270,7 +258,7 @@
               selectMode ? addToSelection(recipe.id) : viewRecipe(recipe.id)
             "
           >
-            <StackLayout class="recipeInfo">
+            <StackLayout class="info">
               <RLabel :text="recipe.title" class="tb title tw" />
             </StackLayout>
           </GridLayout>
@@ -278,75 +266,61 @@
       </CollectionView>
       <GridLayout
         rowSpan="2"
-        class="emptyState"
-        v-if="emptyState"
+        class="empty"
+        :hidden="!empty"
         rows="*, auto, auto"
         columns="*"
       >
-        <RLabel row="1" class="title" :text="emptyState.title | L" />
+        <RLabel row="1" class="tb t3 tw" :text="empty.title | L" />
         <Button
           row="2"
           v-if="
-            emptyState.action &&
-            (filterFavourites || filterTrylater || selCuisine)
+            empty.action && (filterFavourites || filterTrylater || selCuisine)
           "
-          class="text big"
+          class="text tb big fb"
           @loaded="setGravity"
-          :text="emptyState.sub | L"
-          @tap="emptyState.action"
+          :text="empty.sub | L"
+          @tap="empty.action"
         />
         <RLabel
+          class="tw"
           row="2"
-          v-else-if="!emptyState.action"
-          :text="emptyState.sub | L"
+          v-else-if="!empty.action"
+          :text="empty.sub | L"
         />
       </GridLayout>
-      <StackLayout row="1" rowSpan="2" margin="12 8">
-        <GridLayout
-          @loaded="tbLoad"
-          rows="auto, auto"
-          columns="auto"
-          class="appbar toolbar hal"
-          :class="{ r: RTL }"
-          :hidden="!showTools"
+      <GridLayout
+        row="1"
+        @loaded="tbLoad"
+        :rows="tbRows"
+        columns="auto"
+        class="appbar toolbar hal"
+        :class="{ r: RTL }"
+        :visibility="showTools ? 'visible' : 'hidden'"
+      >
+        <RStackLayout
+          v-for="(item, i) in tbItems"
+          :key="i"
+          :row="i"
+          :rtl="RTL"
+          class="tool"
+          @touch="touchTool($event, item.comp, item.title)"
         >
-          <RGridLayout
-            :rtl="RTL"
-            rows="48"
-            class="tool"
-            columns="auto, *"
-            @touch="touchTool($event, CookingTimer, 'timer')"
-          >
-            <Label class="ico" :text="icon.timer" />
-            <Label col="1" class="value" :text="'timer' | L" />
-          </RGridLayout>
-          <RGridLayout
-            :rtl="RTL"
-            row="1"
-            rows="48"
-            class="tool"
-            columns="auto, *"
-            @touch="touchTool($event, MealPlanner, 'planner')"
-          >
-            <Label class="ico" :text="icon.cal" />
-            <Label col="1" class="value" :text="'planner' | L" />
-          </RGridLayout>
-        </GridLayout>
-      </StackLayout>
+          <Label class="ico v vc" :text="icon[item.icon]" />
+          <Label col="1" class="v vc" :text="item.title | L" />
+        </RStackLayout>
+      </GridLayout>
       <RGridLayout
         row="2"
         @loaded="abLoad"
         :rtl="RTL"
-        class="appbar home"
+        class="appbar"
         columns="auto, *, auto, auto, auto, auto"
         @swipe="stSwipe"
         @touch="() => null"
       >
         <Button
-          accessibilityLabel="Accessible Label"
-          accessibilityHint="Just a label"
-          accessibilityValue="Accessible Label"
-          class="ico rtl"
+          class="ico rtl end"
           @tap="
             showSearch
               ? closeSearch()
@@ -363,7 +337,7 @@
           "
         />
         <TextField
-          id="searchBar"
+          id="search"
           :class="{ f: RTL }"
           @loaded="focusField"
           autocapitalizationType="words"
@@ -376,7 +350,7 @@
         />
         <Label
           :hidden="!selectMode"
-          class="title"
+          class="tb tw vc lh4"
           :text="`${selection.length} ${$options.filters.L('sltd')}`"
           col="1"
         />
@@ -403,14 +377,14 @@
         </StackLayout>
         <Button
           :hidden="showSearch || selectMode"
-          class="ico fab"
+          class="ico fab end"
           :text="icon.plus"
           col="5"
-          @tap="addRecipe"
+          @tap="addR"
         />
         <Button
           :hidden="!selectMode"
-          class="ico"
+          class="ico end"
           :text="icon.del"
           col="5"
           @tap="deleteSelection"
@@ -451,7 +425,7 @@ let lastShake = 0;
 let lastForce = 0;
 let shakeCount = 0;
 let typingTimer;
-let filterTimer;
+
 export default {
   data() {
     return {
@@ -491,7 +465,7 @@ export default {
   computed: {
     ...mapState([
       "icon",
-      "sortType",
+      "sortT",
       "recipes",
       "cuisines",
       "categories",
@@ -502,7 +476,7 @@ export default {
       "selCuisine",
       "selCategory",
       "selTag",
-      "timerSound",
+      "timerS",
       "RTL",
     ]),
     filteredRecipes() {
@@ -554,6 +528,23 @@ export default {
     getRecipes() {
       return [{}, {}].concat(this.filteredRecipes);
     },
+    tbItems() {
+      return [
+        {
+          title: "timer",
+          icon: "timer",
+          comp: CookingTimer,
+        },
+        {
+          title: "planner",
+          icon: "cal",
+          comp: MealPlanner,
+        },
+      ];
+    },
+    tbRows() {
+      return "52, ".repeat(this.tbItems.length) + "52";
+    },
     noResultFor() {
       if (this.filterFavourites || this.filterTrylater || this.selCuisine)
         return "noRecsInL";
@@ -562,17 +553,18 @@ export default {
     imgWidth() {
       return Screen.mainScreen.widthDIPs / 2 - 24;
     },
-    emptyState() {
+    empty() {
       let rl = this.recipes.length;
       let fr = this.filteredRecipes.length;
       let ff = this.filterFavourites;
       let ftl = this.filterTrylater;
       let sq = this.searchQuery;
-      let r: {
+      interface EmptyState {
         title: string;
         sub: string;
         action?: Function;
-      };
+      }
+      let r = <EmptyState>{};
       if (!rl && !ff && !ftl) {
         r.title = "strAdd";
         r.sub = "plsAdd";
@@ -591,20 +583,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      "initListItems",
-      "initRecipes",
-      "initMealPlans",
-      "initTimerPresets",
-      "setShake",
-      "setFirstDay",
-      "setLayout",
-      "setSortType",
-      "deleteRecipes",
-      "clearFilter",
-      "setTheme",
-      "setTimerSound",
-    ]),
+    ...mapActions(["setS", "setST", "deleteRs", "clearF"]),
     setComp(comp) {
       this.currentComp = comp;
     },
@@ -620,15 +599,14 @@ export default {
       if (this.shake) {
         if (utils.hasAccelerometer())
           startAccelerometerUpdates((data) => this.onSensorData(data));
-        else this.setShake(0);
+        else this.setS(0);
       }
       this.hijackBackEvent();
       setTimeout(() => {
         if (this.listview) this.listview.refresh();
       }, 1000);
-      this.showTools && this.toggleTools();
     },
-    onPageUnload() {
+    pgUnload() {
       if (this.shake) stopAccelerometerUpdates();
     },
     abLoad({ object }) {
@@ -644,9 +622,9 @@ export default {
       object.android.setOverScrollMode(View.OVER_SCROLL_NEVER);
       this.listview = object;
     },
-    cvScroll(args) {
+    cvScroll({ object }) {
       let scrollUp;
-      let y = args.object.scrollOffset;
+      let y = object.scrollOffset;
       if (y) {
         scrollUp = y < this.scrollPos;
         this.scrollPos = Math.abs(y);
@@ -656,19 +634,11 @@ export default {
       }
     },
     showBars() {
-      this.appbar.animate({
-        translate: { x: 0, y: 0 },
-        duration: 200,
-        curve: CoreTypes.AnimationCurve.ease,
-      });
+      this.animateBar(this.appbar, 1);
     },
     hideBars() {
       this.showTools && this.toggleTools();
-      this.appbar.animate({
-        translate: { x: 0, y: 64 },
-        duration: 200,
-        curve: CoreTypes.AnimationCurve.ease,
-      });
+      this.animateBar(this.appbar, 0);
     },
     getSpanSize(index) {
       return (this.layout == "grid" || this.layout == "photogrid") &&
@@ -709,12 +679,12 @@ export default {
             "Newest first",
             "Oldest first",
           ],
-          selected: this.sortType,
+          selected: this.sortT,
         },
       }).then((action) => {
-        if (action && this.sortType !== action) {
-          this.setSortType(action);
-          ApplicationSettings.setString("sortType", action);
+        if (action && this.sortT !== action) {
+          this.setST(action);
+          ApplicationSettings.setString("sortT", action);
           this.updateSort();
         }
         this.hijackBackEvent();
@@ -736,29 +706,31 @@ export default {
     // Tools
     toggleTools() {
       if (this.showTools) {
-        this.toolbar.translateY = 0;
         this.toolbar
           .animate({
-            translate: { x: 0, y: 112 },
+            height: 0,
+            translate: { x: 0, y: 48 },
             duration: 200,
-            curve: CoreTypes.AnimationCurve.ease,
+            curve: CoreTypes.AnimationCurve.easeIn,
           })
           .then(() => (this.showTools = 0));
       } else {
+        this.toolbar.height = 1;
         this.showTools = 1;
-        this.toolbar.translateY = 112;
-        this.toolbar.animate({
-          translate: { x: 0, y: 0 },
-          duration: 200,
-          curve: CoreTypes.AnimationCurve.ease,
-        });
+        setTimeout(() => {
+          this.toolbar.animate({
+            height: 52 * this.tbItems.length + 8,
+            duration: 200,
+            translate: { x: 0, y: 0 },
+            curve: CoreTypes.AnimationCurve.easeOut,
+          });
+        }, 1);
       }
     },
 
     // ListHandlers
     addToSelection(id) {
       this.showTools && this.toggleTools();
-
       this.selectMode = 1;
       this.appbar.translateY = 0;
       this.selection.includes(id)
@@ -793,7 +765,7 @@ export default {
         },
       }).then((action) => {
         if (action) {
-          this.deleteRecipes(this.selection);
+          this.deleteRs(this.selection);
           if (!this.filteredRecipes.length) this.goToHome();
           this.clearSelection();
         }
@@ -894,11 +866,9 @@ export default {
           }).length;
           break;
       }
-      return count && this.getLocaleN(count);
+      return count && this.localeN(count);
     },
-    centerLabel({ object }) {
-      object.android.setGravity(17);
-    },
+
     focusField({ object }) {
       if (this.RTL) object.android.setGravity(5);
       setTimeout((e) => {
@@ -915,7 +885,6 @@ export default {
     },
 
     randomRecipeID() {
-      // TODO: show only from selected filter
       let min = 0;
       let max = this.filteredRecipes.length - 1;
       let randomIndex = Math.round(Math.random() * (max - min));
@@ -963,7 +932,7 @@ export default {
       }
       let dl1 = difficultyLevel(a.difficulty);
       let dl2 = difficultyLevel(b.difficulty);
-      switch (this.sortType) {
+      switch (this.sortT) {
         case "random":
           return 0.5 - Math.random();
         case "title":
@@ -1000,7 +969,7 @@ export default {
               id == this.filteredRecipes[length - 2].id)
           ? "lastItem"
           : "";
-      let selection = this.selection.includes(id) ? "selected" : "unselected";
+      let selection = this.selection.includes(id) ? "select" : "deselect";
       let classes = itemPos + " " + selection;
       return l2 ? classes + oddOrEven : classes;
     },
@@ -1045,7 +1014,7 @@ export default {
     goToHome() {
       this.setComp("EnRecipes");
       this.filterFavourites = this.filterTrylater = null;
-      this.clearFilter();
+      this.clearF();
     },
     navigateTo(to, title, page) {
       this.showTools && this.toggleTools();
@@ -1067,7 +1036,7 @@ export default {
         this.setComp(title);
         this.filterFavourites = to == "favourites";
         this.filterTrylater = to == "trylater";
-        this.clearFilter();
+        this.clearF();
       }
     },
     stSwipe({ direction }) {
@@ -1081,7 +1050,7 @@ export default {
             this.setComp(comps[index - 1]);
             this.filterFavourites = comps[index - 1] == "favourites";
             this.filterTrylater = comps[index - 1] == "trylater";
-            this.clearFilter();
+            this.clearF();
           }
           break;
         case 2:
@@ -1095,7 +1064,7 @@ export default {
           break;
       }
     },
-    addRecipe() {
+    addR() {
       this.showTools && this.toggleTools();
       this.$navigateTo(EditRecipe, {
         props: {
@@ -1126,24 +1095,16 @@ export default {
       });
     },
     touchSelector({ object, action }, comp, title) {
-      let selected = this.currentComp == comp;
-      object.className = action.match(/down|move/)
-        ? `segment r ${selected ? "select" : "fade"}`
-        : `segment r ${selected && "select"}`;
-      if (action == "up") this.navigateTo(comp, title);
-    },
-    touchRecipe({ object, action }) {
-      let classes = object.className;
-      if (!this.selectMode) {
-        object.className = action.match(/down|move/)
-          ? !classes.includes("fade")
-            ? classes + " fade"
-            : classes
-          : classes.replace(/ fade/g, "");
+      if (this.currentComp != title) {
+        this.touchFade(object, action);
+        if (action == "up") this.navigateTo(comp, title);
       }
     },
+    touchRecipe({ object, action }) {
+      if (!this.selectMode) this.touchFade(object, action);
+    },
     touchTool({ object, action }, comp, value) {
-      object.className = action.match(/down|move/) ? `tool fade` : `tool`;
+      this.touchFade(object, action);
       if (action == "up") this.navigateTo(comp, value, 1);
     },
   },

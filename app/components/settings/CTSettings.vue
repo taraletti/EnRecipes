@@ -3,8 +3,15 @@
     <RGridLayout :rtl="RTL" rows="*, auto" columns="auto, *">
       <OptionsList title="Settings" :items="items" />
       <GridLayout row="1" class="appbar rtl" rows="*" columns="auto, *">
-        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
+        <Button class="ico end" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
+      <Label rowSpan="2" class="edge hal rtl" @swipe="swipeBack" />
+      <Label
+        rowSpan="2"
+        colSpan="2"
+        class="edge har rtl f"
+        @swipe="swipeBack"
+      />
     </RGridLayout>
   </Page>
 </template>
@@ -26,7 +33,7 @@ import * as utils from "~/shared/utils";
 export default {
   components: { OptionsList },
   computed: {
-    ...mapState(["icon", "timerDelay", "timerSound", "timerVibrate", "RTL"]),
+    ...mapState(["icon", "timerD", "timerS", "timerV", "RTL"]),
     items() {
       let options = [
         {
@@ -34,7 +41,7 @@ export default {
           icon: "sound",
           rtl: 0,
           title: "tmrSnd",
-          subTitle: this.timerSound.title,
+          subTitle: this.timerS.title,
           action: this.showSoundsList,
         },
         {
@@ -42,7 +49,7 @@ export default {
           icon: "vibrate",
           rtl: 0,
           title: "tmrvbrt",
-          checked: !!this.timerVibrate,
+          checked: !!this.timerV,
           action: this.toggleTimerVibrate,
         },
       ];
@@ -65,9 +72,8 @@ export default {
           rtl: 0,
           title: "dlyDur",
           subTitle:
-            this.delayList[
-              this.delayList.findIndex((e) => e.n == this.timerDelay)
-            ].l,
+            this.delayList[this.delayList.findIndex((e) => e.n == this.timerD)]
+              .l,
           action: this.showDelayList,
         },
         ...list,
@@ -80,14 +86,14 @@ export default {
         ...Array.from(Array(6), (_, x) => (x + 1) * 5),
       ].map((e) => {
         return {
-          l: `${this.getLocaleN(e)} ${localize(e > 1 ? "minutes" : "minute")}`,
+          l: `${this.localeN(e)} ${localize(e > 1 ? "minutes" : "minute")}`,
           n: e,
         };
       });
     },
   },
   methods: {
-    ...mapActions(["setTimerDelay", "setTimerSound", "setTimerVibrate"]),
+    ...mapActions(["setTD", "setTS", "setTV"]),
     pgLoad({ object }) {
       object.bindingContext = new Observable();
       ApplicationSettings.setNumber("isTimer", 2);
@@ -97,12 +103,12 @@ export default {
         props: {
           title: "dlyDur",
           list: this.delayList.map((e) => e.l),
-          selected: this.delayList.findIndex((e) => e.n == this.timerDelay),
+          selected: this.delayList.findIndex((e) => e.n == this.timerD),
         },
       }).then(
         (res) =>
           res &&
-          this.setTimerDelay(
+          this.setTD(
             this.delayList[this.delayList.findIndex((e) => e.l == res)].n
           )
       );
@@ -113,16 +119,19 @@ export default {
         props: {
           title: "tmrSnd",
           list: getTones.tones.map((e) => e.title),
+          selected: getTones.tones.findIndex(
+            (e) => e.title == this.timerS.title
+          ),
         },
       }).then(
         (tone) =>
           tone &&
-          tone !== this.timerSound.title &&
-          this.setTimerSound(getTones.tones.filter((e) => e.title === tone)[0])
+          tone !== this.timerS.title &&
+          this.setTS(getTones.tones.filter((e) => e.title === tone)[0])
       );
     },
     toggleTimerVibrate() {
-      this.setTimerVibrate(!this.timerVibrate | 0);
+      this.setTV(!this.timerV | 0);
     },
     openNotificationChannelSettings() {
       const ctx = Application.android.context;
@@ -137,8 +146,6 @@ export default {
       intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
       ctx.startActivity(intent);
     },
-
-    // HELPERS
     channelExists() {
       if (Device.sdkVersion * 1 >= 26) {
         const ctx = Utils.ad.getApplicationContext();

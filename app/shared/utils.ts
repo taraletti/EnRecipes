@@ -15,57 +15,18 @@ declare const global, android, androidx, com, java, Array: any
 
 const View = android.view.View
 const PowerManager = android.os.PowerManager
-const pm = Utils.android
-  .getApplicationContext()
-  .getSystemService(android.content.Context.POWER_SERVICE)
+const ctx = Utils.android.getApplicationContext()
+const pm = ctx.getSystemService(android.content.Context.POWER_SERVICE)
 const wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, 'Timers')
-
 const sdkv = parseInt(Device.sdkVersion)
 
-export function restartApp() {
-  const ctx = Utils.ad.getApplicationContext()
-  let mStartActivity = new android.content.Intent(
-    ctx,
-    Application.android.startActivity.getClass()
-  )
-  let mPendingIntentId = Math.random() * 100000
-  let mPendingIntent = android.app.PendingIntent.getActivity(
-    ctx,
-    mPendingIntentId,
-    mStartActivity,
-    android.app.PendingIntent.FLAG_CANCEL_CURRENT
-  )
-  let mgr = ctx.getSystemService(android.content.Context.ALARM_SERVICE)
-  mgr.set(
-    android.app.AlarmManager.RTC,
-    java.lang.System.currentTimeMillis() + 100,
-    mPendingIntent
-  )
-  android.os.Process.killProcess(android.os.Process.myPid())
-}
-export function openAppSettingsPage() {
-  let intent = new android.content.Intent(
-    android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-  )
-  intent.addCategory(android.content.Intent.CATEGORY_DEFAULT)
-  intent.setData(
-    android.net.Uri.parse(
-      'package:' + Application.android.context.getPackageName()
-    )
-  )
-  Application.android.foregroundActivity.startActivity(intent)
-}
 export function hasAccelerometer() {
-  let ctx = Utils.ad.getApplicationContext()
-  let sensorManager = ctx.getSystemService(
-    android.content.Context.SENSOR_SERVICE
-  )
-  return sensorManager.getDefaultSensor(
-    android.hardware.Sensor.TYPE_ACCELEROMETER
-  )
+  return ctx
+    .getSystemService(android.content.Context.SENSOR_SERVICE)
+    .getDefaultSensor(android.hardware.Sensor.TYPE_ACCELEROMETER)
 }
 export function vibrate(duration) {
-  let vibratorService = Application.android.context.getSystemService(
+  let vibratorService = ctx.getSystemService(
     android.content.Context.VIBRATOR_SERVICE
   )
   if (vibratorService.hasVibrator()) vibratorService.vibrate(duration)
@@ -98,7 +59,7 @@ function callIntent(ctx, intent, msg, pickerType) {
     )
   })
 }
-// IMAGE PICKER
+// ImagePicker
 export function getRecipePhoto() {
   const ctx =
     Application.android.foregroundActivity || Application.android.startActivity
@@ -114,13 +75,17 @@ export function getRecipePhoto() {
     }
   )
 }
+
 export function copyPhotoToCache(src: string, dest: string) {
   const ContentResolver = Application.android.nativeApp.getContentResolver()
   const isURI = src.includes('content://')
+  console.log(src, dest, isURI)
+
   return new Promise((resolve) => {
     if (isURI) {
+      const uri = new android.net.Uri.parse(src)
       const input = new java.io.BufferedInputStream(
-        ContentResolver.openInputStream(src)
+        ContentResolver.openInputStream(uri)
       )
       let size = input.available()
       let buffer = Array.create('byte', size)
@@ -147,7 +112,7 @@ export function copyPhotoToCache(src: string, dest: string) {
   })
 }
 
-// COPY DB FILE
+// CopyDbFile
 export function copyDBToExport() {
   const src = path.join(knownFolders.documents().path, 'EnRecipes.db')
   const dst = path.join(
@@ -167,7 +132,7 @@ export function copyDBToExport() {
   }
 }
 
-// BACKUP FOLDER PICKER
+// BackupFolderPicker
 export function getBackupFolder() {
   const ctx =
     Application.android.foregroundActivity || Application.android.startActivity
@@ -183,7 +148,7 @@ export function getBackupFolder() {
   )
 }
 
-// BACKUP FILE PICKER
+// BackupFilePicker
 export function getBackupFile() {
   const ctx =
     Application.android.foregroundActivity || Application.android.startActivity
@@ -202,7 +167,7 @@ export function getBackupFile() {
   )
 }
 
-// ZIP OPERATIONS
+// ZipOperations
 export class Zip {
   static getSubFiles(src: string, isRootFolder?: number) {
     const fileList = new java.util.ArrayList()
@@ -216,7 +181,7 @@ export class Zip {
         if (isRootFolder) {
           fileList.add(tempList[i])
         }
-        fileList.addAll(Zip.getSubFiles(tempList[i].getAbsolutePath()))
+        fileList.addAll(this.getSubFiles(tempList[i].getAbsolutePath()))
       }
     }
     return fileList
@@ -233,7 +198,7 @@ export class Zip {
         let destFile = uri.createFile('application/zip', filename).getUri()
         const outputStream = ContentResolver.openOutputStream(destFile)
         const zipOutputStream = new java.util.zip.ZipOutputStream(outputStream)
-        const sourceFiles = Zip.getSubFiles(src, 1)
+        const sourceFiles = this.getSubFiles(src, 1)
         for (let i = 0; i < sourceFiles.size(); i++) {
           let len
           let buffer = Array.create('byte', 4096)
@@ -291,10 +256,9 @@ export class Zip {
   }
 }
 
-// SHARE OPERATIONS
+// ShareOperations
 
 function share(intent, subject) {
-  const ctx = Application.android.context
   const shareIntent = android.content.Intent.createChooser(intent, subject)
   shareIntent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
   ctx.startActivity(shareIntent)
@@ -310,7 +274,6 @@ export function shareText(text, subject) {
   share(intent, subject)
 }
 export function shareImage(image, subject, title) {
-  let ctx = Application.android.context
   const intent = getSendIntent('image/jpeg')
   const baos = new java.io.ByteArrayOutputStream()
   image.android.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, baos)
@@ -328,15 +291,29 @@ export function shareImage(image, subject, title) {
   share(intent, subject)
 }
 
-export function keepScreenOn(bool) {
-  let ctx =
+export function keepScreenOn(n: number) {
+  const ctx =
     Application.android.foregroundActivity || Application.android.startActivity
   let window = ctx.getWindow()
   let flag = android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-  bool ? window.addFlags(flag) : window.clearFlags(flag)
+  n ? window.addFlags(flag) : window.clearFlags(flag)
 }
 
-// TIMER NOTIFICATION
+interface INotification {
+  multi?: boolean
+  actions?: number
+  bID: string
+  cID: string
+  nID: number
+  cName: string
+  description: string
+  priority: number
+  sound: string
+  title: string
+  vibrate?: number
+}
+
+// TimerNotification
 export class TimerNotif {
   static getIcon(ctx, icon) {
     const packageName = ctx.getApplicationInfo().packageName
@@ -347,39 +324,23 @@ export class TimerNotif {
     )
   }
   static clear(nID) {
-    let ctx = Utils.ad.getApplicationContext()
     const NotifySrv = ctx.getSystemService(
       android.content.Context.NOTIFICATION_SERVICE
     )
-    // nID ? NotifySrv.cancel(nID) : NotifySrv.cancelAll()
     NotifySrv.cancel(nID)
   }
-  static getNotification(
-    {
-      multi,
-      actions,
-      bID,
-      cID,
-      cName,
-      description,
-      priority,
-      sound,
-      title,
-      vibrate,
-    }: {
-      multi?: boolean
-      actions?: number
-      bID: string
-      cID: string
-      cName: string
-      description: string
-      priority: number
-      sound: string
-      title: string
-      vibrate?: number
-    },
-    ctx
-  ) {
+  static getNotification({
+    multi,
+    actions,
+    bID,
+    cID,
+    cName,
+    description,
+    priority,
+    sound,
+    title,
+    vibrate,
+  }: INotification) {
     let soundUri: any
     if (sound) soundUri = new android.net.Uri.parse(sound)
     const NotifyMgr = android.app.NotificationManager
@@ -423,7 +384,7 @@ export class TimerNotif {
       PendingIntent.FLAG_UPDATE_CURRENT
     )
 
-    // Action intent
+    // ActionIntent
     let actionInt1,
       actionInt2,
       actionInt3,
@@ -457,8 +418,7 @@ export class TimerNotif {
       )
     }
 
-    // CREATE NOTIFICATION
-
+    // CreateNotification
     let icon = this.getIcon(ctx, 'notify')
     let builder = new NotificationCompat.Builder(ctx, cID)
       .setColor(new Color('#ff5200').android)
@@ -489,12 +449,11 @@ export class TimerNotif {
 
     return notification
   }
-  static show(data) {
-    const ctx = Utils.ad.getApplicationContext()
+  static show(data: INotification) {
     const NotifySrv = ctx.getSystemService(
       android.content.Context.NOTIFICATION_SERVICE
     )
-    NotifySrv.notify(data.nID, this.getNotification(data, ctx))
+    NotifySrv.notify(data.nID, this.getNotification(data))
   }
 }
 export class Printer {
@@ -530,10 +489,9 @@ export class Printer {
   }
 }
 
-// GET RINGTONES LIST
+// GetRingtonesList
 export function getTones() {
   const RingtoneManager = android.media.RingtoneManager
-  let ctx = Utils.ad.getApplicationContext()
   const ringtonesMgr = new RingtoneManager(ctx)
   ringtonesMgr.setType(RingtoneManager.TYPE_ALARM)
   const cursor = ringtonesMgr.getCursor()
@@ -566,7 +524,7 @@ export function getTones() {
   return { tones, defaultTone: defaultToneUri ? defaultTone : tones[0] }
 }
 
-//WAKE LOCK
+// WakeLock
 export function wakeLock(n): void {
   n ? !wl.isHeld() && wl.acquire() : wl.isHeld() && wl.release()
 }
@@ -589,7 +547,6 @@ export function updateLocale() {
   let lang = ApplicationSettings.getString('appLocale', 'none').split('-')
   const l = lang[0]
   const c = lang[1]
-  const ctx = Utils.android.getApplicationContext()
   const res = ctx.getResources()
   const config = res.getConfiguration()
   if (l !== 'none') {
@@ -600,6 +557,8 @@ export function updateLocale() {
     ctx.createConfigurationContext(config)
     res.updateConfiguration(config, res.getDisplayMetrics())
     ApplicationSettings.setNumber('RTL', config.getLayoutDirection() | 0)
+  } else {
+    ApplicationSettings.setNumber('RTL', sysRTL() | 0)
   }
   ApplicationSettings.setString('sysLocale', sysLocale())
 }
@@ -619,7 +578,7 @@ export function sysLocale() {
 export function setBarColors(w, dv, t) {
   function setColors(color) {
     w.setStatusBarColor(new Color(color).android)
-    sdkv >= 27 && w.setNavigationBarColor(new Color(color).android)
+    sdkv >= 26 && w.setNavigationBarColor(new Color(color).android)
   }
   switch (t) {
     case 'Light':
@@ -632,7 +591,7 @@ export function setBarColors(w, dv, t) {
       setColors('#000000')
       break
   }
-  if (sdkv >= 27)
+  if (sdkv >= 26)
     dv.setSystemUiVisibility(
       t == 'Light'
         ? View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR |

@@ -6,7 +6,7 @@
     class="timer"
   >
     <Button
-      class="ico min rtl"
+      class="ico si rtl"
       :text="done ? icon.ring : timer.isPaused ? icon.start : icon.pause"
       @tap="!done && toggleProgress()"
     />
@@ -20,8 +20,7 @@
         :hidden="!timer.recipeID && done"
         @touch="!done && touch($event)"
         :text="getRecipeTitle"
-        class="a"
-        :class="timer.recipeID ? 'sub' : 'accent'"
+        class="a accent"
       />
       <RLabel
         :text="
@@ -48,7 +47,7 @@
     />
     <Button
       col="4"
-      class="ico min"
+      class="ico si"
       :text="icon.x"
       @tap="removeTimer(timer.id, done)"
     />
@@ -57,11 +56,11 @@
 </template>
 
 <script>
-import { ApplicationSettings } from "@nativescript/core";
+import { ApplicationSettings, Device } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
 import { mapState, mapActions } from "vuex";
 import ActionWithSearch from "../modals/ActionWithSearch";
-import ViewRecipe from "../ViewRecipe";
+import EditRecipe from "../EditRecipe";
 import * as utils from "~/shared/utils";
 import { EvtBus } from "~/main";
 export default {
@@ -82,7 +81,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon", "recipes", "timerDelay", "timerPresets", "RTL"]),
+    ...mapState(["icon", "recipes", "timerD", "timerPs", "RTL"]),
     getRecipeTitle() {
       let { recipeID } = this.timer;
       if (recipeID) {
@@ -135,27 +134,18 @@ export default {
           )
       );
     },
+    sdkv() {
+      return parseInt(Device.sdkVersion);
+    },
   },
   methods: {
-    ...mapActions([
-      "removeActiveTimer",
-      "addTimerPreset",
-      "deleteTimerPreset",
-      "sortActiveTimers",
-    ]),
+    ...mapActions(["addTP", "sortATs"]),
     pLoaded({ object }) {
       this.pBar = object.android;
       this.pBar.setRotation(
         this.RTL && utils.sysRTL() ? 0 : this.RTL || utils.sysRTL() ? 180 : 0
       );
       this.initTimer();
-    },
-    viewRecipe(recipeID) {
-      this.$navigateTo(ViewRecipe, {
-        props: {
-          recipeID,
-        },
-      });
     },
     attachRecipe() {
       this.$showModal(ActionWithSearch, {
@@ -172,7 +162,7 @@ export default {
         } else if (res) {
           let timer = this.timer;
           timer.recipeID = res;
-          this.sortActiveTimers();
+          this.sortATs();
         }
       });
     },
@@ -181,7 +171,9 @@ export default {
     },
     setProgress() {
       this.progress = 100 - (this.count / this.getTotalTime) * 100;
-      this.pBar.setProgress(this.progress, true);
+      this.sdkv > 23
+        ? this.pBar.setProgress(this.progress, true)
+        : this.pBar.setProgress(this.progress);
     },
     initTimer() {
       this.resetInterval();
@@ -211,14 +203,16 @@ export default {
       ApplicationSettings.remove(`${this.timer.id}d`);
       this.setNum("c", this.count);
       this.toggleProgress(1);
-      this.pBar.setProgress(0, true);
+      this.sdkv > 23
+        ? this.pBar.setProgress(0, true)
+        : this.pBar.setProgress(0);
     },
     toggleProgress(n) {
       this.togglePause(this.timer, n);
       this.timer.isPaused ? this.resetInterval() : this.initTimer();
     },
     addPreset() {
-      let exist = this.timerPresets.some((e) => e.id == this.timer.id);
+      let exist = this.timerPs.some((e) => e.id == this.timer.id);
       this.timer.preset = 1;
       if (this.countUp) {
         this.timer.time = new Date(this.count * 1000)
@@ -228,14 +222,14 @@ export default {
       let timer = JSON.parse(JSON.stringify(this.timer));
       let { recipeID, timerInt, isPaused, preset, done, mode, ...presetTimer } =
         timer;
-      this.addTimerPreset(presetTimer);
+      this.addTP(presetTimer);
       exist ? this.showToast("prstTU") : this.showToast("aTPrst");
     },
     addDelay() {
       this.timer.done = 0;
-      let td = this.timerDelay;
+      let td = this.timerD;
       let delayDur =
-        this.getLocaleN(td) + " " + localize(td > 1 ? "minutes" : "minute");
+        this.localeN(td) + " " + localize(td > 1 ? "minutes" : "minute");
       this.showToast(localize("wDBy", this.timer.label, delayDur));
       let delay = td * 60;
       if (this.done) this.delay = delay;
@@ -251,12 +245,7 @@ export default {
 
     // HELPERS
     touch({ object, action }) {
-      let classes = object.className;
-      classes = action.match(/down|move/)
-        ? !classes.includes("fade")
-          ? classes + " fade"
-          : classes
-        : classes.replace(/ fade/g, "");
+      this.touchFade(object, action);
       if (action == "up") this.attachRecipe();
     },
   },

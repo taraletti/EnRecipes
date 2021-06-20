@@ -9,7 +9,7 @@ module.exports = (env) => {
       const appComponents = [
         '@nativescript/core/ui/frame',
         '@nativescript/core/ui/frame/activity',
-        path.resolve(__dirname, 'app/ForegroundService.js'),
+        path.resolve(__dirname, 'app/services/ForegroundService.js'),
       ]
       appComponents.map((component) => {
         config.entry('bundle').add(component)

@@ -1,6 +1,6 @@
 <template>
   <Page
-    @loaded="transparentPage"
+    @loaded="mLoad"
     backgroundColor="transparent"
     :class="theme"
   >
@@ -33,13 +33,13 @@
       <RGridLayout :rtl="RTL" row="2" columns="*, auto, auto" class="actions">
         <Button
           col="1"
-          class="text sm"
+          class="text tb st fb"
           :text="'cBtn' | L"
           @tap="$modal.close(0)"
         />
         <Button
           col="2"
-          class="text sm"
+          class="text tb st fb"
           :text="'SET' | L"
           @tap="$modal.close(selected)"
         />

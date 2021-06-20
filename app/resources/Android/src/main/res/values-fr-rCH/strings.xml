@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="ksavr">"Garder l’écran allumé durant l’affichage d’une recette"</string>
+  <string name="ksavrInfo">"Empêche l’écran de s’éteindre durant la visualisation d’une recette"</string>
+  <string name="esgb">"Balayer le bord pour revenir en arrière"</string>
+  <string name="esgbInfo">"Désactivez cette option si vous avez des problèmes de navigation"</string>
+  <string name="add">"Ajouter"</string>
+  <string name="rstBtn">"RÉINITIALISER"</string>
   <string name="selMT">"Sélectionnez le type de repas"</string>
   <string name="ehwmp">"Mangez sainement grâce aux planifications de repas!"</string>
-  <string name="plsCrt">"Utilisez le bouton plus pour en créer une"</string>
+  <string name="plsCrt">"Utilisez le bouton + pour en créer une"</string>
   <string name="admp">"Supprimer automatiquement les planifications de repas"</string>
   <string name="otay">"Après un an"</string>
   <string name="otam">"Après un mois"</string>
@@ -13,13 +19,6 @@
   <string name="mnth">"Mois"</string>
   <string name="wk">"Semaine"</string>
   <string name="d">"Jour"</string>
-  <string name="sun">"dimanche"</string>
-  <string name="mon">"lundi"</string>
-  <string name="tue">"mardi"</string>
-  <string name="wed">"mercredi"</string>
-  <string name="thu">"jeudi"</string>
-  <string name="fri">"vendredi"</string>
-  <string name="sat">"samedi"</string>
   <string name="cpy">"copie"</string>
   <string name="tdy">"Aujourd’hui"</string>
   <string name="tmrw">"Demain"</string>
@@ -37,7 +36,7 @@
   <string name="delPrst">"Vous êtes sur le point de supprimer %1$s des préréglages"</string>
   <string name="tmrRm">"Minuterie retirée"</string>
   <string name="notifSetg">"Paramètres de notification"</string>
-  <string name="delay">"Retard"</string>
+  <string name="delay">"Retarder"</string>
   <string name="dlyDur">"Durée du retard"</string>
   <string name="minute">"minute"</string>
   <string name="minutes">"minutes"</string>
@@ -61,7 +60,6 @@
   <string name="yieldU">"Unité de rendement"</string>
   <string name="yieldQ">"Quantité de rendement"</string>
   <string name="yesterday">"hier"</string>
-  <string name="WED">"mer"</string>
   <string name="wAgo">"il y a %1$s semaines"</string>
   <string name="Vietnamese">"vietnamienne"</string>
   <string name="Vegetarian">"Végétarien"</string>
@@ -72,7 +70,6 @@
   <string name="unit">"unité"</string>
   <string name="Undefined">"Indéfini"</string>
   <string name="Turkish">"turque"</string>
-  <string name="TUE">"mar"</string>
   <string name="tsp">"c.à.c"</string>
   <string name="tsInfo">"séparez par des espaces"</string>
   <string name="ts">"Étiquettes"</string>
@@ -83,7 +80,6 @@
   <string name="today">"aujourd’hui"</string>
   <string name="tLInfo">"Les recettes que vous voulez essayer plus tard sont listées ici"</string>
   <string name="title">"Titre"</string>
-  <string name="THU">"jeu"</string>
   <string name="Theme">"Thème"</string>
   <string name="Thai">"thaïlandaise"</string>
   <string name="Teaspoon">"Cuillère à café"</string>
@@ -94,7 +90,6 @@
   <string name="Swedish">"suédoise"</string>
   <string name="sVwInfo">"Vous aide à choisir quoi cuisiner quand vous ne pouvez pas vous décider"</string>
   <string name="sVw">"Secouez pour voir une recette au hasard"</string>
-  <string name="SUN">"dim"</string>
   <string name="strAdd">"Commencez à ajouter vos recettes!"</string>
   <string name="stp">"Étape"</string>
   <string name="stick">"barre"</string>
@@ -116,12 +111,10 @@
   <string name="SET">"DÉFINIR"</string>
   <string name="Serving">"Portion"</string>
   <string name="ser">"Chercher"</string>
-  <string name="September">"septembre"</string>
   <string name="selRec">"Sélectionner une recette"</string>
   <string name="Seafood">"Fruits de mer"</string>
   <string name="Scottish">"écossaise"</string>
   <string name="Sauces">"Sauces"</string>
-  <string name="SAT">"sam"</string>
   <string name="Salads">"Salades"</string>
   <string name="Russian">"russe"</string>
   <string name="rst">"REDÉMARRER"</string>
@@ -165,7 +158,7 @@
   <string name="Pound">"Livre"</string>
   <string name="Poultry">"Volaille"</string>
   <string name="Portuguese">"portugaise"</string>
-  <string name="plsAdd">"Utilisez le bouton plus pour en ajouter une"</string>
+  <string name="plsAdd">"Utilisez le bouton + pour en ajouter une"</string>
   <string name="planner">"Planificateur de repas"</string>
   <string name="pinch">"pincée"</string>
   <string name="Piece">"Morceau"</string>
@@ -179,10 +172,8 @@
   <string name="opts">"Options"</string>
   <string name="_Oldest_first_Z6cq4h">"La plus ancienne d’abord"</string>
   <string name="OK">"OK"</string>
-  <string name="October">"octobre"</string>
   <string name="nwYiU">"Nouvelle unité de rendement"</string>
   <string name="nwCat">"Nouvelle catégorie"</string>
-  <string name="November">"novembre"</string>
   <string name="nos">"Notes"</string>
   <string name="noRecsInL">"Aucune des recettes ici ne correspond à votre recherche"</string>
   <string name="noRecs">"Aucune recette ne correspond à votre recette"</string>
@@ -197,7 +188,6 @@
   <string name="newRec">"Nouvelle recette"</string>
   <string name="_Newest_first_2Sb3c">"La plus récente d’abord"</string>
   <string name="newCui">"Nouvelle cuisine"</string>
-  <string name="MON">"lun"</string>
   <string name="Moderate">"Modéré"</string>
   <string name="ml">"ml"</string>
   <string name="minimal">"Minimale"</string>
@@ -207,8 +197,6 @@
   <string name="Mexican">"mexicaine"</string>
   <string name="medium">"moyen"</string>
   <string name="Meat">"Viande"</string>
-  <string name="May">"mai"</string>
-  <string name="March">"mars"</string>
   <string name="_Main_dishes_u6RGQ">"Plats principaux"</string>
   <string name="mAgo">"il y a %1$s mois"</string>
   <string name="lunch">"Dîner"</string>
@@ -228,12 +216,9 @@
   <string name="kg">"kg"</string>
   <string name="Kenyan">"kényane"</string>
   <string name="kEdit">"CONTINUER"</string>
-  <string name="June">"juin"</string>
-  <string name="July">"juillet"</string>
   <string name="joinTG">"Rejoignez le groupe Telegram"</string>
   <string name="Jewish">"juive"</string>
   <string name="Japanese">"japonaise"</string>
-  <string name="January">"janvier"</string>
   <string name="Jamaican">"jamaïcaine"</string>
   <string name="Italian">"italienne"</string>
   <string name="it">"Élément"</string>
@@ -262,14 +247,12 @@
   <string name="gal">"gal"</string>
   <string name="g">"g"</string>
   <string name="fsList">"Vos recettes favorites sont listées ici"</string>
-  <string name="FRI">"ven"</string>
   <string name="French">"française"</string>
   <string name="_Fluid_Ounce_bd10L">"Once liquide"</string>
   <string name="fltr">"Filtre"</string>
   <string name="_fl_oz_72kqu">"oz liq"</string>
   <string name="_Filtered_recipes_Z1alhhu">"Recettes filtrées"</string>
   <string name="Filipino">"philippine"</string>
-  <string name="February">"février"</string>
   <string name="favourites">"Favoris"</string>
   <string name="expSuc">"Exportation réussie"</string>
   <string name="expip">"Exportation en cours"</string>
@@ -291,7 +274,6 @@
   <string name="Desserts">"Desserts"</string>
   <string name="delRecsInfo">"Vous êtes sur le point de supprimer définitivement %1$s"</string>
   <string name="delRecInfo">"Vous êtes sur le point de supprimer définitivement la recette %1$s"</string>
-  <string name="December">"décembre"</string>
   <string name="dBtn">"SUPPRIMER"</string>
   <string name="db">"Base de données"</string>
   <string name="Dark">"Sombre"</string>
@@ -324,9 +306,7 @@
   <string name="Black">"Noir"</string>
   <string name="Beverages">"Boissons"</string>
   <string name="Barbecue">"Barbecue"</string>
-  <string name="August">"août"</string>
   <string name="aStpBtn">"AJOUTER UNE ÉTAPE"</string>
-  <string name="April">"avril"</string>
   <string name="appRst">"Redémarrage de l’appli nécessaire"</string>
   <string name="apply">"APPLIQUER"</string>
   <string name="appInfo">"EnRecipes est un livre de cuisine numérique à code source ouvert et respectueux de la vie privée qui vous permet de créer, gérer et partager vos recettes"</string>
@@ -348,5 +328,4 @@
   <string name="aBtn">"AJOUTER"</string>
   <string name="About">"À propos"</string>
   <string name="aap">"Joindre une photo"</string>
-  <string name="add">"Add"</string>
 </resources>

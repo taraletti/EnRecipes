@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="esgbInfo">"Disable this option if you have any navigation issues"</string>
+  <string name="esgb">"Edge swipe to go back"</string>
+  <string name="ksavrInfo">"Prevents the screen from turning off while viewing a recipe"</string>
+  <string name="ksavr">"Keep screen awake while viewing recipe"</string>
+  <string name="rstBtn">"RESET"</string>
   <string name="add">"Add"</string>
   <string name="nvr">"Never"</string>
   <string name="otaw">"Older than a week"</string>
   <string name="otam">"Older than a month"</string>
   <string name="otay">"Older than a year"</string>
   <string name="admp">"Auto-delete meal plans"</string>
-  <string name="plsCrt">"Use the plus button to create one"</string>
+  <string name="plsCrt">"Use the + button to create one"</string>
   <string name="ehwmp">"Eat healthy with meal plans!"</string>
   <string name="selMT">"Select meal type"</string>
   <string name="ystr">"Yesterday"</string>
   <string name="tmrw">"Tomorrow"</string>
   <string name="tdy">"Today"</string>
   <string name="cpy">"copy"</string>
-  <string name="sat">"Saturday"</string>
-  <string name="fri">"Friday"</string>
-  <string name="thu">"Thursday"</string>
-  <string name="wed">"Wednesday"</string>
-  <string name="tue">"Tuesday"</string>
-  <string name="mon">"Monday"</string>
-  <string name="sun">"Sunday"</string>
   <string name="d">"Day"</string>
   <string name="wk">"Week"</string>
   <string name="mnth">"Month"</string>
@@ -61,7 +59,6 @@
   <string name="yieldU">"Yield unit"</string>
   <string name="yieldQ">"Yield quantity"</string>
   <string name="yesterday">"yesterday"</string>
-  <string name="WED">"WED"</string>
   <string name="wAgo">"%1$s weeks ago"</string>
   <string name="Vietnamese">"Vietnamese"</string>
   <string name="Vegetarian">"Vegetarian"</string>
@@ -72,7 +69,6 @@
   <string name="unit">"unit"</string>
   <string name="Undefined">"Undefined"</string>
   <string name="Turkish">"Turkish"</string>
-  <string name="TUE">"TUE"</string>
   <string name="tsp">"tsp"</string>
   <string name="tsInfo">"separate with spaces"</string>
   <string name="ts">"Tags"</string>
@@ -83,7 +79,6 @@
   <string name="today">"today"</string>
   <string name="tLInfo">"Recipes you want to try later are listed here"</string>
   <string name="title">"Title"</string>
-  <string name="THU">"THU"</string>
   <string name="Theme">"Theme"</string>
   <string name="Thai">"Thai"</string>
   <string name="Teaspoon">"Teaspoon"</string>
@@ -94,7 +89,6 @@
   <string name="Swedish">"Swedish"</string>
   <string name="sVwInfo">"Helps you choose what to cook when you can\'t decide"</string>
   <string name="sVw">"Shake to view random recipe"</string>
-  <string name="SUN">"SUN"</string>
   <string name="strAdd">"Start adding your recipes!"</string>
   <string name="stp">"Step"</string>
   <string name="stick">"stick"</string>
@@ -116,12 +110,10 @@
   <string name="SET">"SET"</string>
   <string name="Serving">"Serving"</string>
   <string name="ser">"Search"</string>
-  <string name="September">"September"</string>
   <string name="selRec">"Select recipe"</string>
   <string name="Seafood">"Seafood"</string>
   <string name="Scottish">"Scottish"</string>
   <string name="Sauces">"Sauces"</string>
-  <string name="SAT">"SAT"</string>
   <string name="Salads">"Salads"</string>
   <string name="Russian">"Russian"</string>
   <string name="rst">"RESTART"</string>
@@ -165,7 +157,7 @@
   <string name="Pound">"Pound"</string>
   <string name="Poultry">"Poultry"</string>
   <string name="Portuguese">"Portuguese"</string>
-  <string name="plsAdd">"Use the plus button to add one"</string>
+  <string name="plsAdd">"Use the + button to add one"</string>
   <string name="planner">"Meal Planner"</string>
   <string name="pinch">"pinch"</string>
   <string name="Piece">"Piece"</string>
@@ -179,10 +171,8 @@
   <string name="opts">"Options"</string>
   <string name="_Oldest_first_Z6cq4h">"Oldest first"</string>
   <string name="OK">"OK"</string>
-  <string name="October">"October"</string>
   <string name="nwYiU">"New yield unit"</string>
   <string name="nwCat">"New category"</string>
-  <string name="November">"November"</string>
   <string name="nos">"Notes"</string>
   <string name="noRecsInL">"None of the recipes here matches your search"</string>
   <string name="noRecs">"No recipes match your search"</string>
@@ -197,7 +187,6 @@
   <string name="newRec">"New recipe"</string>
   <string name="_Newest_first_2Sb3c">"Newest first"</string>
   <string name="newCui">"New cuisine"</string>
-  <string name="MON">"MON"</string>
   <string name="Moderate">"Moderate"</string>
   <string name="ml">"ml"</string>
   <string name="minimal">"Minimal"</string>
@@ -208,8 +197,6 @@
   <string name="Mexican">"Mexican"</string>
   <string name="medium">"medium"</string>
   <string name="Meat">"Meat"</string>
-  <string name="May">"May"</string>
-  <string name="March">"March"</string>
   <string name="_Main_dishes_u6RGQ">"Main dishes"</string>
   <string name="mAgo">"%1$s months ago"</string>
   <string name="lunch">"Lunch"</string>
@@ -229,12 +216,9 @@
   <string name="kg">"kg"</string>
   <string name="Kenyan">"Kenyan"</string>
   <string name="kEdit">"KEEP EDITING"</string>
-  <string name="June">"June"</string>
-  <string name="July">"July"</string>
   <string name="joinTG">"Join the Telegram group"</string>
   <string name="Jewish">"Jewish"</string>
   <string name="Japanese">"Japanese"</string>
-  <string name="January">"January"</string>
   <string name="Jamaican">"Jamaican"</string>
   <string name="Italian">"Italian"</string>
   <string name="it">"Item"</string>
@@ -263,14 +247,12 @@
   <string name="gal">"gal"</string>
   <string name="g">"g"</string>
   <string name="fsList">"Your favourite recipes are listed here"</string>
-  <string name="FRI">"FRI"</string>
   <string name="French">"French"</string>
   <string name="_Fluid_Ounce_bd10L">"Fluid Ounce"</string>
   <string name="fltr">"Filter"</string>
   <string name="_fl_oz_72kqu">"fl oz"</string>
   <string name="_Filtered_recipes_Z1alhhu">"Filtered recipes"</string>
   <string name="Filipino">"Filipino"</string>
-  <string name="February">"February"</string>
   <string name="favourites">"Favourites"</string>
   <string name="expSuc">"Export success"</string>
   <string name="expip">"Export in progress"</string>
@@ -292,7 +274,6 @@
   <string name="Desserts">"Desserts"</string>
   <string name="delRecsInfo">"You are about to permanently delete %1$s"</string>
   <string name="delRecInfo">"You are about to permanently delete the recipe %1$s"</string>
-  <string name="December">"December"</string>
   <string name="dBtn">"DELETE"</string>
   <string name="db">"Database"</string>
   <string name="Dark">"Dark"</string>
@@ -325,9 +306,7 @@
   <string name="Black">"Black"</string>
   <string name="Beverages">"Beverages"</string>
   <string name="Barbecue">"Barbecue"</string>
-  <string name="August">"August"</string>
   <string name="aStpBtn">"ADD STEP"</string>
-  <string name="April">"April"</string>
   <string name="appRst">"App restart required"</string>
   <string name="apply">"APPLY"</string>
   <string name="appInfo">"EnRecipes is an open source, privacy-friendly digital cookbook that lets you create, manage and share your recipes"</string>

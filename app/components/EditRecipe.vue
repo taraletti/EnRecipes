@@ -3,7 +3,11 @@
     <GridLayout rows="*, auto" columns="auto, *, auto">
       <ScrollView rowSpan="2" colSpan="3" @scroll="!showUndo && svLoad($event)">
         <StackLayout padding="0 16 72">
-          <RLabel class="pageTitle" padding="16 0 24" :text="`${title}` | L" />
+          <RLabel
+            class="pTitle tw tb"
+            padding="16 0 24"
+            :text="`${title}` | L"
+          />
           <Image
             margin="0 0 32"
             v-if="recipe.image"
@@ -25,8 +29,8 @@
             @tap="imageHandler"
           />
           <!-- OVERVIEW -->
-          <StackLayout class="inputField">
-            <Label class="fieldLabel" :text="'title' | L" />
+          <StackLayout class="inputC">
+            <Label class="fLabel" :text="'title' | L" />
             <TextField
               :hint="'recTitle' | L"
               v-model="recipe.title"
@@ -34,8 +38,8 @@
             />
           </StackLayout>
           <RGridLayout :rtl="RTL" class="" columns="*, 8, *">
-            <StackLayout class="inputField">
-              <Label class="fieldLabel" :text="'cui' | L" />
+            <StackLayout class="inputC">
+              <Label class="fLabel" :text="'cui' | L" />
               <TextField
                 @loaded="setGravity"
                 :text="recipe.cuisine | L"
@@ -44,8 +48,8 @@
                 @tap="showCuisine(0)"
               />
             </StackLayout>
-            <StackLayout class="inputField" col="2">
-              <Label class="fieldLabel" :text="'cat' | L" />
+            <StackLayout class="inputC" col="2">
+              <Label class="fLabel" :text="'cat' | L" />
               <TextField
                 @loaded="setGravity"
                 ref="category"
@@ -56,8 +60,8 @@
               />
             </StackLayout>
           </RGridLayout>
-          <StackLayout class="inputField">
-            <Label class="fieldLabel" :text="'ts' | L" />
+          <StackLayout class="inputC">
+            <Label class="fLabel" :text="'ts' | L" />
             <TextField
               @loaded="setGravity"
               :hint="'tsInfo' | L"
@@ -69,8 +73,8 @@
             />
           </StackLayout>
           <RGridLayout :rtl="RTL" columns="*, 8, *">
-            <StackLayout class="inputField">
-              <Label class="fieldLabel" :text="'prepT' | L" />
+            <StackLayout class="inputC">
+              <Label class="fLabel" :text="'prepT' | L" />
               <TextField
                 @loaded="setGravity"
                 :text="timeRequired('prepTime')"
@@ -79,8 +83,8 @@
                 @tap="setTimeRequired(0, 'prepTime')"
               />
             </StackLayout>
-            <StackLayout class="inputField" col="2">
-              <Label class="fieldLabel" :text="'cookT' | L" />
+            <StackLayout class="inputC" col="2">
+              <Label class="fLabel" :text="'cookT' | L" />
               <TextField
                 @loaded="setGravity"
                 ref="cookTime"
@@ -92,8 +96,8 @@
             </StackLayout>
           </RGridLayout>
           <RGridLayout :rtl="RTL" columns="*, 8, *">
-            <StackLayout class="inputField">
-              <Label class="fieldLabel" :text="'yieldQ' | L" />
+            <StackLayout class="inputC">
+              <Label class="fLabel" :text="'yieldQ' | L" />
               <TextField
                 @loaded="setGravity"
                 ref="yieldQuantity"
@@ -103,8 +107,8 @@
                 returnKeyType="next"
               />
             </StackLayout>
-            <StackLayout class="inputField" col="2">
-              <Label class="fieldLabel" :text="'yieldU' | L" />
+            <StackLayout class="inputC" col="2">
+              <Label class="fLabel" :text="'yieldU' | L" />
               <TextField
                 @loaded="setGravity"
                 :text="`${recipe.yieldUnit}` | L"
@@ -115,8 +119,8 @@
             </StackLayout>
           </RGridLayout>
           <GridLayout columns="*, 8, *">
-            <StackLayout class="inputField" :col="RTL ? 2 : 0">
-              <Label class="fieldLabel" :text="'Difficulty level' | L" />
+            <StackLayout class="inputC" :col="RTL ? 2 : 0">
+              <Label class="fLabel" :text="'Difficulty level' | L" />
               <TextField
                 @loaded="setGravity"
                 ref="difficultyLevel"
@@ -130,7 +134,8 @@
           <!-- INGREDIENTS -->
           <Label
             :text="getTitleCount('ings', 'ingredients')"
-            class="sectionTitle"
+            padding="0"
+            class="section t2 tb tw"
           />
           <RGridLayout
             :rtl="RTL"
@@ -168,13 +173,13 @@
             />
             <Button
               col="5"
-              class="ico min"
+              class="ico si"
               :text="icon.x"
               @tap="removeIngredient(index)"
             />
           </RGridLayout>
           <Button
-            class="text big hal"
+            class="text tb big hal fb"
             :class="{ r: RTL }"
             :text="'aIngBtn' | L"
             @tap="addIngredient()"
@@ -182,7 +187,8 @@
           <!-- INSTRUCTIONS -->
           <Label
             :text="getTitleCount('inss', 'instructions')"
-            class="sectionTitle"
+            padding="0"
+            class="section t2 tb tw"
           />
           <RGridLayout
             :rtl="RTL"
@@ -197,13 +203,13 @@
             />
             <Button
               col="1"
-              class="ico min"
+              class="ico si"
               :text="icon.x"
               @tap="removeInstruction(index)"
             />
           </RGridLayout>
           <Button
-            class="text big hal"
+            class="text tb big hal fb"
             :class="{ r: RTL }"
             :text="'aStpBtn' | L"
             @tap="addInstruction"
@@ -211,7 +217,8 @@
           <!-- COMBINATIONS -->
           <Label
             :text="getTitleCount('cmbs', 'combinations')"
-            class="sectionTitle"
+            padding="0"
+            class="section t2 tb tw"
           />
           <RGridLayout
             :rtl="RTL"
@@ -227,19 +234,23 @@
             />
             <Button
               col="1"
-              class="ico min"
+              class="ico si"
               :text="icon.x"
               @tap="removeCombination(combination)"
             />
           </RGridLayout>
           <Button
-            class="text big hal"
+            class="text tb big hal fb"
             :class="{ r: RTL }"
             :text="'addCmbBtn' | L"
             @tap="showCombinations"
           />
           <!-- NOTES -->
-          <Label :text="getTitleCount('nos', 'notes')" class="sectionTitle" />
+          <Label
+            :text="getTitleCount('nos', 'notes')"
+            padding="0"
+            class="section t2 tb tw"
+          />
           <RGridLayout
             :rtl="RTL"
             columns="*, auto"
@@ -253,13 +264,13 @@
             />
             <Button
               col="1"
-              class="ico min"
+              class="ico si"
               :text="icon.x"
               @tap="removeNote(index)"
             />
           </RGridLayout>
           <Button
-            class="text big hal"
+            class="text tb big hal fb"
             :class="{ r: RTL }"
             :text="'aNoBtn' | L"
             @tap="addNote"
@@ -277,19 +288,19 @@
         columns="auto, *, auto"
       >
         <Button
-          class="ico"
+          class="ico end"
           :class="{ f: RTL }"
           :text="icon.back"
           @tap="navigateBack(0)"
         />
         <Button
           v-if="hasChanges && !saving"
-          class="ico fab"
+          class="ico fab end"
           :text="icon.save"
           col="2"
           @tap="saveOperation"
         />
-        <ActivityIndicator col="2" v-if="saving" :busy="saving" />
+        <ActivityIndicator class="end" col="2" v-if="saving" :busy="saving" />
       </RGridLayout>
       <SnackBar
         :hidden="!showUndo"
@@ -299,6 +310,19 @@
         :undo="undoDel"
         :action="hideBar"
         :onload="sbLoad"
+      />
+      <Label
+        rowSpan="2"
+        colSpan="3"
+        class="edge hal"
+        :class="{ 'f r': RTL }"
+        @swipe="swipeBack($event, navigateBack)"
+      />
+      <Label
+        rowSpan="2"
+        colSpan="3"
+        class="edge har rtl f"
+        @swipe="swipeBack($event, navigateBack)"
       />
     </GridLayout>
   </Page>
@@ -315,10 +339,8 @@ import {
   Screen,
   Utils,
   Observable,
-  CoreTypes,
   Frame,
   Application,
-  GridLayout,
 } from "@nativescript/core";
 import { getString, setString } from "@nativescript/core/application-settings";
 import { localize } from "@nativescript/localize";
@@ -369,7 +391,7 @@ export default {
       modalOpen: 0,
       saving: 0,
       cacheImagePath: null,
-      unSyncCombinations: [],
+      unLinkCombs: [],
       difficultyLevels: ["Easy", "Moderate", "Challenging"],
       appbar: null,
       snackbar: null,
@@ -405,11 +427,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      "addRecipeAction",
-      "addListItemAction",
-      "unSyncCombinationsAction",
-    ]),
+    ...mapActions(["addR", "addLI", "unLinkCs"]),
     pgLoad({ object }) {
       object.bindingContext = new Observable();
       this.hijackBackEvent();
@@ -430,19 +448,10 @@ export default {
         scrollUp = y < this.scrollPos;
         this.scrollPos = Math.abs(y);
         let ab = this.appbar.translateY;
-        if (!scrollUp && ab == 0) {
-          this.appbar.animate({
-            translate: { x: 0, y: 64 },
-            duration: 200,
-            curve: CoreTypes.AnimationCurve.ease,
-          });
-        } else if (scrollUp && ab == 64) {
+        if (!scrollUp && ab == 0) this.animateBar(this.appbar, 0);
+        else if (scrollUp && ab == 64) {
           Utils.ad.dismissSoftInput();
-          this.appbar.animate({
-            translate: { x: 0, y: 0 },
-            duration: 200,
-            curve: CoreTypes.AnimationCurve.ease,
-          });
+          this.animateBar(this.appbar, 1);
         }
       }
     },
@@ -478,37 +487,39 @@ export default {
             knownFolders.temp().path,
             `${utils.getRandomID(0)}.jpg`
           );
-          utils.copyPhotoToCache(uri, this.cacheImagePath).then((imgPath) => {
-            if (imgPath) {
-              ImageSource.fromFile(imgPath).then((image) => {
-                ImageCropper.prototype
-                  .show(
-                    image,
-                    {
-                      width: 1080,
-                      height: 1080,
-                    },
-                    {
-                      hideBottomControls: true,
-                      toolbarTitle: localize("cPic"),
-                      statusBarColor: "#ff5200",
-                      toolbarTextColor: aT == "Light" ? "#212529" : "#f1f3f5",
-                      toolbarColor:
-                        aT == "Light"
-                          ? "#f1f3f5"
-                          : aT == "Dark"
-                          ? "#212529"
-                          : "#000000",
-                      cropFrameColor: "#ff5200",
-                    }
-                  )
-                  .then((cropped) => {
-                    cropped.image.saveToFile(this.cacheImagePath, "jpg", 75);
-                    this.recipe.image = this.cacheImagePath;
-                  });
-              });
-            }
-          });
+          utils
+            .copyPhotoToCache(uri.toString(), this.cacheImagePath)
+            .then((imgPath) => {
+              if (imgPath) {
+                ImageSource.fromFile(imgPath).then((image) => {
+                  ImageCropper.prototype
+                    .show(
+                      image,
+                      {
+                        width: 1080,
+                        height: 1080,
+                      },
+                      {
+                        hideBottomControls: true,
+                        toolbarTitle: localize("cPic"),
+                        statusBarColor: "#ff5200",
+                        toolbarTextColor: aT == "Light" ? "#212529" : "#f1f3f5",
+                        toolbarColor:
+                          aT == "Light"
+                            ? "#f1f3f5"
+                            : aT == "Dark"
+                            ? "#212529"
+                            : "#000000",
+                        cropFrameColor: "#ff5200",
+                      }
+                    )
+                    .then((cropped) => {
+                      cropped.image.saveToFile(this.cacheImagePath, "jpg", 75);
+                      this.recipe.image = this.cacheImagePath;
+                    });
+                });
+              }
+            });
         }
       });
     },
@@ -545,7 +556,7 @@ export default {
             this.modalOpen = 0;
             if (item.length) {
               this.recipe.cuisine = item;
-              this.addListItemAction({
+              this.addLI({
                 item,
                 listName: "cuisines",
               });
@@ -559,7 +570,7 @@ export default {
             if (focus) this.autoFocusField("category", 0);
           } else
             this.cuisines.includes(this.recipe.cuisine)
-              ? mull
+              ? null
               : (this.recipe.cuisine = "Undefined");
         }
       });
@@ -584,7 +595,7 @@ export default {
             this.modalOpen = 0;
             if (item.length) {
               this.recipe.category = item;
-              this.addListItemAction({
+              this.addLI({
                 item,
                 listName: "categories",
               });
@@ -598,7 +609,7 @@ export default {
             if (focus) this.autoFocusField("tags", 1);
           } else
             this.categories.includes(this.recipe.category)
-              ? mull
+              ? null
               : (this.recipe.category = "Undefined");
         }
       });
@@ -623,7 +634,7 @@ export default {
             this.modalOpen = 0;
             if (item.length) {
               this.recipe.yieldUnit = item;
-              this.addListItemAction({
+              this.addLI({
                 item,
                 listName: "yieldUnits",
               });
@@ -637,7 +648,7 @@ export default {
             if (focus) this.autoFocusField("difficultyLevel", 0);
           } else
             this.yieldUnits.includes(this.recipe.yieldUnit)
-              ? mull
+              ? null
               : (this.recipe.yieldUnit = "Serving");
         }
       });
@@ -657,7 +668,7 @@ export default {
           if (focus) this.addIngredient();
         } else
           this.difficultyLevels.includes(this.recipe.difficulty)
-            ? mull
+            ? null
             : (this.recipe.difficulty = "Easy");
       });
     },
@@ -681,7 +692,7 @@ export default {
             this.modalOpen = 0;
             if (item.length) {
               this.recipe.ingredients[index].unit = item;
-              this.addListItemAction({
+              this.addLI({
                 item,
                 listName: "units",
               });
@@ -772,7 +783,7 @@ export default {
     removeCombination(id) {
       let index = this.recipe.combinations.indexOf(id);
       this.recipe.combinations.splice(index, 1);
-      this.unSyncCombinations.push(id);
+      this.unLinkCombs.push(id);
       this.showUndoBar("rmCmb").then((res) =>
         this.recipe.combinations.splice(index, 0, id)
       );
@@ -819,14 +830,14 @@ export default {
       } else if (this.tempRecipe.image) {
         getFileAccess().deleteFile(this.tempRecipe.image);
       }
-      this.unSyncCombinationsAction({
+      this.unLinkCs({
         id: this.recipeID,
-        combinations: this.unSyncCombinations,
+        combs: this.unLinkCombs,
       });
       this.saveRecipe();
     },
     saveRecipe() {
-      this.addRecipeAction(this.recipe);
+      this.addR(this.recipe);
       this.saving = 0;
       this.dupRecipe
         ? this.$navigateTo(EnRecipes, {
@@ -844,7 +855,7 @@ export default {
           this.showUndo = 1;
           this.snackMsg = message;
           this.countdown = 5;
-          this.animateBar(this.snackbar, 1).then(() => {
+          this.animateBar(this.snackbar, 1, 1).then(() => {
             let a = 5;
             barTimer = setInterval(() => {
               if (this.undo) {

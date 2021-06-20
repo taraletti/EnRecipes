@@ -5,7 +5,7 @@ const Intl = require('nativescript-intl')
 
 export const myMixin = {
   methods: {
-    transparentPage({ object }) {
+    mLoad({ object }) {
       object._dialogFragment
         .getDialog()
         .getWindow()
@@ -15,16 +15,14 @@ export const myMixin = {
           )
         )
     },
-    animateBar(obj, op) {
-      if (op) {
-        obj.translateY = 64
-        obj.opacity = 0
-      }
+    animateBar(obj, x: number, y?: number) {
+      let c = CoreTypes.AnimationCurve
+      if (y) obj.translateY = 64
       return obj.animate({
-        opacity: op,
-        translate: { x: 0, y: op ? 0 : 64 },
+        opacity: 1,
+        translate: { x: 0, y: x ? 0 : 64 },
         duration: 200,
-        curve: CoreTypes.AnimationCurve.ease,
+        curve: x ? c.easeOut : c.easeIn,
       })
     },
     totalTime(prepTime, cookTime) {
@@ -36,8 +34,8 @@ export const myMixin = {
       let hr = localize('hr')
       let min = localize('min')
       let mins = h * 60 + m
-      h = h && this.getLocaleN(h)
-      m = m && this.getLocaleN(m)
+      h = h && this.localeN(h)
+      m = m && this.localeN(m)
       return {
         time: h ? (m ? `${h} ${hr} ${m} ${min}` : `${h} ${hr}`) : `${m} ${min}`,
         duration: `${mins}`,
@@ -46,8 +44,26 @@ export const myMixin = {
     setGravity(args) {
       ;(args.object || args).android.setGravity(this.RTL ? 5 : 3)
     },
-    getLocaleN(n) {
-      return new Intl.NumberFormat(null).format(n)
+    centerLVH({ object }) {
+      object.android.setGravity(17)
+    },
+    centerLV({ object }) {
+      object.android.setGravity(16)
+    },
+    localeN(n) {
+      return new Intl.NumberFormat(null).format(Number(n))
+    },
+    touchFade(object, action) {
+      let c = object.className
+      object.className = action.match(/down|move/)
+        ? !c.includes('fade')
+          ? c + ' fade'
+          : c
+        : c.replace(/ fade/g, '')
+    },
+    swipeBack({ direction }, method) {
+      if (this.$store.state.edgeS)
+        if (direction == 1) method ? method(0) : this.$navigateBack()
     },
   },
 }

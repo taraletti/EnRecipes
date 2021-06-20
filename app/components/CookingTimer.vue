@@ -1,5 +1,5 @@
 <template>
-  <Page @loaded="pgLoad" @unloaded="pgUnload" actionBarHidden="true">
+  <Page @loaded="pgLoad" actionBarHidden="true">
     <GridLayout rows="*, auto" columns="*">
       <ScrollView
         @scroll="svScroll($event)"
@@ -8,11 +8,11 @@
       >
         <StackLayout>
           <RGridLayout :rtl="RTL" rows="auto" columns="*, auto, 12">
-            <RLabel class="pageTitle" :text="'timer' | L" />
+            <RLabel class="pTitle tw tb" :text="'timer' | L" />
             <Button col="1" class="ico" :text="icon.cog" @tap="navigateTo" />
           </RGridLayout>
           <Timer
-            v-for="timer in activeTimers"
+            v-for="timer in activeTs"
             :key="timer.id + key"
             :timer="timer"
             :formattedTime="formattedTime"
@@ -21,13 +21,13 @@
             :timerAlert="timerAlert"
             :showToast="showToast"
           />
-          <StackLayout class="listSpace"> </StackLayout>
+          <StackLayout class="ls"> </StackLayout>
         </StackLayout>
       </ScrollView>
-      <GridLayout v-if="!activeTimers.length" rows="*, auto">
-        <StackLayout row="1" class="emptyState">
-          <RLabel class="title" :text="'ccwt' | L" />
-          <RLabel :text="'plsAdd' | L" />
+      <GridLayout v-if="!activeTs.length" rows="*, auto">
+        <StackLayout row="1" class="empty">
+          <RLabel class="tb t3 tw" :text="'ccwt' | L" />
+          <RLabel class="tw" :text="'plsAdd' | L" />
         </StackLayout>
       </GridLayout>
       <RGridLayout
@@ -38,8 +38,8 @@
         :hidden="showUndo"
         columns="auto, *, auto"
       >
-        <Button class="ico rtl" :text="icon.back" @tap="navigateBack" />
-        <Button class="ico fab" :text="icon.plus" @tap="addTimer" col="2" />
+        <Button class="ico rtl end" :text="icon.back" @tap="navigateBack" />
+        <Button class="ico fab end" :text="icon.plus" @tap="addTimer" col="2" />
       </RGridLayout>
       <SnackBar
         :hidden="!showUndo || toast"
@@ -50,6 +50,18 @@
         :onload="sbLoad"
       />
       <Toast :onload="tbLoad" :toast="toast" :action="hideBar" />
+      <Label
+        rowSpan="2"
+        class="edge hal"
+        :class="{ 'f r': RTL }"
+        @swipe="swipeBack($event, navigateBack)"
+      />
+      <Label
+        rowSpan="2"
+        class="edge har rtl"
+        :class="{ r: RTL, f: !RTL }"
+        @swipe="swipeBack($event, navigateBack)"
+      />
     </GridLayout>
   </Page>
 </template>
@@ -58,7 +70,6 @@
 import { localize } from "@nativescript/localize";
 import {
   Observable,
-  CoreTypes,
   Application,
   Utils,
   Device,
@@ -104,11 +115,11 @@ export default {
     ...mapState([
       "icon",
       "recipes",
-      "timerSound",
-      "timerVibrate",
-      "timerPresets",
-      "activeTimers",
-      "FGService",
+      "timerS",
+      "timerV",
+      "timerPs",
+      "activeTs",
+      "FGS",
       "RTL",
     ]),
     hasBackStack() {
@@ -116,23 +127,11 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      "addActiveTimer",
-      "removeActiveTimer",
-      "clearTimerInterval",
-      "addTimerPreset",
-      "updateActiveTimer",
-      "setFGService",
-    ]),
+    ...mapActions(["addAT", "removeAT", "clearATIs", "updateAT", "setFgS"]),
     pgLoad({ object }) {
       object.bindingContext = new Observable();
-      if (this.activeTimers.filter((e: any) => e.done).length)
-        this.openReminder();
-      this.keepScreenOnCountUp();
+      if (this.activeTs.filter((e: any) => e.done).length) this.openReminder();
       setNumber("isTimer", 1);
-    },
-    pgUnload() {
-      utils.keepScreenOn(0);
     },
     abLoad({ object }) {
       this.appbar = object;
@@ -151,19 +150,8 @@ export default {
         scrollUp = y < this.scrollPos;
         this.scrollPos = Math.abs(y);
         let ab = this.appbar.translateY;
-        if (!scrollUp && ab == 0) {
-          this.appbar.animate({
-            translate: { x: 0, y: 64 },
-            duration: 200,
-            curve: CoreTypes.AnimationCurve.ease,
-          });
-        } else if (scrollUp && ab == 64) {
-          this.appbar.animate({
-            translate: { x: 0, y: 0 },
-            duration: 200,
-            curve: CoreTypes.AnimationCurve.ease,
-          });
-        }
+        if (!scrollUp && ab == 0) this.animateBar(this.appbar, 0);
+        else if (scrollUp && ab == 64) this.animateBar(this.appbar, 1);
       }
     },
 
@@ -192,8 +180,8 @@ export default {
 
     // NOTIFICATION HANDLERS
     timerInfo() {
-      let activeCount = this.activeTimers.length;
-      let pausedCount = this.activeTimers.filter((e) => e.isPaused).length;
+      let activeCount = this.activeTs.length;
+      let pausedCount = this.activeTs.filter((e) => e.isPaused).length;
       let ongoingCount = activeCount - pausedCount;
       this.foregroundService(activeCount);
       function show() {
@@ -208,14 +196,12 @@ export default {
           title: localize("timer"),
         });
       }
-      if (this.FGService)
-        setTimeout(() => this.activeTimers.length && show(), 250);
-      this.keepScreenOnCountUp();
+      if (this.FGS) setTimeout(() => this.activeTs.length && show(), 250);
       utils.wakeLock(ongoingCount);
     },
     timerAlert() {
       let title, description, bID;
-      let firedTimers = this.activeTimers.filter((e) => e.done);
+      let firedTimers = this.activeTs.filter((e) => e.done);
       let timer = firedTimers[0];
       if (firedTimers.length > 1) {
         title = localize("texp", firedTimers.length);
@@ -240,9 +226,9 @@ export default {
         multi: firedTimers.length > 1,
         nID: 7,
         priority: 1,
-        sound: this.timerSound.uri,
+        sound: this.timerS.uri,
         title,
-        vibrate: this.timerVibrate,
+        vibrate: this.timerV,
       });
       if (firedTimers.length == 1) {
         Application.android.registerBroadcastReceiver(bID, (ctx, intent) => {
@@ -260,7 +246,7 @@ export default {
       }
     },
     openReminder() {
-      this.clearTimerInterval();
+      this.clearATIs();
       this.$showModal(TimerReminder, {
         fullscreen: true,
         props: {
@@ -271,7 +257,7 @@ export default {
           showToast: this.showToast,
         },
       }).then(() => {
-        this.clearTimerInterval();
+        this.clearATIs();
         this.key = Math.floor(Math.random() * 900) + 100;
       });
     },
@@ -281,16 +267,16 @@ export default {
         ctx,
         com.tns.ForegroundService.class
       );
-      if (n && !this.FGService) {
+      if (n && !this.FGS) {
         parseInt(Device.sdkVersion) < 26
           ? ctx.startService(intent)
           : ctx.startForegroundService(intent);
-        this.setFGService(1);
-        setNumber("FGService", 1);
-      } else if (!this.activeTimers.length) {
+        this.setFgS(1);
+        setNumber("FGS", 1);
+      } else if (!this.activeTs.length) {
         ctx.stopService(intent);
-        this.setFGService(0);
-        setNumber("FGService", 0);
+        this.setFgS(0);
+        setNumber("FGS", 0);
       }
     },
 
@@ -299,14 +285,14 @@ export default {
       this.$showModal(TimePickerHMS, {
         props: {
           title: "ntmr",
-          label: `${localize("tmr", this.activeTimers.length + 1)}`,
+          label: `${localize("tmr", this.activeTs.length + 1)}`,
           action: "strtBtn",
-          showPreset: this.timerPresets.length,
+          showPreset: this.timerPs.length,
         },
       }).then((res) => {
         if (res) {
           if (res == "presets") {
-            let list = this.timerPresets.map(
+            let list = this.timerPs.map(
               (e) => `${e.label} - ${this.formattedTime(e.time)}`
             );
             this.$showModal(Action, {
@@ -317,22 +303,22 @@ export default {
             }).then((preset) => {
               if (preset) {
                 let timer = JSON.parse(
-                  JSON.stringify(this.timerPresets[list.indexOf(preset)])
+                  JSON.stringify(this.timerPs[list.indexOf(preset)])
                 );
                 timer.id = utils.getRandomID(1);
                 timer.recipeID = this.recipeID;
                 timer.timerInt = timer.isPaused = 0;
                 timer.preset = timer.mode = 1;
-                this.addActiveTimer({
+                this.addAT({
                   timer,
-                  i: this.activeTimers.length,
+                  i: this.activeTs.length,
                 });
                 this.timerInfo();
               }
             });
           } else {
             let mode = res.time != "00:00:00" ? 1 : 0;
-            this.addActiveTimer({
+            this.addAT({
               timer: {
                 id: utils.getRandomID(1),
                 label: res.label,
@@ -344,7 +330,7 @@ export default {
                 done: 0,
                 mode,
               },
-              i: this.activeTimers.length,
+              i: this.activeTs.length,
             });
             this.timerInfo();
           }
@@ -352,11 +338,11 @@ export default {
       });
     },
     removeTimer(id, noUndo) {
-      let i = this.activeTimers.findIndex((e) => e.id == id);
-      let temp = this.activeTimers[i];
+      let i = this.activeTs.findIndex((e) => e.id == id);
+      let temp = this.activeTs[i];
       clearInterval(temp.timerInt);
       temp.timerInt = 0;
-      this.removeActiveTimer(i);
+      this.removeAT(i);
       let secs = [getNumber(`${temp.id}c`, 0), getNumber(`${temp.id}d`, 0)];
       function removeSettings() {
         remove(`${temp.id}c`);
@@ -368,7 +354,7 @@ export default {
           .then(() => {
             setNumber(`${temp.id}c`, secs[0]),
               setNumber(`${temp.id}d`, secs[1]),
-              this.addActiveTimer({
+              this.addAT({
                 timer: temp,
                 i,
               });
@@ -382,7 +368,7 @@ export default {
     togglePause(timer, n) {
       timer.isPaused =
         typeof n === "number" ? n : (!timer.isPaused as boolean | 0);
-      this.updateActiveTimer(timer);
+      this.updateAT(timer);
       n ? 0 : this.timerInfo();
     },
     showToast(data) {
@@ -390,7 +376,7 @@ export default {
       this.animateBar(this.appbar, 0).then(() => {
         this.showUndo = 0;
         this.toast = localize(data);
-        this.animateBar(this.toastbar, 1);
+        this.animateBar(this.toastbar, 1, 1);
         let a = 5;
         clearInterval(barTimer);
         barTimer = setInterval(() => a-- < 1 && this.hideBar(), 1000);
@@ -404,7 +390,7 @@ export default {
           this.showUndo = 1;
           this.snackMsg = message;
           this.countdown = 5;
-          this.animateBar(this.snackbar, 1).then(() => {
+          this.animateBar(this.snackbar, 1, 1).then(() => {
             let a = 5;
             clearInterval(barTimer);
             barTimer = setInterval(() => {
@@ -456,14 +442,9 @@ export default {
     },
 
     // HELPERS
-    keepScreenOnCountUp() {
-      utils.keepScreenOn(
-        this.activeTimers.filter((e: any) => !e.isPaused).length
-      );
-    },
   },
   created() {
-    this.clearTimerInterval();
+    this.clearATIs();
     this.recipeID && this.addTimer();
   },
   destroyed() {

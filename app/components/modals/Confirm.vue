@@ -1,28 +1,24 @@
 <template>
-  <Page
-    @loaded="transparentPage"
-    backgroundColor="transparent"
-    :class="theme"
-  >
+  <Page @loaded="mLoad" backgroundColor="transparent" :class="theme">
     <GridLayout rows="auto, auto, auto" class="modal">
       <RLabel class="title" :text="title | L" />
       <Label
         row="1"
         v-if="description"
-        class="description tw"
+        class="desc input tw lh4"
         :text="description"
       />
       <RGridLayout :rtl="RTL" row="2" columns="*, auto, auto" class="actions">
         <Button
           v-if="cancelButtonText"
           col="1"
-          class="text sm"
+          class="text tb st fb"
           :text="cancelButtonText | L"
           @tap="$modal.close(0)"
         />
         <Button
           col="2"
-          class="text sm"
+          class="text tb st fb"
           :text="okButtonText | L"
           @tap="$modal.close(1)"
         />

@@ -1,7 +1,7 @@
 <template>
   <Page @loaded="pgLoad" actionBarHidden="true">
     <RGridLayout :rtl="RTL" rows="*, auto" columns="auto, *">
-      <OptionsList title="rest" :items="items" :action="resetListItems" />
+      <OptionsList title="rest" :items="items" :action="reset" />
       <GridLayout
         :hidden="toast"
         row="1"
@@ -9,9 +9,16 @@
         @loaded="abLoad"
         columns="auto, *"
       >
-        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
+        <Button class="ico end" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
       <Toast :onload="tbLoad" :toast="toast" :action="hideToast" />
+      <Label rowSpan="2" class="edge hal rtl" @swipe="swipeBack" />
+      <Label
+        rowSpan="2"
+        colSpan="2"
+        class="edge har rtl f"
+        @swipe="swipeBack"
+      />
     </RGridLayout>
   </Page>
 </template>
@@ -76,7 +83,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["resetListItemsAction"]),
+    ...mapActions(["resetLIs"]),
     pgLoad({ object }) {
       object.bindingContext = new Observable();
     },
@@ -86,15 +93,14 @@ export default {
     tbLoad({ object }) {
       this.toastbar = object;
     },
-    // RESET
-    resetListItems(listName) {
-      this.resetListItemsAction(listName);
+    reset(list) {
+      this.resetLIs(list);
       this.showToast();
     },
     showToast() {
       this.animateBar(this.appbar, 0).then(() => {
         this.toast = localize("restDone");
-        this.animateBar(this.toastbar, 1);
+        this.animateBar(this.toastbar, 1, 1);
       });
       utils.timer(5, (val) => !val && this.hideToast());
     },

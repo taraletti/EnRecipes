@@ -3,63 +3,66 @@ import store from './store'
 import {
   Application,
   AndroidApplication,
-  ApplicationSettings,
   Utils,
   Frame,
 } from '@nativescript/core'
+import {
+  setNumber,
+  getNumber,
+  getString,
+} from '@nativescript/core/application-settings'
 import { localize } from '@nativescript/localize'
 import EnRecipes from './components/EnRecipes.vue'
 import EditRecipe from './components/EditRecipe.vue'
 import MealPlanner from './components/MealPlanner.vue'
 import CookingTimer from './components/CookingTimer.vue'
-
 // import GroceryList from './components/GroceryList.vue'
 
 import * as utils from '~/shared/utils'
 
 export const EvtBus = new Vue()
 
-let renderView = EnRecipes
+let renderView: any = EnRecipes
 
 import CollectionView from '@nativescript-community/ui-collectionview/vue'
 Vue.use(CollectionView)
 
-import { RGridLayout, RStackLayout, RDockLayout, RLabel } from './rtl-ui'
+import { RGridLayout, RStackLayout, RLabel } from './rtl-ui'
 Vue.registerElement('RGridLayout', () => RGridLayout)
 Vue.registerElement('RStackLayout', () => RStackLayout)
-Vue.registerElement('RDockLayout', () => RDockLayout)
 Vue.registerElement('RLabel', () => RLabel)
 
 import { myMixin } from './shared/mixins'
 Vue.mixin(myMixin)
 
+Vue.filter('L', localize)
+
 const initFrame = () => {
-  const vm = store
+  const s = store
   // MainInit
-  vm.commit('setTheme', ApplicationSettings.getString('theme', 'sysDef'))
-  vm.commit('initRecipes')
-  vm.commit('initMealPlans')
-  vm.commit('initListItems')
-  vm.commit('initTimerPresets')
-  if (!Object.keys(vm.state.timerSound).length) {
-    let hasTimerSound = ApplicationSettings.getString('timerSound', null)
-    vm.commit(
-      'setTimerSound',
+  s.commit('setT', getString('theme', 'sysDef'))
+  s.commit('initRs')
+  s.commit('initMPs')
+  s.commit('initLIs')
+  s.commit('initTPs')
+  if (!Object.keys(s.state.timerS).length) {
+    let hasTimerSound = getString('timerS', null)
+    s.commit(
+      'setTS',
       hasTimerSound ? JSON.parse(hasTimerSound) : utils.getTones().defaultTone
     )
   }
   // InitFrame
   const window = Application.android.startActivity.getWindow()
   const decorView = window.getDecorView()
-  utils.setBarColors(window, decorView, vm.state.theme)
-  Frame.topmost().className = vm.state.theme
+  utils.setBarColors(window, decorView, s.state.theme)
+  Frame.topmost().className = s.state.theme
 }
 const showOverLockscreen = () => {
   let ctx = Utils.ad.getApplicationContext()
   const pm = ctx.getSystemService(android.content.Context.POWER_SERVICE)
   let isScreenOff = !pm.isInteractive()
   if (isScreenOff) {
-    console.log('showOverLockscreen')
     const window = Application.android.startActivity.getWindow()
     const windowMgr = android.view.WindowManager
     const flags =
@@ -82,19 +85,21 @@ const intentListener = ({ intent, android }: any) => {
         break
       case 'timer':
         renderView = CookingTimer
-        switch (ApplicationSettings.getNumber('isTimer', 0)) {
+        switch (getNumber('isTimer', 0)) {
           case 0:
             // Closing all modals if available before navigation
-            let modals = Frame.topmost()._getRootModalViews()
-            for (let i = modals.length - 1; i >= 0; i--) {
-              Frame.topmost()
-                ._getRootModalViews()
-                [i].closeModal()
+            if (Frame.topmost()) {
+              let modals = Frame.topmost()._getRootModalViews()
+              for (let i = modals.length - 1; i >= 0; i--) {
+                Frame.topmost()
+                  ._getRootModalViews()
+                  [i].closeModal()
+              }
             }
             Vue.navigateTo(CookingTimer as any, {
               animated: false,
             })
-            ApplicationSettings.setNumber('isTimer', 1)
+            setNumber('isTimer', 1)
             break
           case 2:
             Vue.navigateBack()
@@ -108,17 +113,6 @@ const intentListener = ({ intent, android }: any) => {
   }
 }
 
-Application.on(Application.resumeEvent, () => {
-  showOverLockscreen()
-  if (
-    utils.sysLocale() !==
-    ApplicationSettings.getString('sysLocale', utils.sysLocale())
-  ) {
-    Frame.reloadPage()
-    utils.updateLocale()
-  }
-})
-
 Application.on(Application.launchEvent, (args) => {
   utils.updateLocale()
   store.commit('setRTL')
@@ -130,6 +124,15 @@ Application.on(Application.launchEvent, (args) => {
   Frame.on(Frame.loadedEvent, initFrame)
 })
 
+Application.on(Application.resumeEvent, () => {
+  showOverLockscreen()
+  if (utils.sysLocale() !== getString('sysLocale', utils.sysLocale())) {
+    Frame.reloadPage()
+    utils.updateLocale()
+    store.commit('setRTL')
+  }
+})
+
 Application.on(Application.exitEvent, () => {
   renderView = EnRecipes
   Application.android.off(
@@ -139,8 +142,6 @@ Application.on(Application.exitEvent, () => {
 })
 
 Vue.config.silent = false
-
-Vue.filter('L', localize)
 
 new Vue({
   store,

@@ -1,7 +1,7 @@
 <template>
   <ListView colSpan="2" rowSpan="2" class="options" for="item in items">
     <v-template if="$index == 0">
-      <Label class="pageTitle" :text="title | L" />
+      <Label class="pTitle tw tb" :text="title | L" />
     </v-template>
     <v-template if="item.type == 'switch'">
       <RGridLayout
@@ -10,7 +10,7 @@
         class="option"
         @touch="touch($event, item.data, item.action)"
       >
-        <Label class="ico rtl" :text="icon[item.icon]" />
+        <Label class="ico vc rtl" :text="icon[item.icon]" />
         <StackLayout col="1" class="info">
           <RLabel :text="item.title | L" class="tw" />
           <RLabel
@@ -35,7 +35,11 @@
         class="option"
         @touch="touch($event, item.data, item.action)"
       >
-        <Label class="ico" :class="{ rtl: item.rtl }" :text="icon[item.icon]" />
+        <Label
+          class="ico vc"
+          :class="{ rtl: item.rtl }"
+          :text="icon[item.icon]"
+        />
         <StackLayout col="1" class="info">
           <RLabel :text="item.title | L" class="tw" />
           <RLabel
@@ -48,13 +52,13 @@
     </v-template>
     <v-template if="item.type == 'info'">
       <Label
-        class="group-info sub tw"
+        class="groupInfo sub tw lh4"
         :class="{ r: RTL }"
         :text="item.title | L"
       />
     </v-template>
     <v-template>
-      <StackLayout class="listSpace"> </StackLayout>
+      <StackLayout class="ls"> </StackLayout>
     </v-template>
   </ListView>
 </template>
@@ -75,7 +79,7 @@ export default {
       );
     },
     touch({ object, action }, data, localAction) {
-      object.className = action.match(/down|move/) ? "option fade" : "option";
+      this.touchFade(object, action);
       if (action == "up") localAction ? localAction(data) : this.action(data);
     },
   },

@@ -1,9 +1,5 @@
 <template>
-  <Page
-    @loaded="transparentPage"
-    backgroundColor="transparent"
-    :class="theme"
-  >
+  <Page @loaded="mLoad" backgroundColor="transparent" :class="theme">
     <GridLayout columns="*" rows="auto, auto, *, auto" class="modal">
       <RLabel class="title" :text="title | L" />
       <StackLayout
@@ -29,26 +25,22 @@
       </ListView>
       <Label
         row="2"
-        class="noResInfo"
-        :hidden="recipes.length"
-        :text="'recListEmp' | L"
-      />
-      <Label
-        row="2"
-        class="noResInfo"
-        :hidden="filteredRecipes.length || !searchQuery"
-        :text="'noRecs' | L"
+        padding="16"
+        lineHeight="4"
+        class="tc tw"
+        :hidden="!noResult"
+        :text="noResult | L"
       />
       <RGridLayout :rtl="RTL" row="3" columns="auto, *, auto" class="actions">
         <Button
           :hidden="!action"
-          class="text sm"
+          class="text tb st fb"
           :text="action | L"
           @tap="$modal.close(action)"
         />
         <Button
           col="2"
-          class="text sm"
+          class="text tb st fb"
           :text="'cBtn' | L"
           @tap="$modal.close(0)"
         />
@@ -82,13 +74,16 @@ export default {
         })
         .filter((e) => this.recipeFilter(e));
     },
+    noResult() {
+      if (!this.recipes.length) return "recListEmp";
+      else if (!this.filteredRecipes.length && this.searchQuery)
+        return "noRecs";
+      else 0;
+    },
   },
   methods: {
     tapAction(recipe) {
       this.$modal.close(recipe.id);
-    },
-    centerLabel({ object }) {
-      object.android.setGravity(16);
     },
     recipeFilter(e) {
       let searchQuery = this.searchQuery.toLowerCase();
@@ -101,9 +96,7 @@ export default {
       );
     },
     touch({ object, action }, recipe) {
-      object.className = action.match(/down|move/)
-        ? "listItem fade"
-        : "listItem ";
+      this.touchFade(object, action);
       if (action == "up") this.tapAction(recipe);
     },
   },

@@ -3,8 +3,15 @@
     <RGridLayout :rtl="RTL" rows="*, auto" columns="auto, *">
       <OptionsList title="Settings" :items="items" />
       <GridLayout row="1" class="appbar rtl" rows="*" columns="auto, *">
-        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
+        <Button class="ico end" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
+      <Label rowSpan="2" class="edge hal rtl" @swipe="swipeBack" />
+      <Label
+        rowSpan="2"
+        colSpan="2"
+        class="edge har rtl f"
+        @swipe="swipeBack"
+      />
     </RGridLayout>
   </Page>
 </template>
@@ -19,7 +26,7 @@ import { localize } from "@nativescript/localize";
 export default {
   components: { OptionsList },
   computed: {
-    ...mapState(["icon", "mondayFirst", "RTL", "plannerView", "planDeletion"]),
+    ...mapState(["icon", "startMon", "RTL", "plannerV", "planDel"]),
     items() {
       return [
         {},
@@ -27,21 +34,21 @@ export default {
           type: "list",
           icon: "calv",
           title: "calVM",
-          subTitle: localize(this.plannerView),
+          subTitle: localize(this.plannerV),
           action: this.selectPlannerView,
         },
         {
           type: "switch",
           icon: "week",
           title: "swm",
-          checked: !!this.mondayFirst,
+          checked: !!this.startMon,
           action: this.toggleFirstDay,
         },
         {
           type: "list",
           icon: "mpd",
           title: "admp",
-          subTitle: localize(this.planDeletion),
+          subTitle: localize(this.planDel),
           action: this.selectDeletionTime,
         },
         {},
@@ -49,31 +56,33 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["setFirstDay", "setPlannerView", "setPlanDeletion"]),
+    ...mapActions(["setFD", "setPlannerV", "setPlanDel"]),
     pgLoad({ object }) {
       object.bindingContext = new Observable();
     },
     toggleFirstDay() {
-      this.setFirstDay(!this.mondayFirst | 0);
+      this.setFD(!this.startMon | 0);
     },
     selectPlannerView() {
       this.$showModal(Action, {
         props: {
           title: "calVM",
-          list: ["mnth", "wk", "d"],
+          list: ["d", "wk", "mnth"],
+          selected: this.plannerV,
         },
       }).then((res) => {
-        if (res && this.plannerView != res) this.setPlannerView(res);
+        if (res && this.plannerV != res) this.setPlannerV(res);
       });
     },
     selectDeletionTime() {
       this.$showModal(Action, {
         props: {
           title: "admp",
-          list: ["otay", "otam", "otaw", "nvr"],
+          list: ["otaw", "otam", "otay", "nvr"],
+          selected: this.planDel,
         },
       }).then((res) => {
-        if (res && this.planDeletion != res) this.setPlanDeletion(res);
+        if (res && this.planDel != res) this.setPlanDel(res);
       });
     },
   },
