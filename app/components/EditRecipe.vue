@@ -288,19 +288,19 @@
         columns="auto, *, auto"
       >
         <Button
-          class="ico"
+          class="ico end"
           :class="{ f: RTL }"
           :text="icon.back"
           @tap="navigateBack(0)"
         />
         <Button
           v-if="hasChanges && !saving"
-          class="ico fab"
+          class="ico fab end"
           :text="icon.save"
           col="2"
           @tap="saveOperation"
         />
-        <ActivityIndicator col="2" v-if="saving" :busy="saving" />
+        <ActivityIndicator class="end" col="2" v-if="saving" :busy="saving" />
       </RGridLayout>
       <SnackBar
         :hidden="!showUndo"

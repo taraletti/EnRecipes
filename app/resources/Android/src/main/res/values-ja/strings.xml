@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="sec">"s"</string>
   <string name="medium">"中"</string>
   <string name="large">"大"</string>
   <string name="small">"小"</string>
@@ -17,7 +18,6 @@
   <string name="yieldU">"仕上がり分量の単位"</string>
   <string name="yieldQ">"仕上がり分量"</string>
   <string name="yesterday">"昨日"</string>
-  <string name="WED">"水"</string>
   <string name="wAgo">"%1$s 週前"</string>
   <string name="Vietnamese">"ベトナム料理"</string>
   <string name="Vegetarian">"ベジタリアン"</string>
@@ -27,7 +27,6 @@
   <string name="Unit">"単位"</string>
   <string name="unit">"個"</string>
   <string name="Turkish">"トルコ料理"</string>
-  <string name="TUE">"火"</string>
   <string name="tsp">"小さじ"</string>
   <string name="tsInfo">"スペースで区切ってください"</string>
   <string name="ts">"タグ"</string>
@@ -38,7 +37,6 @@
   <string name="today">"今日"</string>
   <string name="tLInfo">"あとで試したいレシピはここに並びます"</string>
   <string name="title">"タイトル"</string>
-  <string name="THU">"木"</string>
   <string name="Theme">"テーマ"</string>
   <string name="Thai">"タイ料理"</string>
   <string name="Teaspoon">"小さじ"</string>
@@ -49,7 +47,6 @@
   <string name="Swedish">"スウェーデン料理"</string>
   <string name="sVwInfo">"何を作るか決められないときに使います"</string>
   <string name="sVw">"振ってランダムなレシピを表示"</string>
-  <string name="SUN">"日"</string>
   <string name="strAdd">"レシピを追加しましょう！"</string>
   <string name="stp">"作り方"</string>
   <string name="stars">"星評価"</string>
@@ -69,12 +66,10 @@
   <string name="SET">"設定"</string>
   <string name="Serving">"人前"</string>
   <string name="ser">"検索"</string>
-  <string name="September">"9月"</string>
   <string name="selRec">"レシピを選択"</string>
   <string name="Seafood">"シーフード"</string>
   <string name="Scottish">"スコットランド料理"</string>
   <string name="Sauces">"ソース"</string>
-  <string name="SAT">"土"</string>
   <string name="Salads">"サラダ"</string>
   <string name="Russian">"ロシア料理"</string>
   <string name="rst">"再起動"</string>
@@ -130,10 +125,8 @@
   <string name="opts">"オプション"</string>
   <string name="_Oldest_first_Z6cq4h">"古いもの順"</string>
   <string name="OK">"OK"</string>
-  <string name="October">"10月"</string>
   <string name="nwYiU">"新しい仕上がり単位"</string>
   <string name="nwCat">"新しいカテゴリー"</string>
-  <string name="November">"11月"</string>
   <string name="nos">"メモ"</string>
   <string name="noRecsInL">"検索に一致するレシピが見つかりませんでした"</string>
   <string name="noRecs">"検索に一致するレシピがありません"</string>
@@ -147,7 +140,6 @@
   <string name="newRec">"新しいレシピ"</string>
   <string name="_Newest_first_2Sb3c">"新しい順"</string>
   <string name="newCui">"新しいジャンル"</string>
-  <string name="MON">"月"</string>
   <string name="Moderate">"普通"</string>
   <string name="ml">"ml"</string>
   <string name="minimal">"最小"</string>
@@ -156,8 +148,6 @@
   <string name="mg">"mg"</string>
   <string name="Mexican">"メキシコ料理"</string>
   <string name="Meat">"肉料理"</string>
-  <string name="May">"5月"</string>
-  <string name="March">"3月"</string>
   <string name="_Main_dishes_u6RGQ">"主菜"</string>
   <string name="mAgo">"%1$s か月前"</string>
   <string name="lunch">"昼食"</string>
@@ -175,12 +165,9 @@
   <string name="kg">"kg"</string>
   <string name="Kenyan">"ケニア料理"</string>
   <string name="kEdit">"編集を続ける"</string>
-  <string name="June">"6月"</string>
-  <string name="July">"7月"</string>
   <string name="joinTG">"Telegramグループに参加"</string>
   <string name="Jewish">"ユダヤ料理"</string>
   <string name="Japanese">"和食"</string>
-  <string name="January">"1月"</string>
   <string name="Jamaican">"ジャマイカ料理"</string>
   <string name="Italian">"イタリア料理"</string>
   <string name="Irish">"アイルランド料理"</string>
@@ -207,14 +194,12 @@
   <string name="gal">"ガロン"</string>
   <string name="g">"g"</string>
   <string name="fsList">"お気に入りのレシピはここに表示されます"</string>
-  <string name="FRI">"金"</string>
   <string name="French">"フランス料理"</string>
   <string name="_Fluid_Ounce_bd10L">"液量オンス"</string>
   <string name="fltr">"絞り込み"</string>
   <string name="_fl_oz_72kqu">"液量オンス"</string>
   <string name="_Filtered_recipes_Z1alhhu">"絞り込み結果"</string>
   <string name="Filipino">"フィリピン料理"</string>
-  <string name="February">"2月"</string>
   <string name="favourites">"お気に入り"</string>
   <string name="expSuc">"エクスポートに成功"</string>
   <string name="expip">"エクスポートを実行中"</string>
@@ -236,7 +221,6 @@
   <string name="Desserts">"デザート"</string>
   <string name="delRecsInfo">"%1$s 件のレシピを削除しようとしています"</string>
   <string name="delRecInfo">"レシピ %1$s を削除しようとしています"</string>
-  <string name="December">"12月"</string>
   <string name="dBtn">"削除"</string>
   <string name="db">"データベース"</string>
   <string name="Dark">"ダーク"</string>
@@ -269,9 +253,7 @@
   <string name="Black">"黒"</string>
   <string name="Beverages">"飲物"</string>
   <string name="Barbecue">"キャンプ料理"</string>
-  <string name="August">"8月"</string>
   <string name="aStpBtn">"手順を追加"</string>
-  <string name="April">"4月"</string>
   <string name="appRst">"アプリの再起動が必要"</string>
   <string name="apply">"適用する"</string>
   <string name="appInfo">"EnRecipesはレシピを作成・管理・共有することができる、オープンソースでプライバシーに配慮したデジタル料理本です"</string>
@@ -293,26 +275,24 @@
   <string name="aBtn">"追加"</string>
   <string name="About">"アプリについて"</string>
   <string name="aap">"写真を添付"</string>
+  <string name="esgbInfo">"Disable this option if you have any navigation issues"</string>
+  <string name="esgb">"Edge swipe to go back"</string>
+  <string name="ksavrInfo">"Prevents the screen from turning off while viewing a recipe"</string>
+  <string name="ksavr">"Keep screen awake while viewing recipe"</string>
+  <string name="rstBtn">"RESET"</string>
   <string name="add">"Add"</string>
   <string name="nvr">"Never"</string>
   <string name="otaw">"Older than a week"</string>
   <string name="otam">"Older than a month"</string>
   <string name="otay">"Older than a year"</string>
   <string name="admp">"Auto-delete meal plans"</string>
-  <string name="plsCrt">"Use the plus button to create one"</string>
+  <string name="plsCrt">"Use the + button to create one"</string>
   <string name="ehwmp">"Eat healthy with meal plans!"</string>
   <string name="selMT">"Select meal type"</string>
   <string name="ystr">"Yesterday"</string>
   <string name="tmrw">"Tomorrow"</string>
   <string name="tdy">"Today"</string>
   <string name="cpy">"copy"</string>
-  <string name="sat">"Saturday"</string>
-  <string name="fri">"Friday"</string>
-  <string name="thu">"Thursday"</string>
-  <string name="wed">"Wednesday"</string>
-  <string name="tue">"Tuesday"</string>
-  <string name="mon">"Monday"</string>
-  <string name="sun">"Sunday"</string>
   <string name="d">"Day"</string>
   <string name="wk">"Week"</string>
   <string name="mnth">"Month"</string>
@@ -348,5 +328,4 @@
   <string name="strtBtn">"START"</string>
   <string name="ntmr">"New timer"</string>
   <string name="timer">"Cooking Timer"</string>
-  <string name="sec">"sec"</string>
 </resources>

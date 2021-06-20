@@ -18,10 +18,9 @@
       <RLabel :text="timer.label" class="tb title tw a" />
       <RLabel
         :hidden="!timer.recipeID && done"
-        @touch="!timer.recipeID && !done && touch($event)"
+        @touch="!done && touch($event)"
         :text="getRecipeTitle"
-        class="a"
-        :class="timer.recipeID ? 'sub' : 'accent'"
+        class="a accent"
       />
       <RLabel
         :text="
@@ -57,7 +56,7 @@
 </template>
 
 <script>
-import { ApplicationSettings } from "@nativescript/core";
+import { ApplicationSettings, Device } from "@nativescript/core";
 import { localize } from "@nativescript/localize";
 import { mapState, mapActions } from "vuex";
 import ActionWithSearch from "../modals/ActionWithSearch";
@@ -135,6 +134,9 @@ export default {
           )
       );
     },
+    sdkv() {
+      return parseInt(Device.sdkVersion);
+    },
   },
   methods: {
     ...mapActions(["addTP", "sortATs"]),
@@ -169,7 +171,9 @@ export default {
     },
     setProgress() {
       this.progress = 100 - (this.count / this.getTotalTime) * 100;
-      this.pBar.setProgress(this.progress, true);
+      this.sdkv > 23
+        ? this.pBar.setProgress(this.progress, true)
+        : this.pBar.setProgress(this.progress);
     },
     initTimer() {
       this.resetInterval();
@@ -199,7 +203,9 @@ export default {
       ApplicationSettings.remove(`${this.timer.id}d`);
       this.setNum("c", this.count);
       this.toggleProgress(1);
-      this.pBar.setProgress(0, true);
+      this.sdkv > 23
+        ? this.pBar.setProgress(0, true)
+        : this.pBar.setProgress(0);
     },
     toggleProgress(n) {
       this.togglePause(this.timer, n);

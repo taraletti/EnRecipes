@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="mnth">"నెల"</string>
+  <string name="wk">"వారం"</string>
+  <string name="d">"రోజు"</string>
+  <string name="selMT">"భోజన రకాన్ని ఎంచుకోండి"</string>
+  <string name="ehwmp">"భోజన పథకాలతో ఆరోగ్యంగా తినండి!"</string>
+  <string name="plsCrt">"ఒకదాన్ని సృష్టించడానికి + బటన్‌ను ఉపయోగించండి"</string>
+  <string name="admp">"భోజన పథకాలను స్వయంచాలకంగా తొలగించండి"</string>
+  <string name="otay">"ఒక సంవత్సరం కన్నా పాతది"</string>
+  <string name="otam">"ఒక నెల కన్నా పాతది"</string>
+  <string name="otaw">"వారం కన్నా పాతది"</string>
+  <string name="nvr">"ఎప్పుడూ"</string>
+  <string name="add">"జోడించు"</string>
+  <string name="rstBtn">"రీసెట్ చేయండి"</string>
+  <string name="ksavr">"రెసిపీని చూసేటప్పుడు స్క్రీన్‌ను మేల్కొని ఉండండి"</string>
+  <string name="ksavrInfo">"రెసిపీని చూసేటప్పుడు స్క్రీన్ ఆపివేయకుండా నిరోధిస్తుంది"</string>
+  <string name="esgb">"తిరిగి వెళ్ళడానికి అంచుని స్వైప్ చేయండి"</string>
+  <string name="esgbInfo">"మీకు నావిగేషన్ సమస్యలు ఉంటే ఈ ఎంపికను నిలిపివేయండి"</string>
   <string name="random">"యాదృచ్ఛికం"</string>
   <string name="gtD">"తేదీకి వెళ్ళండి"</string>
   <string name="ccwt">"టైమర్‌లతో నమ్మకంగా ఉడికించాలి!"</string>
@@ -11,13 +28,6 @@
   <string name="ttv">"వీక్షించడానికి నొక్కండి"</string>
   <string name="oAP">"%1$s పురోగతిలో ఉంది, %2$s పాజ్ చేయబడ్డాయి"</string>
   <string name="calVM">"క్యాలెండర్ వీక్షణ మోడ్"</string>
-  <string name="sun">"ఆదివారం"</string>
-  <string name="mon">"సోమవారం"</string>
-  <string name="tue">"మంగళవారం"</string>
-  <string name="wed">"బుధవారం"</string>
-  <string name="thu">"గురువారం"</string>
-  <string name="fri">"శుక్రవారం"</string>
-  <string name="sat">"శనివారం"</string>
   <string name="cpy">"కాపీ"</string>
   <string name="tdy">"నేడు"</string>
   <string name="tmrw">"రేపు"</string>
@@ -50,7 +60,6 @@
   <string name="yieldU">"దిగుబడి యూనిట్"</string>
   <string name="yieldQ">"దిగుబడి పరిమాణం"</string>
   <string name="yesterday">"నిన్న"</string>
-  <string name="WED">"బుధ"</string>
   <string name="wAgo">"%1$s వారాల క్రితం"</string>
   <string name="Vietnamese">"వియత్నామీస్"</string>
   <string name="Vegetarian">"శాఖాహారం"</string>
@@ -61,7 +70,6 @@
   <string name="unit">"యూనిట్"</string>
   <string name="Undefined">"వివరించబడలేదు"</string>
   <string name="Turkish">"టర్కిష్"</string>
-  <string name="TUE">"మంగళ"</string>
   <string name="tsp">"స్పూన్"</string>
   <string name="tsInfo">"ఖాళీలతో వేరు"</string>
   <string name="ts">"టాగ్లు"</string>
@@ -72,7 +80,6 @@
   <string name="today">"ఈ రోజు"</string>
   <string name="tLInfo">"మీరు తరువాత ప్రయత్నించాలనుకునే వంటకాలు ఇక్కడ ఇవ్వబడ్డాయి"</string>
   <string name="title">"శీర్షిక"</string>
-  <string name="THU">"గురు"</string>
   <string name="Theme">"థీమ్"</string>
   <string name="Thai">"థాయ్"</string>
   <string name="Teaspoon">"టీస్పూన్"</string>
@@ -83,7 +90,6 @@
   <string name="Swedish">"స్వీడిష్"</string>
   <string name="sVwInfo">"మీరు నిర్ణయించలేనప్పుడు ఏమి ఉడికించాలో ఎంచుకోవడానికి మీకు సహాయపడుతుంది"</string>
   <string name="sVw">"యాదృచ్ఛిక రెసిపీని చూడటానికి షేక్ చేయండి"</string>
-  <string name="SUN">"ఆది"</string>
   <string name="strAdd">"మీ వంటకాలను జోడించడం ప్రారంభించండి!"</string>
   <string name="stp">"దశ"</string>
   <string name="stick">"కర్ర"</string>
@@ -105,12 +111,10 @@
   <string name="SET">"సెట్"</string>
   <string name="Serving">"అందిస్తోంది"</string>
   <string name="ser">"శోధించు"</string>
-  <string name="September">"సెప్టెంబర్"</string>
   <string name="selRec">"రెసిపీని ఎంచుకోండి"</string>
   <string name="Seafood">"సముద్రపు ఆహారం"</string>
   <string name="Scottish">"స్కాటిష్"</string>
   <string name="Sauces">"సాస్"</string>
-  <string name="SAT">"శని"</string>
   <string name="Salads">"సలాడ్లు"</string>
   <string name="Russian">"రష్యన్"</string>
   <string name="rst">"పునఃప్రారంభించు"</string>
@@ -154,7 +158,7 @@
   <string name="Pound">"పౌండ్"</string>
   <string name="Poultry">"పౌల్ట్రీ"</string>
   <string name="Portuguese">"పోర్చుగీస్"</string>
-  <string name="plsAdd">"ఒకదాన్ని జోడించడానికి ప్లస్ బటన్‌ను ఉపయోగించండి"</string>
+  <string name="plsAdd">"ఒకదాన్ని జోడించడానికి + బటన్‌ను ఉపయోగించండి"</string>
   <string name="planner">"భోజన ప్రణాళిక"</string>
   <string name="pinch">"చిటికెడు"</string>
   <string name="Piece">"ముక్క"</string>
@@ -168,10 +172,8 @@
   <string name="opts">"ఎంపికలు"</string>
   <string name="_Oldest_first_Z6cq4h">"పురాతన మొదటి"</string>
   <string name="OK">"అలాగే"</string>
-  <string name="October">"అక్టోబర్"</string>
   <string name="nwYiU">"కొత్త దిగుబడి యూనిట్"</string>
   <string name="nwCat">"కొత్త వర్గం"</string>
-  <string name="November">"నవంబర్"</string>
   <string name="nos">"గమనికలు"</string>
   <string name="noRecsInL">"ఇక్కడ ఉన్న వంటకాలు ఏవీ మీ శోధనతో సరిపోలడం లేదు"</string>
   <string name="noRecs">"మీ శోధనకు వంటకాలు ఏవీ సరిపోలడం లేదు"</string>
@@ -186,7 +188,6 @@
   <string name="newRec">"కొత్త వంటకం"</string>
   <string name="_Newest_first_2Sb3c">"క్రొత్తది మొదటిది"</string>
   <string name="newCui">"కొత్త వంటకాలు"</string>
-  <string name="MON">"సోమ"</string>
   <string name="Moderate">"మోస్తరు"</string>
   <string name="ml">"మిల్లీలీటర్"</string>
   <string name="minimal">"కనిష్ట"</string>
@@ -196,8 +197,6 @@
   <string name="Mexican">"మెక్సికన్"</string>
   <string name="medium">"మీడియం"</string>
   <string name="Meat">"మాంసం"</string>
-  <string name="May">"మే"</string>
-  <string name="March">"మార్చి"</string>
   <string name="_Main_dishes_u6RGQ">"ప్రధాన వంటకాలు"</string>
   <string name="mAgo">"%1$s నెలల క్రితం"</string>
   <string name="lunch">"భోజనం"</string>
@@ -217,12 +216,9 @@
   <string name="kg">"కిలోగ్రాము"</string>
   <string name="Kenyan">"కెన్యా"</string>
   <string name="kEdit">"సవరణ కొనసాగించండి"</string>
-  <string name="June">"జూన్"</string>
-  <string name="July">"జూలై"</string>
   <string name="joinTG">"టెలిగ్రామ్ సమూహంలో చేరండి"</string>
   <string name="Jewish">"యూదుల"</string>
   <string name="Japanese">"జపనీస్"</string>
-  <string name="January">"జనవరి"</string>
   <string name="Jamaican">"జమైకా"</string>
   <string name="Italian">"ఇటాలియన్"</string>
   <string name="it">"అంశం"</string>
@@ -251,14 +247,12 @@
   <string name="gal">"గాలన్"</string>
   <string name="g">"గ్రాము"</string>
   <string name="fsList">"ఇష్టమైన వంటకాలు ఇంకా ఏమీ లేవు"</string>
-  <string name="FRI">"శుక్ర"</string>
   <string name="French">"ఫ్రెంచ్"</string>
   <string name="_Fluid_Ounce_bd10L">"ద్రవం oun న్స్"</string>
   <string name="fltr">"ఫిల్టర్"</string>
   <string name="_fl_oz_72kqu">"ద్రవం oun న్స్"</string>
   <string name="_Filtered_recipes_Z1alhhu">"ఫిల్టర్ చేసిన వంటకాలు"</string>
   <string name="Filipino">"ఫిలిపినో"</string>
-  <string name="February">"ఫిబ్రవరి"</string>
   <string name="favourites">"ఇష్టమైనవి"</string>
   <string name="expSuc">"ఎగుమతి విజయం"</string>
   <string name="expip">"ఎగుమతి పురోగతిలో ఉంది"</string>
@@ -280,7 +274,6 @@
   <string name="Desserts">"డెజర్ట్స్"</string>
   <string name="delRecsInfo">"మీరు %1$s ని శాశ్వతంగా తొలగించబోతున్నారు"</string>
   <string name="delRecInfo">"మీరు %1$s రెసిపీని శాశ్వతంగా తొలగించబోతున్నారు"</string>
-  <string name="December">"డిసెంబర్"</string>
   <string name="dBtn">"ఎంచుకోబడింది"</string>
   <string name="db">"డేటాబేస్"</string>
   <string name="Dark">"ముదురు"</string>
@@ -313,9 +306,7 @@
   <string name="Black">"నలుపు"</string>
   <string name="Beverages">"పానీయాలు"</string>
   <string name="Barbecue">"బార్బెక్యూ"</string>
-  <string name="August">"ఆగస్టు"</string>
   <string name="aStpBtn">"దశను జోడించండి"</string>
-  <string name="April">"ఏప్రిల్"</string>
   <string name="appRst">"అప్లికేషన్ పున art ప్రారంభం అవసరం"</string>
   <string name="apply">"వర్తించు"</string>
   <string name="appInfo">"నారెసిపీస్ అనేది ఓపెన్ సోర్స్, గోప్యతా-స్నేహపూర్వక డిజిటల్ కుక్‌బుక్, ఇది మీ వంటకాలను సృష్టించడానికి, నిర్వహించడానికి మరియు భాగస్వామ్యం చేయడానికి మిమ్మల్ని అనుమతిస్తుంది"</string>
@@ -337,16 +328,4 @@
   <string name="aBtn">"చేర్చు"</string>
   <string name="About">"గురించి"</string>
   <string name="aap">"ఫోటోను అటాచ్ చేయండి"</string>
-  <string name="add">"Add"</string>
-  <string name="nvr">"Never"</string>
-  <string name="otaw">"Older than a week"</string>
-  <string name="otam">"Older than a month"</string>
-  <string name="otay">"Older than a year"</string>
-  <string name="admp">"Auto-delete meal plans"</string>
-  <string name="plsCrt">"Use the plus button to create one"</string>
-  <string name="ehwmp">"Eat healthy with meal plans!"</string>
-  <string name="selMT">"Select meal type"</string>
-  <string name="d">"Day"</string>
-  <string name="wk">"Week"</string>
-  <string name="mnth">"Month"</string>
 </resources>

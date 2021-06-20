@@ -1,3 +1,13 @@
+## :warning: Important Notice :warning:
+
+To continue receiving updates, please update your EnRecipes to v2.0.0
+
+There are some significant changes in this version. So, in order to continue, you must do the following:
+
+1. Export a full backup.
+2. Uninstall EnRecipes.
+3. Install v2.0.0 and Import your data.
+
 <p align="center"><a href="https://enrecipes.vercel.app"><img src="fastlane/metadata/android/en-GB/images/featureGraphic.png" width="100%"></a></p>
 
 <h1 align="center">A Simple, Offline Recipe Manager</h1>
@@ -15,7 +25,7 @@
 <a href="https://www.vishnuraghav.com/donate/"><img alt="Donate to Vishnu Raghav" src="assets/Images/donate.svg" width="240"></a></p>
 <hr>
 <h3 align="center">Important Links</h3>
-<p align="center"><a href="https://github.com/vishnuraghavb/EnRecipes/wiki/User-Guide">User Guide</a> - <a href="https://github.com/vishnuraghavb/EnRecipes/blob/main/PRIVACY.md">Privacy Policy</a> - <a href="https://github.com/vishnuraghavb/EnRecipes/blob/main/CONTRIBUTING.md">Contribution Guide</a> - <a href="https://github.com/vishnuraghavb/EnRecipes/projects/1">Roadmap</a> - <a href="https://t.me/enrecipes/">Telegram Group</a> - <a href="https://enrecipes.vercel.app/">Website</a></p>
+<p align="center"><a href="https://github.com/vishnuraghavb/EnRecipes/wiki/User-Guide">User Guide</a> · <a href="https://github.com/vishnuraghavb/EnRecipes/blob/main/PRIVACY.md">Privacy Policy</a> · <a href="https://github.com/vishnuraghavb/EnRecipes/blob/main/CONTRIBUTING.md">Contribution Guide</a> · <a href="https://github.com/vishnuraghavb/EnRecipes/projects/1">Roadmap</a> · <a href="https://t.me/enrecipes/">Telegram Group</a> · <a href="https://enrecipes.vercel.app/">Website</a></p>
 <hr>
 
 ## Features
@@ -32,7 +42,7 @@
 - Create meal plans
 - Set cooking timers
 - You can Import or Export your data
-- Has Light, Dark and Black themes
+- Light, Dark and Black themes
 
 ## Highlights
 
@@ -40,10 +50,6 @@
 - Private by Design
 - No special permissions required
 - No annoying ads or pop-ups
-
-**Languages being translated**:
-
-[![Translation status](https://hosted.weblate.org/widgets/enrecipes/-/app-translations/multi-auto.svg)](https://hosted.weblate.org/engage/enrecipes/)
 
 Check the [Roadmap](https://github.com/vishnuraghavb/EnRecipes/projects/1) for upcoming features.
 
@@ -55,11 +61,11 @@ Please read the [User Guide](https://github.com/vishnuraghavb/EnRecipes/wiki/Use
 | :---------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------: |
 |                               **Home - Light theme**                                |                                **Home - Dark theme**                                |
 | <img src="fastlane/metadata/android/en-GB/images/phoneScreenshots/3.png" width=276> | <img src="fastlane/metadata/android/en-GB/images/phoneScreenshots/4.png" width=276> |
-|                               **Home - Black theme**                                |                                   **Recipe view**                                   |
+|                                   **Recipe view**                                   |                                **Scale ingredients**                                |
 | <img src="fastlane/metadata/android/en-GB/images/phoneScreenshots/5.png" width=276> | <img src="fastlane/metadata/android/en-GB/images/phoneScreenshots/6.png" width=276> |
-|                                   **Share menu**                                    |                                **Scale ingredients**                                |
+|                                   **Share menu**                                    |                                  **Meal Planner**                                   |
 | <img src="fastlane/metadata/android/en-GB/images/phoneScreenshots/7.png" width=276> | <img src="fastlane/metadata/android/en-GB/images/phoneScreenshots/8.png" width=276> |
-|                                  **Meal planner**                                   |                                      **About**                                      |
+|                                  **Cooking Timer**                                  |                                      **About**                                      |
 
 ## Contribution
 
@@ -75,19 +81,52 @@ You can,
 - [Join the Telegram group](http://t.me/enrecipes) (quicker replies)
 - Contact me at apps@vishnuraghav.com
 
-### Looking to translate the app to your own language?
+### Looking to translate EnRecipes?
 
 EnRecipes is being translated using [Weblate](https://hosted.weblate.org/engage/enrecipes/). See [translation instructions](https://github.com/vishnuraghavb/EnRecipes/wiki/Translation-Instructions) in the wiki for more information.
 
-<a href="https://hosted.weblate.org/engage/enrecipes/">
+<!-- <a href="https://hosted.weblate.org/engage/enrecipes/">
 <img src="https://hosted.weblate.org/widgets/enrecipes/-/app-translations/287x66-grey.png" alt="Translation status" />
+</a> -->
+<a href="https://hosted.weblate.org/engage/enrecipes/">
+<img src="https://hosted.weblate.org/widgets/enrecipes/-/open-graph.png" alt="Translation status" />
 </a>
 
 ## Credits
 
 This app was written in my free time using NativeScript-Vue. I would like to thank all those people who helped me understand the concepts during the process and my special thanks to the NativeScript team and the community. I also would like to thank the members of the [EnRecipes Telegram group](https://t.me/enrecipes) for contributing their ideas for this project.
 
-### Recipes used in the Screenshots
+### Translation credits
+
+| Language                 | Translator(s)                                                                                                                                                                                                  |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Arabic                   | [phwright](https://hosted.weblate.org/user/phwright/)                                                                                                                                                          |
+| Catalan                  | J. Lavoie                                                                                                                                                                                                      |
+| Danish                   | [mondstern](https://hosted.weblate.org/user/mondstern/), Henrik Dankvardt, J. Lavoie, Allan Nordhøy, Jonas Hansen                                                                                              |
+| Dutch                    | Heimen Stoffels                                                                                                                                                                                                |
+| English (India)          | Vishnu Raghav B                                                                                                                                                                                                |
+| English (United Kingdom) | Vishnu Raghav B                                                                                                                                                                                                |
+| English (United States)  | Vishnu Raghav B                                                                                                                                                                                                |
+| Finnish                  | J. Lavoie                                                                                                                                                                                                      |
+| French                   | J. Lavoie, Swann Fournial, fabeuss, [mondstern](https://hosted.weblate.org/user/mondstern/)                                                                                                                    |
+| French (Canada)          | Swann Fournial, J. Lavoie                                                                                                                                                                                      |
+| French (Switzerland)     | Swann Fournial, J. Lavoie                                                                                                                                                                                      |
+| French (Belgium)         | Swann Fournial, J. Lavoie                                                                                                                                                                                      |
+| German                   | J. Lavoie, nautilusx, Swann Fournial                                                                                                                                                                           |
+| Hindi                    | Vishnu Raghav B, V                                                                                                                                                                                             |
+| Indonesian               | Reza Almanda, [mondstern](https://hosted.weblate.org/user/mondstern/)                                                                                                                                          |
+| Italian                  | J. Lavoie, [mondstern](https://hosted.weblate.org/user/mondstern/), Andrea Ghensi                                                                                                                              |
+| Japanese                 | Y. Sakamoto, K. Herbert                                                                                                                                                                                        |
+| Malayalam                | Vishnu Raghav B                                                                                                                                                                                                |
+| Norwegian Bokmål         | Allan Nordhøy, [mondstern](https://hosted.weblate.org/user/mondstern/), Lars A Reinton                                                                                                                         |
+| Portuguese               | Sérgio Morais, [mondstern](https://hosted.weblate.org/user/mondstern/), J. Lavoie                                                                                                                              |
+| Portuguese (Brazil)      | [mondstern](https://hosted.weblate.org/user/mondstern/), Sérgio Morais, Wesley, Ricardo Zamarrenho Carvalho Correa, J. Lavoie, Nínive de Jesus Celestino, emmanuel einstein campos vasconcelos, Fabio Oliveira |
+| Russian                  | dm9pZCAq, [mondstern](https://hosted.weblate.org/user/mondstern/), Leca                                                                                                                                        |
+| Spanish                  | taraletti, J. Lavoie, Sansom, [mondstern](https://hosted.weblate.org/user/mondstern/), Diego                                                                                                                   |
+| Spanish (Argentina)      | another-sapiens                                                                                                                                                                                                |
+| Tamil                    | Vishnu Raghav B                                                                                                                                                                                                |
+
+### Screenshot recipe credits
 
 - **Meen Pollichathu** by [Bency Veronica](https://www.instagram.com/bencys_lil_kitchen)
 - **Curd Vada** by P. Shanmugalakshmi

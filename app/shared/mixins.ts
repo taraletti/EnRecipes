@@ -44,6 +44,12 @@ export const myMixin = {
     setGravity(args) {
       ;(args.object || args).android.setGravity(this.RTL ? 5 : 3)
     },
+    centerLVH({ object }) {
+      object.android.setGravity(17)
+    },
+    centerLV({ object }) {
+      object.android.setGravity(16)
+    },
     localeN(n) {
       return new Intl.NumberFormat(null).format(Number(n))
     },

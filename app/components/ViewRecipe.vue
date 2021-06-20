@@ -71,10 +71,7 @@
               <RGridLayout :rtl="RTL" rows="auto" columns="*, *">
                 <StackLayout class="attrT" :hidden="!hasTime(recipe.prepTime)">
                   <RLabel class="sub" :text="'prepT' | L" />
-                  <RLabel
-                    class="v"
-                    :text="formattedTime(recipe.prepTime)"
-                  />
+                  <RLabel class="v" :text="formattedTime(recipe.prepTime)" />
                 </StackLayout>
                 <StackLayout
                   :col="hasTime(recipe.prepTime) ? 1 : 0"
@@ -82,10 +79,7 @@
                   :hidden="!hasTime(recipe.cookTime)"
                 >
                   <RLabel class="title sub" :text="'cookT' | L" />
-                  <RLabel
-                    class="v"
-                    :text="formattedTime(recipe.cookTime)"
-                  />
+                  <RLabel class="v" :text="formattedTime(recipe.cookTime)" />
                 </StackLayout>
               </RGridLayout>
               <RGridLayout :rtl="RTL" rows="auto" columns="*, *">
@@ -169,7 +163,6 @@
             </StackLayout>
           </ScrollView>
           <RLabel
-            @loaded="onStickyLoad"
             class="t2 tb tw sticky"
             :hidden="!stickyTitle"
             :text="stickyTitle"
@@ -179,9 +172,10 @@
       <GridLayout
         row="1"
         @loaded="sbload"
-        class="appbar sidebar"
+        class="appbar toolbar"
         :col="RTL ? 0 : 2"
-        rows="auto, auto, auto"
+        rows="auto, auto, auto, auto"
+        :visibility="showTools ? 'visible' : 'hidden'"
       >
         <Button class="ico" :text="icon.timer" @tap="openCookingTimer" />
         <Button
@@ -200,6 +194,7 @@
           :text="icon.print"
           @tap="printView"
         />
+        <Button row="3" class="ico" :text="icon.share" @tap="shareHandler" />
       </GridLayout>
       <RGridLayout
         :rtl="RTL"
@@ -211,7 +206,7 @@
         columns="auto, *, auto, auto, auto, auto"
         @touch="() => null"
       >
-        <Button class="ico rtl" :text="icon.back" @tap="$navigateBack()" />
+        <Button class="ico rtl end" :text="icon.back" @tap="$navigateBack()" />
         <Button
           col="2"
           v-if="!filterTrylater"
@@ -242,9 +237,9 @@
         <ActivityIndicator col="4" :hidden="!busyEdit" :busy="busyEdit" />
         <Button
           col="5"
-          class="ico fab"
-          :text="icon.share"
-          @tap="shareHandler"
+          class="ico end"
+          :text="showTools ? icon.less : icon.more"
+          @tap="toggleTools"
         />
       </RGridLayout>
       <Toast
@@ -334,9 +329,9 @@ export default {
       toast: null,
       photoOpen: 0,
       showTitleArr: [0, 0, 0, 0],
-      sticky: null,
       view: null,
       wv: null,
+      showTools: 0,
     };
   },
   computed: {
@@ -421,9 +416,6 @@ export default {
       this.imgView.top = 24;
       this.imgView.left = this.RTL ? 16 : Screen.mainScreen.widthDIPs - 112;
     },
-    onStickyLoad({ object }) {
-      this.sticky = object;
-    },
     fixTitle(object, swipeUp: boolean): void {
       let ingL = this.recipe.ingredients.length;
       let insL = this.recipe.instructions.length;
@@ -478,15 +470,10 @@ export default {
     },
     showBars() {
       this.animateBar(this.appbar, 1);
-      this.animateBar(this.sidebar, 1);
     },
     hideBars() {
+      this.showTools && this.toggleTools();
       this.animateBar(this.appbar, 0);
-      this.sidebar.animate({
-        translate: { x: this.RTL ? -64 : 64, y: 0 },
-        duration: 200,
-        curve: CoreTypes.AnimationCurve.easeIn,
-      });
     },
 
     // Helpers
@@ -693,6 +680,31 @@ export default {
       this.createNotes();
       this.yieldMultiplier = this.recipe.yieldQuantity;
       this.recipe.tried && this.recipe.lastTried && this.showLastTried();
+    },
+
+    // Tools
+    toggleTools() {
+      if (this.showTools) {
+        this.sidebar
+          .animate({
+            height: 0,
+            translate: { x: 0, y: 48 },
+            duration: 200,
+            curve: CoreTypes.AnimationCurve.easeIn,
+          })
+          .then(() => (this.showTools = 0));
+      } else {
+        this.sidebar.height = 1;
+        this.showTools = 1;
+        setTimeout(() => {
+          this.sidebar.animate({
+            height: 216,
+            duration: 200,
+            translate: { x: 0, y: 0 },
+            curve: CoreTypes.AnimationCurve.easeOut,
+          });
+        }, 1);
+      }
     },
 
     // ShareAction

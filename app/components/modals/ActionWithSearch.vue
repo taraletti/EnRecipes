@@ -85,9 +85,6 @@ export default {
     tapAction(recipe) {
       this.$modal.close(recipe.id);
     },
-    centerLabel({ object }) {
-      object.android.setGravity(16);
-    },
     recipeFilter(e) {
       let searchQuery = this.searchQuery.toLowerCase();
       return (

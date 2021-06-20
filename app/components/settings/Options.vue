@@ -10,7 +10,7 @@
         rows="*"
         columns="auto, *"
       >
-        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
+        <Button class="ico end" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
       <Toast :onload="tbLoad" :toast="toast" :action="hideBar" />
       <Label rowSpan="2" class="edge hal rtl" @swipe="swipeBack" />

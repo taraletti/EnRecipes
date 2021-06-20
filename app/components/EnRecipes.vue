@@ -1,6 +1,6 @@
 <template>
   <Page @loaded="pgLoad" @unloaded="pgUnload" actionBarHidden="true">
-    <GridLayout rows="*, 104, auto" columns="*">
+    <GridLayout rows="*, auto, auto" columns="*">
       <CollectionView
         rowSpan="4"
         :spanSize="getSpanSize"
@@ -81,7 +81,7 @@
               :hidden="recipe.image"
               verticalAlignment="center"
               class="ico imgHolder"
-              @loaded="centerLabel"
+              @loaded="centerLVH"
               width="96"
               height="96"
               fontSize="48"
@@ -150,7 +150,7 @@
               v-else
               width="100%"
               :height="imgWidth"
-              @loaded="centerLabel"
+              @loaded="centerLVH"
               class="ico imgHolder"
               :fontSize="imgWidth / 2"
               :text="icon.img"
@@ -206,7 +206,7 @@
               v-else
               width="100%"
               :height="imgWidth"
-              @loaded="centerLabel"
+              @loaded="centerLVH"
               class="ico imgHolder"
               :fontSize="imgWidth / 2"
               :text="icon.img"
@@ -294,7 +294,7 @@
         @loaded="tbLoad"
         :rows="tbRows"
         columns="auto"
-        class="appbar toolbar sidebar hal"
+        class="appbar toolbar hal"
         :class="{ r: RTL }"
         :visibility="showTools ? 'visible' : 'hidden'"
       >
@@ -306,7 +306,7 @@
           class="tool"
           @touch="touchTool($event, item.comp, item.title)"
         >
-          <Label class="ico vc" :text="icon[item.icon]" />
+          <Label class="ico v vc" :text="icon[item.icon]" />
           <Label col="1" class="v vc" :text="item.title | L" />
         </RStackLayout>
       </GridLayout>
@@ -320,10 +320,7 @@
         @touch="() => null"
       >
         <Button
-          accessibilityLabel="Accessible Label"
-          accessibilityHint="Just a label"
-          accessibilityValue="Accessible Label"
-          class="ico rtl"
+          class="ico rtl end"
           @tap="
             showSearch
               ? closeSearch()
@@ -380,14 +377,14 @@
         </StackLayout>
         <Button
           :hidden="showSearch || selectMode"
-          class="ico fab"
+          class="ico fab end"
           :text="icon.plus"
           col="5"
           @tap="addR"
         />
         <Button
           :hidden="!selectMode"
-          class="ico"
+          class="ico end"
           :text="icon.del"
           col="5"
           @tap="deleteSelection"
@@ -546,7 +543,7 @@ export default {
       ];
     },
     tbRows() {
-      return "48, ".repeat(this.tbItems.length) + 48;
+      return "52, ".repeat(this.tbItems.length) + "52";
     },
     noResultFor() {
       if (this.filterFavourites || this.filterTrylater || this.selCuisine)
@@ -625,9 +622,9 @@ export default {
       object.android.setOverScrollMode(View.OVER_SCROLL_NEVER);
       this.listview = object;
     },
-    cvScroll(args) {
+    cvScroll({ object }) {
       let scrollUp;
-      let y = args.object.scrollOffset;
+      let y = object.scrollOffset;
       if (y) {
         scrollUp = y < this.scrollPos;
         this.scrollPos = Math.abs(y);
@@ -722,7 +719,7 @@ export default {
         this.showTools = 1;
         setTimeout(() => {
           this.toolbar.animate({
-            height: 104,
+            height: 52 * this.tbItems.length + 8,
             duration: 200,
             translate: { x: 0, y: 0 },
             curve: CoreTypes.AnimationCurve.easeOut,
@@ -734,7 +731,6 @@ export default {
     // ListHandlers
     addToSelection(id) {
       this.showTools && this.toggleTools();
-
       this.selectMode = 1;
       this.appbar.translateY = 0;
       this.selection.includes(id)
@@ -872,9 +868,7 @@ export default {
       }
       return count && this.localeN(count);
     },
-    centerLabel({ object }) {
-      object.android.setGravity(17);
-    },
+
     focusField({ object }) {
       if (this.RTL) object.android.setGravity(5);
       setTimeout((e) => {

@@ -38,8 +38,8 @@
         :hidden="showUndo"
         columns="auto, *, auto"
       >
-        <Button class="ico rtl" :text="icon.back" @tap="navigateBack" />
-        <Button class="ico fab" :text="icon.plus" @tap="addTimer" col="2" />
+        <Button class="ico rtl end" :text="icon.back" @tap="navigateBack" />
+        <Button class="ico fab end" :text="icon.plus" @tap="addTimer" col="2" />
       </RGridLayout>
       <SnackBar
         :hidden="!showUndo || toast"

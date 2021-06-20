@@ -3,7 +3,7 @@
     <RGridLayout :rtl="RTL" rows="*, auto" columns="auto, *">
       <OptionsList title="Settings" :items="items" />
       <GridLayout row="1" class="appbar rtl" rows="*" columns="auto, *">
-        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
+        <Button class="ico end" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
       <Label rowSpan="2" class="edge hal rtl" @swipe="swipeBack" />
       <Label

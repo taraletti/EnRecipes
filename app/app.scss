@@ -54,7 +54,6 @@ Page {
   color: $gray9;
   background: $gray1;
   Page,
-  .filters,
   .sticky {
     background: $gray1;
   }
@@ -79,7 +78,7 @@ Page {
     color: $gray3;
     background: $gray2;
   }
-  .snackBar {
+  .snackbar {
     color: $gray1;
     background: $gray9;
   }
@@ -91,7 +90,6 @@ Page {
   color: $gray1;
   background: $gray9;
   Page,
-  .filters,
   .sticky {
     background: $gray9;
   }
@@ -116,7 +114,7 @@ Page {
     color: $gray9;
     background: $gray10;
   }
-  .snackBar {
+  .snackbar {
     color: $gray9;
     background: $gray1;
   }
@@ -128,7 +126,6 @@ Page {
   color: $gray2;
   background: $gray10;
   Page,
-  .filters,
   .sticky {
     background: $gray10;
   }
@@ -153,7 +150,7 @@ Page {
     color: $gray10;
     background: $gray9;
   }
-  .snackBar {
+  .snackbar {
     color: $gray10;
     background: $gray2;
   }
@@ -179,7 +176,7 @@ TextView {
   line-height: 4;
 }
 #search {
-  padding: 13 12;
+  padding: 13 8;
 }
 .inputC {
   margin-bottom: 24;
@@ -414,26 +411,23 @@ ActivityIndicator {
 // AppBar
 
 .appbar {
-  margin: 8;
-  padding: 4;
+  margin: 0 8 8;
   border-radius: 16;
-  .fab {
-    margin-left: 8;
+  padding: 2;
+  .ico {
+    margin: 2;
   }
-}
-.sidebar {
-  margin-bottom: 0;
 }
 .toolbar {
-  vertical-align: bottom;
   height: 1;
+  vertical-align: bottom;
   transform: translateY(48);
+  padding: 4 2;
   .tool {
-    padding: 0 8;
     orientation: horizontal;
+    padding: 0 8;
   }
-  .v,
-  .ico {
+  .v {
     padding: 0 4;
   }
 }
@@ -459,15 +453,15 @@ ActivityIndicator {
 // -----------------------------
 // MealPlanner
 .calendar {
-  padding: 0 16;
+  padding: 0 16 16;
   .accent.sub {
     color: rgba($orange, 0.6);
   }
 }
 .plans {
-  margin: 16 16 0;
+  margin: 0 16;
   .date {
-    margin: 16 0 8;
+    padding: 16 0 8;
   }
   .type {
     padding: 8 0;

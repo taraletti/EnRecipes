@@ -286,6 +286,8 @@ export default new Vuex.Store({
       madd: '\ue943',
       awake: '\ue944',
       edge: '\ue945',
+      more: '\ue946',
+      less: '\ue947',
     },
     sortT: 'random', // SortType
     langs: [

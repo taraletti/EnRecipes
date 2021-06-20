@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="ksavr">"Scherm niet uitschakelen tijdens bekijken van recept"</string>
+  <string name="ksavrInfo">"Voorkomt dat het scherm wordt uitgeschakeld tijdens het bekijken van een recept"</string>
+  <string name="esgb">"Vegen vanaf schermrand om terug te gaan"</string>
+  <string name="esgbInfo">"Schakel deze optie uit als je problemen ervaart tijdens het navigeren"</string>
+  <string name="add">"Toevoegen"</string>
+  <string name="rstBtn">"STANDAARDWAARDEN"</string>
   <string name="selMT">"Kies het soort maaltijd"</string>
   <string name="ehwmp">"Eet gezond met maaltijdschema\'s!"</string>
   <string name="plsCrt">"Druk op de plusknop om een schema toe te voegen"</string>
@@ -13,13 +19,6 @@
   <string name="mnth">"Maand"</string>
   <string name="wk">"Week"</string>
   <string name="d">"Dag"</string>
-  <string name="sun">"zondag"</string>
-  <string name="mon">"maandag"</string>
-  <string name="tue">"dinsdag"</string>
-  <string name="wed">"woensdag"</string>
-  <string name="thu">"donderdag"</string>
-  <string name="fri">"vrijdag"</string>
-  <string name="sat">"zaterdag"</string>
   <string name="cpy">"kopie"</string>
   <string name="tdy">"Vandaag"</string>
   <string name="tmrw">"Morgen"</string>
@@ -61,7 +60,6 @@
   <string name="yieldU">"Eenheid"</string>
   <string name="yieldQ">"Hoeveelheid"</string>
   <string name="yesterday">"gisteren"</string>
-  <string name="WED">"WOE"</string>
   <string name="wAgo">"%1$s weken geleden"</string>
   <string name="Vietnamese">"Vietnamees"</string>
   <string name="Vegetarian">"Vegetarisch"</string>
@@ -72,7 +70,6 @@
   <string name="unit">"eenheid"</string>
   <string name="Undefined">"Onbekend"</string>
   <string name="Turkish">"Turks"</string>
-  <string name="TUE">"DI"</string>
   <string name="tsp">"tl"</string>
   <string name="tsInfo">"kommagescheiden"</string>
   <string name="ts">"Labels"</string>
@@ -83,7 +80,6 @@
   <string name="today">"vandaag"</string>
   <string name="tLInfo">"Hier vind je de recepten terug die je later wilt uitproberen"</string>
   <string name="title">"Naam"</string>
-  <string name="THU">"DO"</string>
   <string name="Theme">"Thema"</string>
   <string name="Thai">"Thais"</string>
   <string name="Teaspoon">"Theelepel"</string>
@@ -94,7 +90,6 @@
   <string name="Swedish">"Zweeds"</string>
   <string name="sVwInfo">"Handig voor als je even niet weet wat je wilt maken"</string>
   <string name="sVw">"Schudden om willekeurig recept te tonen"</string>
-  <string name="SUN">"ZO"</string>
   <string name="strAdd">"Voeg je recepten toe!"</string>
   <string name="stp">"Stap"</string>
   <string name="stick">"stokje"</string>
@@ -116,12 +111,10 @@
   <string name="SET">"INSTELLEN"</string>
   <string name="Serving">"Portie"</string>
   <string name="ser">"Zoeken"</string>
-  <string name="September">"september"</string>
   <string name="selRec">"Recept kiezen"</string>
   <string name="Seafood">"Zeevruchten"</string>
   <string name="Scottish">"Schots"</string>
   <string name="Sauces">"Sausen"</string>
-  <string name="SAT">"ZA"</string>
   <string name="Salads">"Salades"</string>
   <string name="Russian">"Russisch"</string>
   <string name="rst">"HERSTARTEN"</string>
@@ -179,10 +172,8 @@
   <string name="opts">"Opties"</string>
   <string name="_Oldest_first_Z6cq4h">"Oudste bovenaan"</string>
   <string name="OK">"Oké"</string>
-  <string name="October">"oktober"</string>
   <string name="nwYiU">"Nieuwe eenheid"</string>
   <string name="nwCat">"Nieuwe categorie"</string>
-  <string name="November">"november"</string>
   <string name="nos">"Aantekeningen"</string>
   <string name="noRecsInL">"Geen van deze recepten komt overeen met je zoekopdracht"</string>
   <string name="noRecs">"Er zijn geen overeenkomende zoekresultaten"</string>
@@ -197,7 +188,6 @@
   <string name="newRec">"Nieuw recept"</string>
   <string name="_Newest_first_2Sb3c">"Nieuwste bovenaan"</string>
   <string name="newCui">"Nieuwe keuken"</string>
-  <string name="MON">"MA"</string>
   <string name="Moderate">"Gemiddeld"</string>
   <string name="ml">"ml"</string>
   <string name="minimal">"Minimaal"</string>
@@ -207,8 +197,6 @@
   <string name="Mexican">"Mexicaans"</string>
   <string name="medium">"middelgroot"</string>
   <string name="Meat">"Vlees"</string>
-  <string name="May">"mei"</string>
-  <string name="March">"maart"</string>
   <string name="_Main_dishes_u6RGQ">"Hoofdgerechten"</string>
   <string name="mAgo">"%1$s maanden geleden"</string>
   <string name="lunch">"Lunch"</string>
@@ -228,12 +216,9 @@
   <string name="kg">"kg"</string>
   <string name="Kenyan">"Keniaans"</string>
   <string name="kEdit">"DOORGAAN MET BEWERKEN"</string>
-  <string name="June">"juni"</string>
-  <string name="July">"juli"</string>
   <string name="joinTG">"Word lid van de Telegram-groep"</string>
   <string name="Jewish">"Joods"</string>
   <string name="Japanese">"Japans"</string>
-  <string name="January">"januari"</string>
   <string name="Jamaican">"Jamaicaans"</string>
   <string name="Italian">"Italiaans"</string>
   <string name="it">"Item"</string>
@@ -262,14 +247,12 @@
   <string name="gal">"gal"</string>
   <string name="g">"g"</string>
   <string name="fsList">"Hier vind je je favoriete recepten terug"</string>
-  <string name="FRI">"VRIJ"</string>
   <string name="French">"Frans"</string>
   <string name="_Fluid_Ounce_bd10L">"Vloeibaar ons"</string>
   <string name="fltr">"Filteren"</string>
   <string name="_fl_oz_72kqu">"fl oz"</string>
   <string name="_Filtered_recipes_Z1alhhu">"Gefilterde recepten"</string>
   <string name="Filipino">"Filipijns"</string>
-  <string name="February">"februari"</string>
   <string name="favourites">"Favorieten"</string>
   <string name="expSuc">"Exporteren voltooid"</string>
   <string name="expip">"Bezig met exporteren"</string>
@@ -291,7 +274,6 @@
   <string name="Desserts">"Nagerechten"</string>
   <string name="delRecsInfo">"Je staat op het punt om %1$s permanent te verwijderen"</string>
   <string name="delRecInfo">"Je staat op het punt om %1$s te verwijderen"</string>
-  <string name="December">"december"</string>
   <string name="dBtn">"VERWIJDEREN"</string>
   <string name="db">"Databank"</string>
   <string name="Dark">"Donker"</string>
@@ -324,9 +306,7 @@
   <string name="Black">"Zwart"</string>
   <string name="Beverages">"Drankjes"</string>
   <string name="Barbecue">"Barbecue"</string>
-  <string name="August">"augustus"</string>
   <string name="aStpBtn">"STAP TOEVOEGEN"</string>
-  <string name="April">"april"</string>
   <string name="appRst">"Herstart vereist"</string>
   <string name="apply">"TOEPASSEN"</string>
   <string name="appInfo">"EnRecipes in een open source, privacybewust digitaal kookboek waarmee je recepten kunt aanmaken, beheren en delen"</string>
@@ -348,5 +328,4 @@
   <string name="aBtn">"TOEVOEGEN"</string>
   <string name="About">"Over"</string>
   <string name="aap">"Foto bijvoegen"</string>
-  <string name="add">"Add"</string>
 </resources>

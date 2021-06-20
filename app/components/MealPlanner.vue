@@ -1,7 +1,8 @@
 <template>
   <Page @loaded="pgLoad" actionBarHidden="true">
-    <GridLayout rows="*, auto, 72" columns="*">
+    <GridLayout rows="*, auto, auto" columns="*">
       <ScrollView
+        @loaded="svLoad"
         @scroll="!edit && svScroll($event)"
         rowSpan="3"
         scrollBarIndicatorVisible="false"
@@ -54,6 +55,7 @@
           <StackLayout row="3" class="plans">
             <CollectionView
               @loaded="cvLoad"
+              @scroll="cvScroll"
               for="item in mpItems"
               :height="listHeight"
             >
@@ -72,7 +74,7 @@
                   :rtl="RTL"
                   class="plan vc"
                   columns="auto, *, auto"
-                  @touch="!edit && touchRecipe"
+                  @touch="!edit && touchRecipe($event)"
                   @tap="!edit && viewRecipe(item.id)"
                 >
                   <Image
@@ -89,27 +91,22 @@
                     v-else-if="!noImg && !item.image"
                     verticalAlignment="middle"
                     class="ico imgHolder"
-                    @loaded="centerLabel($event, 17)"
+                    @loaded="centerLVH"
                     width="48"
                     height="48"
                     fontSize="23"
                     :text="icon.img"
                   />
                   <GridLayout rows="auto, auto" class="info vc" col="1">
-                    <RLabel :text="item.title" />
-                    <RLabel
-                      row="1"
-                      :hidden="!item.size"
-                      class="t6"
-                      :text="item.size"
-                    />
+                    <RLabel class="vc" :text="item.title" />
+                    <RLabel row="1" class="t6" :text="item.size || 0" />
                   </GridLayout>
                   <Button
                     :hidden="!edit"
                     col="2"
                     class="ico si"
                     :text="icon.x"
-                    @tap="removeRecipe(item.id)"
+                    @tap="removePlan(item.id)"
                   />
                 </RGridLayout>
               </v-template>
@@ -118,7 +115,7 @@
                   <Label
                     class="info lh4 tw"
                     :class="{ note: !noImg }"
-                    @loaded="centerLabel($event, 16)"
+                    @loaded="centerLV"
                     :hidden="!item.note"
                     :text="item.note"
                   />
@@ -127,7 +124,7 @@
                     col="2"
                     class="ico si"
                     :text="icon.x"
-                    @tap="removeRecipe(item.id)"
+                    @tap="removePlan(item.id)"
                   />
                 </RGridLayout>
               </v-template>
@@ -174,7 +171,12 @@
           @tap="hasRecipes ? toggleEditMode() : randomMealPlan()"
           col="3"
         /> -->
-        <Button class="ico fab" :text="icon.plus" @tap="addMealPlan" col="4" />
+        <Button
+          class="ico fab end"
+          :text="icon.plus"
+          @tap="addMealPlan"
+          col="4"
+        />
       </RGridLayout>
       <SnackBar
         row="2"
@@ -202,7 +204,14 @@
 </template>
 
 <script lang="ts">
-import { Frame, Observable, Screen } from "@nativescript/core";
+import {
+  Application,
+  Device,
+  Frame,
+  Observable,
+  Screen,
+  Utils,
+} from "@nativescript/core";
 import { mapState, mapActions } from "vuex";
 import ViewRecipe from "./ViewRecipe.vue";
 import EditRecipe from "./EditRecipe.vue";
@@ -218,6 +227,7 @@ const Intl = require("nativescript-intl");
 import { localize } from "@nativescript/localize";
 let barTimer;
 
+declare const android, androidx: any;
 export default {
   components: {
     SnackBar,
@@ -230,8 +240,10 @@ export default {
       date: 0,
       edit: 0,
       scrollPos: 1,
+      cvScrollPos: 0,
       appbar: 0,
       snackbar: 0,
+      scrollView: 0,
       listView: 0,
       countdown: 5,
       snackMsg: 0,
@@ -254,7 +266,34 @@ export default {
       return new Date(this.year, this.month, this.date, 0).getTime();
     },
     listHeight() {
-      return Math.floor(Screen.mainScreen.heightDIPs);
+      const ctx = Utils.android.getApplicationContext();
+      const wm = ctx.getSystemService(android.content.Context.WINDOW_SERVICE);
+      if (parseInt(Device.sdkVersion) < 30) {
+        let resources = ctx.getResources();
+        let idSbH = resources.getIdentifier(
+          "status_bar_height",
+          "dimen",
+          "android"
+        );
+        let sbHeight = idSbH > 0 ? resources.getDimensionPixelSize(idSbH) : 0;
+        const metrics = new android.util.DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(metrics);
+        console.log(metrics.heightPixels - sbHeight);
+        return Math.floor(
+          Utils.layout.toDeviceIndependentPixels(
+            metrics.heightPixels - sbHeight
+          )
+        );
+      } else {
+        const metrics = wm.getCurrentWindowMetrics();
+        const { top, bottom } = metrics
+          .getWindowInsets()
+          .getInsetsIgnoringVisibility(
+            android.view.WindowInsets.Type.systemBars()
+          );
+        console.log(metrics.getBounds().height() - top - bottom, top, bottom);
+        return metrics.getBounds().height() - top - bottom;
+      }
     },
     getRecipes() {
       if (this.mealPlans.length) {
@@ -399,24 +438,31 @@ export default {
       this.snackbar = object;
     },
     cvLoad({ object }) {
+      const View = android.view.View;
+      object.android.setOverScrollMode(View.OVER_SCROLL_NEVER);
       this.listView = object;
+      object.isScrollEnabled = false;
     },
-    svScroll(args) {
+    cvScroll({ object }) {
+      this.scrollView.isScrollEnabled = object.scrollOffset <= 100;
+    },
+    svLoad({ object }) {
+      this.scrollView = object;
+    },
+    svScroll({ object, scrollY }) {
       let scrollUp;
-      let y = args.scrollY;
+      let y = scrollY;
       if (y) {
         scrollUp = y < this.scrollPos;
         this.scrollPos = Math.abs(y);
         let ab = this.appbar.translateY;
         if (!scrollUp && ab == 0) this.animateBar(this.appbar, 0);
         else if (scrollUp && ab == 64) this.animateBar(this.appbar, 1);
+        this.listView.isScrollEnabled = y >= object.scrollableHeight;
       }
     },
 
     // Helpers
-    centerLabel({ object }, n) {
-      object.android.setGravity(n);
-    },
     showBar() {
       this.animateBar(this.appbar, 1);
     },
@@ -659,7 +705,7 @@ export default {
         this.temp = 0;
       }
     },
-    removeRecipe(id) {
+    removePlan(id) {
       this.deleteTempFromDB();
       let index = this.mealPlans.findIndex((e) => e.id == id);
       let plan = this.mealPlans.filter((e) => e.id == id)[0];

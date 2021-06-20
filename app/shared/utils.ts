@@ -578,7 +578,7 @@ export function sysLocale() {
 export function setBarColors(w, dv, t) {
   function setColors(color) {
     w.setStatusBarColor(new Color(color).android)
-    sdkv >= 27 && w.setNavigationBarColor(new Color(color).android)
+    sdkv >= 26 && w.setNavigationBarColor(new Color(color).android)
   }
   switch (t) {
     case 'Light':
@@ -591,7 +591,7 @@ export function setBarColors(w, dv, t) {
       setColors('#000000')
       break
   }
-  if (sdkv >= 27)
+  if (sdkv >= 26)
     dv.setSystemUiVisibility(
       t == 'Light'
         ? View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR |

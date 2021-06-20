@@ -10,7 +10,7 @@
         rows="*"
         columns="auto, *"
       >
-        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
+        <Button class="ico end" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
       <Toast :onload="tbLoad" :toast="toast" :action="hideBar" />
       <RGridLayout
@@ -18,7 +18,7 @@
         v-show="progress"
         row="1"
         colSpan="2"
-        class="appbar snackBar rtl"
+        class="appbar snackbar rtl"
         columns="auto, *"
       >
         <ActivityIndicator :busy="!!progress" />
@@ -373,9 +373,7 @@ export default {
       );
 
       // Import mealPlans
-      db.select(`SELECT * FROM mealPlans`).then((res) =>
-        this.importMPsDB(res)
-      );
+      db.select(`SELECT * FROM mealPlans`).then((res) => this.importMPsDB(res));
 
       // Import timerPs
       db.select(`SELECT * FROM timerPresets`).then((res) =>
