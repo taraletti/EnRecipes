@@ -320,5 +320,9 @@
     "calVM": "Modo de vista tipo calendário",
     "oAP": "%1$s a decorrer, %2$s em pausa",
     "rstBtn": "REINICIAR",
-    "add": "Adicionar"
+    "add": "Adicionar",
+    "esgb": "Deslizar para a borda para voltar",
+    "esgbInfo": "Desative esta opção se tiver problemas ao navegar",
+    "ksavrInfo": "Impede que o ecrã desligue ao ver uma receita",
+    "ksavr": "Manter ecrã ligado ao ver receitas"
 }
