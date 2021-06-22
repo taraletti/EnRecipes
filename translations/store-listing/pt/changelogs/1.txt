@@ -1,4 +1,4 @@
-- Agora pode escolher um tema padrão do sistema para seguir a configuração do modo escuro do seu dispositivo (para Android 10 e superior)
+- Tema padrão do sistema para seguir a configuração do modo escuro do dispositivo (Android >=10)
 - Adicionada ferramenta de cronómetro de cozedura
 - Página de configurações individuais para cada ferramenta
 - As receitas agora podem ser classificadas por ordem aleatória
@@ -6,3 +6,4 @@
 - Imprimir receitas
 - Duplicar receitas
 - Interface reformulada na planificação de refeições
+- Deslizar para a borda para voltar ao ecrã anterior
