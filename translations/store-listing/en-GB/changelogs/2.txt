@@ -1,0 +1,2 @@
+- Add sections to your recipe ingredients and instructions
+- Adding or removing items in the recipe editor is even more easier
