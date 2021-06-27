@@ -234,7 +234,7 @@
   "sru": "Share recipe using...",
   "stars": "Star rating",
   "stick": "stick",
-  "stp": "Step",
+  "stp": "Step %s",
   "strAdd": "Start adding your recipes!",
   "sVw": "Shake to view random recipe",
   "sVwInfo": "Helps you choose what to cook when you can't decide",
@@ -326,5 +326,6 @@
   "esgb": "Edge swipe to go back",
   "esgbInfo": "Disable this option if you have any navigation issues",
   "sect": "Section %s",
-  "addSectBtn": "ADD SECTION"
+  "addSectBtn": "ADD SECTION",
+  "sectRm": "Section removed"
 }
