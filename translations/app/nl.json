@@ -103,7 +103,7 @@
     "intf": "Uiterlijk",
     "invFile": "Ongeldig bestand",
     "Irish": "Iers",
-    "it": "Item",
+    "it": "Item %s",
     "Italian": "Italiaans",
     "Jamaican": "Jamaicaans",
     "Japanese": "Japans",
@@ -324,5 +324,7 @@
     "esgbInfo": "Schakel deze optie uit als je problemen ervaart tijdens het navigeren",
     "esgb": "Vegen vanaf schermrand om terug te gaan",
     "ksavrInfo": "Voorkomt dat het scherm wordt uitgeschakeld tijdens het bekijken van een recept",
-    "ksavr": "Scherm niet uitschakelen tijdens bekijken van recept"
+    "ksavr": "Scherm niet uitschakelen tijdens bekijken van recept",
+    "addSectBtn": "SECTIE TOEVOEGEN",
+    "sect": "Sectie %s"
 }
