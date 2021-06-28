@@ -103,7 +103,7 @@
   "intf": "Interface",
   "invFile": "Invalid file",
   "Irish": "Irish",
-  "it": "Item",
+  "it": "Item %s",
   "Italian": "Italian",
   "Jamaican": "Jamaican",
   "Japanese": "Japanese",
@@ -234,7 +234,7 @@
   "sru": "Share recipe using...",
   "stars": "Star rating",
   "stick": "stick",
-  "stp": "Step",
+  "stp": "Step %s",
   "strAdd": "Start adding your recipes!",
   "sVw": "Shake to view random recipe",
   "sVwInfo": "Helps you choose what to cook when you can't decide",
@@ -324,5 +324,7 @@
   "ksavr": "Keep screen awake while viewing recipe",
   "ksavrInfo": "Prevents the screen from turning off while viewing a recipe",
   "esgb": "Edge swipe to go back",
-  "esgbInfo": "Disable this option if you have any navigation issues"
+  "esgbInfo": "Disable this option if you have any navigation issues",
+  "sect": "Section %s",
+  "addSectBtn": "ADD SECTION"
 }
