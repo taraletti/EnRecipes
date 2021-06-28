@@ -326,5 +326,6 @@
     "ksavrInfo": "Voorkomt dat het scherm wordt uitgeschakeld tijdens het bekijken van een recept",
     "ksavr": "Scherm niet uitschakelen tijdens bekijken van recept",
     "addSectBtn": "SECTIE TOEVOEGEN",
-    "sect": "Sectie %s"
+    "sect": "Sectie %s",
+    "sectRm": "De sectie is verwijderd"
 }
