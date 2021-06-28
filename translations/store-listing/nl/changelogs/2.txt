@@ -1,0 +1,3 @@
+[NIEUW] Voeg secties toe aan ingrediëntenlijsten en bereidingswijzen;
+[VERBETERD] Het toevoegen en verwijderen van items is vereenvoudigd;
+[OPGELOST] Diverse fouten opgelost.
