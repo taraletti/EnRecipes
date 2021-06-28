@@ -103,7 +103,7 @@
     "intf": "Interfaccia",
     "invFile": "File non valido",
     "Irish": "irlandese",
-    "it": "Voce",
+    "it": "Voce %s",
     "Italian": "italiana",
     "Jamaican": "giamaicana",
     "Japanese": "giapponese",
@@ -233,7 +233,7 @@
     "sru": "Condividi la ricetta usando…",
     "stars": "Valutazione a stelle",
     "stick": "bastone",
-    "stp": "Passo",
+    "stp": "Passo %s",
     "strAdd": "Inizia ad aggiungere le tue ricette!",
     "sVw": "Scuoti per visualizzare una ricetta casuale",
     "sVwInfo": "Ti aiuta a scegliere cosa cucinare quando non puoi decidere",
@@ -324,5 +324,8 @@
     "esgbInfo": "Disabilita questa opzione se hai problemi di navigazione",
     "esgb": "Scorri sul bordo per tornare indietro",
     "ksavrInfo": "Impedisce che lo schermo si spenga durante la visualizzazione di una ricetta",
-    "ksavr": "Mantieni lo schermo attivo durante la visualizzazione di una ricetta"
+    "ksavr": "Mantieni lo schermo attivo durante la visualizzazione di una ricetta",
+    "sectRm": "Sezione rimossa",
+    "addSectBtn": "AGGIUNGI SEZIONE",
+    "sect": "Sezione %s"
 }
