@@ -275,6 +275,9 @@
   <string name="aBtn">"追加"</string>
   <string name="About">"アプリについて"</string>
   <string name="aap">"写真を添付"</string>
+  <string name="sectRm">"Section removed"</string>
+  <string name="addSectBtn">"ADD SECTION"</string>
+  <string name="sect">"Section %1$s"</string>
   <string name="esgbInfo">"Disable this option if you have any navigation issues"</string>
   <string name="esgb">"Edge swipe to go back"</string>
   <string name="ksavrInfo">"Prevents the screen from turning off while viewing a recipe"</string>

@@ -575,6 +575,40 @@ export default new Vuex.Store({
                 f.match(/tags|ingredients|instructions|combinations|notes/) &&
                 (e[f] = JSON.parse(e[f]))
             )
+            if (
+              e.ingredients.length &&
+              !e.ingredients[0].hasOwnProperty('type')
+            ) {
+              e.ingredients = e.ingredients.map((e) => {
+                return {
+                  id: utils.getRandomID(1),
+                  type: 1,
+                  quantity: e.quantity,
+                  unit: e.unit,
+                  value: e.item,
+                }
+              })
+            }
+            if (
+              e.instructions.length &&
+              !e.instructions[0].hasOwnProperty('type')
+            ) {
+              e.instructions = e.instructions.map((e) => {
+                return {
+                  id: utils.getRandomID(1),
+                  type: 1,
+                  value: e,
+                }
+              })
+            }
+            if (e.notes.length && !e.notes[0].hasOwnProperty('value')) {
+              e.notes = e.notes.map((e) => {
+                return {
+                  id: utils.getRandomID(1),
+                  value: e,
+                }
+              })
+            }
             state.recipes.push(e)
           })
         })
@@ -609,6 +643,40 @@ export default new Vuex.Store({
           delete r.yield
           function getTime(d) {
             return new Date(d).getTime()
+          }
+          if (
+            r.ingredients.length &&
+            !r.ingredients[0].hasOwnProperty('type')
+          ) {
+            r.ingredients = r.ingredients.map((e) => {
+              return {
+                id: utils.getRandomID(1),
+                type: 1,
+                quantity: e.quantity,
+                unit: e.unit,
+                value: e.item,
+              }
+            })
+          }
+          if (
+            r.instructions.length &&
+            !r.instructions[0].hasOwnProperty('type')
+          ) {
+            r.instructions = r.instructions.map((e) => {
+              return {
+                id: utils.getRandomID(1),
+                type: 1,
+                value: e,
+              }
+            })
+          }
+          if (r.notes.length && !r.notes[0].hasOwnProperty('type')) {
+            r.notes = r.notes.map((e) => {
+              return {
+                id: utils.getRandomID(1),
+                value: e,
+              }
+            })
           }
           r.lastTried = getTime(r.lastTried)
           r.lastModified = getTime(r.lastModified)
@@ -718,7 +786,48 @@ export default new Vuex.Store({
       let localRecipesIDs: string[], partition: any[]
       let imported = 0
       let updated = 0
+      function getUpdatedData(data: any[]) {
+        return data.map((recipe) => {
+          let r = Object.assign({}, recipe)
+          if (
+            r.ingredients.length &&
+            !r.ingredients[0].hasOwnProperty('type')
+          ) {
+            r.ingredients = r.ingredients.map((e) => {
+              return {
+                id: utils.getRandomID(1),
+                type: 1,
+                quantity: e.quantity,
+                unit: e.unit,
+                value: e.item,
+              }
+            })
+          }
+          if (
+            r.instructions.length &&
+            !r.instructions[0].hasOwnProperty('type')
+          ) {
+            r.instructions = r.instructions.map((e) => {
+              return {
+                id: utils.getRandomID(1),
+                type: 1,
+                value: e,
+              }
+            })
+          }
+          if (r.notes.length && !r.notes[0].hasOwnProperty('value')) {
+            r.notes = r.notes.map((e) => {
+              return {
+                id: utils.getRandomID(1),
+                value: e,
+              }
+            })
+          }
+          return r
+        })
+      }
       function createDocuments(data: any[]) {
+        data = getUpdatedData(data)
         data.forEach((r) => {
           const cols = Object.keys(r).join(', ')
           const placeholder = Object.keys(r)
@@ -738,6 +847,7 @@ export default new Vuex.Store({
         })
       }
       function updateDocuments(data: any[]) {
+        data = getUpdatedData(data)
         data.forEach((r) => {
           let recipeIndex = state.recipes
             .map((e, i) => {

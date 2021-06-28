@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="sectRm">"De sectie is verwijderd"</string>
+  <string name="sect">"Sectie %1$s"</string>
+  <string name="addSectBtn">"SECTIE TOEVOEGEN"</string>
   <string name="ksavr">"Scherm niet uitschakelen tijdens bekijken van recept"</string>
   <string name="ksavrInfo">"Voorkomt dat het scherm wordt uitgeschakeld tijdens het bekijken van een recept"</string>
   <string name="esgb">"Vegen vanaf schermrand om terug te gaan"</string>
@@ -91,7 +94,7 @@
   <string name="sVwInfo">"Handig voor als je even niet weet wat je wilt maken"</string>
   <string name="sVw">"Schudden om willekeurig recept te tonen"</string>
   <string name="strAdd">"Voeg je recepten toe!"</string>
-  <string name="stp">"Stap"</string>
+  <string name="stp">"Stap %1$s"</string>
   <string name="stick">"stokje"</string>
   <string name="stars">"Waardering"</string>
   <string name="sru">"Recept delen via…"</string>
@@ -221,7 +224,7 @@
   <string name="Japanese">"Japans"</string>
   <string name="Jamaican">"Jamaicaans"</string>
   <string name="Italian">"Italiaans"</string>
-  <string name="it">"Item"</string>
+  <string name="it">"Item %1$s"</string>
   <string name="Irish">"Iers"</string>
   <string name="invFile">"Ongeldig bestand"</string>
   <string name="intf">"Uiterlijk"</string>

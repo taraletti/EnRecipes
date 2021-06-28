@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="sect">"பிரிவு %1$s"</string>
+  <string name="addSectBtn">"பிரிவைச் சேர்"</string>
+  <string name="sectRm">"பிரிவு நீக்கப்பட்டது"</string>
   <string name="add">"சேர்"</string>
   <string name="rstBtn">"மீட்டமை"</string>
   <string name="ksavr">"சமையல் குறிப்பு பார்க்கும் போது திரையை விழித்திரு"</string>
@@ -52,7 +55,7 @@
   <string name="hour">"மணி"</string>
   <string name="hours">"மணி"</string>
   <string name="seconds">"வினாடிகள்"</string>
-  <string name="tmrRm">"டைமர் அகற்றப்பட்டது"</string>
+  <string name="tmrRm">"டைமர் நீக்கப்பட்டது"</string>
   <string name="notifSetg">"அறிவிப்பு அமைப்புகள்"</string>
   <string name="sysDefB">"அமைப்பு இயல்புநிலை + கருப்பு"</string>
   <string name="buto">"%1$s இல் காப்புப் பிரதி எடுக்கப்பட்டது"</string>
@@ -91,7 +94,7 @@
   <string name="sVwInfo">"நீங்கள் தீர்மானிக்க முடியாதபோது என்ன சமைக்கலாம் என்பதைத் தேர்வுசெய்ய உதவும்"</string>
   <string name="sVw">"சாதனத்தை அசைத்து சீரற்ற சமையல் குறிப்பை காண்க"</string>
   <string name="strAdd">"உங்கள் சமையல் குறிப்புகளைச் சேர்க்கத் தொடங்குங்கள்!"</string>
-  <string name="stp">"செய்முறை"</string>
+  <string name="stp">"செய்முறை %1$s"</string>
   <string name="stick">"குச்சி"</string>
   <string name="stars">"நட்சத்திர மதிப்பீடு"</string>
   <string name="sru">"சமையல் குறிப்பை பகிரவும்..."</string>
@@ -221,7 +224,7 @@
   <string name="Japanese">"ஜப்பானிய"</string>
   <string name="Jamaican">"ஜமைக்கா"</string>
   <string name="Italian">"இத்தாலிய"</string>
-  <string name="it">"பொருள்"</string>
+  <string name="it">"பொருள் %1$s"</string>
   <string name="Irish">"ஐரிஷ்"</string>
   <string name="invFile">"தவறான கோப்பு"</string>
   <string name="intf">"இடைமுகம்"</string>

@@ -10,7 +10,7 @@
         rows="*"
         columns="auto, *"
       >
-        <Button class="ico end" :text="icon.back" @tap="$navigateBack()" />
+        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
       <Toast :onload="tbLoad" :toast="toast" :action="hideBar" />
       <RGridLayout
@@ -22,7 +22,7 @@
         columns="auto, *"
       >
         <ActivityIndicator :busy="!!progress" />
-        <RLabel margin="0 12" col="1" class="tb tw vc lh4" :text="progress" />
+        <RLabel margin="0 2" col="1" class="tb tw vc lh4" :text="progress" />
       </RGridLayout>
       <Label rowSpan="2" class="edge hal rtl" @swipe="swipeBack" />
       <Label

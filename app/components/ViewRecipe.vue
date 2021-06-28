@@ -107,13 +107,21 @@
                 <RStackLayout
                   :rtl="RTL"
                   orientation="horizontal"
-                  v-for="(item, index) in recipe.ingredients"
-                  :key="index + 'ing'"
+                  v-for="(item, i) in recipe.ingredients"
+                  :key="item.key"
                   class="check"
-                  @touch="touchIngredient($event, index)"
+                  @touch="item.type && touchIngredient($event, i)"
                 >
-                  <Button class="ico si" :text="icon.uncheck" />
-                  <RLabel class="v tw" :text="getIngredientItem(item)" />
+                  <Button
+                    :hidden="!item.type"
+                    class="ico si"
+                    :text="icon.uncheck"
+                  />
+                  <RLabel
+                    class="v tw"
+                    :class="{ 'tb t t3': !item.type }"
+                    :text="getIngredientItem(item)"
+                  />
                 </RStackLayout>
               </StackLayout>
               <StackLayout @loaded="onInsLoad">
@@ -125,13 +133,21 @@
                 <RStackLayout
                   :rtl="RTL"
                   orientation="horizontal"
-                  @touch="touchInstruction"
-                  v-for="(instruction, index) in recipe.instructions"
-                  :key="index + 'ins'"
+                  @touch="item.type && touchInstruction($event)"
+                  v-for="(item, i) in recipe.instructions"
+                  :key="item.key"
                   class="check"
                 >
-                  <Button class="tb t3 ico si" :text="localeN(index + 1)" />
-                  <RLabel class="v tw" :text="instruction" />
+                  <Button
+                    :hidden="!item.type"
+                    class="tb t3 ico si"
+                    :text="getInsPos(i)"
+                  />
+                  <RLabel
+                    class="v tw"
+                    :class="{ 'tb t t3': !item.type }"
+                    :text="item.value"
+                  />
                 </RStackLayout>
               </StackLayout>
               <RLabel
@@ -206,7 +222,7 @@
         columns="auto, *, auto, auto, auto, auto"
         @touch="() => null"
       >
-        <Button class="ico rtl end" :text="icon.back" @tap="$navigateBack()" />
+        <Button class="ico rtl" :text="icon.back" @tap="$navigateBack()" />
         <Button
           col="2"
           v-if="!filterTrylater"
@@ -237,7 +253,7 @@
         <ActivityIndicator col="4" :hidden="!busyEdit" :busy="busyEdit" />
         <Button
           col="5"
-          class="ico end"
+          class="ico"
           :text="showTools ? icon.less : icon.more"
           @tap="toggleTools"
         />
@@ -475,31 +491,49 @@ export default {
       this.showTools && this.toggleTools();
       this.animateBar(this.appbar, 0);
     },
+    getInsPos(n) {
+      let a = 1;
+      let b = 1;
+      let ins = this.recipe.instructions;
+      let group = ins.reduce((acc, e) => {
+        if (!e.type) {
+          a = 1;
+          acc.push(b++);
+        } else acc.push(a++);
+        return acc;
+      }, []);
+      return this.localeN(group[n]);
+    },
 
     // Helpers
-    getTitleCount(title, type) {
-      let c = this.recipe[type].length;
+    getTitleCount(title, type, unsel) {
+      let c;
       let s = null;
       switch (title) {
         case "ings":
           s = this.checked;
+          c = this.recipe[type].filter((e) => e.type).length;
           break;
         case "inss":
           s = this.stepsDid;
+          c = this.recipe[type].filter((e) => e.type).length;
+          break;
+        default:
+          c = this.recipe[type].length;
           break;
       }
       c = this.localeN(c);
       s = s && this.localeN(s);
-      let text = s ? ` (${s}/${c})` : ` (${c})`;
+      let text = s && !unsel ? ` (${s}/${c})` : ` (${c})`;
       return localize(title) + text;
     },
-    getIngredientItem(item) {
+    getIngredientItem(o) {
       return `${
-        this.roundedQuantity(item.quantity)
-          ? this.roundedQuantity(item.quantity) + " "
+        this.roundedQuantity(o.quantity)
+          ? this.roundedQuantity(o.quantity) + " "
           : ""
-      }${this.roundedQuantity(item.quantity) ? localize(item.unit) + " " : ""}${
-        item.item
+      }${this.roundedQuantity(o.quantity) ? localize(o.unit) + " " : ""}${
+        o.value
       }`;
     },
     changeYield() {
@@ -669,6 +703,7 @@ export default {
       });
     },
     viewCombination(combination) {
+      this.hideBar();
       this.scrollview.scrollToVerticalOffset(0, true);
       this.recipe = this.recipes.filter((e) => e.id === combination)[0];
       this.showTitleArr = new Array(4).fill(0);
@@ -765,14 +800,14 @@ export default {
                 this.$options.filters.L(e.unit) +
                 " "
               : ""
-          }${e.item}\n`;
+          }${e.value}\n`;
         });
         shareContent += ingredients;
       }
       if (this.recipe.instructions.length) {
         let instructions = `\n\n${localize("inss")}:\n\n`;
         this.recipe.instructions.forEach((e, i) => {
-          instructions += `${i + 1}. ${e}\n\n`;
+          instructions += `${i + 1}. ${e.value}\n\n`;
         });
         shareContent += instructions;
       }
@@ -786,7 +821,7 @@ export default {
       if (this.recipe.notes.length) {
         let notes = `\n${localize("nos")}:\n\n`;
         this.recipe.notes.forEach((e, i) => {
-          notes += `${i + 1}. ${e}\n\n`;
+          notes += `${i + 1}. ${e.value}\n\n`;
         });
         shareContent += notes;
       }
@@ -849,7 +884,7 @@ export default {
       const stack = this.notescon;
       stack.removeChildren();
       this.recipe.notes.forEach((note) =>
-        stack.addChild(this.createNote(note))
+        stack.addChild(this.createNote(note.value))
       );
     },
     getTags(tags) {
@@ -891,7 +926,6 @@ export default {
             height: sw,
             translate: { x: this.RTL ? -16 : 112 - sw, y: (sh - sw) / 3 },
             duration: 200,
-            curve: CoreTypes.AnimationCurve.easeOut,
           })
         )
         .then(() =>
@@ -899,7 +933,6 @@ export default {
             height: sh,
             translate: { x: this.RTL ? -16 : 112 - sw, y: -((sh - sw) / 6) },
             duration: 200,
-            curve: CoreTypes.AnimationCurve.easeOut,
           })
         );
     },
@@ -912,7 +945,6 @@ export default {
         height: sw,
         translate: { x: this.RTL ? -16 : 112 - sw, y: (sh - sw) / 3 },
         duration: 200,
-        curve: CoreTypes.AnimationCurve.easeIn,
       })
         .then(() =>
           pv.animate({
@@ -920,7 +952,6 @@ export default {
             height: 96,
             translate: { x: 0, y: 0 },
             duration: 200,
-            curve: CoreTypes.AnimationCurve.easeIn,
           })
         )
         .then(() =>
@@ -964,7 +995,7 @@ export default {
     // Print
     prepareHTML() {
       let r = this.recipe;
-      const head = `<head><meta charset=UTF-8><meta content="IE=edge"http-equiv=X-UA-Compatible><meta content="width=device-width,initial-scale=1"name=viewport><title>EnRecipes - Recipe for Print</title><style>a,body,div,html,img,ol,p,span,ul{border:0;font-size:100%;font:inherit;margin:0;padding:0;vertical-align:baseline}@font-face{font-family:Inter-Medium;src:url(../app/fonts/Inter-Medium.otf)}@font-face{font-family:Inter-Bold;src:url(../app/fonts/Inter-Bold.otf)}body{font-family:Inter-Medium,sans-serif;line-height:1.5;max-width:45rem;padding:1.5rem}body>p{padding:.5rem 0}.attr>div>p:last-child,h1,h2{font-family:Inter-Bold,sans-serif}#header{display:grid;grid-column-gap:2rem;grid-template-columns:1fr auto;margin-bottom:2.5rem;width:100%}img{border-radius:1rem;height:8rem;object-fit:cover;width:8rem}h1{font-size:2.25rem;line-height:1.25;margin:0;padding-bottom:1rem}svg{width:2rem;height:2rem;padding:0 .5rem 0 0}h2{margin:2rem 0 1rem}.attr{display:grid;grid-column-gap:2rem;grid-template-columns:1fr 1fr;margin-top:1rem}.attr>div>p:first-child{font-size:.9rem;opacity:.5}ol,ul{padding:0 1.5rem}li{padding:.5rem}a{color:inherit}.sub{font-size:.9rem;margin-top:2rem;opacity:.5}</style></head>`;
+      const head = `<head><meta charset=UTF-8><meta content="IE=edge"http-equiv=X-UA-Compatible><meta content="width=device-width,initial-scale=1"name=viewport><title>EnRecipes - Recipe for Print</title><style>a,body,div,html,img,ol,p,span,ul{border:0;font-size:100%;font:inherit;margin:0;padding:0;vertical-align:baseline}@font-face{font-family:Inter-Medium;src:url(../app/fonts/Inter-Medium.otf)}@font-face{font-family:Inter-Bold;src:url(../app/fonts/Inter-Bold.otf)}body{font-family:Inter-Medium,sans-serif;line-height:1.5;max-width:45rem;padding:1.5rem}body>p{padding:.5rem 0}.attr>div>p:last-child,h1,h2,h3{font-family:Inter-Bold,sans-serif}#header{display:grid;grid-column-gap:2rem;grid-template-columns:1fr auto;margin-bottom:2.5rem;width:100%}img{border-radius:1rem;height:8rem;object-fit:cover;width:8rem}h1{font-size:2.25rem;line-height:1.25;margin:0;padding-bottom:1rem}svg{width:2rem;height:2rem;padding:0 .5rem 0 0}h2{margin:2rem 0 1rem}.attr{display:grid;grid-column-gap:2rem;grid-template-columns:1fr 1fr;margin-top:1rem}.attr>div>p:first-child{font-size:.9rem;opacity:.5}ol,ul{padding:0 1.5rem}li{padding:.5rem}a{color:inherit}.sub{font-size:.9rem;margin-top:2rem;opacity:.5}</style></head>`;
       const getStarRating = () => {
         let rate = `<svg width="100%" height="100%" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2"><path d="M10.756 2.826 8.419 7.98l-5.624.63c-.533.06-.982.425-1.147.935-.166.51-.018 1.07.378 1.431l4.179 3.816-1.138 5.543c-.108.525.101 1.065.535 1.38.434.315 1.012.348 1.478.083L12 19.002l4.92 2.796c.466.265 1.044.232 1.478-.083.434-.315.643-.855.535-1.38l-1.138-5.543 4.179-3.816c.396-.361.544-.921.378-1.431-.165-.51-.614-.875-1.147-.935l-5.624-.63-2.337-5.154c-.221-.489-.708-.802-1.244-.802s-1.023.313-1.244.802z"/></svg>`;
         let unrate = `<svg width="100%" height="100%" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2"><path d="M10.756 2.826 8.419 7.98l-5.624.63c-.533.06-.982.425-1.147.935-.166.51-.018 1.07.378 1.431l4.179 3.816-1.138 5.543c-.108.525.101 1.065.535 1.38.434.315 1.012.348 1.478.083L12 19.002l4.92 2.796c.466.265 1.044.232 1.478-.083.434-.315.643-.855.535-1.38l-1.138-5.543 4.179-3.816c.396-.361.544-.921.378-1.431-.165-.51-.614-.875-1.147-.935l-5.624-.63-2.337-5.154c-.221-.489-.708-.802-1.244-.802s-1.023.313-1.244.802zM12 4.925l1.994 4.398c.146.321.45.542.8.581l4.799.538-3.567 3.256c-.26.237-.376.594-.305.94l.972 4.73-4.199-2.386c-.306-.174-.682-.174-.988.0l-4.199 2.386.972-4.73c.071-.346-.045-.703-.305-.94l-3.567-3.256 4.799-.538c.35-.039.654-.26.8-.581L12 4.925z"/></svg>`;
@@ -972,18 +1003,34 @@ export default {
       };
       const img = r.image ? `<img src="${r.image}" alt="${r.title}" />` : "";
       const getIngs = () => {
-        let ing = [];
-        r.ingredients.forEach((e) => {
-          ing.push(`<li>${this.getIngredientItem(e)}</li>`);
-        });
-        return ing.join("");
+        let ings = r.ingredients;
+        return ings
+          .map((e, i) => {
+            if (!e.type)
+              return `${i > 0 ? "</ul>" : ""}<h3>${e.value}</h3>${
+                i < ings.length - 1 ? "<ul>" : ""
+              }`;
+            else
+              return `${i < 1 ? "<ul>" : ""}<li>${this.getIngredientItem(
+                e
+              )}</li>${i == ings.length - 1 ? "</ul>" : ""}`;
+          })
+          .join("");
       };
       const getIns = () => {
-        let ins = [];
-        r.instructions.forEach((e) => {
-          ins.push(`<li>${e}</li>`);
-        });
-        return ins.join("");
+        let inss = r.instructions;
+        return r.instructions
+          .map((e, i) => {
+            if (!e.type)
+              return `${i > 0 ? "</ol>" : ""}<h3>${e.value}</h3>${
+                i < inss.length - 1 ? "<ol>" : ""
+              }`;
+            else
+              return `${i < 1 ? "<ol>" : ""}<li>${e.value}</li>${
+                i == inss.length - 1 ? "</ol>" : ""
+              }`;
+          })
+          .join("");
       };
       const getCmbs = () => {
         let cmb = [];
@@ -1001,7 +1048,7 @@ export default {
             : val;
         };
         r.notes.forEach((e) => {
-          let arr = e.split(regex);
+          let arr = e.value.split(regex);
           let single = [];
           arr.forEach((f) => {
             single.push(createSpan(f, regex.test(f)));
@@ -1046,18 +1093,20 @@ export default {
         "Difficulty level"
       )}<p>${r.difficulty}</div></div>${
         r.ingredients.length
-          ? `<h2>${this.getTitleCount("ings", "ingredients")}</h2>`
+          ? `<h2>${this.getTitleCount("ings", "ingredients", 1)}</h2>`
           : ""
-      }<ul>${getIngs()}</ul>${
+      }${getIngs()}${
         r.instructions.length
-          ? `<h2>${this.getTitleCount("inss", "instructions")}</h2>`
+          ? `<h2>${this.getTitleCount("inss", "instructions", 1)}</h2>`
           : ""
-      }<ol>${getIns()}</ol>${
+      }${getIns()}${
         r.combinations.length
-          ? `<h2>${this.getTitleCount("cmbs", "combinations")}</h2>`
+          ? `<h2>${this.getTitleCount("cmbs", "combinations", 1)}</h2>`
           : ""
       } ${getCmbs()} ${
-        r.notes.length ? `<h2>${this.getTitleCount("nos", "notes")}</h2>` : ""
+        r.notes.length
+          ? `<h2>${this.getTitleCount("nos", "notes", 1)}</h2>`
+          : ""
       } ${getNotes()}<div class=sub><p>${this.getDates().u}<p>${
         this.getDates().c
       }</div>

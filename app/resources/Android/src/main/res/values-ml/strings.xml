@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="sect">"ഭാഗം %1$s"</string>
+  <string name="sectRm">"വിഭാഗം നീക്കംചെയ്തു"</string>
+  <string name="addSectBtn">"വിഭാഗം ചേർക്കുക"</string>
   <string name="sec">"സെക്കൻഡ്"</string>
   <string name="timer">"പാചക ടൈമർ"</string>
   <string name="ntmr">"പുതിയ ടൈമർ"</string>
@@ -91,7 +94,7 @@
   <string name="sVwInfo">"നിങ്ങൾക്ക് തീരുമാനിക്കാൻ കഴിയാത്തപ്പോൾ എന്താണ് പാചകം ചെയ്യേണ്ടതെന്ന് തിരഞ്ഞെടുക്കാൻ നിങ്ങളെ സഹായിക്കുന്നു"</string>
   <string name="sVw">"ക്രമരഹിതമായ പാചകക്കുറിപ്പ് കാണാൻ കുലുക്കുക"</string>
   <string name="strAdd">"നിങ്ങളുടെ പാചകക്കുറിപ്പുകൾ ചേർക്കാൻ ആരംഭിക്കുക!"</string>
-  <string name="stp">"ഘട്ടം"</string>
+  <string name="stp">"ഘട്ടം %1$s"</string>
   <string name="stick">"വടി"</string>
   <string name="stars">"നക്ഷത്ര റേറ്റിംഗ്"</string>
   <string name="sru">"പാചകക്കുറിപ്പ് പങ്കിടുക..."</string>
@@ -221,7 +224,7 @@
   <string name="Japanese">"ജാപ്പനീസ്"</string>
   <string name="Jamaican">"ജമൈക്കൻ"</string>
   <string name="Italian">"ഇറ്റാലിയൻ"</string>
-  <string name="it">"ഇനം"</string>
+  <string name="it">"ഇനം %1$s"</string>
   <string name="Irish">"ഐറിഷ്"</string>
   <string name="invFile">"അസാധുവായ ഫയൽ"</string>
   <string name="intf">"ഇന്റർഫേസ്"</string>
