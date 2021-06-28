@@ -103,7 +103,7 @@
     "intf": "Benutzeroberfläche",
     "invFile": "Ungültige Datei",
     "Irish": "Irisch",
-    "it": "Element",
+    "it": "Element %s",
     "Italian": "Italienisch",
     "Jamaican": "Jamaikanisch",
     "Japanese": "Japanisch",
@@ -233,7 +233,7 @@
     "sru": "Rezept teilen mit …",
     "stars": "Bewertung in Sternen",
     "stick": "Stange",
-    "stp": "Schritt",
+    "stp": "Schritt %s",
     "strAdd": "Beginne deine Rezepte hinzuzufügen!",
     "sVw": "Schütteln, um ein zufälliges Rezept anzuzeigen",
     "sVwInfo": "Hilft dir, wenn du dich nicht entscheiden kannst, was gekocht werden soll",
@@ -324,5 +324,8 @@
     "ksavr": "Bildschirm während der Rezeptanzeige eingeschaltet halten",
     "esgbInfo": "Deaktiviere diese Option, wenn du Probleme mit der Navigation hast",
     "esgb": "Randwischen zum Zurückgehen",
-    "ksavrInfo": "Verhindert, dass sich der Bildschirm während der Anzeige eines Rezepts ausschaltet"
+    "ksavrInfo": "Verhindert, dass sich der Bildschirm während der Anzeige eines Rezepts ausschaltet",
+    "sectRm": "Abschnitt entfernt",
+    "addSectBtn": "ABSCHNITT HINZUFÜGEN",
+    "sect": "Abschnitt %s"
 }
