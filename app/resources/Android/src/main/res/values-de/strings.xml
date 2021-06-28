@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="sect">"Abschnitt %1$s"</string>
+  <string name="addSectBtn">"ABSCHNITT HINZUFÜGEN"</string>
+  <string name="sectRm">"Abschnitt entfernt"</string>
   <string name="ksavrInfo">"Verhindert, dass sich der Bildschirm während der Anzeige eines Rezepts ausschaltet"</string>
   <string name="esgb">"Randwischen zum Zurückgehen"</string>
   <string name="esgbInfo">"Deaktiviere diese Option, wenn du Probleme mit der Navigation hast"</string>
@@ -91,7 +94,7 @@
   <string name="sVwInfo">"Hilft dir, wenn du dich nicht entscheiden kannst, was gekocht werden soll"</string>
   <string name="sVw">"Schütteln, um ein zufälliges Rezept anzuzeigen"</string>
   <string name="strAdd">"Beginne deine Rezepte hinzuzufügen!"</string>
-  <string name="stp">"Schritt"</string>
+  <string name="stp">"Schritt %1$s"</string>
   <string name="stick">"Stange"</string>
   <string name="stars">"Bewertung in Sternen"</string>
   <string name="sru">"Rezept teilen mit …"</string>
@@ -221,7 +224,7 @@
   <string name="Japanese">"Japanisch"</string>
   <string name="Jamaican">"Jamaikanisch"</string>
   <string name="Italian">"Italienisch"</string>
-  <string name="it">"Element"</string>
+  <string name="it">"Element %1$s"</string>
   <string name="Irish">"Irisch"</string>
   <string name="invFile">"Ungültige Datei"</string>
   <string name="intf">"Benutzeroberfläche"</string>

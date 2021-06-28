@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="sect">"విభాగం %1$s"</string>
+  <string name="addSectBtn">"విభాగం జోడించండి"</string>
+  <string name="sectRm">"విభాగం తొలగించబడింది"</string>
   <string name="mnth">"నెల"</string>
   <string name="wk">"వారం"</string>
   <string name="d">"రోజు"</string>
@@ -91,7 +94,7 @@
   <string name="sVwInfo">"మీరు నిర్ణయించలేనప్పుడు ఏమి ఉడికించాలో ఎంచుకోవడానికి మీకు సహాయపడుతుంది"</string>
   <string name="sVw">"యాదృచ్ఛిక రెసిపీని చూడటానికి షేక్ చేయండి"</string>
   <string name="strAdd">"మీ వంటకాలను జోడించడం ప్రారంభించండి!"</string>
-  <string name="stp">"దశ"</string>
+  <string name="stp">"దశ %1$s"</string>
   <string name="stick">"కర్ర"</string>
   <string name="stars">"స్టార్ రేటింగ్"</string>
   <string name="sru">"రెసిపీని భాగస్వామ్యం చేయండి ..."</string>
@@ -221,7 +224,7 @@
   <string name="Japanese">"జపనీస్"</string>
   <string name="Jamaican">"జమైకా"</string>
   <string name="Italian">"ఇటాలియన్"</string>
-  <string name="it">"అంశం"</string>
+  <string name="it">"అంశం %1$s"</string>
   <string name="Irish">"ఐరిష్"</string>
   <string name="invFile">"చెల్లుబాటులోలేని ఫైలు"</string>
   <string name="intf">"ఇంటర్ఫేస్"</string>

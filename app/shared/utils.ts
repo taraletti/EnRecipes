@@ -79,8 +79,6 @@ export function getRecipePhoto() {
 export function copyPhotoToCache(src: string, dest: string) {
   const ContentResolver = Application.android.nativeApp.getContentResolver()
   const isURI = src.includes('content://')
-  console.log(src, dest, isURI)
-
   return new Promise((resolve) => {
     if (isURI) {
       const uri = new android.net.Uri.parse(src)

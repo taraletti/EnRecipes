@@ -34,7 +34,9 @@
             <TextField
               :hint="'recTitle' | L"
               v-model="recipe.title"
-              @loaded="setInputTypeText($event, 'words')"
+              autocapitalizationType="words"
+              autocorrect="true"
+              @returnPress="showCuisine(1)"
             />
           </StackLayout>
           <RGridLayout :rtl="RTL" class="" columns="*, 8, *">
@@ -44,7 +46,6 @@
                 @loaded="setGravity"
                 :text="recipe.cuisine | L"
                 editable="false"
-                @focus="!modalOpen && showCuisine(1)"
                 @tap="showCuisine(0)"
               />
             </StackLayout>
@@ -52,10 +53,8 @@
               <Label class="fLabel" :text="'cat' | L" />
               <TextField
                 @loaded="setGravity"
-                ref="category"
                 :text="recipe.category | L"
                 editable="false"
-                @focus="!modalOpen && showCategories(1)"
                 @tap="showCategories(0)"
               />
             </StackLayout>
@@ -63,13 +62,14 @@
           <StackLayout class="inputC">
             <Label class="fLabel" :text="'ts' | L" />
             <TextField
-              @loaded="setGravity"
-              :hint="'tsInfo' | L"
-              autocapitalizationType="words"
               ref="tags"
+              autocapitalizationType="words"
+              autocorrect="true"
+              :hint="'tsInfo' | L"
               v-model="tags"
               @textChange="splitTags"
-              returnKeyType="next"
+              @loaded="setGravity"
+              @returnPress="setTimeRequired(1, 'prepTime')"
             />
           </StackLayout>
           <RGridLayout :rtl="RTL" columns="*, 8, *">
@@ -79,7 +79,6 @@
                 @loaded="setGravity"
                 :text="timeRequired('prepTime')"
                 editable="false"
-                @focus="!modalOpen && setTimeRequired(1, 'prepTime')"
                 @tap="setTimeRequired(0, 'prepTime')"
               />
             </StackLayout>
@@ -87,10 +86,8 @@
               <Label class="fLabel" :text="'cookT' | L" />
               <TextField
                 @loaded="setGravity"
-                ref="cookTime"
                 :text="timeRequired('cookTime')"
                 editable="false"
-                @focus="!modalOpen && setTimeRequired(1, 'cookTime')"
                 @tap="setTimeRequired(0, 'cookTime')"
               />
             </StackLayout>
@@ -100,11 +97,12 @@
               <Label class="fLabel" :text="'yieldQ' | L" />
               <TextField
                 @loaded="setGravity"
-                ref="yieldQuantity"
+                ref="yieldQ"
                 v-model="recipe.yieldQuantity"
                 hint="1"
                 keyboardType="number"
                 returnKeyType="next"
+                @returnPress="showYieldUnits(1)"
               />
             </StackLayout>
             <StackLayout class="inputC" col="2">
@@ -113,7 +111,6 @@
                 @loaded="setGravity"
                 :text="`${recipe.yieldUnit}` | L"
                 editable="false"
-                @focus="!modalOpen && showYieldUnits(1)"
                 @tap="showYieldUnits(0)"
               />
             </StackLayout>
@@ -123,10 +120,8 @@
               <Label class="fLabel" :text="'Difficulty level' | L" />
               <TextField
                 @loaded="setGravity"
-                ref="difficultyLevel"
                 :text="`${recipe.difficulty}` | L"
                 editable="false"
-                @focus="!modalOpen && showDifficultyLevel(1)"
                 @tap="showDifficultyLevel(0)"
               />
             </StackLayout>
@@ -140,50 +135,58 @@
           <RGridLayout
             :rtl="RTL"
             columns="auto,8,auto,8,*,auto"
-            v-for="(ingredient, index) in recipe.ingredients"
-            :key="'ing' + index"
+            v-for="(item, i) in recipe.ingredients"
+            :key="item.key"
           >
             <TextField
+              v-if="item.type"
+              :ref="'ing' + i"
               width="52"
-              @loaded="!recipe.ingredients[index].item && focusField($event)"
-              v-model="recipe.ingredients[index].quantity"
-              hint="1.00"
+              @focus="setFocus(i)"
+              @blur="setFocus(-1)"
               keyboardType="number"
               returnKeyType="next"
+              hint="1.00"
+              v-model="recipe.ingredients[i].quantity"
             />
-
             <TextField
+              v-if="item.type"
               width="68"
               col="2"
-              :text="`${recipe.ingredients[index].unit}` | L"
+              :text="`${recipe.ingredients[i].unit}` | L"
               editable="false"
-              @focus="!modalOpen && showUnits($event, 1, index)"
-              @tap="showUnits($event, 0, index)"
+              @focus="showUnits(1, i)"
+              @tap="showUnits(0, i)"
             />
-
             <TextField
-              ref="ingredient"
-              @loaded="setInputTypeText($event, 'sentence')"
-              col="4"
-              v-model="recipe.ingredients[index].item"
-              :hint="`${$options.filters.L('it')} ${index + 1}`"
-              @returnPress="
-                index + 1 == recipe.ingredients.length && addIngredient()
-              "
+              :ref="'ing' + i"
+              @focus="setFocus(i)"
+              @blur="setFocus(-1)"
+              autocapitalizationType="sentence"
+              autocorrect="true"
+              returnKeyType="done"
+              :col="item.type ? 4 : 0"
+              :colSpan="item.type ? 1 : 5"
+              v-model="recipe.ingredients[i].value"
+              :hint="getIngPos(i)"
+              @returnPress="addIng(1)"
+            />
+            <Button col="5" class="ico si" :text="icon.x" @tap="rmIng(i)" />
+          </RGridLayout>
+          <RStackLayout :rtl="RTL" class="ingActions">
+            <Button
+              class="text tb big hal fb"
+              :class="{ r: RTL }"
+              :text="'aIngBtn' | L"
+              @tap="addIng(1)"
             />
             <Button
-              col="5"
-              class="ico si"
-              :text="icon.x"
-              @tap="removeIngredient(index)"
+              class="text tb big hal fb"
+              :class="{ r: RTL }"
+              :text="'addSectBtn' | L"
+              @tap="addIng(0)"
             />
-          </RGridLayout>
-          <Button
-            class="text tb big hal fb"
-            :class="{ r: RTL }"
-            :text="'aIngBtn' | L"
-            @tap="addIngredient()"
-          />
+          </RStackLayout>
           <!-- INSTRUCTIONS -->
           <Label
             :text="getTitleCount('inss', 'instructions')"
@@ -193,27 +196,48 @@
           <RGridLayout
             :rtl="RTL"
             columns="*,auto"
-            v-for="(instruction, index) in recipe.instructions"
-            :key="'ins' + index"
+            v-for="(item, i) in recipe.instructions"
+            :key="item.key"
           >
+            <TextField
+              :ref="'ins' + i"
+              v-if="!item.type"
+              @focus="setFocus(i)"
+              @blur="setFocus(-1)"
+              autocapitalizationType="sentence"
+              autocorrect="true"
+              :hint="getInsPos(i)"
+              v-model="recipe.instructions[i].value"
+              @returnPress="addIns(1)"
+              returnKeyType="done"
+            />
             <TextView
-              @loaded="focusField($event, 'multiLine')"
-              :hint="`${$options.filters.L('stp')} ${index + 1}`"
-              v-model="recipe.instructions[index]"
+              :ref="'ins' + i"
+              v-else
+              @focus="setFocus(i)"
+              @blur="setFocus(-1)"
+              autocapitalizationType="multiLine"
+              autocorrect="true"
+              :hint="getInsPos(i)"
+              v-model="recipe.instructions[i].value"
+            />
+            <Button col="1" class="ico si" :text="icon.x" @tap="rmIns(i)" />
+          </RGridLayout>
+          <RStackLayout :rtl="RTL" class="ingActions">
+            <Button
+              class="text tb big hal fb"
+              :class="{ r: RTL }"
+              :text="'aStpBtn' | L"
+              @tap="addIns(1)"
             />
             <Button
-              col="1"
-              class="ico si"
-              :text="icon.x"
-              @tap="removeInstruction(index)"
+              class="text tb big hal fb"
+              :class="{ r: RTL }"
+              :text="'addSectBtn' | L"
+              @tap="addIns(0)"
             />
-          </RGridLayout>
-          <Button
-            class="text tb big hal fb"
-            :class="{ r: RTL }"
-            :text="'aStpBtn' | L"
-            @tap="addInstruction"
-          />
+          </RStackLayout>
+
           <!-- COMBINATIONS -->
           <Label
             :text="getTitleCount('cmbs', 'combinations')"
@@ -254,19 +278,23 @@
           <RGridLayout
             :rtl="RTL"
             columns="*, auto"
-            v-for="(note, index) in recipe.notes"
-            :key="'nos' + index"
+            v-for="(item, i) in recipe.notes"
+            :key="item.key"
           >
             <TextView
-              @loaded="focusField($event, 'multiLine')"
-              :hint="`${$options.filters.L('no')} ${index + 1}`"
-              v-model="recipe.notes[index]"
+              :ref="'note' + i"
+              @focus="setFocus(i)"
+              @blur="setFocus(-1)"
+              autocapitalizationType="multiLine"
+              autocorrect="true"
+              :hint="`${$options.filters.L('no')} ${i + 1}`"
+              v-model="recipe.notes[i].value"
             />
             <Button
               col="1"
               class="ico si"
               :text="icon.x"
-              @tap="removeNote(index)"
+              @tap="removeNote(i)"
             />
           </RGridLayout>
           <Button
@@ -288,19 +316,19 @@
         columns="auto, *, auto"
       >
         <Button
-          class="ico end"
+          class="ico"
           :class="{ f: RTL }"
           :text="icon.back"
           @tap="navigateBack(0)"
         />
         <Button
           v-if="hasChanges && !saving"
-          class="ico fab end"
+          class="ico fab"
           :text="icon.save"
           col="2"
           @tap="saveOperation"
         />
-        <ActivityIndicator class="end" col="2" v-if="saving" :busy="saving" />
+        <ActivityIndicator col="2" v-if="saving" :busy="saving" />
       </RGridLayout>
       <SnackBar
         :hidden="!showUndo"
@@ -400,6 +428,7 @@ export default {
       snackMsg: null,
       showUndo: 0,
       undo: 0,
+      fi: 0,
     };
   },
   computed: {
@@ -458,16 +487,13 @@ export default {
 
     // PHOTO HANDLERS
     imageHandler() {
-      this.clearEmptyFields(1);
       if (this.recipe.image) {
-        this.modalOpen = 1;
         this.$showModal(Action, {
           props: {
             title: "recPic",
             list: ["aap", "rp"],
           },
         }).then((action) => {
-          this.modalOpen = 0;
           switch (action) {
             case "aap":
               this.imagePicker();
@@ -537,7 +563,6 @@ export default {
 
     // DATA LIST
     showCuisine(focus) {
-      this.modalOpen = 1;
       this.$showModal(Action, {
         props: {
           title: "cui",
@@ -553,21 +578,19 @@ export default {
               action: "aBtn",
             },
           }).then((item) => {
-            this.modalOpen = 0;
             if (item.length) {
               this.recipe.cuisine = item;
               this.addLI({
                 item,
                 listName: "cuisines",
               });
-              if (focus) this.autoFocusField("category", 0);
+              if (focus) this.showCategories(1);
             }
           });
         } else {
-          this.modalOpen = 0;
           if (action) {
             this.recipe.cuisine = action;
-            if (focus) this.autoFocusField("category", 0);
+            if (focus) this.showCategories(1);
           } else
             this.cuisines.includes(this.recipe.cuisine)
               ? null
@@ -576,7 +599,6 @@ export default {
       });
     },
     showCategories(focus) {
-      this.modalOpen = 1;
       this.$showModal(Action, {
         props: {
           title: "cat",
@@ -592,21 +614,19 @@ export default {
               action: "aBtn",
             },
           }).then((item) => {
-            this.modalOpen = 0;
             if (item.length) {
               this.recipe.category = item;
               this.addLI({
                 item,
                 listName: "categories",
               });
-              if (focus) this.autoFocusField("tags", 1);
+              if (focus) this.focusRef("tags");
             }
           });
         } else {
-          this.modalOpen = 0;
           if (action) {
             this.recipe.category = action;
-            if (focus) this.autoFocusField("tags", 1);
+            if (focus) this.focusRef("tags");
           } else
             this.categories.includes(this.recipe.category)
               ? null
@@ -614,8 +634,33 @@ export default {
         }
       });
     },
+    setTimeRequired(focus, time) {
+      let t = this.recipe[time].split(":");
+      let hr = t[0];
+      let min = t[1];
+      this.$showModal(TimePickerHM, {
+        props: {
+          title: `${time == "prepTime" ? "prepT" : "cookT"}`,
+          selectedHr: hr,
+          selectedMin: min,
+        },
+      }).then((result) => {
+        if (result) {
+          this.recipe[time] = result;
+          if (focus) {
+            switch (time) {
+              case "prepTime":
+                this.setTimeRequired(1, "cookTime");
+                break;
+              case "cookTime":
+                this.focusRef("yieldQ");
+                break;
+            }
+          }
+        }
+      });
+    },
     showYieldUnits(focus) {
-      this.modalOpen = 1;
       this.$showModal(Action, {
         props: {
           title: "yieldU",
@@ -631,21 +676,19 @@ export default {
               action: "aBtn",
             },
           }).then((item) => {
-            this.modalOpen = 0;
             if (item.length) {
               this.recipe.yieldUnit = item;
               this.addLI({
                 item,
                 listName: "yieldUnits",
               });
-              if (focus) this.autoFocusField("difficultyLevel", 0);
+              if (focus) this.showDifficultyLevel(1);
             }
           });
         } else {
-          this.modalOpen = 0;
           if (action) {
             this.recipe.yieldUnit = action;
-            if (focus) this.autoFocusField("difficultyLevel", 0);
+            if (focus) this.showDifficultyLevel(1);
           } else
             this.yieldUnits.includes(this.recipe.yieldUnit)
               ? null
@@ -654,7 +697,6 @@ export default {
       });
     },
     showDifficultyLevel(focus) {
-      this.modalOpen = 1;
       this.$showModal(Action, {
         props: {
           title: "Difficulty level",
@@ -662,24 +704,22 @@ export default {
           selected: this.recipe.difficulty,
         },
       }).then((action) => {
-        this.modalOpen = 0;
         if (action) {
           this.recipe.difficulty = action;
-          if (focus) this.addIngredient();
+          if (focus) this.addIng(1);
         } else
           this.difficultyLevels.includes(this.recipe.difficulty)
             ? null
             : (this.recipe.difficulty = "Easy");
       });
     },
-    showUnits(e, focus, index) {
-      this.modalOpen = 1;
+    showUnits(focus, i) {
       this.$showModal(Action, {
         props: {
           title: "Unit",
           list: this.units,
           action: "aNBtn",
-          selected: this.recipe.ingredients[index].unit,
+          selected: this.recipe.ingredients[i].unit,
         },
       }).then((action) => {
         if (action == "aNBtn") {
@@ -689,30 +729,25 @@ export default {
               action: "aBtn",
             },
           }).then((item) => {
-            this.modalOpen = 0;
             if (item.length) {
-              this.recipe.ingredients[index].unit = item;
+              this.recipe.ingredients[i].unit = item;
               this.addLI({
                 item,
                 listName: "units",
               });
-              if (focus && this.recipe.ingredients.length - 1 === index)
-                this.autoFocusRefField("ingredient", index);
+              if (focus) this.focusRefs("ing" + i, 1);
             }
           });
         } else {
-          this.modalOpen = 0;
           if (action) {
-            this.recipe.ingredients[index].unit = action;
-            if (focus && this.recipe.ingredients.length - 1 === index)
-              this.autoFocusRefField("ingredient", index);
+            this.recipe.ingredients[i].unit = action;
+            if (focus) this.focusRefs("ing" + i, 1);
           }
         }
       });
     },
     showCombinations() {
       Utils.ad.dismissSoftInput();
-      this.modalOpen = 1;
       let existingCombinations = [...this.recipe.combinations, this.recipe.id];
       let filteredRecipes = this.recipes.filter(
         (e) => !existingCombinations.includes(e.id)
@@ -723,56 +758,80 @@ export default {
           recipes: filteredRecipes,
         },
       }).then((res) => {
-        this.modalOpen = 0;
         if (res) this.recipe.combinations.push(res);
       });
     },
 
     // INPUT FIELD HANDLERS
-    addIngredient() {
-      let ingredients = this.recipe.ingredients;
-      let unit = ingredients.length
-        ? ingredients[ingredients.length - 1].unit
-        : "unit";
-      this.recipe.ingredients.push({
-        item: "",
-        quantity: null,
-        unit,
-      });
+    setFocus(i) {
+      this.fi = i;
     },
-    removeIngredient(index) {
-      this.modalOpen = 1;
-      if (this.recipe.ingredients[index].item.length) {
-        let item = this.recipe.ingredients[index];
-        this.recipe.ingredients.splice(index, 1);
-        this.showUndoBar("rmIng").then(
-          (res) => res && this.recipe.ingredients.splice(index, 0, item)
+    addIng(type) {
+      let ing = {
+        key: utils.getRandomID(1),
+        type,
+        quantity: null,
+        unit: 0,
+        value: "",
+      };
+      let ings = this.recipe.ingredients;
+      if (type) {
+        ing.unit = ings.length
+          ? ings[this.fi >= 0 ? this.fi : ings.length - 1].unit
+            ? ings[this.fi >= 0 ? this.fi : ings.length - 1].unit
+            : "unit"
+          : "unit";
+      }
+      let i = this.fi >= 0 ? this.fi + 1 : ings.length;
+      this.recipe.ingredients.splice(i, 0, ing);
+      if (!ing.value || !type) this.delayFocus("ing", ings.length);
+    },
+    rmIng(i) {
+      if (this.recipe.ingredients[i].value.length) {
+        let item = this.recipe.ingredients[i];
+        this.recipe.ingredients.splice(i, 1);
+        this.showUndoBar(item.type ? "rmIng" : "sectRm").then(
+          (res) => res && this.recipe.ingredients.splice(i, 0, item)
         );
       } else {
-        this.recipe.ingredients.splice(index, 1);
+        this.recipe.ingredients.splice(i, 1);
       }
-      setTimeout(() => (this.modalOpen = 0), 200);
     },
-    addInstruction() {
-      this.recipe.instructions.push("");
+    addIns(type) {
+      let obj = {
+        key: utils.getRandomID(1),
+        type,
+        value: "",
+      };
+      let inss = this.recipe.instructions;
+      let i = this.fi >= 0 ? this.fi + 1 : inss.length;
+      this.recipe.instructions.splice(i, 0, obj);
+      this.delayFocus("ins", inss.length);
     },
-    removeInstruction(index) {
-      if (this.recipe.instructions[index].length) {
-        let item = this.recipe.instructions[index];
-        this.recipe.instructions.splice(index, 1);
-        this.showUndoBar("rmIns").then(
-          (res) => res && this.recipe.instructions.splice(index, 0, item)
+    rmIns(i) {
+      if (this.recipe.instructions[i].value.length) {
+        let item = this.recipe.instructions[i];
+        this.recipe.instructions.splice(i, 1);
+        this.showUndoBar(item.type ? "rmIns" : "sectRm").then(
+          (res) => res && this.recipe.instructions.splice(i, 0, item)
         );
-      } else this.recipe.instructions.splice(index, 1);
+      } else this.recipe.instructions.splice(i, 1);
     },
     addNote() {
-      this.recipe.notes.push("");
+      let obj = {
+        key: utils.getRandomID(1),
+        value: "",
+      };
+      let nos = this.recipe.notes;
+      let i = this.fi >= 0 ? this.fi + 1 : nos.length;
+      this.recipe.notes.splice(i, 0, obj);
+      this.delayFocus("note", nos.length);
     },
     removeNote(index) {
-      if (this.recipe.notes[index].length) {
+      if (this.recipe.notes[index].value.length) {
         let item = this.recipe.notes[index];
         this.recipe.notes.splice(index, 1);
-        this.showUndoBar("rmN").then((res) =>
+        this.showUndoBar("rmN").then(() =>
           this.recipe.notes.splice(index, 0, item)
         );
       } else this.recipe.notes.splice(index, 1);
@@ -788,22 +847,46 @@ export default {
         this.recipe.combinations.splice(index, 0, id)
       );
     },
+    getIngPos(n) {
+      let a = 1;
+      let b = 1;
+      let ings = this.recipe.ingredients;
+      let group = ings.reduce((acc, e) => {
+        if (!e.type) {
+          a = 1;
+          acc.push(b++);
+        } else acc.push(e.type ? a++ : a - 1);
+        return acc;
+      }, []);
+      return localize(ings[n].type ? "it" : "sect", group[n]);
+    },
+    getInsPos(n) {
+      let a = 1;
+      let b = 1;
+      let ins = this.recipe.instructions;
+      let group = ins.reduce((acc, e) => {
+        if (!e.type) {
+          a = 1;
+          acc.push(b++);
+        } else acc.push(a++);
+        return acc;
+      }, []);
+      return localize(ins[n].type ? "stp" : "sect", group[n]);
+    },
 
     // SAVE OPERATION
-    clearEmptyFields(bool) {
-      if (!this.recipe.title && !bool) this.recipe.title = localize("untRec");
+    clearEmptyFields() {
+      if (!this.recipe.title) this.recipe.title = localize("untRec");
       if (!this.recipe.yieldQuantity) this.recipe.yieldQuantity = 1;
-      this.recipe.ingredients = this.recipe.ingredients.filter((e) => e.item);
-      let vm = this;
-
-      function clearEmpty(arr) {
-        vm.recipe[arr] = vm.recipe[arr].filter((e) => e);
-      }
+      const clearEmpty = (arr) => {
+        this.recipe[arr] = this.recipe[arr].filter((e) => e.value);
+      };
+      clearEmpty("ingredients");
       clearEmpty("instructions");
       clearEmpty("notes");
     },
     saveOperation() {
-      this.saving = this.modalOpen = 1;
+      this.saving = 1;
       this.clearEmptyFields();
       this.recipe.lastModified = new Date().getTime();
       setString("previousCuisine", this.recipe.cuisine);
@@ -884,19 +967,27 @@ export default {
     },
 
     // HELPERS
-    autoFocusField(ref, showSoftInput) {
-      this.$refs[ref].nativeView.focus();
-      if (showSoftInput) {
-        setTimeout(() => {
-          Utils.ad.showSoftInput(this.$refs[ref].nativeView.android);
-        }, 100);
-      }
-    },
-    autoFocusRefField(ref, index) {
-      this.$refs[ref][index].nativeView.focus();
+    focusRef(r) {
+      this.$refs[r].nativeView.focus();
       setTimeout(() => {
-        Utils.ad.showSoftInput(this.$refs[ref][index].nativeView.android);
+        Utils.ad.showSoftInput(this.$refs[r].nativeView.android);
       }, 100);
+    },
+    focusRefs(r, i) {
+      i = i != null ? i : 0;
+      this.$refs[r][i].nativeView.focus();
+      setTimeout(() => {
+        Utils.ad.showSoftInput(this.$refs[r][i].nativeView.android);
+      }, 100);
+    },
+    delayFocus(type, length) {
+      setTimeout(
+        () =>
+          this.focusRefs(
+            type + (length == 1 ? 0 : this.fi >= 0 ? this.fi + 1 : length - 1)
+          ),
+        100
+      );
     },
     splitTags() {
       let tags = [];
@@ -925,70 +1016,17 @@ export default {
       let min = localize("min");
       return h ? (m ? `${h} ${hr} ${m} ${min}` : `${h} ${hr}`) : `${m} ${min}`;
     },
-    focusField(args, type) {
-      if (type) this.setInputTypeText(args, type);
-      else this.setGravity(args);
-      if (!args.object.text) {
-        args.object.focus();
-        setTimeout(() => Utils.ad.showSoftInput(args.object.android), 100);
-      }
-    },
-    setInputTypeText({ object }, type) {
-      this.setGravity(object);
-      let common =
-        android.text.InputType.TYPE_CLASS_TEXT |
-        android.text.InputType.TYPE_TEXT_FLAG_AUTO_CORRECT;
-      switch (type) {
-        case "words":
-          object.android.setInputType(
-            android.text.InputType.TYPE_TEXT_FLAG_CAP_WORDS | common
-          );
-          break;
-        case "sentence":
-          object.android.setInputType(
-            android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | common
-          );
-          break;
-        case "multiLine":
-          object.android.setInputType(
-            android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE |
-              android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES |
-              common
-          );
-          break;
-      }
-    },
-    setTimeRequired(focus, time) {
-      this.modalOpen = 1;
-      let t = this.recipe[time].split(":");
-      let hr = t[0];
-      let min = t[1];
-      this.$showModal(TimePickerHM, {
-        props: {
-          title: `${time == "prepTime" ? "prepT" : "cookT"}`,
-          selectedHr: hr,
-          selectedMin: min,
-        },
-      }).then((result) => {
-        this.modalOpen = 0;
-        if (result) {
-          this.recipe[time] = result;
-          if (focus) {
-            switch (time) {
-              case "prepTime":
-                this.autoFocusField("cookTime", 0);
-                break;
-              case "cookTime":
-                this.autoFocusField("yieldQuantity", 1);
-                break;
-            }
-          }
-        }
-      });
-    },
     getTitleCount(title, type) {
-      let count = this.recipe[type].length;
-      let text = count ? ` (${count})` : "";
+      let c;
+      switch (title) {
+        case "ings" || "inss":
+          c = this.recipe[type].filter((e) => e.type).length;
+          break;
+        default:
+          c = this.recipe[type].length;
+          break;
+      }
+      let text = c ? ` (${c})` : "";
       return localize(title) + text;
     },
 

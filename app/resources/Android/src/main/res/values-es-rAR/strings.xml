@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="aap">"Adjuntá una foto"</string>
+  <string name="About">"Acerca de"</string>
+  <string name="aBtn">"AGREGAR"</string>
+  <string name="aD">"¡Todo listo!"</string>
+  <string name="addCmbBtn">"AGREGAR COMBINACIÓN"</string>
+  <string name="aFBu">"Agregá recetas para hacer un backup"</string>
+  <string name="aIngBtn">"AGREGAR INGREDIENTE"</string>
+  <string name="allCats">"Todas las categorías"</string>
+  <string name="American">"Americana"</string>
+  <string name="aNBtn">"AGREGAR NUEVA"</string>
+  <string name="aNoBtn">"AGREGAR NOTA"</string>
+  <string name="appCrd">"Compartido vía EnRecipes. Conseguilo en F-Droid, IzzyOnDroid o en la Play Store."</string>
+  <string name="Appetizers">"Aperitivos"</string>
+  <string name="appInfo">"EnRecipes es un libro de cocina digital, privado y de código abierto, que te permite crear, administrar y compartir tus recetas"</string>
+  <string name="apply">"APLICAR"</string>
+  <string name="appRst">"Se requiere reiniciar la app"</string>
+  <string name="aStpBtn">"AGREGAR PASO"</string>
+  <string name="sec">"s"</string>
   <string name="sectRm">"Section removed"</string>
   <string name="addSectBtn">"ADD SECTION"</string>
   <string name="sect">"Section %1$s"</string>
@@ -193,7 +211,6 @@
   <string name="Moderate">"Moderate"</string>
   <string name="ml">"ml"</string>
   <string name="minimal">"Minimal"</string>
-  <string name="sec">"sec"</string>
   <string name="min">"min"</string>
   <string name="Millilitre">"Millilitre"</string>
   <string name="mg">"mg"</string>
@@ -309,26 +326,9 @@
   <string name="Black">"Black"</string>
   <string name="Beverages">"Beverages"</string>
   <string name="Barbecue">"Barbecue"</string>
-  <string name="aStpBtn">"ADD STEP"</string>
-  <string name="appRst">"App restart required"</string>
-  <string name="apply">"APPLY"</string>
-  <string name="appInfo">"EnRecipes is an open source, privacy-friendly digital cookbook that lets you create, manage and share your recipes"</string>
-  <string name="Appetizers">"Appetizers"</string>
-  <string name="appCrd">"Shared via EnRecipes. Get it on F-Droid, IzzyOnDroid or the Play Store."</string>
   <string name="_app_name_1k3Sbz">"EnRecipes"</string>
   <string name="app_name">"EnRecipes"</string>
   <string name="title_activity_kimera">"EnRecipes"</string>
-  <string name="aNoBtn">"ADD NOTE"</string>
-  <string name="aNBtn">"ADD NEW"</string>
-  <string name="American">"American"</string>
   <string name="allTs">"All Tags"</string>
   <string name="allCuis">"All Cuisines"</string>
-  <string name="allCats">"All Categories"</string>
-  <string name="aIngBtn">"ADD INGREDIENT"</string>
-  <string name="aFBu">"Add a recipe to perform a backup"</string>
-  <string name="addCmbBtn">"ADD COMBINATION"</string>
-  <string name="aD">"All done!"</string>
-  <string name="aBtn">"ADD"</string>
-  <string name="About">"About"</string>
-  <string name="aap">"Attach a photo"</string>
 </resources>

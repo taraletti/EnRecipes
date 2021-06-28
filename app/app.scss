@@ -241,7 +241,7 @@ button {
 ActivityIndicator {
   width: 24;
   height: 24;
-  margin: 12;
+  margin: 14;
   color: $orange;
 }
 
@@ -395,6 +395,9 @@ ActivityIndicator {
     padding: 14 16;
     line-height: 4;
   }
+  .t {
+    padding: 14 0;
+  }
 }
 .done {
   opacity: 0.5;
@@ -405,6 +408,9 @@ ActivityIndicator {
 .note {
   padding: 16 24;
   line-height: 4;
+}
+.t5 {
+  font-size: $t5;
 }
 
 // -----------------------------
@@ -448,6 +454,12 @@ ActivityIndicator {
 .sticky {
   width: 100%;
   padding: 0 16 16;
+}
+.ingActions {
+  orientation: horizontal;
+  button {
+    margin-right: 16;
+  }
 }
 
 // -----------------------------

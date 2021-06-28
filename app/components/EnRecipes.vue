@@ -320,7 +320,7 @@
         @touch="() => null"
       >
         <Button
-          class="ico rtl end"
+          class="ico rtl"
           @tap="
             showSearch
               ? closeSearch()
@@ -377,14 +377,14 @@
         </StackLayout>
         <Button
           :hidden="showSearch || selectMode"
-          class="ico fab end"
+          class="ico fab"
           :text="icon.plus"
           col="5"
           @tap="addR"
         />
         <Button
           :hidden="!selectMode"
-          class="ico end"
+          class="ico"
           :text="icon.del"
           col="5"
           @tap="deleteSelection"
@@ -483,7 +483,7 @@ export default {
       let vm = this;
       function getIngredients(e) {
         return e.ingredients
-          .map((f) => f.item.toLowerCase())
+          .map((f) => f.value.toLowerCase())
           .join()
           .includes(vm.searchQuery);
       }

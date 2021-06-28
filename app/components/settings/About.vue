@@ -35,7 +35,7 @@
         </v-template>
       </ListView>
       <GridLayout row="1" class="appbar rtl" rows="*" columns="auto, *">
-        <Button class="ico end" :text="icon.back" @tap="$navigateBack()" />
+        <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
       <Label rowSpan="2" class="edge hal rtl" @swipe="swipeBack" />
       <Label

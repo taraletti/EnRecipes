@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="ksavr">"Manter tela ligada ao ver receitas"</string>
   <string name="add">"Adicionar"</string>
   <string name="rstBtn">"REINICIAR"</string>
   <string name="gtD">"Ir à data"</string>
@@ -324,8 +325,10 @@
   <string name="aD">"Tudo feito!"</string>
   <string name="aBtn">"ADICIONAR"</string>
   <string name="About">"Sobre"</string>
+  <string name="sectRm">"Section removed"</string>
+  <string name="addSectBtn">"ADD SECTION"</string>
+  <string name="sect">"Section %1$s"</string>
   <string name="esgbInfo">"Disable this option if you have any navigation issues"</string>
   <string name="esgb">"Edge swipe to go back"</string>
   <string name="ksavrInfo">"Prevents the screen from turning off while viewing a recipe"</string>
-  <string name="ksavr">"Keep screen awake while viewing recipe"</string>
 </resources>

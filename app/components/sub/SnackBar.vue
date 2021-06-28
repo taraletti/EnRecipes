@@ -10,8 +10,8 @@
     <Button @tap="action" :text="count" class="ico t3 accent tb" />
     <RLabel
       @tap="action"
-      margin="0 4"
-      class="tb tw vc lh4"
+      margin="0 2"
+      class="tw vc lh4"
       col="1"
       :text="msg | L"
     />

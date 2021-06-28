@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="sect">"Section %1$s"</string>
+  <string name="addSectBtn">"AJOUTER UNE SECTION"</string>
+  <string name="sectRm">"Section retiré"</string>
   <string name="ksavrInfo">"Empêche l’écran de s’éteindre durant la visualisation d’une recette"</string>
   <string name="esgb">"Balayer le bord pour revenir en arrière"</string>
   <string name="esgbInfo">"Désactivez cette option si vous avez des problèmes de navigation"</string>
@@ -91,7 +94,7 @@
   <string name="sVwInfo">"Vous aide à choisir quoi cuisiner quand vous ne pouvez pas vous décider"</string>
   <string name="sVw">"Secouez pour voir une recette au hasard"</string>
   <string name="strAdd">"Commencez à ajouter vos recettes !"</string>
-  <string name="stp">"Étape"</string>
+  <string name="stp">"Étape %1$s"</string>
   <string name="stick">"barre"</string>
   <string name="stars">"Évaluation étoilée"</string>
   <string name="sru">"Partager la recette en utilisant…"</string>
@@ -221,7 +224,7 @@
   <string name="Japanese">"japonaise"</string>
   <string name="Jamaican">"jamaïcaine"</string>
   <string name="Italian">"italienne"</string>
-  <string name="it">"Élément"</string>
+  <string name="it">"Élément %1$s"</string>
   <string name="Irish">"irlandaise"</string>
   <string name="invFile">"Fichier invalide"</string>
   <string name="intf">"Interface"</string>

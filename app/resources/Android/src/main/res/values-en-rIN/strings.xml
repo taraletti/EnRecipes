@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="sect">"Section %1$s"</string>
+  <string name="addSectBtn">"ADD SECTION"</string>
+  <string name="sectRm">"Section removed"</string>
   <string name="ksavr">"Keep screen awake while viewing recipe"</string>
   <string name="ksavrInfo">"Prevents the screen from turning off while viewing a recipe"</string>
   <string name="esgb">"Edge swipe to go back"</string>
@@ -91,7 +94,7 @@
   <string name="sVwInfo">"Helps you choose what to cook when you can\'t decide"</string>
   <string name="sVw">"Shake to view random recipe"</string>
   <string name="strAdd">"Start adding your recipes!"</string>
-  <string name="stp">"Step"</string>
+  <string name="stp">"Step %1$s"</string>
   <string name="stick">"stick"</string>
   <string name="stars">"Star rating"</string>
   <string name="sru">"Share recipe using..."</string>
@@ -221,7 +224,7 @@
   <string name="Japanese">"Japanese"</string>
   <string name="Jamaican">"Jamaican"</string>
   <string name="Italian">"Italian"</string>
-  <string name="it">"Item"</string>
+  <string name="it">"Item %1$s"</string>
   <string name="Irish">"Irish"</string>
   <string name="invFile">"Invalid file"</string>
   <string name="intf">"Interface"</string>

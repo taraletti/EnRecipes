@@ -69,7 +69,7 @@ export default {
             cuisine: e.cuisine,
             category: e.category,
             tags: e.tags.map((e) => e.toLowerCase()).join(),
-            ingredients: e.ingredients.map((e) => e.item.toLowerCase()).join(),
+            ingredients: e.ingredients.map((e) => e.value.toLowerCase()).join(),
           };
         })
         .filter((e) => this.recipeFilter(e));
