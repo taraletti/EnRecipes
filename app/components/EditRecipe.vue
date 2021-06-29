@@ -155,7 +155,7 @@
               col="2"
               :text="`${recipe.ingredients[i].unit}` | L"
               editable="false"
-              @focus="showUnits(1, i)"
+              @focus="!modalOpen && showUnits(1, i)"
               @tap="showUnits(0, i)"
             />
             <TextField
@@ -714,6 +714,7 @@ export default {
       });
     },
     showUnits(focus, i) {
+      this.modalOpen = 1;
       this.$showModal(Action, {
         props: {
           title: "Unit",
@@ -722,6 +723,7 @@ export default {
           selected: this.recipe.ingredients[i].unit,
         },
       }).then((action) => {
+        this.modalOpen = 0;
         if (action == "aNBtn") {
           this.$showModal(Prompt, {
             props: {
