@@ -66,7 +66,7 @@
                 :class="{ r: RTL }"
               >
                 <RLabel class="sub" :text="'ts' | L" />
-                <RLabel class="v" :text="getTags(recipe.tags)" />
+                <RLabel class="v" :text="getTags" />
               </StackLayout>
               <RGridLayout :rtl="RTL" rows="auto" columns="*, *">
                 <StackLayout class="attrT" :hidden="!hasTime(recipe.prepTime)">
@@ -120,7 +120,7 @@
                   <RLabel
                     class="v tw"
                     :class="{ 'tb t t3': !item.type }"
-                    :text="getIngredientItem(item)"
+                    :text="getIng(item)"
                   />
                 </RStackLayout>
               </StackLayout>
@@ -234,7 +234,7 @@
           col="2"
           v-else
           class="ico"
-          :text="icon.done"
+          :text="recipeTried ? icon.try : icon.done"
           @tap="toggle('tried', 1)"
         />
         <Button
@@ -318,7 +318,6 @@ import * as utils from "~/shared/utils";
 const Intl = require("nativescript-intl");
 let barTimer;
 declare const android: any;
-
 export default {
   components: { Toast },
   props: ["filterTrylater", "recipeID", "yieldQuantity"],
@@ -348,6 +347,8 @@ export default {
       view: null,
       wv: null,
       showTools: 0,
+      snackMsg: null,
+      recipeTried: 0,
     };
   },
   computed: {
@@ -378,6 +379,9 @@ export default {
     hasPrinterSupport() {
       return utils.Printer.isSupported();
     },
+    getTags() {
+      return this.recipe.tags.join(" · ");
+    },
   },
   methods: {
     ...mapActions(["toggleState", "setR"]),
@@ -392,6 +396,7 @@ export default {
     },
     onPageUnload() {
       utils.keepScreenOn(0);
+      if (this.recipeTried) this.markTried();
     },
     sbload({ object }) {
       this.sidebar = object;
@@ -401,7 +406,7 @@ export default {
     },
     tbLoad({ object }) {
       this.toastbar = object;
-      this.recipe.tried && this.recipe.lastTried && this.showLastTried();
+      this.recipe.lastTried && this.showLastTried();
     },
     wvLoad({ object }) {
       this.wv = object;
@@ -527,7 +532,7 @@ export default {
       let text = s && !unsel ? ` (${s}/${c})` : ` (${c})`;
       return localize(title) + text;
     },
-    getIngredientItem(o) {
+    getIng(o) {
       return `${
         this.roundedQuantity(o.quantity)
           ? this.roundedQuantity(o.quantity) + " "
@@ -614,10 +619,6 @@ export default {
         minute: "numeric",
       }).format(new Date(date));
     },
-    isValidURL(string) {
-      let pattern = new RegExp("^https?|^www", "ig");
-      return pattern.test(string);
-    },
     getCombinationTitle(id) {
       return this.recipes.filter((e) => e.id === id)[0].title;
     },
@@ -692,6 +693,22 @@ export default {
     },
 
     // NavigationHandlers
+    hijackBackEvent() {
+      Application.android.on(
+        AndroidApplication.activityBackPressedEvent,
+        this.backEvent
+      );
+    },
+    releaseBackEvent() {
+      Application.android.off(
+        AndroidApplication.activityBackPressedEvent,
+        this.backEvent
+      );
+    },
+    backEvent(args) {
+      args.cancel = true;
+      this.closePhoto();
+    },
     editRecipe() {
       this.busyEdit = 1;
       this.$navigateTo(EditRecipe, {
@@ -714,7 +731,7 @@ export default {
       this.syncCombinations();
       this.createNotes();
       this.yieldMultiplier = this.recipe.yieldQuantity;
-      this.recipe.tried && this.recipe.lastTried && this.showLastTried();
+      this.recipe.lastTried && this.showLastTried();
     },
 
     // Tools
@@ -847,19 +864,25 @@ export default {
     },
 
     // DataHandlers
-    toggle(key: string, setDate: boolean) {
+    toggle(key: string, setDate: number) {
+      console.log(setDate);
+      if (setDate) {
+        this.recipeTried = !this.recipeTried;
+      } else
+        this.toggleState({
+          id: this.currentRecipeID,
+          key,
+          setDate,
+        });
+    },
+    markTried() {
       this.toggleState({
         id: this.currentRecipeID,
-        key,
-        setDate,
+        key: "tried",
+        setDate: 1,
       });
-      if (setDate) this.$navigateBack();
     },
-    touchRate({ object, action }, r) {
-      this.touchFade(object, action);
-      if (action == "up") this.setRating(r);
-    },
-    setRating(r) {
+    rate(r) {
       if (r !== this.recipe.rating || r === 1) {
         if (this.recipe.rating == 1 && r == 1) r = 0;
         this.setR({
@@ -868,8 +891,6 @@ export default {
         });
       }
     },
-
-    // ShoppingList
 
     // Notes
     createNote(note) {
@@ -903,27 +924,12 @@ export default {
         stack.addChild(this.createNote(note.value))
       );
     },
-    getTags(tags) {
-      return tags.join(" · ");
+    isValidURL(s) {
+      let pattern = new RegExp("^https?|^www", "ig");
+      return pattern.test(s);
     },
-    hijackBackEvent() {
-      Application.android.on(
-        AndroidApplication.activityBackPressedEvent,
-        this.backEvent
-      );
-    },
-    releaseBackEvent() {
-      Application.android.off(
-        AndroidApplication.activityBackPressedEvent,
-        this.backEvent
-      );
-    },
-    backEvent(args) {
-      if (this.photoOpen) {
-        args.cancel = true;
-        this.closePhoto();
-      } else this.$navigateBack();
-    },
+
+    // PhotoViewer
     viewPhoto() {
       this.hideBars();
       this.photoOpen = 1;
@@ -994,7 +1000,7 @@ export default {
       });
     },
 
-    //DuplicateRecipe
+    // Duplicate
     duplicateRecipe() {
       this.busyDup = 1;
       let dupRecipe = Object.assign({}, this.recipe);
@@ -1027,9 +1033,9 @@ export default {
                 i < ings.length - 1 ? "<ul>" : ""
               }`;
             else
-              return `${i < 1 ? "<ul>" : ""}<li>${this.getIngredientItem(
-                e
-              )}</li>${i == ings.length - 1 ? "</ul>" : ""}`;
+              return `${i < 1 ? "<ul>" : ""}<li>${this.getIng(e)}</li>${
+                i == ings.length - 1 ? "</ul>" : ""
+              }`;
           })
           .join("");
       };
@@ -1085,7 +1091,7 @@ export default {
         r.tags.length
           ? `<div class=attr><div style="grid-column:span 2"><p>${localize(
               "ts"
-            )}<p>${this.getTags(r.tags)}</div></div>`
+            )}<p>${this.getTags}</div></div>`
           : ""
       } ${
         this.hasTime(r.prepTime) || this.hasTime(r.cookTime)
@@ -1139,6 +1145,10 @@ export default {
     },
 
     // Helpers
+    touchRate({ object, action }, r) {
+      this.touchFade(object, action);
+      if (action == "up") this.rate(r);
+    },
     touchYield({ object, action }) {
       this.touchFade(object, action);
 

@@ -1173,16 +1173,16 @@ export default new Vuex.Store({
       }
     },
     toggleState(state, { id, key, setDate }) {
-      let i = state.recipes.findIndex((e) => e.id == id)
-      state.recipes[i][key] = state.recipes[i][key] ? 0 : 1
+      let res = state.recipes
+      let i = res.findIndex((e) => e.id == id)
+      state.recipes[i][key] = +!res[i][key]
       db.execute(
-        `UPDATE recipes SET ${key} = ${state.recipes[i][key]} WHERE id = '${id}'`
+        `UPDATE recipes SET ${key} = ${res[i][key]} WHERE id = '${id}'`
       )
       if (setDate) {
-        state.recipes[i].lastTried = new Date().getTime()
-        db.execute(
-          `UPDATE recipes SET lastTried = ${state.recipes[i].lastTried} WHERE id = '${id}'`
-        )
+        let time = new Date().getTime()
+        state.recipes[i].lastTried = time
+        db.execute(`UPDATE recipes SET lastTried = ${time} WHERE id = '${id}'`)
       }
     },
     // UnLinkCombinations
