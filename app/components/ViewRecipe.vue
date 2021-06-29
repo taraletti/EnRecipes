@@ -767,60 +767,76 @@ export default {
       }
     },
     shareRecipe() {
-      let overview = `${this.recipe.title}\n\n`;
-      if (this.recipe.rating)
-        overview += `${localize("stars")}: ${this.recipe.rating}\n`;
-      overview += `${localize("cui")}: ${localize(
-        this.recipe.cuisine
-      )}\n${localize("cat")}: ${localize(this.recipe.category)}\n`;
-      if (this.recipe.tags.length)
-        overview += `${localize("ts")}: ${this.recipe.tags.join(", ")}\n`;
-      if (this.recipe.prepTime != "00:00")
-        overview += `${localize("prepT")}: ${this.formattedTime(
-          this.recipe.prepTime
-        )}\n`;
-      if (this.recipe.cookTime != "00:00")
-        overview += `${localize("cookT")}: ${this.formattedTime(
-          this.recipe.cookTime
-        )}\n`;
+      let r = this.recipe;
+      let overview = `${r.title}\n\n`;
+      if (r.rating) overview += `${localize("stars")}: ${r.rating}\n`;
+      overview += `${localize("cui")}: ${localize(r.cuisine)}\n${localize(
+        "cat"
+      )}: ${localize(r.category)}\n`;
+      if (r.tags.length)
+        overview += `${localize("ts")}: ${r.tags.join(", ")}\n`;
+      if (r.prepTime != "00:00")
+        overview += `${localize("prepT")}: ${this.formattedTime(r.prepTime)}\n`;
+      if (r.cookTime != "00:00")
+        overview += `${localize("cookT")}: ${this.formattedTime(r.cookTime)}\n`;
       overview += `${localize("yld")}: ${this.tempYieldQuantity} ${localize(
-        this.recipe.yieldUnit
-      )}\n${localize("Difficulty level")}: ${localize(
-        this.recipe.difficulty
-      )}\n`;
+        r.yieldUnit
+      )}\n${localize("Difficulty level")}: ${localize(r.difficulty)}\n`;
 
       let shareContent = overview;
-      if (this.recipe.ingredients.length) {
+      if (r.ingredients.length) {
         let ingredients = `\n\n${localize("ings")}:\n\n`;
-        this.recipe.ingredients.forEach((e) => {
-          ingredients += `- ${
-            e.quantity
-              ? this.roundedQuantity(e.quantity) +
-                " " +
-                this.$options.filters.L(e.unit) +
-                " "
-              : ""
-          }${e.value}\n`;
+        r.ingredients.forEach((e) => {
+          if (e.type) {
+            ingredients += `- ${
+              e.quantity
+                ? this.roundedQuantity(e.quantity) +
+                  " " +
+                  localize(e.unit) +
+                  " "
+                : ""
+            }${e.value}\n`;
+          } else {
+            ingredients += `\n${
+              e.quantity
+                ? this.roundedQuantity(e.quantity) +
+                  " " +
+                  localize(e.unit) +
+                  " "
+                : ""
+            }${e.value}\n\n`;
+          }
         });
         shareContent += ingredients;
       }
-      if (this.recipe.instructions.length) {
+      let ins = r.instructions;
+      if (ins.length) {
+        let a = 1;
+        let b = 1;
+        let group = ins.reduce((acc, e) => {
+          if (!e.type) {
+            a = 1;
+            acc.push(b++);
+          } else acc.push(a++);
+          return acc;
+        }, []);
         let instructions = `\n\n${localize("inss")}:\n\n`;
-        this.recipe.instructions.forEach((e, i) => {
-          instructions += `${i + 1}. ${e.value}\n\n`;
-        });
+        ins.forEach(
+          (e, i) =>
+            (instructions += (e.type ? group[i] + ". " : "") + `${e.value}\n\n`)
+        );
         shareContent += instructions;
       }
-      if (this.recipe.combinations.length) {
+      if (r.combinations.length) {
         let combinations = `\n${localize("cmbs")}:\n\n`;
-        this.recipe.combinations.forEach((e, i) => {
+        r.combinations.forEach((e, i) => {
           combinations += `${i + 1}. ${this.getCombinationTitle(e)}\n\n`;
         });
         shareContent += combinations;
       }
-      if (this.recipe.notes.length) {
+      if (r.notes.length) {
         let notes = `\n${localize("nos")}:\n\n`;
-        this.recipe.notes.forEach((e, i) => {
+        r.notes.forEach((e, i) => {
           notes += `${i + 1}. ${e.value}\n\n`;
         });
         shareContent += notes;
