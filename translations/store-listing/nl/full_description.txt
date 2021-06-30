@@ -1,3 +1,5 @@
+BELANGRIJKE MEDEDELING voor gebruikers van EnRecipes v1.3.2 of ouder:
+
 Update EnRecipes naar deze versie om updates te blijven ontvangen.
 
 Deze versie bevat enkele grote wijzigingen, dus moet je als volgt te werk gaan:
