@@ -1,3 +1,5 @@
+WICHTIGER HINWEIS für Nutzer mit EnRecipes v1.3.2 oder früher:
+
 Um weiterhin Aktualisierungen zu erhalten, aktualisiere bitte EnRecipes auf diese Version.
 
 In dieser Version gibt es einige wesentliche Änderungen. Um fortzufahren, musst du also Folgendes tun:
