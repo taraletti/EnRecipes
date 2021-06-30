@@ -1,12 +1,12 @@
-## :warning: Important Notice :warning:
+#### :warning: IMPORTANT NOTICE for users with EnRecipes v1.3.2 or before:
 
-To continue receiving updates, please update your EnRecipes to v2.0.0
+To continue receiving updates, please update your EnRecipes to the latest version.
 
 There are some significant changes in this version. So, in order to continue, you must do the following:
 
 1. Export a full backup.
 2. Uninstall EnRecipes.
-3. Install v2.0.0 and Import your data.
+3. Install this version and Import your data.
 
 <p align="center"><a href="https://enrecipes.vercel.app"><img src="fastlane/metadata/android/en-US/images/featureGraphic.png" width="100%"></a></p>
 

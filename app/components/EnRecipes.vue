@@ -608,6 +608,7 @@ export default {
     },
     pgUnload() {
       if (this.shake) stopAccelerometerUpdates();
+      this.releaseBackEvent();
     },
     abLoad({ object }) {
       this.appbar = object;
