@@ -1,3 +1,5 @@
+AVVISO IMPORTANTE per gli utenti con EnRecipes v1.3.2 o precedente:
+
 EnRecipes è un libro di cucina digitale a codice aperto e rispettoso della riservatezza che ti permette di creare, gestire e condividere le tue ricette.
 
 Caratteristiche:

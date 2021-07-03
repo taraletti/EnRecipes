@@ -1,0 +1,3 @@
+- Aggiunta di sezioni agli ingredienti e alle istruzioni della tua ricetta
+- Aggiungnere o rimuovere elementi nell'editore di ricette è ancora più facile
+- Correzioni di errori e miglioramenti

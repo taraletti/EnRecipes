@@ -1,11 +1,13 @@
+AVISO IMPORTANTE para utilizadores do EnRecipes versão 1.3.2 ou inferior:
+
 Para continuar a receber atualizações, por favor atualize o EnRecipes para esta versão.
 
-Há algumas alterações significativas nesta versão. Portanto, para continuar, deve fazer o seguinte:
+Há algumas alterações significativas nesta versão. Por isso para continuar, deve fazer o seguinte:
 1. Exportar uma cópia de segurança completa.
 2. Desinstalar o EnRecipes.
 3. Instalar esta versão e importar os dados da cópia de segurança.
 
-EnRecipes é um livro de receitas digital de código aberto, amigo da privacidade, que lhe permite criar, gerir e partilhar as suas receitas.
+O EnRecipes é um livro de receitas digital de código-fonte aberto, amigo da privacidade, que lhe permite criar, gerir e partilhar as suas receitas.
 
 Características:
 
@@ -14,18 +16,18 @@ Características:
 - Organize as suas receitas por cozinha, categoria e etiquetas.
 - Adicione receitas à sua lista "Experimentar mais tarde" e marque-as como favoritas.
 - Pesquisa rápida de receitas por título ou ingrediente.
-- Adapte a quantidade dos ingredientes da sua receita para servir mais ou menos pessoas.
-- Seja notificado sobre a última vez que experimentou uma receita.
-- Partilhe a sua receita com qualquer pessoa, por qualquer meio, como uma mensagem bem formatada. Também pode partilhar a fotografia da receita.
+- Altere a quantidade dos ingredientes da sua receita para servir mais ou menos pessoas.
+- Receba uma notificação sobre a última vez que experimentou uma receita.
+- Partilhe a sua receita com qualquer pessoa, por qualquer meio, como uma mensagem formatada. Também pode partilhar a fotografia da receita.
 - Agite o aparelho para ver uma receita aleatória.
 - Crie planos de refeições.
-- Importação/exportação de receitas.
+- Importe/exporte de receitas.
 - Temas da interface: claro, escuro e preto.
 
 Destaques:
 
-- 100% gratuito e de código aberto.
-- Concebido desde o início a pesar na privacidade.
+- 100% gratuito e de código-fonte aberto.
+- Concebido desde o início a pensar na privacidade.
 - Não são necessárias autorizações.
 - Sem anúncios ou pop-ups irritantes.
 
