@@ -53,7 +53,7 @@
     "ings": "Ingredientes",
     "inss": "Instruções",
     "intf": "Interface",
-    "it": "Item",
+    "it": "Item %s",
     "joinTG": "Junte-se ao grupo Telegram",
     "kg": "kg",
     "Kilogram": "Quilograma",
@@ -122,7 +122,7 @@
     "Soups": "Sopas",
     "srt": "Ordenar",
     "stick": "bastão",
-    "stp": "Etapa",
+    "stp": "Etapa %s",
     "strAdd": "Comece a adicionar suas receitas!",
     "sysDef": "Padrão do sistema",
     "Tablespoon": "Colher de sopa",
@@ -321,5 +321,11 @@
     "gtD": "Ir à data",
     "rstBtn": "REINICIAR",
     "add": "Adicionar",
-    "ksavr": "Manter tela ligada ao ver receitas"
+    "ksavr": "Manter tela ligada ao ver receitas",
+    "sectRm": "Seção removida",
+    "addSectBtn": "ADICIONAR SEÇÃO",
+    "sect": "Seção %s",
+    "esgbInfo": "Desative esta opção se tiver algum problema de navegação",
+    "esgb": "Deslizar para a borda para voltar",
+    "ksavrInfo": "Impede que a tela desligue ao ver uma receita"
 }
