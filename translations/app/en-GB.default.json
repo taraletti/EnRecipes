@@ -327,5 +327,8 @@
   "esgbInfo": "Disable this option if you have any navigation issues",
   "sect": "Section %s",
   "addSectBtn": "ADD SECTION",
-  "sectRm": "Section removed"
+  "sectRm": "Section removed",
+  "mSystem": "Measuring system",
+  "mtrc": "Metric",
+  "imprl": "Imperial"
 }
