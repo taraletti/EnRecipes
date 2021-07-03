@@ -386,8 +386,8 @@ export default new Vuex.Store({
       },
     ],
     shake: getNumber('shake', 1), // ShakeViewRandomRecipe
+    // ImportSummary
     impSum: {
-      // ImportSummary
       found: 0,
       imported: 0,
       updated: 0,
@@ -575,24 +575,18 @@ export default new Vuex.Store({
                 f.match(/tags|ingredients|instructions|combinations|notes/) &&
                 (e[f] = JSON.parse(e[f]))
             )
-            if (
-              e.ingredients.length &&
-              !e.ingredients[0].hasOwnProperty('type')
-            ) {
-              e.ingredients = e.ingredients.map((e) => {
+            if (e.ingredients.length && !('type' in e.ingredients[0])) {
+              e.ingredients = e.ingredients.map(({ quantity, unit, item }) => {
                 return {
                   id: utils.getRandomID(1),
                   type: 1,
-                  quantity: e.quantity,
-                  unit: e.unit,
-                  value: e.item,
+                  quantity,
+                  unit,
+                  value: item,
                 }
               })
             }
-            if (
-              e.instructions.length &&
-              !e.instructions[0].hasOwnProperty('type')
-            ) {
+            if (e.instructions.length && !('type' in e.instructions[0])) {
               e.instructions = e.instructions.map((e) => {
                 return {
                   id: utils.getRandomID(1),
@@ -601,7 +595,7 @@ export default new Vuex.Store({
                 }
               })
             }
-            if (e.notes.length && !e.notes[0].hasOwnProperty('value')) {
+            if (e.notes.length && !('value' in e.notes[0])) {
               e.notes = e.notes.map((e) => {
                 return {
                   id: utils.getRandomID(1),
@@ -633,28 +627,25 @@ export default new Vuex.Store({
             r.image = r.imageSrc.replace('enrecipes', 'EnRecipes')
             delete r.imageSrc
           }
-          if (!r.hasOwnProperty('cuisine')) r.cuisine = 'Undefined'
-          if (!r.hasOwnProperty('tags')) r.tags = []
-          if (!r.hasOwnProperty('difficulty')) r.difficulty = 'Easy'
-          if (!r.hasOwnProperty('rating')) r.rating = 0
-          if (!r.hasOwnProperty('created')) r.created = r.lastModified
+          if (!('cuisine' in r)) r.cuisine = 'Undefined'
+          if (!('tags' in r)) r.tags = []
+          if (!('difficulty' in r)) r.difficulty = 'Easy'
+          if (!('rating' in r)) r.rating = 0
+          if (!('created' in r)) r.created = r.lastModified
           r.yieldQuantity = r.yield.quantity
           r.yieldUnit = r.yield.unit
           delete r.yield
           function getTime(d) {
             return new Date(d).getTime()
           }
-          if (
-            r.ingredients.length &&
-            !r.ingredients[0].hasOwnProperty('type')
-          ) {
-            r.ingredients = r.ingredients.map((e) => {
+          if (r.ingredients.length && !('type' in r.ingredients[0])) {
+            r.ingredients = r.ingredients.map(({ quantity, unit, item }) => {
               return {
                 id: utils.getRandomID(1),
                 type: 1,
-                quantity: e.quantity,
-                unit: e.unit,
-                value: e.item,
+                quantity,
+                unit,
+                value: item,
               }
             })
           }
@@ -670,7 +661,7 @@ export default new Vuex.Store({
               }
             })
           }
-          if (r.notes.length && !r.notes[0].hasOwnProperty('type')) {
+          if (r.notes.length && !r.notes[0].hasOwnProperty('value')) {
             r.notes = r.notes.map((e) => {
               return {
                 id: utils.getRandomID(1),
@@ -774,9 +765,8 @@ export default new Vuex.Store({
         )
         if (partition[0].length) createDocuments(partition[0])
         if (partition[1].length) updateDocuments(partition[1])
-      } else {
-        createDocuments(ao)
-      }
+      } else createDocuments(ao)
+
       state.impSum.found = ao.length
       state.impSum.imported = imported
       state.impSum.updated = updated
@@ -786,47 +776,50 @@ export default new Vuex.Store({
       let localRecipesIDs: string[], partition: any[]
       let imported = 0
       let updated = 0
-      function getUpdatedData(data: any[]) {
+      const getUpdatedData = (data) => {
         return data.map((recipe) => {
           let r = Object.assign({}, recipe)
-          if (
-            r.ingredients.length &&
-            !r.ingredients[0].hasOwnProperty('type')
-          ) {
-            r.ingredients = r.ingredients.map((e) => {
-              return {
-                id: utils.getRandomID(1),
-                type: 1,
-                quantity: e.quantity,
-                unit: e.unit,
-                value: e.item,
-              }
-            })
+          let ings = JSON.parse(r.ingredients)
+          let inss = JSON.parse(r.instructions)
+          let notes = JSON.parse(r.notes)
+          if (ings.length && !('type' in ings[0])) {
+            r.ingredients = JSON.stringify(
+              ings.map((e) => {
+                return {
+                  id: utils.getRandomID(1),
+                  type: 1,
+                  quantity: e.quantity,
+                  unit: e.unit,
+                  value: e.item,
+                }
+              })
+            )
           }
-          if (
-            r.instructions.length &&
-            !r.instructions[0].hasOwnProperty('type')
-          ) {
-            r.instructions = r.instructions.map((e) => {
-              return {
-                id: utils.getRandomID(1),
-                type: 1,
-                value: e,
-              }
-            })
+          if (inss.length && !inss[0].hasOwnProperty('type')) {
+            r.instructions = JSON.stringify(
+              inss.map((e) => {
+                return {
+                  id: utils.getRandomID(1),
+                  type: 1,
+                  value: e,
+                }
+              })
+            )
           }
-          if (r.notes.length && !r.notes[0].hasOwnProperty('value')) {
-            r.notes = r.notes.map((e) => {
-              return {
-                id: utils.getRandomID(1),
-                value: e,
-              }
-            })
+          if (notes.length && !notes[0].hasOwnProperty('value')) {
+            r.notes = JSON.stringify(
+              notes.map((e) => {
+                return {
+                  id: utils.getRandomID(1),
+                  value: e,
+                }
+              })
+            )
           }
           return r
         })
       }
-      function createDocuments(data: any[]) {
+      const createDocuments = (data) => {
         data = getUpdatedData(data)
         data.forEach((r) => {
           const cols = Object.keys(r).join(', ')
@@ -846,7 +839,7 @@ export default new Vuex.Store({
           state.recipes.push(r)
         })
       }
-      function updateDocuments(data: any[]) {
+      const updateDocuments = (data) => {
         data = getUpdatedData(data)
         data.forEach((r) => {
           let recipeIndex = state.recipes
@@ -889,6 +882,7 @@ export default new Vuex.Store({
         if (partition[0].length) createDocuments(partition[0])
         if (partition[1].length) updateDocuments(partition[1])
       } else createDocuments(ao)
+      console.log(ao.length)
       state.impSum.found = ao.length
       state.impSum.imported = imported
       state.impSum.updated = updated
@@ -1038,7 +1032,7 @@ export default new Vuex.Store({
     importMPsJSON(state, ao) {
       let updatedMealPlans = []
       let newMealPlans = ao.filter((e) => {
-        if (e.hasOwnProperty('eventColor')) {
+        if ('eventColor' in e) {
           return !state.mealPlans.some((f) => {
             let d = new Date(e.startDate)
             let date = new Date(
@@ -1076,7 +1070,7 @@ export default new Vuex.Store({
         p.recipeID = p.title
         p.quantity = 1
         p.note = null
-        if (p.hasOwnProperty('eventColor')) {
+        if ('eventColor' in p) {
           let d = new Date(p.startDate)
           p.date = new Date(
             d.getFullYear(),

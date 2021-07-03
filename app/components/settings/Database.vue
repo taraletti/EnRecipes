@@ -1,10 +1,10 @@
 <template>
-  <Page @loaded="pgLoad" actionBarHidden="true">
+  <Page @loaded="pageL" actionBarHidden="true">
     <RGridLayout :rtl="RTL" rows="*, auto" columns="auto, *">
       <OptionsList title="db" :items="items" />
       <GridLayout
         :hidden="toast || progress"
-        @loaded="abLoad"
+        @loaded="appbarL"
         row="1"
         class="appbar rtl"
         rows="*"
@@ -12,7 +12,7 @@
       >
         <Button class="ico" :text="icon.back" @tap="$navigateBack()" />
       </GridLayout>
-      <Toast :onload="tbLoad" :toast="toast" :action="hideBar" />
+      <Toast :onload="toastL" :toast="toast" :action="hideBar" />
       <RGridLayout
         :rtl="RTL"
         v-show="progress"
@@ -60,7 +60,7 @@ export default {
   data() {
     return {
       backupFolder: 0,
-      progress: 0,
+      progress: null,
       toast: 0,
       appbar: 0,
       toastbar: 0,
@@ -117,7 +117,7 @@ export default {
       "unLinkBIs",
       "clearIS",
     ]),
-    pgLoad({ object }) {
+    pageL({ object }) {
       object.bindingContext = new Observable();
       const ContentResolver =
         Application.android.nativeApp.getContentResolver();
@@ -129,10 +129,10 @@ export default {
         this.backupFolder = null;
       }
     },
-    abLoad({ object }) {
+    appbarL({ object }) {
       this.appbar = object;
     },
-    tbLoad({ object }) {
+    toastL({ object }) {
       this.toastbar = object;
     },
 
@@ -180,7 +180,7 @@ export default {
       this.progress = localize("expip");
       this.hijackBackEvent();
       let date = new Date();
-      let formattedDate =
+      let intlDate =
         date.getFullYear() +
         "-" +
         ("0" + (date.getMonth() + 1)).slice(-2) +
@@ -194,13 +194,13 @@ export default {
       // Copy db file to EnRecipes folder
       utils.copyDBToExport();
 
-      let filename = `${localize("EnRecipes")}_${formattedDate}.zip`;
+      let filename = `${localize("EnRecipes")}_${intlDate}.zip`;
       let fromPath = path.join(knownFolders.documents().path, "EnRecipes");
       utils.Zip.zip(fromPath, this.backupFolder, filename)
         .then((res) => res && this.showExportSummary(filename))
         .catch((err) => {
           console.log("Backup error: ", err);
-          this.progress = null;
+          this.progress = 0;
           this.releaseBackEvent();
           this.setBackupFolder(1);
         });
@@ -213,7 +213,7 @@ export default {
           "EnRecipes.db"
         )
       );
-      this.progress = null;
+      this.progress = 0;
       this.releaseBackEvent();
       let description = localize("buto", `"${filename}"`);
       this.$showModal(Confirm, {
@@ -333,7 +333,7 @@ export default {
       } else this.failedImport(localize("buEmp"));
     },
     failedImport(description) {
-      this.progress = null;
+      this.progress = 0;
       this.releaseBackEvent();
       knownFolders.temp().clear();
       this.$showModal(Confirm, {
@@ -434,7 +434,7 @@ export default {
       });
     },
     showImportSummary() {
-      this.progress = null;
+      this.progress = 0;
       this.releaseBackEvent();
       let { found, imported, updated } = this.impSum;
       let exists = Math.abs(found - imported - updated) + updated;
