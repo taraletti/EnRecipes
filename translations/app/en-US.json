@@ -327,5 +327,8 @@
     "ksavr": "Keep screen awake while viewing recipe",
     "sectRm": "Section removed",
     "addSectBtn": "ADD SECTION",
-    "sect": "Section %s"
+    "sect": "Section %s",
+    "imprl": "Imperial",
+    "mtrc": "Metric",
+    "mSystem": "Measurement system"
 }
