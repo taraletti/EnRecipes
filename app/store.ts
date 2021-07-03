@@ -409,8 +409,14 @@ export default new Vuex.Store({
     planDel: getString('planDel', 'nvr'), // PlanDeletionCriteria
     edgeS: getNumber('edgeS', 1), // EdgeSwipe
     awakeV: getNumber('awakeV', 1), // AwakeViewer
+    mSystem: getString('mSystem', 'mtrc'), //MeasuringSystem
   },
   mutations: {
+    //SetMeasuringSystem
+    setMS(state, s) {
+      state.mSystem = s
+      setNumber('mSystem', s)
+    },
     // ToggleKeepAwakeOnRecipeViewer
     toggleAwakeV(state) {
       state.awakeV = +!state.awakeV
@@ -422,12 +428,12 @@ export default new Vuex.Store({
       setNumber('edgeS', state.edgeS)
     },
     // SetPlanDeletionCriteria
-    setPlanDel(state, s: string) {
+    setPlanDel(state, s) {
       state.planDel = s
       setString('planDel', s)
     },
     // SetPlannerViewMode
-    setPlannerV(state, s: string) {
+    setPlannerV(state, s) {
       state.plannerV = s
       setString('plannerV', s)
     },
@@ -436,7 +442,7 @@ export default new Vuex.Store({
       state.RTL = getNumber('RTL', 0)
     },
     // SetForegroundService
-    setFgS(state, n: number) {
+    setFgS(state, n) {
       state.FGS = n
     },
     // AddTimerPreset
@@ -451,7 +457,7 @@ export default new Vuex.Store({
       )
     },
     // DeleteTimerPreset
-    deleteTP(state, n: number) {
+    deleteTP(state, n) {
       let id = state.timerPs[n]
       state.timerPs.splice(n, 1)
       db.execute(`DELETE FROM timerPresets WHERE id = ${id}`)
@@ -508,21 +514,21 @@ export default new Vuex.Store({
       state.activeTs.splice(i, 1, o)
     },
     // RemoveActiveTimer
-    removeAT(state, n: number) {
+    removeAT(state, n) {
       state.activeTs.splice(n, 1)
     },
     // SetTimerDelay
-    setTD(state, n: number) {
+    setTD(state, n) {
       state.timerD = n
       setNumber('timerD', n)
     },
     // SetTimerSound
-    setTS(state, s: string) {
+    setTS(state, s) {
       state.timerS = s
       setString('timerS', JSON.stringify(s))
     },
     // SetTimerVibrate
-    setTV(state, n: number) {
+    setTV(state, n) {
       state.timerV = n
       setNumber('timerV', n)
     },
@@ -531,12 +537,12 @@ export default new Vuex.Store({
       for (const key in state.impSum) state.impSum[key] = 0
     },
     // SetFirstDayMonday
-    setFD(state, n: number) {
+    setFD(state, n) {
       state.startMon = n
       setNumber('startMon', n)
     },
     // SetTheme
-    setT(state, s: string) {
+    setT(state, s) {
       switch (s) {
         case 'sysDef':
           state.theme =
@@ -557,12 +563,12 @@ export default new Vuex.Store({
       state.selCuisine = state.selCategory = state.selTag = null
     },
     // SetLayout
-    setL(state, s: string) {
+    setL(state, s) {
       state.layout = s
       setString('layout', s)
     },
     // SetSortType
-    setST(state, s: string) {
+    setST(state, s) {
       state.sortT = s
     },
     // InitialiseRecipes
@@ -1213,17 +1219,20 @@ export default new Vuex.Store({
         }
       })
     },
-    setCuisine(state, s: string) {
+    setCuisine(state, s) {
       state.selCuisine = s
     },
-    setCategory(state, s: string) {
+    setCategory(state, s) {
       state.selCategory = s
     },
-    setTag(state, s: string) {
+    setTag(state, s) {
       state.selTag = s
     },
   },
   actions: {
+    setMS({ commit }, s: string) {
+      commit('setMS', s)
+    },
     toggleAwakeV({ commit }) {
       commit('toggleAwakeV')
     },

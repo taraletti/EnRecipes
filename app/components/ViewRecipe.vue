@@ -1,5 +1,5 @@
 <template>
-  <Page @loaded="pgLoad" @unloaded="onPageUnload" actionBarHidden="true">
+  <Page @loaded="pageL" @unloaded="pageUL" actionBarHidden="true">
     <GridLayout rows="*, auto, auto" columns="auto, *, auto">
       <DockLayout stretchLastChild="true" rowSpan="3" colSpan="3">
         <RGridLayout
@@ -46,8 +46,8 @@
             dock="bottom"
             width="100%"
             height="100%"
-            @loaded="onScrollLoad"
-            @scroll="svScroll($event)"
+            @loaded="scrollvL"
+            @scroll="scrollvS($event)"
           >
             <StackLayout>
               <RGridLayout :rtl="RTL" rows="auto" columns="*, *">
@@ -71,7 +71,7 @@
               <RGridLayout :rtl="RTL" rows="auto" columns="*, *">
                 <StackLayout class="attrT" :hidden="!hasTime(recipe.prepTime)">
                   <RLabel class="sub" :text="'prepT' | L" />
-                  <RLabel class="v" :text="formattedTime(recipe.prepTime)" />
+                  <RLabel class="v" :text="niceTime(recipe.prepTime)" />
                 </StackLayout>
                 <StackLayout
                   :col="hasTime(recipe.prepTime) ? 1 : 0"
@@ -79,7 +79,7 @@
                   :hidden="!hasTime(recipe.cookTime)"
                 >
                   <RLabel class="title sub" :text="'cookT' | L" />
-                  <RLabel class="v" :text="formattedTime(recipe.cookTime)" />
+                  <RLabel class="v" :text="niceTime(recipe.cookTime)" />
                 </StackLayout>
               </RGridLayout>
               <RGridLayout :rtl="RTL" rows="auto" columns="*, *">
@@ -98,7 +98,7 @@
                   <RLabel class="v" :text="recipe.difficulty | L" />
                 </StackLayout>
               </RGridLayout>
-              <StackLayout @loaded="onIngsLoad">
+              <StackLayout @loaded="ingCL">
                 <RLabel
                   class="section t2 tb tw"
                   :hidden="!recipe.ingredients.length"
@@ -124,7 +124,7 @@
                   />
                 </RStackLayout>
               </StackLayout>
-              <StackLayout @loaded="onInsLoad">
+              <StackLayout @loaded="insCL">
                 <RLabel
                   :hidden="!recipe.instructions.length"
                   class="section t2 tb tw"
@@ -141,7 +141,7 @@
                   <Button
                     :hidden="!item.type"
                     class="tb t3 ico si"
-                    :text="getInsPos(i)"
+                    :text="localeN(getInsPos[i])"
                   />
                   <RLabel
                     class="v tw"
@@ -151,7 +151,7 @@
                 </RStackLayout>
               </StackLayout>
               <RLabel
-                @loaded="onCmbLoad"
+                @loaded="cmbCL"
                 :hidden="!recipe.combinations.length"
                 class="section t2 tb tw"
                 :text="getTitleCount('cmbs', 'combinations')"
@@ -165,16 +165,16 @@
                 @tap="viewCombination(combination)"
               />
               <RLabel
-                @loaded="onNosTLoad"
+                @loaded="notesCTL"
                 :hidden="!recipe.notes.length"
                 class="section t2 tb tw"
                 :text="getTitleCount('nos', 'notes')"
               />
-              <StackLayout @loaded="onNosLoad"> </StackLayout>
+              <StackLayout @loaded="notesCL"> </StackLayout>
               <Label
                 padding="32 16 16"
                 class="lh4 t5 sub tw"
-                :text="getDates().uc"
+                :text="getDates.uc"
               />
             </StackLayout>
           </ScrollView>
@@ -187,7 +187,7 @@
       </DockLayout>
       <GridLayout
         row="1"
-        @loaded="sbload"
+        @loaded="sidebarL"
         class="appbar toolbar"
         :col="RTL ? 0 : 2"
         rows="auto, auto, auto, auto"
@@ -216,7 +216,7 @@
         :rtl="RTL"
         row="2"
         colSpan="3"
-        @loaded="abLoad"
+        @loaded="appbarL"
         class="appbar"
         :hidden="toast"
         columns="auto, *, auto, auto, auto, auto"
@@ -261,7 +261,7 @@
       <Toast
         row="2"
         colSpan="3"
-        :onload="tbLoad"
+        :onload="toastL"
         :toast="toast"
         :action="hideBar"
       />
@@ -270,7 +270,7 @@
           @tap="closePhoto"
           backgroundColor="black"
           stretch="aspectFit"
-          @loaded="onImgViewLoad"
+          @loaded="imgVLoad"
           :src="recipe.image"
           class="imgV"
         />
@@ -352,7 +352,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["icon", "recipes", "RTL", "awakeV"]),
+    ...mapState(["icon", "recipes", "RTL", "awakeV", "mSystem"]),
     tempYieldQuantity() {
       return Math.abs(this.yieldMultiplier) > 0
         ? Math.abs(parseFloat(this.yieldMultiplier))
@@ -382,10 +382,32 @@ export default {
     getTags() {
       return this.recipe.tags.join(" · ");
     },
+    getDates() {
+      let r = this.recipe;
+      let u = `${localize("Last updated")}: ${this.intlDate(r.lastModified)}`;
+      let c = `${localize("Created")}: ${this.intlDate(r.created)}`;
+      return {
+        u,
+        c,
+        uc: u + "\n" + c,
+      };
+    },
+    getInsPos() {
+      let a = 1;
+      let b = 1;
+      let ins = this.recipe.instructions;
+      return ins.reduce((acc, e) => {
+        if (!e.type) {
+          a = 1;
+          acc.push(b++);
+        } else acc.push(a++);
+        return acc;
+      }, []);
+    },
   },
   methods: {
     ...mapActions(["toggleState", "setR"]),
-    pgLoad({ object }) {
+    pageL({ object }) {
       this.busyDup = this.busyEdit = this.photoOpen = 0;
       object.bindingContext = new Observable();
       if (this.yieldMultiplier == this.recipe.yieldQuantity)
@@ -394,50 +416,56 @@ export default {
       this.syncCombinations();
       this.view = object.page.getViewById("printview");
     },
-    onPageUnload() {
+    pageUL() {
       utils.keepScreenOn(0);
       if (this.recipeTried) this.markTried();
     },
-    sbload({ object }) {
+    sidebarL({ object }) {
       this.sidebar = object;
     },
-    abLoad({ object }) {
+    appbarL({ object }) {
       this.appbar = object;
     },
-    tbLoad({ object }) {
+    toastL({ object }) {
       this.toastbar = object;
       this.recipe.lastTried && this.showLastTried();
     },
-    wvLoad({ object }) {
-      this.wv = object;
-      utils.updateLocale();
-    },
-    onIngsLoad({ object }) {
+    ingCL({ object }) {
       this.ingcon = object;
     },
-    onInsLoad({ object }) {
+    insCL({ object }) {
       this.inscon = object;
     },
-    onCmbLoad({ object }) {
+    cmbCL({ object }) {
       this.cmbcon = object;
     },
-    onNosTLoad({ object }) {
-      this.notesT = object;
-    },
-    onNosLoad({ object }) {
+    notesCL({ object }) {
       this.notescon = object;
       this.createNotes();
     },
-    onScrollLoad(args) {
+    notesCTL({ object }) {
+      this.notesT = object;
+    },
+
+    // ScrollView
+    scrollvL(args) {
       this.scrollview = args.object;
     },
-    onImgViewLoad({ object }) {
-      this.imgView = object;
-      this.imgView.visibility = "collapsed";
-      this.imgView.top = 24;
-      this.imgView.left = this.RTL ? 16 : Screen.mainScreen.widthDIPs - 112;
+    scrollvS({ object, scrollY }) {
+      let swipeUp: boolean;
+      let y = scrollY;
+      if (y) {
+        swipeUp = y > this.scrollPos;
+        this.scrollPos = Math.abs(y);
+        this.fixTitle(object, swipeUp);
+        if (!this.toast) {
+          let ab = this.appbar.translateY;
+          if (swipeUp && ab == 0) this.hideBars();
+          else if (!swipeUp && ab == 64) this.showBars();
+        }
+      }
     },
-    fixTitle(object, swipeUp: boolean): void {
+    fixTitle(object, swipeUp: boolean) {
       let ingL = this.recipe.ingredients.length;
       let insL = this.recipe.instructions.length;
       let cmbL = this.recipe.combinations.length;
@@ -475,39 +503,35 @@ export default {
           setVisibleTitle(0);
       }
     },
-    svScroll({ object, scrollY }) {
-      let swipeUp: boolean;
-      let y = scrollY;
-      if (y) {
-        swipeUp = y > this.scrollPos;
-        this.scrollPos = Math.abs(y);
-        this.fixTitle(object, swipeUp);
-        if (!this.toast) {
-          let ab = this.appbar.translateY;
-          if (swipeUp && ab == 0) this.hideBars();
-          else if (!swipeUp && ab == 64) this.showBars();
-        }
-      }
-    },
+
+    // AppBars
     showBars() {
       this.animateBar(this.appbar, 1);
+    },
+    hideBar() {
+      clearInterval(barTimer);
+      this.animateBar(this.toastbar, 0).then(() => {
+        this.toast = null;
+        this.photoOpen
+          ? (this.appbar.opacity = 1)
+          : this.animateBar(this.appbar, 1);
+      });
     },
     hideBars() {
       this.showTools && this.toggleTools();
       this.animateBar(this.appbar, 0);
     },
-    getInsPos(n) {
-      let a = 1;
-      let b = 1;
-      let ins = this.recipe.instructions;
-      let group = ins.reduce((acc, e) => {
-        if (!e.type) {
-          a = 1;
-          acc.push(b++);
-        } else acc.push(a++);
-        return acc;
-      }, []);
-      return this.localeN(group[n]);
+    showLastTried() {
+      this.animateBar(this.appbar, 0).then(() => {
+        this.toast = localize(
+          "triedInfo",
+          this.niceDate(this.recipe.lastTried)
+        );
+        this.animateBar(this.toastbar, 1, 1);
+        let a = 10;
+        clearInterval(barTimer);
+        barTimer = setInterval(() => a-- < 1 && this.hideBar(), 1000);
+      });
     },
 
     // Helpers
@@ -533,13 +557,144 @@ export default {
       return localize(title) + text;
     },
     getIng(o) {
-      return `${
-        this.roundedQuantity(o.quantity)
-          ? this.roundedQuantity(o.quantity) + " "
-          : ""
-      }${this.roundedQuantity(o.quantity) ? localize(o.unit) + " " : ""}${
-        o.value
-      }`;
+      let q = o.quantity;
+      return `${q ? this.scaleUnit(q, o.unit) : ""}${o.value}`;
+    },
+    roundQ(q: number) {
+      return Math.abs(
+        Math.round(
+          (q / this.recipe.yieldQuantity) * this.tempYieldQuantity * 100
+        ) / 100
+      );
+    },
+    metric(q, u) {
+      switch (u) {
+        case "mg":
+          if (q / 1000 >= 1) {
+            q = q / 1000;
+            u = "g";
+          }
+        case "g":
+          if (q / 1000 >= 1) {
+            q = q / 1000;
+            u = "kg";
+          }
+          break;
+        case "ml":
+          if (q / 1000 >= 1) {
+            q = q / 1000;
+            u = "l";
+          }
+          break;
+        case "pinch":
+          if (q / 16 >= 1) {
+            q = q / 16;
+            u = "tsp";
+          }
+        case "tsp":
+          if (q / 3 >= 1) {
+            q = q / 3;
+            u = "tbsp";
+          }
+        case "tbsp":
+          if (q / 16 >= 1) {
+            q = q / 16;
+            u = "cup";
+          }
+          break;
+        case "cup":
+          if (q / 4.16 >= 1) {
+            q = q / 4.16;
+            u = "l";
+          }
+          break;
+      }
+      return { q, u };
+    },
+    imperial(q, u) {
+      switch (u) {
+        case "pinch":
+          if (q / 16 >= 1) {
+            q = q / 16;
+            u = "tsp";
+          }
+        case "tsp":
+          if (q / 3 >= 1) {
+            q = q / 3;
+            u = "tbsp";
+          } else if (q / 2 >= 1) {
+            q = q / 2;
+            u = "dsp";
+          }
+        case "dsp":
+          if (q / 1.5 >= 1) {
+            q = q / 1.5;
+            u = "tbsp";
+          }
+        case "tbsp":
+          if (q / 16 >= 1) {
+            q = q / 16;
+            u = "cup";
+          }
+          break;
+        case "fl oz":
+          if (q / 8 >= 1) {
+            q = q / 8;
+            u = "cup";
+          }
+          break;
+        case "cup":
+          if (q / 16 >= 1) {
+            q = q / 16;
+            u = "gal";
+          } else if (q / 4 >= 1) {
+            q = q / 4;
+            u = "qt";
+          } else if (q / 2 >= 1) {
+            q = q / 2;
+            u = "pt";
+          }
+        case "oz":
+          if (q / 16 >= 1) {
+            q = q / 16;
+            u = "lb";
+          }
+        case "pt":
+          if (q / 2 >= 1) {
+            q = q / 2;
+            u = "qt";
+          }
+        case "qt":
+          if (q / 4 >= 1) {
+            q = q / 4;
+            u = "gal";
+          }
+      }
+      return { q, u };
+    },
+    fraction(num) {
+      let arr = [0, 0.125, 0.25, 0.333, 0.375, 0.5, 0.666, 0.75, 0.875, 1];
+      let brr = [0, "⅛", "¼", "⅓", "⅜", "½", "⅔", "¾", "⅞", 1];
+      let dec = Math.trunc(num);
+      let n = Number((num - Math.floor(num)).toFixed(2));
+      let closest = arr.reduce((acc, e) =>
+        Math.abs(e - n) < Math.abs(acc - n) ? e : acc
+      );
+      let f = brr[arr.indexOf(closest)];
+      return f == 0 ? num : f == 1 ? dec + 1 : (dec ? dec + " " : "") + f;
+    },
+    scaleUnit(quantity, unit) {
+      quantity =
+        (quantity / this.recipe.yieldQuantity) * this.tempYieldQuantity;
+      let { q, u } =
+        this.mSystem == "mtrc"
+          ? this.metric(quantity, unit)
+          : this.imperial(quantity, unit);
+      let rounded = Math.abs(Math.round(q * 100) / 100);
+      if (true) {
+        rounded = this.fraction(rounded);
+      }
+      return `${rounded} ${localize(u)} `;
     },
     changeYield() {
       this.$showModal(Prompt, {
@@ -554,6 +709,14 @@ export default {
     },
     hasTime(time) {
       return time != "00:00";
+    },
+    niceTime(time) {
+      let t = time.split(":");
+      let h = parseInt(t[0]);
+      let m = parseInt(t[1]);
+      let hr = localize("hr");
+      let min = localize("min");
+      return h ? (m ? `${h} ${hr} ${m} ${min}` : `${h} ${hr}`) : `${m} ${min}`;
     },
     niceDate(lastTried) {
       let now = new Date().getTime();
@@ -574,43 +737,7 @@ export default {
         (dayDiff > 365 && duration("ltAgo"))
       );
     },
-    showLastTried() {
-      this.animateBar(this.appbar, 0).then(() => {
-        this.toast = localize(
-          "triedInfo",
-          this.niceDate(this.recipe.lastTried)
-        );
-        this.animateBar(this.toastbar, 1, 1);
-        let a = 10;
-        clearInterval(barTimer);
-        barTimer = setInterval(() => a-- < 1 && this.hideBar(), 1000);
-      });
-    },
-    hideBar() {
-      clearInterval(barTimer);
-      this.animateBar(this.toastbar, 0).then(() => {
-        this.toast = null;
-        this.photoOpen
-          ? (this.appbar.opacity = 1)
-          : this.animateBar(this.appbar, 1);
-      });
-    },
-    roundedQuantity(quantity: number) {
-      return Math.abs(
-        Math.round(
-          (quantity / this.recipe.yieldQuantity) * this.tempYieldQuantity * 100
-        ) / 100
-      );
-    },
-    formattedTime(time) {
-      let t = time.split(":");
-      let h = parseInt(t[0]);
-      let m = parseInt(t[1]);
-      let hr = localize("hr");
-      let min = localize("min");
-      return h ? (m ? `${h} ${hr} ${m} ${min}` : `${h} ${hr}`) : `${m} ${min}`;
-    },
-    formattedDate(date) {
+    intlDate(date) {
       return new Intl.DateTimeFormat(null, {
         year: "numeric",
         month: "long",
@@ -618,78 +745,6 @@ export default {
         hour: "numeric",
         minute: "numeric",
       }).format(new Date(date));
-    },
-    getCombinationTitle(id) {
-      return this.recipes.filter((e) => e.id === id)[0].title;
-    },
-    syncCombinations() {
-      let combinationForOtherRecipes = this.recipes
-        .filter(
-          (e) =>
-            e.combinations.indexOf(this.currentRecipeID) >= 0 ||
-            this.recipe.combinations.includes(e.id)
-        )
-        .map((e) => e.id);
-      this.recipe.combinations = combinationForOtherRecipes;
-      // this.overwriteRecipeAction({
-      //   id: this.currentRecipeID,
-      //   recipe: this.recipe,
-      // });
-    },
-    touchIngredient({ object, action }, index) {
-      this.touchFade(object, action);
-      if (action == "up") this.checkChange(object, index);
-    },
-    checkChange(obj, index) {
-      this.checks[index] = !this.checks[index];
-      if (this.checks[index]) {
-        this.checked++;
-        obj.getChildAt(0).text = this.icon.check;
-      } else {
-        this.checked--;
-        obj.getChildAt(0).text = this.icon.uncheck;
-      }
-    },
-    clearChecks() {
-      this.checked = 0;
-      this.checks = [];
-      for (let i = 1; i < this.ingcon.getChildrenCount(); i++) {
-        this.ingcon.getChildAt(i).getChildAt(0).text = this.icon.uncheck;
-      }
-    },
-    touchInstruction({ object, action }) {
-      let hasDone = object.className.includes("done");
-      if (!hasDone) this.touchFade(object, action);
-      if (action == "up") this.stepDone(object);
-    },
-    stepDone(object) {
-      let a = object;
-      if (a.className.includes("done")) {
-        a.className = "check";
-        this.stepsDid--;
-      } else {
-        a.className = "check done";
-        this.stepsDid++;
-      }
-    },
-    clearSteps() {
-      this.stepsDid = 0;
-      for (let i = 1; i < this.inscon.getChildrenCount(); i++) {
-        this.inscon.getChildAt(i).className = "check";
-      }
-    },
-    getDates() {
-      let u = `${localize("Last updated")}: ${this.formattedDate(
-        this.recipe.lastModified
-      )}`;
-      let c = `${localize("Created")}: ${this.formattedDate(
-        this.recipe.created
-      )}`;
-      return {
-        u,
-        c,
-        uc: u + "\n" + c,
-      };
     },
 
     // NavigationHandlers
@@ -718,6 +773,20 @@ export default {
         },
         animated: false,
       });
+    },
+
+    // Combinations
+    getCombinationTitle(id) {
+      return this.recipes.filter((e) => e.id === id)[0].title;
+    },
+    syncCombinations() {
+      this.recipe.combinations = this.recipes
+        .filter(
+          (e) =>
+            e.combinations.indexOf(this.currentRecipeID) >= 0 ||
+            this.recipe.combinations.includes(e.id)
+        )
+        .map((e) => e.id);
     },
     viewCombination(combination) {
       this.hideBar();
@@ -793,9 +862,9 @@ export default {
       if (r.tags.length)
         overview += `${localize("ts")}: ${r.tags.join(", ")}\n`;
       if (r.prepTime != "00:00")
-        overview += `${localize("prepT")}: ${this.formattedTime(r.prepTime)}\n`;
+        overview += `${localize("prepT")}: ${this.niceTime(r.prepTime)}\n`;
       if (r.cookTime != "00:00")
-        overview += `${localize("cookT")}: ${this.formattedTime(r.cookTime)}\n`;
+        overview += `${localize("cookT")}: ${this.niceTime(r.cookTime)}\n`;
       overview += `${localize("yld")}: ${this.tempYieldQuantity} ${localize(
         r.yieldUnit
       )}\n${localize("Difficulty level")}: ${localize(r.difficulty)}\n`;
@@ -807,19 +876,13 @@ export default {
           if (e.type) {
             ingredients += `- ${
               e.quantity
-                ? this.roundedQuantity(e.quantity) +
-                  " " +
-                  localize(e.unit) +
-                  " "
+                ? this.roundQ(e.quantity) + " " + localize(e.unit) + " "
                 : ""
             }${e.value}\n`;
           } else {
             ingredients += `\n${
               e.quantity
-                ? this.roundedQuantity(e.quantity) +
-                  " " +
-                  localize(e.unit) +
-                  " "
+                ? this.roundQ(e.quantity) + " " + localize(e.unit) + " "
                 : ""
             }${e.value}\n\n`;
           }
@@ -863,7 +926,7 @@ export default {
       utils.shareText(shareContent, localize("sru"));
     },
 
-    // DataHandlers
+    // Toggles
     toggle(key: string, setDate: number) {
       console.log(setDate);
       if (setDate) {
@@ -889,6 +952,39 @@ export default {
           id: this.currentRecipeID,
           r,
         });
+      }
+    },
+    toggleCheck(obj, index) {
+      this.checks[index] = !this.checks[index];
+      if (this.checks[index]) {
+        this.checked++;
+        obj.getChildAt(0).text = this.icon.check;
+      } else {
+        this.checked--;
+        obj.getChildAt(0).text = this.icon.uncheck;
+      }
+    },
+    clearChecks() {
+      this.checked = 0;
+      this.checks = [];
+      for (let i = 1; i < this.ingcon.getChildrenCount(); i++) {
+        this.ingcon.getChildAt(i).getChildAt(0).text = this.icon.uncheck;
+      }
+    },
+    toggleStep(object) {
+      let a = object;
+      if (a.className.includes("done")) {
+        a.className = "check";
+        this.stepsDid--;
+      } else {
+        a.className = "check done";
+        this.stepsDid++;
+      }
+    },
+    clearSteps() {
+      this.stepsDid = 0;
+      for (let i = 1; i < this.inscon.getChildrenCount(); i++) {
+        this.inscon.getChildAt(i).className = "check";
       }
     },
 
@@ -930,6 +1026,12 @@ export default {
     },
 
     // PhotoViewer
+    imgVLoad({ object }) {
+      this.imgView = object;
+      this.imgView.visibility = "collapsed";
+      this.imgView.top = 24;
+      this.imgView.left = this.RTL ? 16 : Screen.mainScreen.widthDIPs - 112;
+    },
     viewPhoto() {
       this.hideBars();
       this.photoOpen = 1;
@@ -1015,6 +1117,10 @@ export default {
     },
 
     // Print
+    wvLoad({ object }) {
+      this.wv = object;
+      utils.updateLocale(); // required to set local RTL and language in webview
+    },
     prepareHTML() {
       let r = this.recipe;
       const head = `<head><meta charset=UTF-8><meta content="IE=edge"http-equiv=X-UA-Compatible><meta content="width=device-width,initial-scale=1"name=viewport><title>EnRecipes - Recipe for Print</title><style>a,body,div,html,img,ol,p,span,ul{border:0;font-size:100%;font:inherit;margin:0;padding:0;vertical-align:baseline}@font-face{font-family:Inter-Medium;src:url(../app/fonts/Inter-Medium.otf)}@font-face{font-family:Inter-Bold;src:url(../app/fonts/Inter-Bold.otf)}body{font-family:Inter-Medium,sans-serif;line-height:1.5;max-width:45rem;padding:1.5rem}body>p{padding:.5rem 0}.attr>div>p:last-child,h1,h2,h3{font-family:Inter-Bold,sans-serif}#header{display:grid;grid-column-gap:2rem;grid-template-columns:1fr auto;margin-bottom:2.5rem;width:100%}img{border-radius:1rem;height:8rem;object-fit:cover;width:8rem}h1{font-size:2.25rem;line-height:1.25;margin:0;padding-bottom:1rem}svg{width:2rem;height:2rem;padding:0 .5rem 0 0}h2{margin:2rem 0 1rem}.attr{display:grid;grid-column-gap:2rem;grid-template-columns:1fr 1fr;margin-top:1rem}.attr>div>p:first-child{font-size:.9rem;opacity:.5}ol,ul{padding:0 1.5rem}li{padding:.5rem}a{color:inherit}.sub{font-size:.9rem;margin-top:2rem;opacity:.5}</style></head>`;
@@ -1097,13 +1203,13 @@ export default {
         this.hasTime(r.prepTime) || this.hasTime(r.cookTime)
           ? `<div class=attr>${
               this.hasTime(r.prepTime)
-                ? `<div><p>${localize("prepT")}<p>${this.formattedTime(
+                ? `<div><p>${localize("prepT")}<p>${this.niceTime(
                     r.prepTime
                   )}</div>`
                 : ""
             } ${
               this.hasTime(r.cookTime)
-                ? `<div><p>${localize("cookT")}<p>${this.formattedTime(
+                ? `<div><p>${localize("cookT")}<p>${this.niceTime(
                     r.cookTime
                   )}</div>`
                 : ""
@@ -1129,9 +1235,9 @@ export default {
         r.notes.length
           ? `<h2>${this.getTitleCount("nos", "notes", 1)}</h2>`
           : ""
-      } ${getNotes()}<div class=sub><p>${this.getDates().u}<p>${
-        this.getDates().c
-      }</div>
+      } ${getNotes()}<div class=sub><p>${this.getDates.u}</p><p>${
+        this.getDates.c
+      }</p></div>
   </body>
 </html>`;
     },
@@ -1144,7 +1250,7 @@ export default {
       );
     },
 
-    // Helpers
+    // FeedBack
     touchRate({ object, action }, r) {
       this.touchFade(object, action);
       if (action == "up") this.rate(r);
@@ -1153,6 +1259,15 @@ export default {
       this.touchFade(object, action);
 
       if (action == "up") this.changeYield();
+    },
+    touchIngredient({ object, action }, index) {
+      this.touchFade(object, action);
+      if (action == "up") this.toggleCheck(object, index);
+    },
+    touchInstruction({ object, action }) {
+      let hasDone = object.className.includes("done");
+      if (!hasDone) this.touchFade(object, action);
+      if (action == "up") this.toggleStep(object);
     },
   },
   created() {
