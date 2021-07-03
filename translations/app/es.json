@@ -103,7 +103,7 @@
     "intf": "Interfaz",
     "invFile": "Archivo invalido",
     "Irish": "Irlandés",
-    "it": "Artículo",
+    "it": "Artículo %s",
     "Italian": "Italiano",
     "Jamaican": "Jamaiquino",
     "Japanese": "Japonés",
@@ -233,7 +233,7 @@
     "sru": "Compartir receta usando...",
     "stars": "Valoración",
     "stick": "rama",
-    "stp": "Paso",
+    "stp": "Paso %s",
     "strAdd": "¡Empieza a añadir tus recetas!",
     "sVw": "Agita para ver una receta aleatoria",
     "sVwInfo": "Te ayuda a elegir que cocinar cuando no podés decidirte",
@@ -318,5 +318,8 @@
     "otam": "Más de un mes",
     "otay": "Más de un año",
     "plsCrt": "Usa el botón + para crear una",
-    "ccwt": "¡Cocine con confianza con los temporizadores!"
+    "ccwt": "¡Cocine con confianza con los temporizadores!",
+    "sectRm": "Sección eliminada",
+    "addSectBtn": "AÑADIR UNA SECCIÓN",
+    "sect": "Sección %s"
 }

@@ -1,0 +1,3 @@
+- Hinzufügen von Abschnitten zu deinen Rezeptzutaten und Anweisungen
+- Das Hinzufügen oder Entfernen von Elementen im Rezepteditor ist jetzt noch einfacher
+- Fehlerkorrekturen und Verbesserungen

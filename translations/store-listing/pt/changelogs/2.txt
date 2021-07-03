@@ -1,0 +1,3 @@
+- Adicionadas secções aos ingredientes e instruções das receitas
+- Agora é mais fácil adicionar ou remover itens no editor de receitas
+- Várias correções e melhorias

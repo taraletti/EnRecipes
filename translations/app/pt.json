@@ -326,5 +326,6 @@
     "ksavrInfo": "Impede que o ecrã desligue ao ver uma receita",
     "ksavr": "Manter ecrã ligado ao ver receitas",
     "addSectBtn": "ADICIONAR SECÇÃO",
-    "sect": "Secção %s"
+    "sect": "Secção %s",
+    "sectRm": "Secção removida"
 }
