@@ -327,5 +327,8 @@
     "ksavr": "Scherm niet uitschakelen tijdens bekijken van recept",
     "addSectBtn": "SECTIE TOEVOEGEN",
     "sect": "Sectie %s",
-    "sectRm": "De sectie is verwijderd"
+    "sectRm": "De sectie is verwijderd",
+    "imprl": "Imperiaal",
+    "mtrc": "Metrisch",
+    "mSystem": "Eenheden"
 }
