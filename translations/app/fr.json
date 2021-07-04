@@ -327,5 +327,8 @@
     "ksavrInfo": "Empêche l’écran de s’éteindre durant la visualisation d’une recette",
     "sectRm": "Section retirée",
     "addSectBtn": "AJOUTER UNE SECTION",
-    "sect": "Section %s"
+    "sect": "Section %s",
+    "imprl": "Anglo-saxon",
+    "mtrc": "Métrique",
+    "mSystem": "Système d’unités"
 }
