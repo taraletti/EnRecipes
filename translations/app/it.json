@@ -327,5 +327,8 @@
     "ksavr": "Mantieni lo schermo attivo durante la visualizzazione di una ricetta",
     "sectRm": "Sezione rimossa",
     "addSectBtn": "AGGIUNGI SEZIONE",
-    "sect": "Sezione %s"
+    "sect": "Sezione %s",
+    "imprl": "Imperiale britannico",
+    "mtrc": "Metrico",
+    "mSystem": "Sistema di misurazione"
 }
