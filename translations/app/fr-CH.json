@@ -327,5 +327,8 @@
     "ksavr": "Garder l’écran allumé durant l’affichage d’une recette",
     "sectRm": "Section retirée",
     "addSectBtn": "AJOUTER UNE SECTION",
-    "sect": "Section %s"
+    "sect": "Section %s",
+    "imprl": "Anglo-saxon",
+    "mtrc": "Métrique",
+    "mSystem": "Système d’unités"
 }
