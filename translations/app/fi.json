@@ -327,5 +327,8 @@
     "ksavr": "Pidä näyttö päällä reseptin katselun aikana",
     "tmrvbrt": "Ajastimen väriseminen",
     "delay": "Siirrä",
-    "strtBtn": "ALOITA"
+    "strtBtn": "ALOITA",
+    "imprl": "Brittiläinen",
+    "mSystem": "Yksikkö­järjestelmä",
+    "mtrc": "Metrinen"
 }
