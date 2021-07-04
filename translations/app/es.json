@@ -321,5 +321,8 @@
     "ccwt": "¡Cocine con confianza con los temporizadores!",
     "sectRm": "Sección eliminada",
     "addSectBtn": "AÑADIR UNA SECCIÓN",
-    "sect": "Sección %s"
+    "sect": "Sección %s",
+    "imprl": "Anglosajón",
+    "mtrc": "Métrico",
+    "mSystem": "Sistema de unidades"
 }
