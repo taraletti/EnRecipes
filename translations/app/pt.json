@@ -327,5 +327,8 @@
     "ksavr": "Manter ecrã ligado ao ver receitas",
     "addSectBtn": "ADICIONAR SECÇÃO",
     "sect": "Secção %s",
-    "sectRm": "Secção removida"
+    "sectRm": "Secção removida",
+    "imprl": "Imperial",
+    "mtrc": "Métrico",
+    "mSystem": "Sistema de unidades"
 }
