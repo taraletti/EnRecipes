@@ -315,7 +315,7 @@
     "otaw": "Älter als eine Woche",
     "otam": "Älter als ein Monat",
     "otay": "Älter als ein Jahr",
-    "admp": "Mahlzeitenpläne automatisch löschen",
+    "admp": "Essenspläne automatisch löschen",
     "plsCrt": "Verwende die +-Schaltfläche, um einen zu erstellen",
     "ehwmp": "Iss gesund mit Essensplänen!",
     "selMT": "Mahlzeitentyp auswählen",
@@ -327,5 +327,8 @@
     "ksavrInfo": "Verhindert, dass sich der Bildschirm während der Anzeige eines Rezepts ausschaltet",
     "sectRm": "Abschnitt entfernt",
     "addSectBtn": "ABSCHNITT HINZUFÜGEN",
-    "sect": "Abschnitt %s"
+    "sect": "Abschnitt %s",
+    "imprl": "Angloamerikanisch",
+    "mtrc": "Metrisch",
+    "mSystem": "Einheitensystem"
 }
