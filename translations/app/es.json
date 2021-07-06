@@ -26,7 +26,7 @@
     "Breads": "Panes",
     "breakfast": "Desayuno",
     "British": "Británica",
-    "buEmp": "El archivode backup está vacío",
+    "buEmp": "El archivo de backup está vacío",
     "buFol": "Carpeta de respaldo",
     "buInc": "Archivo de backup corrupto",
     "buInfo": "Genera un archivo ZIP con todos tus datos que se puede volver a importar",
@@ -324,5 +324,6 @@
     "sect": "Sección %s",
     "imprl": "Anglosajón",
     "mtrc": "Métrico",
-    "mSystem": "Sistema de unidades"
+    "mSystem": "Sistema de unidades",
+    "esgbInfo": "Apagá esta opción si tenés problemas con la navegación"
 }
